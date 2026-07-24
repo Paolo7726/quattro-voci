@@ -1,4 +1,4 @@
-const CACHE_NAME = 'quattro-voci-v1';
+const CACHE_NAME = 'quattro-voci-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -23,18 +23,35 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Cache-first per l'app shell, network-first per tutto il resto (es. font Google)
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
 
-  if (ASSETS.some((a) => req.url.endsWith(a.replace('./', '')))) {
+  // Pagina HTML: prova sempre la rete per prima, cache solo come riserva offline.
+  // Cosi ogni aggiornamento che pubblichi arriva subito, senza bisogno di disinstallare l'app.
+  if (req.mode === 'navigate' || req.destination === 'document') {
     event.respondWith(
-      caches.match(req).then((cached) => cached || fetch(req))
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+          return res;
+        })
+        .catch(() => caches.match(req))
     );
-  } else {
-    event.respondWith(
-      fetch(req).catch(() => caches.match(req))
-    );
+    return;
   }
+
+  // Tutto il resto (icone, manifest, font): cache immediata, aggiornamento in background.
+  event.respondWith(
+    caches.match(req).then((cached) => {
+      const network = fetch(req)
+        .then((res) => {
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone()));
+          return res;
+        })
+        .catch(() => cached);
+      return cached || network;
+    })
+  );
 });
