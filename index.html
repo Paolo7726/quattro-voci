@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Quattro Voci</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1B1916">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Quattro Voci">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B1916;
+    --panel: #242119;
+    --panel-2: #2C2820;
+    --ink: #EDE6D8;
+    --ink-dim: #A79C89;
+    --hair: #3A352B;
+    --accent: #5EA8A0;
+    --accent-soft: rgba(94,168,160,0.16);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    transition: background .4s ease;
+    padding-bottom: 84px;
+  }
+  ::selection{ background: var(--accent-soft); }
+  .app{ max-width: 480px; margin:0 auto; padding: 18px 16px 8px; }
+
+  /* Header */
+  header{ padding: 10px 2px 4px; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing:.14em; text-transform:uppercase;
+    color: var(--ink-dim); margin:0 0 4px;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-weight:600; font-optical-sizing:auto;
+    font-size: 30px; line-height:1.05; margin: 0 0 14px; letter-spacing:-.01em;
+    color: var(--ink);
+  }
+  h1 span{ color: var(--accent); transition: color .4s ease; }
+
+  /* voice ring selector */
+  .ring{
+    display:flex; gap:8px; padding:5px;
+    background: var(--panel); border-radius: 999px; border:1px solid var(--hair);
+  }
+  .voice-btn{
+    flex:1; border:none; background:transparent; color: var(--ink-dim);
+    padding: 10px 4px; border-radius: 999px; font-family:'IBM Plex Sans', sans-serif;
+    font-size: 13.5px; font-weight:500; cursor:pointer; position:relative;
+    transition: color .3s ease;
+  }
+  .voice-btn .script{ display:block; font-size: 15px; margin-bottom:1px; }
+  .voice-btn.active{ color: #17140F; }
+  .voice-fill{
+    position:absolute; inset:0; border-radius:999px; z-index:-1;
+    background: var(--accent); opacity:0; transition: opacity .3s ease;
+  }
+  .voice-btn.active .voice-fill{ opacity:1; }
+
+  /* streak strip */
+  .streak{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top: 14px; padding: 12px 14px; background: var(--panel);
+    border:1px solid var(--hair); border-radius: var(--radius);
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--ink-dim);
+  }
+  .streak b{ color: var(--ink); font-size: 15px; font-family:'IBM Plex Sans'; font-weight:600; }
+  .flame{ color: var(--accent); }
+
+  /* module card */
+  .card{
+    background: var(--panel); border:1px solid var(--hair); border-radius: var(--radius);
+    padding: 18px 16px 16px; margin-top: 14px;
+  }
+  .card h2{
+    font-family:'Fraunces', serif; font-size: 19px; font-weight:600; margin: 0 0 4px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .card .sub{ color: var(--ink-dim); font-size:13px; margin: 0 0 14px; line-height:1.45;}
+  .tag{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    letter-spacing:.08em; text-transform:uppercase; color: var(--accent);
+    background: var(--accent-soft); padding: 3px 8px; border-radius: 6px; margin-bottom:10px;
+  }
+
+  .challenge-text{
+    font-family:'Fraunces', serif; font-size: 20px; line-height:1.35; font-weight:500;
+    padding: 14px; background: var(--panel-2); border-radius: 10px; border-left: 3px solid var(--accent);
+    margin-bottom: 12px;
+  }
+  .row{ display:flex; gap:10px; }
+  button.primary{
+    flex:1; background: var(--accent); color:#17140F; border:none; border-radius: 10px;
+    padding: 12px; font-weight:600; font-size:14px; cursor:pointer; font-family:'IBM Plex Sans';
+    transition: filter .15s ease, transform .1s ease;
+  }
+  button.primary:active{ transform: scale(.98); }
+  button.ghost{
+    background: transparent; color: var(--ink); border:1px solid var(--hair); border-radius:10px;
+    padding: 12px 14px; font-size:14px; cursor:pointer; font-family:'IBM Plex Sans'; font-weight:500;
+  }
+  button.ghost:hover{ border-color: var(--accent); }
+  button:disabled{ opacity:.45; cursor:default; }
+
+  /* shadowing timer */
+  .timer-display{
+    font-family:'IBM Plex Mono', monospace; font-size: 44px; font-weight:600;
+    text-align:center; padding: 18px 0 6px; letter-spacing:.02em; color: var(--ink);
+  }
+  .phase-label{ text-align:center; font-size:13px; color: var(--accent); margin-bottom:14px; font-weight:500;}
+  .phase-list{ list-style:none; padding:0; margin: 0 0 14px; display:flex; flex-direction:column; gap:6px; }
+  .phase-list li{
+    font-size: 13px; color: var(--ink-dim); padding: 8px 10px; border-radius:8px;
+    background: var(--panel-2); display:flex; justify-content:space-between; gap:8px;
+  }
+  .phase-list li.current{ color: var(--ink); background: var(--accent-soft); }
+  .phase-list li b{ color: inherit; font-family:'IBM Plex Mono'; font-size:11px; }
+
+  /* sounds */
+  .sound-item{ padding: 12px 0; border-top:1px solid var(--hair); }
+  .sound-item:first-child{ border-top:none; padding-top:0; }
+  .sound-item .sym{
+    font-family:'Fraunces', serif; font-size: 22px; color: var(--accent); margin-right:6px;
+  }
+  .sound-item .name{ font-weight:600; font-size:14.5px; }
+  .sound-item p{ font-size:13px; color: var(--ink-dim); margin: 4px 0 0; line-height:1.5; }
+  .pairs{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--accent);
+    margin-top:6px; letter-spacing:.02em;
+  }
+
+  /* roleplay */
+  .level-tabs{ display:flex; gap:6px; margin-bottom: 12px; }
+  .level-tabs button{
+    flex:1; padding:8px 4px; border-radius:8px; border:1px solid var(--hair); background:transparent;
+    color: var(--ink-dim); font-size:12.5px; cursor:pointer; font-family:'IBM Plex Sans'; font-weight:500;
+  }
+  .level-tabs button.active{ border-color: var(--accent); color: var(--ink); background: var(--accent-soft); }
+  .scenario-box{
+    font-size:14.5px; line-height:1.55; padding:14px; background:var(--panel-2);
+    border-radius:10px; margin-bottom:12px; min-height: 60px;
+  }
+
+  /* notebook */
+  textarea, input[type=text]{
+    width:100%; background: var(--panel-2); border:1px solid var(--hair); color: var(--ink);
+    border-radius:10px; padding: 10px 12px; font-family:'IBM Plex Sans'; font-size:14px;
+    margin-bottom:8px; resize:vertical;
+  }
+  textarea:focus, input:focus{ outline:none; border-color: var(--accent); }
+  .entry{
+    padding:10px 12px; background: var(--panel-2); border-radius:10px; margin-bottom:8px;
+    font-size:13.5px; border-left: 3px solid var(--hair);
+  }
+  .entry .orig{ color: var(--ink-dim); text-decoration: line-through; }
+  .entry .corr{ color: var(--ink); font-weight:500; margin-top:3px; }
+  .entry .meta{ font-family:'IBM Plex Mono'; font-size:10px; color: var(--ink-dim); margin-top:6px; }
+  .empty{ color: var(--ink-dim); font-size:13px; padding: 10px 2px; }
+
+  /* cronologia */
+  .stats-row{ display:flex; gap:8px; margin-bottom:14px; }
+  .stat-box{
+    flex:1; background: var(--panel-2); border-radius:10px; padding: 12px 10px; text-align:center;
+  }
+  .stat-box .n{ font-family:'IBM Plex Mono', monospace; font-size:22px; font-weight:600; color: var(--accent); }
+  .stat-box .l{ font-size:10.5px; color: var(--ink-dim); margin-top:2px; letter-spacing:.03em; }
+  .hist-item{
+    display:flex; justify-content:space-between; gap:10px; padding: 10px 12px;
+    background: var(--panel-2); border-radius:10px; margin-bottom:8px; font-size:13px;
+  }
+  .hist-item .htext{ color: var(--ink); line-height:1.4; }
+  .hist-item .hdate{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--ink-dim); white-space:nowrap; padding-top:2px; }
+
+  /* percorso iniziale */
+  .bp-progress-wrap{ margin-bottom:12px; }
+  .bp-progress-bar{ height:6px; background: var(--panel-2); border-radius:99px; overflow:hidden; }
+  .bp-progress-fill{ height:100%; background: var(--accent); width:0%; transition: width .3s ease; }
+  .bp-progress-label{ font-family:'IBM Plex Mono', monospace; font-size:11px; color: var(--ink-dim); margin-top:6px; }
+  .bp-feedback{ min-height: 20px; font-size:13px; font-weight:500; margin: 8px 2px 10px; line-height:1.5; }
+  .bp-feedback.ok{ color:#7FBF7F; }
+  .bp-feedback.ko{ color:#D96C6C; }
+  .bp-feedback .hint{ display:block; color: var(--ink-dim); font-weight:400; margin-top:4px; font-size:12.5px; }
+  .bp-done{ text-align:center; padding: 20px 10px; }
+  .bp-done .n{ font-family:'Fraunces', serif; font-size:22px; color: var(--accent); margin-bottom:6px; }
+
+  /* bottom nav */
+  nav.tabs{
+    position: fixed; left:0; right:0; bottom:0;
+    background: rgba(27,25,22,0.92); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--hair);
+    display:flex; justify-content:space-around; padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+    max-width: 480px; margin: 0 auto;
+    overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{ display:none; }
+  nav.tabs button{
+    background:none; border:none; color: var(--ink-dim); display:flex; flex-direction:column;
+    align-items:center; gap:3px; font-size:10.5px; font-family:'IBM Plex Sans'; font-weight:500;
+    cursor:pointer; padding: 4px 8px; flex: 0 0 auto; min-width: 58px;
+  }
+  nav.tabs button svg{ width:20px; height:20px; }
+  nav.tabs button.active{ color: var(--accent); }
+
+  [dir="rtl"] .challenge-text, [dir="rtl"] .scenario-box{ text-align:right; }
+  .rtl-text{ direction: rtl; font-family:'IBM Plex Sans Arabic', sans-serif; }
+
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <p class="eyebrow">Ecosistema di pratica &middot; parlato prima, forma dopo</p>
+    <h1>Quattro <span id="voiceWord">Voci</span></h1>
+    <div class="ring" id="ring"></div>
+    <div class="streak">
+      <span>Serie di pratica &mdash; <b id="langLabel">English</b></span>
+      <span><span class="flame">&#9679;</span> <b id="streakCount">0</b> giorni</span>
+    </div>
+  </header>
+
+  <!-- SFIDA -->
+  <section class="card" id="tab-sfida">
+    <span class="tag">Sfida del giorno &middot; slot <span id="slotNum">1</span>/30</span>
+    <h2>Parla per 60 secondi</h2>
+    <p class="sub">Registrati a voce, di getto, senza scrivere nulla prima. Il messaggio conta più della forma.</p>
+    <div class="challenge-text" id="challengeText">&mdash;</div>
+    <div class="row">
+      <button class="primary" id="btnDone">Segna come fatta</button>
+      <button class="ghost" id="btnAnother">Un'altra</button>
+    </div>
+  </section>
+
+  <!-- PERCORSO INIZIALE -->
+  <section class="card hidden" id="tab-percorso">
+    <span class="tag">Percorso iniziale &middot; da zero</span>
+    <h2>Traduci con la tastiera</h2>
+    <p class="sub">Scrivi la traduzione della frase italiana. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
+    <div class="bp-progress-wrap">
+      <div class="bp-progress-bar"><div class="bp-progress-fill" id="bpProgressFill"></div></div>
+      <div class="bp-progress-label" id="bpProgressLabel">Frase 1 di 18</div>
+    </div>
+    <div class="challenge-text" id="bpPrompt">&mdash;</div>
+    <input type="text" id="bpInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="bp-feedback" id="bpFeedback"></div>
+    <div class="row">
+      <button class="primary" id="bpCheck">Verifica</button>
+      <button class="ghost" id="bpSkip">Salta</button>
+    </div>
+    <button class="ghost" id="bpReset" style="width:100%; margin-top:8px;">Ricomincia percorso</button>
+  </section>
+
+  <!-- SHADOWING -->
+  <section class="card hidden" id="tab-shadow">
+    <span class="tag">Shadowing</span>
+    <h2>Timer a 4 fasi</h2>
+    <p class="sub">Segui il protocollo: ascolto passivo &rarr; ombra &rarr; con testo &rarr; registra e confronta.</p>
+    <div class="timer-display" id="timerDisplay">05:00</div>
+    <div class="phase-label" id="phaseLabel">Fase 1 &middot; Ascolto passivo</div>
+    <ul class="phase-list" id="phaseList"></ul>
+    <div class="row">
+      <button class="primary" id="btnTimerToggle">Avvia</button>
+      <button class="ghost" id="btnTimerReset">Reimposta</button>
+    </div>
+  </section>
+
+  <!-- SUONI -->
+  <section class="card hidden" id="tab-suoni">
+    <span class="tag">Pronuncia mirata</span>
+    <h2>Suoni critici</h2>
+    <p class="sub">I suoni che più spesso tradiscono l'accento italiano in questa lingua. 10 minuti al giorno, non di più.</p>
+    <div id="soundsList"></div>
+  </section>
+
+  <!-- DIALOGHI -->
+  <section class="card hidden" id="tab-dialoghi">
+    <span class="tag">Role-play</span>
+    <h2>Scenario da interpretare</h2>
+    <div class="level-tabs" id="levelTabs">
+      <button data-level="0" class="active">Sopravvivenza</button>
+      <button data-level="1">Funzionale</button>
+      <button data-level="2">Naturalezza</button>
+    </div>
+    <div class="scenario-box" id="scenarioBox">&mdash;</div>
+    <button class="ghost" id="btnNewScenario" style="width:100%">Nuovo scenario</button>
+  </section>
+
+  <!-- QUADERNO -->
+  <section class="card hidden" id="tab-quaderno">
+    <span class="tag">Delayed correction</span>
+    <h2>Quaderno di correzione</h2>
+    <p class="sub">Entro 24h: annota una frase che non suonava bene e la sua forma corretta. Poi ripetila 3 volte in un contesto nuovo.</p>
+    <input type="text" id="inputOrig" placeholder="Frase detta (non suonava bene)...">
+    <input type="text" id="inputCorr" placeholder="Forma corretta...">
+    <button class="primary" id="btnAddEntry" style="width:100%; margin-bottom:10px;">Aggiungi al quaderno</button>
+    <button class="ghost" id="btnExport" style="width:100%; margin-bottom:14px;">Esporta quaderno (.txt)</button>
+    <div id="entriesList"></div>
+  </section>
+
+  <!-- CRONOLOGIA -->
+  <section class="card hidden" id="tab-cronologia">
+    <span class="tag">Cronologia</span>
+    <h2>Il tuo percorso</h2>
+    <p class="sub">Sfide completate e serie di pratica per <span id="cronoLangLabel">English</span>.</p>
+    <div class="stats-row" id="statsRow"></div>
+    <div id="historyList"></div>
+  </section>
+
+
+
+</div>
+
+<nav class="tabs">
+  <button data-tab="sfida" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    Sfida
+  </button>
+  <button data-tab="percorso">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V6a2 2 0 012-2h9l5 5v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M9 12l2 2 4-4"/></svg>
+    Base
+  </button>
+  <button data-tab="shadow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v10m0 0a4 4 0 004-4M12 13a4 4 0 01-4-4"/><path d="M8 19h8M12 17v2"/></svg>
+    Shadow
+  </button>
+  <button data-tab="suoni">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10v4M7 6v12M11 3v18M15 7v10M19 9v6"/></svg>
+    Suoni
+  </button>
+  <button data-tab="dialoghi">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h11v8H8l-4 4V4z"/><path d="M20 9v8l-3-3h-4"/></svg>
+    Dialoghi
+  </button>
+  <button data-tab="quaderno">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12v18l-6-3-6 3V3z"/></svg>
+    Quaderno
+  </button>
+  <button data-tab="cronologia">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
+    Storia
+  </button>
+</nav>
+
+<script>
+/* ---------- DATA ---------- */
+const LANGS = {
+  en: {
+    label:'English', script:'Aa', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
+    sounds:[
+      {sym:'θ/ð', name:'Th sordo e sonoro (think / this)', desc:'Lingua tra i denti, non dietro. L\'errore tipico è dire "sink" invece di "think".', pairs:'think / sink &middot; this / dis'},
+      {sym:'ə', name:'Vocali ridotte (schwa)', desc:'Le sillabe atone collassano in un suono neutro. L\'italiano tende a pronunciare ogni vocale piena.', pairs:'banana &rarr; ba-NÆ-nə &middot; about &rarr; ə-BAUT'},
+      {sym:'-d/-t', name:'Consonanti finali sonore/sorde', desc:'La differenza cambia il significato: non appiattire tutto su un suono neutro.', pairs:'bed / bet &middot; bad / bat'}
+    ],
+  },
+  fr: {
+    label:'Français', script:'Fr', word:'Voix', accent:'#6C7BC4', dir:'ltr', rtlText:false,
+    sounds:[
+      {sym:'ɑ̃/ɛ̃', name:'Vocali nasali (an / en / in / un)', desc:'Prova con una mano sul naso: deve vibrare. È il tratto che più smaschera un accento italiano.', pairs:'sans / sang &middot; vin / vent'},
+      {sym:'ʁ', name:'R uvulare', desc:'Dal fondo della gola, non arrotolata come in italiano. Si forma quasi come una raschiata leggera.', pairs:'rue / roue'},
+      {sym:'liaison', name:'Liaison', desc:'Le parole si legano tra loro: "les amis" si pronuncia come una parola sola, non due separate.', pairs:'les_amis &rarr; [le.za.mi]'}
+    ],
+  },
+  ar: {
+    label:'العربية', script:'ع', word:'أصوات', accent:'#D4A73D', dir:'rtl', rtlText:true,
+    sounds:[
+      {sym:'ص/ط', name:'Consonanti enfatiche', desc:'Stessa lettera della non-enfatica ma con la radice della lingua abbassata e la bocca più ampia.', pairs:'سِر / صِر'},
+      {sym:'ع', name:'Ayn', desc:'Costrizione faringea, non una semplice vocale. È il suono più difficile per un italofono: servono settimane di lavoro dedicato.', pairs:'عين (occhio)'},
+      {sym:'ق', name:'Qaf', desc:'Occlusiva uvulare, prodotta più indietro nella gola rispetto alla "c" italiana.', pairs:'قلب (cuore)'}
+    ],
+  },
+  es: {
+    label:'Español', script:'Es', word:'Voces', accent:'#C1432E', dir:'ltr', rtlText:false,
+    sounds:[
+      {sym:'b/v', name:'B e V (stesso suono)', desc:'In spagnolo sono lo stesso fonema, spesso una approssimante morbida, non un\'occlusiva piena come in italiano.', pairs:'vaca / baca (identiche)'},
+      {sym:'rr', name:'R multivibrante', desc:'Distinzione fonemica reale rispetto alla r semplice: cambia il significato della parola.', pairs:'perro / pero'},
+      {sym:'ritmo', name:'Ritmo sillabico', desc:'Più veloce e piatto dell\'italiano, con meno enfasi tonica marcata sulle sillabe.', pairs:'—'}
+    ],
+  },
+};
+
+const CHALLENGES = [
+"Descrivi la tua giornata di ieri come se fosse successa a un amico immaginario.",
+"Convinci qualcuno a provare il tuo piatto preferito, in 60 secondi, come un venditore.",
+"Racconta un ricordo d'infanzia con almeno un dettaglio sensoriale (odore, suono).",
+"Lamentati, in modo educato, di un servizio immaginario andato male.",
+"Spiega una regola di un gioco o sport a qualcuno che non lo conosce.",
+"Difendi un'opinione impopolare, ad esempio sulla pizza con l'ananas.",
+"Racconta le previsioni del tempo di oggi come un meteorologo in diretta TV.",
+"Descrivi a voce il percorso da casa tua al posto che frequenti di più.",
+"Improvvisa un'intervista immaginaria a te stesso tra 10 anni.",
+"Spiega perché stai imparando questa lingua a un potenziale compagno di scambio.",
+"Racconta la trama di un film visto di recente, in 90 secondi, senza spoiler eccessivi.",
+"Fai un reclamo formale, come un messaggio vocale, per un pacco mai arrivato.",
+"Descrivi una persona che ammiri, concentrandoti sul carattere più che sull'aspetto.",
+"Improvvisa gli annunci di un aeroporto per un volo in ritardo.",
+"Racconta un sogno che ricordi, anche vago, riempiendo i buchi con l'immaginazione.",
+"Convinci un amico a cambiare programma all'ultimo minuto per un imprevisto.",
+"Spiega una ricetta a memoria, passo dopo passo, come in un cooking show.",
+"Discuti i pro e i contro del lavoro da remoto rispetto all'ufficio.",
+"Racconta un litigio leggero che hai avuto e come si è risolto.",
+"Fai da guida turistica per la tua città a un visitatore immaginario.",
+"Improvvisa una lite scherzosa tra due tifosi di squadre o marche rivali.",
+"Racconta cosa faresti se vincessi una somma di denaro moderata.",
+"Descrivi un errore che hai fatto e cosa hai imparato.",
+"Fai una previsione assurda ma argomentata su come sarà il mondo tra 20 anni.",
+"Improvvisa una chiamata al servizio clienti per cancellare un abbonamento.",
+"Racconta una tradizione di famiglia e perché è importante per te.",
+"Convinci qualcuno a non fare qualcosa che stava per fare, in modo protettivo.",
+"Descrivi il tuo lavoro ideale, anche se non esiste ancora.",
+"Fai un elogio scherzoso per un oggetto rotto a cui eri affezionato.",
+"Riassumi cosa hai imparato in queste settimane, riflettendo a voce alta."
+];
+
+const SCENARIOS = [
+  ["Ordina al bar e scopri che non hanno più il piatto che volevi: gestisci il cambio.",
+   "Chiedi indicazioni per strada, ma non capisci la risposta: chiedi di ripetere o riformulare.",
+   "Fai il check-in in hotel e c'è un problema con la tua prenotazione."],
+  ["Sostieni un breve colloquio di lavoro: presentati e rispondi a una domanda inaspettata.",
+   "Fai un reclamo educato per un servizio scadente ricevuto.",
+   "Negozia il prezzo di un oggetto al mercato o sposta la data di un appuntamento."],
+  ["Discuti un'opinione su un tema leggero (cibo, film, viaggi) e devi dissentire con educazione.",
+   "Racconta un aneddoto personale che si conclude con un colpo di scena.",
+   "Gestisci un piccolo malinteso o conflitto con un amico."]
+];
+
+const BEGINNER = {
+  en: [
+    {it:"Ciao", ans:["hello","hi"]},
+    {it:"Buongiorno", ans:["good morning"]},
+    {it:"Buonasera", ans:["good evening"]},
+    {it:"Grazie", ans:["thank you","thanks"]},
+    {it:"Prego", ans:["you're welcome","youre welcome"]},
+    {it:"Per favore", ans:["please"]},
+    {it:"Mi chiamo Marco", ans:["my name is marco","i am marco","im marco"]},
+    {it:"Come stai?", ans:["how are you"]},
+    {it:"Sto bene, grazie", ans:["i am fine thank you","im fine thank you","i am fine thanks","im fine thanks","i'm fine thank you","i'm fine thanks","i'm good thanks","i am good thanks"]},
+    {it:"Quanti anni hai?", ans:["how old are you"]},
+    {it:"Dove abiti?", ans:["where do you live"]},
+    {it:"Non capisco", ans:["i dont understand","i don't understand","i do not understand"]},
+    {it:"Puoi ripetere?", ans:["can you repeat","can you repeat that","could you repeat"]},
+    {it:"Quanto costa?", ans:["how much does it cost","how much is it"]},
+    {it:"Mi piace il caffè", ans:["i like coffee"]},
+    {it:"Che ore sono?", ans:["what time is it"]},
+    {it:"Vorrei un caffè, per favore", ans:["i would like a coffee please","id like a coffee please","i'd like a coffee please"]},
+    {it:"A che ora parte il treno?", ans:["what time does the train leave","what time does the train depart"]},
+  ],
+  fr: [
+    {it:"Ciao", ans:["salut","bonjour"]},
+    {it:"Buongiorno", ans:["bonjour"]},
+    {it:"Buonasera", ans:["bonsoir"]},
+    {it:"Grazie", ans:["merci"]},
+    {it:"Prego", ans:["de rien"]},
+    {it:"Per favore", ans:["s'il te plait","s'il vous plait","stp","svp"]},
+    {it:"Mi chiamo Marco", ans:["je m'appelle marco","je mappelle marco"]},
+    {it:"Come stai?", ans:["comment ca va","comment vas-tu","comment vas tu"]},
+    {it:"Sto bene, grazie", ans:["je vais bien merci","ca va bien merci","ça va bien merci"]},
+    {it:"Quanti anni hai?", ans:["quel age as-tu","quel age as tu","tu as quel age"]},
+    {it:"Dove abiti?", ans:["ou habites-tu","ou habites tu","tu habites ou"]},
+    {it:"Non capisco", ans:["je ne comprends pas"]},
+    {it:"Puoi ripetere?", ans:["peux-tu repeter","peux tu repeter","tu peux repeter"]},
+    {it:"Quanto costa?", ans:["combien ca coute","combien ça coûte"]},
+    {it:"Mi piace il caffè", ans:["j'aime le cafe","jaime le cafe"]},
+    {it:"Che ore sono?", ans:["quelle heure est-il","quelle heure est il","quelle heure il est"]},
+    {it:"Vorrei un caffè, per favore", ans:["je voudrais un cafe s'il vous plait","je voudrais un cafe stp"]},
+    {it:"A che ora parte il treno?", ans:["a quelle heure part le train"]},
+  ],
+  ar: [
+    {it:"Ciao", ans:["مرحبا","marhaban"]},
+    {it:"Buongiorno", ans:["صباح الخير","sabah al khayr","sabah el kheir"]},
+    {it:"Buonasera", ans:["مساء الخير","masa al khayr","masa el kheir"]},
+    {it:"Grazie", ans:["شكرا","shukran"]},
+    {it:"Prego", ans:["عفوا","afwan"]},
+    {it:"Per favore", ans:["من فضلك","min fadlik","min fadlak"]},
+    {it:"Mi chiamo Marco", ans:["اسمي ماركو","ismi marco"]},
+    {it:"Come stai?", ans:["كيف حالك","kayfa haluk","kayf halak"]},
+    {it:"Sto bene, grazie", ans:["أنا بخير شكرا","ana bikhayr shukran"]},
+    {it:"Quanti anni hai?", ans:["كم عمرك","kam umruk"]},
+    {it:"Dove abiti?", ans:["أين تسكن","ayna taskun"]},
+    {it:"Non capisco", ans:["لا أفهم","la afham"]},
+    {it:"Puoi ripetere?", ans:["هل يمكنك أن تكرر","hal yumkinuka an tukarrir"]},
+    {it:"Quanto costa?", ans:["كم السعر","kam al-si'r","kam alsir"]},
+    {it:"Mi piace il caffè", ans:["أحب القهوة","uhibbu al-qahwa","ohebo alqahwa"]},
+    {it:"Che ore sono?", ans:["كم الساعة","kam al-sa'a","kam alsaa"]},
+    {it:"Vorrei un caffè, per favore", ans:["أريد قهوة من فضلك","ureedu qahwa min fadlik"]},
+    {it:"A che ora parte il treno?", ans:["متى يغادر القطار","mata yughadir al-qitar"]},
+  ],
+  es: [
+    {it:"Ciao", ans:["hola"]},
+    {it:"Buongiorno", ans:["buenos dias","buenos días"]},
+    {it:"Buonasera", ans:["buenas tardes","buenas noches"]},
+    {it:"Grazie", ans:["gracias"]},
+    {it:"Prego", ans:["de nada"]},
+    {it:"Per favore", ans:["por favor"]},
+    {it:"Mi chiamo Marco", ans:["me llamo marco"]},
+    {it:"Come stai?", ans:["como estas","cómo estás"]},
+    {it:"Sto bene, grazie", ans:["estoy bien gracias"]},
+    {it:"Quanti anni hai?", ans:["cuantos anos tienes","cuántos años tienes"]},
+    {it:"Dove abiti?", ans:["donde vives","dónde vives"]},
+    {it:"Non capisco", ans:["no entiendo"]},
+    {it:"Puoi ripetere?", ans:["puedes repetir"]},
+    {it:"Quanto costa?", ans:["cuanto cuesta","cuánto cuesta"]},
+    {it:"Mi piace il caffè", ans:["me gusta el cafe"]},
+    {it:"Che ore sono?", ans:["que hora es","qué hora es"]},
+    {it:"Vorrei un caffè, per favore", ans:["quisiera un cafe por favor"]},
+    {it:"A che ora parte il treno?", ans:["a que hora sale el tren","a qué hora sale el tren"]},
+  ],
+};
+
+/* ---------- STORAGE ADAPTER ----------
+   Dentro Claude usa window.storage. Fuori (GitHub Pages, file locale) non esiste:
+   in quel caso si passa in automatico a localStorage del telefono/browser. */
+const storageAdapter = {
+  async get(key){
+    if(window.storage){ try{ return await window.storage.get(key); }catch(e){ return null; } }
+    try{ const v = localStorage.getItem(key); return v!==null ? {key, value:v} : null; }
+    catch(e){ return null; }
+  },
+  async set(key, value){
+    if(window.storage){ try{ return await window.storage.set(key, value); }catch(e){ return null; } }
+    try{ localStorage.setItem(key, value); return {key, value}; }
+    catch(e){ return null; }
+  }
+};
+
+/* ---------- STATE ---------- */
+let currentLang = 'en';
+let state = { streak:0, lastDate:null, done:[], notebook:[] };
+let currentSlot = 1;
+let currentLevel = 0;
+let timer = { seconds: 300, running:false, interval:null, phase:0 };
+const PHASES = [
+  {label:"Fase 1 · Ascolto passivo", secs:60},
+  {label:"Fase 2 · Shadowing ad ombra", secs:180},
+  {label:"Fase 3 · Shadowing con testo", secs:120},
+  {label:"Fase 4 · Registra e confronta", secs:60},
+];
+
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function dayOfMonthIndex(){ return (new Date().getDate() - 1) % CHALLENGES.length; }
+
+async function loadState(lang){
+  try{
+    const r = await storageAdapter.get('state:'+lang);
+    state = r ? JSON.parse(r.value) : { streak:0, lastDate:null, done:[], notebook:[] };
+  }catch(e){ state = { streak:0, lastDate:null, done:[], notebook:[] }; }
+  if(!state.beginner) state.beginner = { index:0 };
+}
+async function saveState(lang){
+  try{ await storageAdapter.set('state:'+lang, JSON.stringify(state)); }catch(e){ console.warn('storage error', e); }
+}
+
+/* ---------- RENDER: header / ring ---------- */
+function renderRing(){
+  const ring = document.getElementById('ring');
+  ring.innerHTML = '';
+  Object.entries(LANGS).forEach(([key, l])=>{
+    const btn = document.createElement('button');
+    btn.className = 'voice-btn' + (key===currentLang ? ' active':'');
+    btn.innerHTML = `<span class="voice-fill"></span><span class="script">${l.script}</span>${l.label}`;
+    btn.onclick = ()=> switchLang(key);
+    ring.appendChild(btn);
+  });
+}
+
+function applyTheme(){
+  const l = LANGS[currentLang];
+  document.documentElement.style.setProperty('--accent', l.accent);
+  document.documentElement.style.setProperty('--accent-soft', l.accent + '29');
+  document.getElementById('voiceWord').textContent = l.word;
+  document.getElementById('langLabel').textContent = l.label;
+  document.getElementById('challengeText').closest('.card').setAttribute('dir', l.dir);
+  document.getElementById('scenarioBox').closest('.card').setAttribute('dir', l.dir);
+  document.getElementById('tab-percorso').setAttribute('dir', l.dir);
+}
+
+async function switchLang(key){
+  currentLang = key;
+  await loadState(key);
+  renderRing();
+  applyTheme();
+  renderStreak();
+  renderChallenge();
+  renderSounds();
+  renderScenario();
+  renderNotebook();
+  renderHistory();
+  renderBeginner();
+}
+
+function renderStreak(){
+  document.getElementById('streakCount').textContent = state.streak;
+}
+
+/* ---------- SFIDA ---------- */
+function renderChallenge(){
+  currentSlot = dayOfMonthIndex();
+  document.getElementById('slotNum').textContent = currentSlot+1;
+  document.getElementById('challengeText').textContent = CHALLENGES[currentSlot];
+  const isDone = state.done.includes(todayStr()+':'+currentSlot);
+  document.getElementById('btnDone').textContent = isDone ? 'Fatta oggi ✓' : 'Segna come fatta';
+  document.getElementById('btnDone').disabled = isDone;
+}
+document.getElementById('btnDone').onclick = async ()=>{
+  const key = todayStr()+':'+currentSlot;
+  if(state.done.includes(key)) return;
+  state.done.push(key);
+  const y = new Date(); y.setDate(y.getDate()-1);
+  const wasYesterday = state.lastDate === y.toISOString().slice(0,10);
+  state.streak = (state.lastDate === todayStr()) ? state.streak : (wasYesterday ? state.streak+1 : 1);
+  state.lastDate = todayStr();
+  await saveState(currentLang);
+  renderStreak(); renderChallenge(); renderHistory();
+};
+document.getElementById('btnAnother').onclick = ()=>{
+  currentSlot = Math.floor(Math.random()*CHALLENGES.length);
+  document.getElementById('slotNum').textContent = currentSlot+1;
+  document.getElementById('challengeText').textContent = CHALLENGES[currentSlot];
+  const isDone = state.done.includes(todayStr()+':'+currentSlot);
+  document.getElementById('btnDone').textContent = isDone ? 'Fatta oggi ✓' : 'Segna come fatta';
+  document.getElementById('btnDone').disabled = isDone;
+};
+
+/* ---------- SHADOWING TIMER ---------- */
+function fmt(s){ const m=Math.floor(s/60), sec=s%60; return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0'); }
+function renderPhaseList(){
+  const ul = document.getElementById('phaseList');
+  ul.innerHTML='';
+  PHASES.forEach((p,i)=>{
+    const li = document.createElement('li');
+    li.className = i===timer.phase ? 'current' : '';
+    li.innerHTML = `<span>${p.label}</span><b>${fmt(p.secs)}</b>`;
+    ul.appendChild(li);
+  });
+}
+function resetTimer(){
+  clearInterval(timer.interval);
+  timer.running=false; timer.phase=0; timer.seconds = PHASES[0].secs;
+  document.getElementById('btnTimerToggle').textContent='Avvia';
+  document.getElementById('timerDisplay').textContent = fmt(timer.seconds);
+  document.getElementById('phaseLabel').textContent = PHASES[0].label;
+  renderPhaseList();
+}
+document.getElementById('btnTimerReset').onclick = resetTimer;
+document.getElementById('btnTimerToggle').onclick = ()=>{
+  if(timer.running){
+    clearInterval(timer.interval); timer.running=false;
+    document.getElementById('btnTimerToggle').textContent='Riprendi';
+    return;
+  }
+  timer.running = true;
+  document.getElementById('btnTimerToggle').textContent='Pausa';
+  timer.interval = setInterval(()=>{
+    timer.seconds--;
+    if(timer.seconds < 0){
+      timer.phase++;
+      if(timer.phase >= PHASES.length){ resetTimer(); return; }
+      timer.seconds = PHASES[timer.phase].secs;
+      document.getElementById('phaseLabel').textContent = PHASES[timer.phase].label;
+      renderPhaseList();
+    }
+    document.getElementById('timerDisplay').textContent = fmt(timer.seconds);
+  },1000);
+};
+
+/* ---------- SUONI ---------- */
+function renderSounds(){
+  const box = document.getElementById('soundsList');
+  box.innerHTML='';
+  LANGS[currentLang].sounds.forEach(s=>{
+    const div = document.createElement('div');
+    div.className='sound-item';
+    div.innerHTML = `<div><span class="sym">${s.sym}</span><span class="name">${s.name}</span></div>
+      <p>${s.desc}</p><div class="pairs">${s.pairs}</div>`;
+    box.appendChild(div);
+  });
+}
+
+/* ---------- DIALOGHI ---------- */
+function renderScenario(){
+  const list = SCENARIOS[currentLevel];
+  document.getElementById('scenarioBox').textContent = list[Math.floor(Math.random()*list.length)];
+}
+document.getElementById('btnNewScenario').onclick = renderScenario;
+document.querySelectorAll('#levelTabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('#levelTabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLevel = Number(btn.dataset.level);
+    renderScenario();
+  };
+});
+
+/* ---------- QUADERNO ---------- */
+function renderNotebook(){
+  const box = document.getElementById('entriesList');
+  document.getElementById('btnExport').disabled = state.notebook.length===0;
+  box.innerHTML='';
+  if(state.notebook.length===0){ box.innerHTML = '<div class="empty">Ancora nessuna voce. Aggiungi la tua prima correzione dopo una conversazione di oggi.</div>'; return; }
+  [...state.notebook].reverse().forEach(e=>{
+    const div = document.createElement('div');
+    div.className='entry';
+    div.innerHTML = `<div class="orig">${e.orig}</div><div class="corr">${e.corr}</div><div class="meta">${e.date}</div>`;
+    box.appendChild(div);
+  });
+}
+document.getElementById('btnAddEntry').onclick = async ()=>{
+  const orig = document.getElementById('inputOrig').value.trim();
+  const corr = document.getElementById('inputCorr').value.trim();
+  if(!orig || !corr) return;
+  state.notebook.push({orig, corr, date: todayStr()});
+  await saveState(currentLang);
+  document.getElementById('inputOrig').value='';
+  document.getElementById('inputCorr').value='';
+  renderNotebook();
+};
+
+/* ---------- PERCORSO INIZIALE ---------- */
+function normalizeAnswer(str, isArabic){
+  let s = str.toLowerCase().trim();
+  if(isArabic){
+    s = s.replace(/[\u064B-\u0652\u0670\u0640]/g,''); // harakat/tatweel
+    s = s.replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه');
+  } else {
+    s = s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); // accenti latini
+  }
+  s = s.replace(/['’`.,!?¿¡"]/g,'').replace(/\s+/g,' ').trim();
+  return s;
+}
+function renderBeginner(){
+  const list = BEGINNER[currentLang];
+  const idx = state.beginner.index;
+  document.getElementById('bpFeedback').textContent='';
+  document.getElementById('bpFeedback').className='bp-feedback';
+  document.getElementById('bpInput').value='';
+  document.getElementById('bpInput').dir = LANGS[currentLang].dir;
+  const card = document.getElementById('tab-percorso');
+  if(idx >= list.length){
+    document.getElementById('bpProgressFill').style.width='100%';
+    document.getElementById('bpProgressLabel').textContent = `Completato · ${list.length}/${list.length}`;
+    document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">Percorso completato ✓</div>Hai tradotto tutte le frasi base in ${LANGS[currentLang].label}. Passa alle Sfide o ai Dialoghi per continuare.</div>`;
+    document.getElementById('bpInput').classList.add('hidden');
+    document.getElementById('bpCheck').classList.add('hidden');
+    document.getElementById('bpSkip').classList.add('hidden');
+    return;
+  }
+  document.getElementById('bpInput').classList.remove('hidden');
+  document.getElementById('bpCheck').classList.remove('hidden');
+  document.getElementById('bpSkip').classList.remove('hidden');
+  document.getElementById('bpProgressFill').style.width = (idx/list.length*100)+'%';
+  document.getElementById('bpProgressLabel').textContent = `Frase ${idx+1} di ${list.length}`;
+  document.getElementById('bpPrompt').textContent = list[idx].it;
+}
+async function bpAdvance(){
+  state.beginner.index++;
+  state.beginner.wrong = 0;
+  await saveState(currentLang);
+  renderBeginner();
+}
+document.getElementById('bpCheck').onclick = async ()=>{
+  const list = BEGINNER[currentLang];
+  const idx = state.beginner.index;
+  if(idx >= list.length) return;
+  const isAr = currentLang === 'ar';
+  const given = normalizeAnswer(document.getElementById('bpInput').value, isAr);
+  const ok = list[idx].ans.some(a => normalizeAnswer(a, isAr) === given);
+  const fb = document.getElementById('bpFeedback');
+  if(!given){ return; }
+  if(ok){
+    fb.className='bp-feedback ok';
+    fb.textContent = 'Corretto ✓';
+    setTimeout(bpAdvance, 700);
+  } else {
+    state.beginner.wrong = (state.beginner.wrong||0)+1;
+    fb.className='bp-feedback ko';
+    if(state.beginner.wrong >= 2){
+      fb.innerHTML = 'Non ancora corretto.<span class="hint">Suggerimento: ' + list[idx].ans[0] + '</span>';
+    } else {
+      fb.textContent = 'Non ancora corretto, riprova.';
+    }
+  }
+};
+document.getElementById('bpInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ document.getElementById('bpCheck').click(); }
+});
+document.getElementById('bpSkip').onclick = bpAdvance;
+document.getElementById('bpReset').onclick = async ()=>{
+  state.beginner = { index:0, wrong:0 };
+  await saveState(currentLang);
+  renderBeginner();
+};
+
+/* ---------- CRONOLOGIA ---------- */
+function renderHistory(){
+  document.getElementById('cronoLangLabel').textContent = LANGS[currentLang].label;
+  const uniqueDays = new Set(state.done.map(d=>d.split(':')[0])).size;
+  const stats = document.getElementById('statsRow');
+  stats.innerHTML = `
+    <div class="stat-box"><div class="n">${state.streak}</div><div class="l">SERIE ATTUALE</div></div>
+    <div class="stat-box"><div class="n">${uniqueDays}</div><div class="l">GIORNI DI PRATICA</div></div>
+    <div class="stat-box"><div class="n">${state.done.length}</div><div class="l">SFIDE COMPLETATE</div></div>
+  `;
+  const list = document.getElementById('historyList');
+  if(state.done.length===0){
+    list.innerHTML = '<div class="empty">Nessuna sfida completata ancora per questa lingua. Segna la sfida di oggi per iniziare la cronologia.</div>';
+    return;
+  }
+  const sorted = [...state.done].sort().reverse();
+  list.innerHTML = sorted.map(d=>{
+    const [date, slot] = d.split(':');
+    return `<div class="hist-item"><span class="htext">${CHALLENGES[Number(slot)]}</span><span class="hdate">${date}</span></div>`;
+  }).join('');
+}
+
+/* ---------- EXPORT QUADERNO ---------- */
+function exportNotebook(){
+  if(state.notebook.length===0) return;
+  let text = `Quaderno di correzione — ${LANGS[currentLang].label}\nEsportato il ${todayStr()}\n\n`;
+  [...state.notebook].reverse().forEach(e=>{
+    text += `[${e.date}]\nDetto:     ${e.orig}\nCorretto:  ${e.corr}\n\n`;
+  });
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `quaderno-${currentLang}-${todayStr()}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+document.getElementById('btnExport').onclick = exportNotebook;
+
+/* ---------- TABS ---------- */
+document.querySelectorAll('nav.tabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
+    document.getElementById('tab-'+btn.dataset.tab).classList.remove('hidden');
+  };
+});
+
+/* ---------- INIT ---------- */
+(async function init(){
+  renderRing();
+  await switchLang('en');
+  resetTimer();
+})();
+
+/* Registra il service worker solo se disponibile (non nell'ambiente artifact di Claude) */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{ /* niente, va bene anche senza */ });
+  });
+}
+
+</script>
+</body>
+</html>
