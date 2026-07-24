@@ -217,6 +217,7 @@
   nav.tabs button.active{ color: var(--accent); }
 
   [dir="rtl"] .challenge-text, [dir="rtl"] .scenario-box{ text-align:right; }
+  .challenge-text[dir="rtl"], .scenario-box[dir="rtl"]{ text-align:right; }
   .rtl-text{ direction: rtl; font-family:'IBM Plex Sans Arabic', sans-serif; }
 
   .hidden{ display:none !important; }
@@ -250,7 +251,12 @@
   <section class="card hidden" id="tab-percorso">
     <span class="tag">Percorso iniziale &middot; da zero</span>
     <h2>Traduci con la tastiera</h2>
-    <p class="sub">Scrivi la traduzione della frase italiana. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
+    <p class="sub">Scegli la direzione, poi scrivi la traduzione. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
+    <div class="level-tabs" id="bpDirTabs">
+      <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
+      <button data-dir="to_it" id="bpDirToIt">Lingua &rarr; Italiano</button>
+    </div>
+    <div class="stats-row" id="bpStatsRow"></div>
     <div class="bp-progress-wrap">
       <div class="bp-progress-bar"><div class="bp-progress-fill" id="bpProgressFill"></div></div>
       <div class="bp-progress-label" id="bpProgressLabel">Frase 1 di 18</div>
@@ -262,7 +268,7 @@
       <button class="primary" id="bpCheck">Verifica</button>
       <button class="ghost" id="bpSkip">Salta</button>
     </div>
-    <button class="ghost" id="bpReset" style="width:100%; margin-top:8px;">Ricomincia percorso</button>
+    <button class="ghost" id="bpReset" style="width:100%; margin-top:8px;">Ricomincia questa direzione</button>
   </section>
 
   <!-- SHADOWING -->
@@ -558,7 +564,14 @@ async function loadState(lang){
     const r = await storageAdapter.get('state:'+lang);
     state = r ? JSON.parse(r.value) : { streak:0, lastDate:null, done:[], notebook:[] };
   }catch(e){ state = { streak:0, lastDate:null, done:[], notebook:[] }; }
-  if(!state.beginner) state.beginner = { index:0 };
+  if(!state.beginner || !state.beginner.to_target){
+    const oldIndex = (state.beginner && typeof state.beginner.index === 'number') ? state.beginner.index : 0;
+    state.beginner = {
+      direction: 'to_target',
+      to_target: { index: oldIndex, wrong:0, score:0, correctFirstTry:0, completed:0 },
+      to_it: { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 }
+    };
+  }
 }
 async function saveState(lang){
   try{ await storageAdapter.set('state:'+lang, JSON.stringify(state)); }catch(e){ console.warn('storage error', e); }
@@ -585,7 +598,6 @@ function applyTheme(){
   document.getElementById('langLabel').textContent = l.label;
   document.getElementById('challengeText').closest('.card').setAttribute('dir', l.dir);
   document.getElementById('scenarioBox').closest('.card').setAttribute('dir', l.dir);
-  document.getElementById('tab-percorso').setAttribute('dir', l.dir);
 }
 
 async function switchLang(key){
@@ -741,18 +753,43 @@ function normalizeAnswer(str, isArabic){
   s = s.replace(/['’`.,!?¿¡"]/g,'').replace(/\s+/g,' ').trim();
   return s;
 }
+function currentDirState(){ return state.beginner[state.beginner.direction]; }
+
 function renderBeginner(){
   const list = BEGINNER[currentLang];
-  const idx = state.beginner.index;
+  const dir = state.beginner.direction;
+  const ds = currentDirState();
+  const idx = ds.index;
+
+  document.querySelectorAll('#bpDirTabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.dir === dir);
+  });
+  document.getElementById('bpDirToTarget').textContent = `Italiano \u2192 ${LANGS[currentLang].label}`;
+  document.getElementById('bpDirToIt').textContent = `${LANGS[currentLang].label} \u2192 Italiano`;
+
+  const precisione = ds.completed>0 ? Math.round(ds.correctFirstTry/ds.completed*100) : null;
+  document.getElementById('bpStatsRow').innerHTML = `
+    <div class="stat-box"><div class="n">${ds.score}</div><div class="l">PUNTI</div></div>
+    <div class="stat-box"><div class="n">${precisione===null?'&mdash;':precisione+'%'}</div><div class="l">PRECISIONE</div></div>
+    <div class="stat-box"><div class="n">${ds.completed}</div><div class="l">COMPLETATE</div></div>
+  `;
+
   document.getElementById('bpFeedback').textContent='';
   document.getElementById('bpFeedback').className='bp-feedback';
   document.getElementById('bpInput').value='';
-  document.getElementById('bpInput').dir = LANGS[currentLang].dir;
-  const card = document.getElementById('tab-percorso');
+
+  const inputIsArabic = (dir === 'to_target' && currentLang === 'ar');
+  document.getElementById('bpInput').dir = inputIsArabic ? 'rtl' : 'ltr';
+  document.getElementById('bpInput').placeholder = (dir === 'to_target')
+    ? `Scrivi in ${LANGS[currentLang].label}...`
+    : 'Scrivi in italiano...';
+
   if(idx >= list.length){
     document.getElementById('bpProgressFill').style.width='100%';
     document.getElementById('bpProgressLabel').textContent = `Completato · ${list.length}/${list.length}`;
-    document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">Percorso completato ✓</div>Hai tradotto tutte le frasi base in ${LANGS[currentLang].label}. Passa alle Sfide o ai Dialoghi per continuare.</div>`;
+    document.getElementById('bpPrompt').removeAttribute('dir');
+    document.getElementById('bpPrompt').classList.remove('rtl-text');
+    document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">Direzione completata ✓</div>Hai finito questa direzione per ${LANGS[currentLang].label}. Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}" oppure passa alle Sfide.</div>`;
     document.getElementById('bpInput').classList.add('hidden');
     document.getElementById('bpCheck').classList.add('hidden');
     document.getElementById('bpSkip').classList.add('hidden');
@@ -763,35 +800,56 @@ function renderBeginner(){
   document.getElementById('bpSkip').classList.remove('hidden');
   document.getElementById('bpProgressFill').style.width = (idx/list.length*100)+'%';
   document.getElementById('bpProgressLabel').textContent = `Frase ${idx+1} di ${list.length}`;
-  document.getElementById('bpPrompt').textContent = list[idx].it;
+
+  const item = list[idx];
+  const showingArabic = (dir === 'to_it' && currentLang === 'ar');
+  const promptEl = document.getElementById('bpPrompt');
+  promptEl.textContent = (dir === 'to_target') ? item.it : item.ans[0];
+  promptEl.setAttribute('dir', showingArabic ? 'rtl' : 'ltr');
+  promptEl.classList.toggle('rtl-text', showingArabic);
 }
 async function bpAdvance(){
-  state.beginner.index++;
-  state.beginner.wrong = 0;
+  const ds = currentDirState();
+  ds.index++;
+  ds.wrong = 0;
   await saveState(currentLang);
   renderBeginner();
 }
 document.getElementById('bpCheck').onclick = async ()=>{
   const list = BEGINNER[currentLang];
-  const idx = state.beginner.index;
+  const dir = state.beginner.direction;
+  const ds = currentDirState();
+  const idx = ds.index;
   if(idx >= list.length) return;
-  const isAr = currentLang === 'ar';
-  const given = normalizeAnswer(document.getElementById('bpInput').value, isAr);
-  const ok = list[idx].ans.some(a => normalizeAnswer(a, isAr) === given);
+  const item = list[idx];
+  const isArInput = (dir === 'to_target' && currentLang === 'ar');
+  const given = normalizeAnswer(document.getElementById('bpInput').value, isArInput);
+  if(!given) return;
+
+  const ok = (dir === 'to_target')
+    ? item.ans.some(a => normalizeAnswer(a, isArInput) === given)
+    : normalizeAnswer(item.it, false) === given;
+
   const fb = document.getElementById('bpFeedback');
-  if(!given){ return; }
   if(ok){
+    const gained = ds.wrong === 0 ? 10 : 5;
+    ds.score += gained;
+    if(ds.wrong === 0) ds.correctFirstTry++;
+    ds.completed++;
     fb.className='bp-feedback ok';
-    fb.textContent = 'Corretto ✓';
-    setTimeout(bpAdvance, 700);
+    fb.textContent = `Corretto ✓  +${gained} punti`;
+    await saveState(currentLang);
+    setTimeout(bpAdvance, 800);
   } else {
-    state.beginner.wrong = (state.beginner.wrong||0)+1;
+    ds.wrong = (ds.wrong||0)+1;
     fb.className='bp-feedback ko';
-    if(state.beginner.wrong >= 2){
-      fb.innerHTML = 'Non ancora corretto.<span class="hint">Suggerimento: ' + list[idx].ans[0] + '</span>';
+    if(ds.wrong >= 2){
+      const correctAnswer = (dir === 'to_target') ? item.ans[0] : item.it;
+      fb.innerHTML = 'Non ancora corretto.<span class="hint">Suggerimento: ' + correctAnswer + '</span>';
     } else {
       fb.textContent = 'Non ancora corretto, riprova.';
     }
+    await saveState(currentLang);
   }
 };
 document.getElementById('bpInput').addEventListener('keydown', (e)=>{
@@ -799,10 +857,18 @@ document.getElementById('bpInput').addEventListener('keydown', (e)=>{
 });
 document.getElementById('bpSkip').onclick = bpAdvance;
 document.getElementById('bpReset').onclick = async ()=>{
-  state.beginner = { index:0, wrong:0 };
+  state.beginner[state.beginner.direction] = { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 };
   await saveState(currentLang);
   renderBeginner();
 };
+document.querySelectorAll('#bpDirTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.beginner.direction = btn.dataset.dir;
+    await saveState(currentLang);
+    renderBeginner();
+  };
+});
+
 
 /* ---------- CRONOLOGIA ---------- */
 function renderHistory(){
