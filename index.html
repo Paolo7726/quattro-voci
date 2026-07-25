@@ -62,15 +62,10 @@
     flex:1; border:none; background:transparent; color: var(--ink-dim);
     padding: 10px 4px; border-radius: 999px; font-family:'IBM Plex Sans', sans-serif;
     font-size: 13.5px; font-weight:500; cursor:pointer; position:relative;
-    transition: color .3s ease;
+    transition: color .3s ease, background-color .3s ease;
   }
   .voice-btn .script{ display:block; font-size: 15px; margin-bottom:1px; }
-  .voice-btn.active{ color: #17140F; }
-  .voice-fill{
-    position:absolute; inset:0; border-radius:999px; z-index:-1;
-    background: var(--accent); opacity:0; transition: opacity .3s ease;
-  }
-  .voice-btn.active .voice-fill{ opacity:1; }
+  .voice-btn.active{ color: #17140F; background: var(--accent); font-weight:600; }
 
   /* streak strip */
   .streak{
@@ -584,7 +579,7 @@ function renderRing(){
   Object.entries(LANGS).forEach(([key, l])=>{
     const btn = document.createElement('button');
     btn.className = 'voice-btn' + (key===currentLang ? ' active':'');
-    btn.innerHTML = `<span class="voice-fill"></span><span class="script">${l.script}</span>${l.label}`;
+    btn.innerHTML = `<span class="script">${l.script}</span>${l.label}`;
     btn.onclick = ()=> switchLang(key);
     ring.appendChild(btn);
   });
