@@ -216,11 +216,46 @@
   .rtl-text{ direction: rtl; font-family:'IBM Plex Sans Arabic', sans-serif; }
 
   .hidden{ display:none !important; }
+
+  /* account */
+  header{ position:relative; }
+  .account-btn{
+    position:absolute; top:8px; right:2px; width:36px; height:36px; border-radius:50%;
+    background: var(--panel); border:1px solid var(--hair); color: var(--ink-dim);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .account-btn svg{ width:18px; height:18px; }
+  .account-btn.logged-in{ border-color: var(--accent); color: var(--accent); }
+  .account-dot{
+    position:absolute; top:-2px; right:-2px; width:9px; height:9px; border-radius:50%;
+    background:#7FBF7F; border:2px solid var(--bg); display:none;
+  }
+  .account-btn.logged-in .account-dot{ display:block; }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:50;
+    display:flex; align-items:flex-end; justify-content:center;
+  }
+  .modal-box{
+    width:100%; max-width:480px; background: var(--panel); border-top:1px solid var(--hair);
+    border-radius: 20px 20px 0 0; padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+    max-height:85vh; overflow-y:auto;
+  }
+  .modal-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .modal-head h3{ font-family:'Fraunces', serif; font-size:20px; margin:0; font-weight:600; }
+  .modal-close{ background:none; border:none; color: var(--ink-dim); font-size:22px; cursor:pointer; line-height:1; padding:4px; }
+  .auth-feedback{ min-height:18px; font-size:12.5px; margin: 4px 2px 10px; }
+  .auth-feedback.err{ color:#D96C6C; }
+  .auth-feedback.ok{ color:#7FBF7F; }
 </style>
 </head>
 <body>
 <div class="app">
   <header>
+    <button class="account-btn" id="accountBtn" aria-label="Account">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"/></svg>
+      <span class="account-dot"></span>
+    </button>
     <p class="eyebrow">Ecosistema di pratica &middot; parlato prima, forma dopo</p>
     <h1>Quattro <span id="voiceWord">Voci</span></h1>
     <div class="ring" id="ring"></div>
@@ -229,6 +264,34 @@
       <span><span class="flame">&#9679;</span> <b id="streakCount">0</b> giorni</span>
     </div>
   </header>
+
+  <div class="modal-overlay hidden" id="authModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="authModalTitle">Accedi</h3>
+        <button class="modal-close" id="authModalClose">&times;</button>
+      </div>
+
+      <div id="authLoggedOut">
+        <div class="level-tabs" id="authTabs">
+          <button data-mode="login" class="active">Accedi</button>
+          <button data-mode="signup">Registrati</button>
+        </div>
+        <input type="email" id="authEmail" placeholder="Email" autocomplete="email">
+        <input type="password" id="authPass" placeholder="Password (min. 6 caratteri)" autocomplete="current-password">
+        <div class="auth-feedback" id="authFeedback"></div>
+        <button class="primary" id="authSubmit" style="width:100%">Accedi</button>
+        <p class="sub" style="margin-top:12px;">Facoltativo: puoi continuare a usare l'app senza account. In quel caso i progressi restano salvati solo su questo dispositivo.</p>
+      </div>
+
+      <div id="authLoggedIn" class="hidden">
+        <p class="sub" style="margin-bottom:4px;">Connesso come</p>
+        <p style="font-weight:600; margin: 0 0 16px; font-size:15px;" id="authUserEmail">&mdash;</p>
+        <p class="sub">I progressi di tutte e 4 le lingue si sincronizzano automaticamente su ogni dispositivo dove accedi con questo account.</p>
+        <button class="ghost" id="authLogout" style="width:100%; margin-top:14px;">Esci</button>
+      </div>
+    </div>
+  </div>
 
   <!-- SFIDA -->
   <section class="card" id="tab-sfida">
@@ -570,6 +633,9 @@ async function loadState(lang){
 }
 async function saveState(lang){
   try{ await storageAdapter.set('state:'+lang, JSON.stringify(state)); }catch(e){ console.warn('storage error', e); }
+  if(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser){
+    window.cloudAPI.pushState(lang, state).catch((e)=>console.warn('cloud push error', e));
+  }
 }
 
 /* ---------- RENDER: header / ring ---------- */
@@ -930,6 +996,176 @@ if('serviceWorker' in navigator){
   });
 }
 
+/* ---------- ACCOUNT / SINCRONIZZAZIONE CLOUD ---------- */
+let authMode = 'login';
+
+function openAuthModal(){
+  document.getElementById('authModal').classList.remove('hidden');
+  document.getElementById('authFeedback').textContent = '';
+  const loggedIn = window.cloudAPI && window.cloudAPI.currentUser;
+  document.getElementById('authLoggedOut').classList.toggle('hidden', !!loggedIn);
+  document.getElementById('authLoggedIn').classList.toggle('hidden', !loggedIn);
+  if(loggedIn){
+    document.getElementById('authUserEmail').textContent = window.cloudAPI.currentUser.email;
+    document.getElementById('authModalTitle').textContent = 'Account';
+  } else {
+    document.getElementById('authModalTitle').textContent = authMode === 'login' ? 'Accedi' : 'Registrati';
+  }
+}
+function closeAuthModal(){ document.getElementById('authModal').classList.add('hidden'); }
+
+document.getElementById('accountBtn').onclick = openAuthModal;
+document.getElementById('authModalClose').onclick = closeAuthModal;
+document.getElementById('authModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'authModal') closeAuthModal();
+});
+document.querySelectorAll('#authTabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    authMode = btn.dataset.mode;
+    document.querySelectorAll('#authTabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('authSubmit').textContent = authMode === 'login' ? 'Accedi' : 'Crea account';
+    document.getElementById('authModalTitle').textContent = authMode === 'login' ? 'Accedi' : 'Registrati';
+    document.getElementById('authFeedback').textContent = '';
+  };
+});
+
+document.getElementById('authSubmit').onclick = async ()=>{
+  const fb = document.getElementById('authFeedback');
+  if(!window.cloudAPI || !window.cloudAPI.enabled){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Sincronizzazione non ancora configurata su questa copia dell\'app.';
+    return;
+  }
+  const email = document.getElementById('authEmail').value.trim();
+  const pass = document.getElementById('authPass').value;
+  if(!email || pass.length < 6){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Inserisci un\'email valida e una password di almeno 6 caratteri.';
+    return;
+  }
+  fb.className='auth-feedback'; fb.textContent = 'Un momento...';
+  try{
+    if(authMode === 'login'){
+      await window.cloudAPI.login(email, pass);
+    } else {
+      await window.cloudAPI.signup(email, pass);
+    }
+    fb.textContent = '';
+  }catch(e){
+    fb.className='auth-feedback err';
+    fb.textContent = translateAuthError(e);
+  }
+};
+document.getElementById('authLogout').onclick = async ()=>{
+  if(window.cloudAPI) await window.cloudAPI.logout();
+  closeAuthModal();
+};
+
+function translateAuthError(e){
+  const code = (e && e.code) || '';
+  const map = {
+    'auth/email-already-in-use': 'Questa email ha già un account: prova ad accedere invece di registrarti.',
+    'auth/invalid-email': 'Email non valida.',
+    'auth/weak-password': 'Password troppo debole (minimo 6 caratteri).',
+    'auth/user-not-found': 'Nessun account con questa email: prova a registrarti.',
+    'auth/wrong-password': 'Password errata.',
+    'auth/invalid-credential': 'Email o password errate.',
+    'auth/too-many-requests': 'Troppi tentativi, riprova tra qualche minuto.',
+  };
+  return map[code] || 'Qualcosa è andato storto, riprova.';
+}
+
+async function syncAllLanguagesFromCloud(){
+  for(const lang of Object.keys(LANGS)){
+    let cloudData = null;
+    try{ cloudData = await window.cloudAPI.pullState(lang); }catch(e){ console.warn('pull error', lang, e); }
+    if(cloudData){
+      try{ localStorage.setItem('state:'+lang, JSON.stringify(cloudData)); }catch(e){}
+    } else {
+      try{
+        const localRaw = localStorage.getItem('state:'+lang);
+        if(localRaw){ await window.cloudAPI.pushState(lang, JSON.parse(localRaw)); }
+      }catch(e){ console.warn('push error', lang, e); }
+    }
+  }
+  await switchLang(currentLang);
+}
+
+window.addEventListener('cloud-ready', ()=>{
+  if(!window.cloudAPI || !window.cloudAPI.enabled) return;
+  window.cloudAPI.onAuthChange(async (user)=>{
+    window.cloudAPI.currentUser = user;
+    const btn = document.getElementById('accountBtn');
+    btn.classList.toggle('logged-in', !!user);
+    if(!document.getElementById('authModal').classList.contains('hidden')){
+      openAuthModal();
+    }
+    if(user){
+      await syncAllLanguagesFromCloud();
+    }
+  });
+});
+
+</script>
+
+<!-- ============================================================
+     CONFIGURAZIONE FIREBASE (account + sincronizzazione cloud)
+     Sostituisci i valori qui sotto con quelli del TUO progetto
+     Firebase — li trovi in: Console Firebase → ⚙️ Impostazioni
+     progetto → sezione "Le tue app" → oggetto firebaseConfig.
+     Finché sono lasciati com'è, l'app funziona comunque, solo
+     senza account: tutto resta salvato in locale come prima.
+     ============================================================ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "INCOLLA_QUI_API_KEY",
+    authDomain: "INCOLLA_QUI_AUTH_DOMAIN",
+    projectId: "INCOLLA_QUI_PROJECT_ID",
+    storageBucket: "INCOLLA_QUI_STORAGE_BUCKET",
+    messagingSenderId: "INCOLLA_QUI_SENDER_ID",
+    appId: "INCOLLA_QUI_APP_ID"
+  };
+
+  let app = null, auth = null, db = null;
+  const isConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('INCOLLA');
+
+  if(isConfigured){
+    try{
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+    }catch(e){ console.warn('Firebase init error', e); }
+  }
+
+  window.cloudAPI = {
+    enabled: !!app,
+    currentUser: null,
+    async signup(email, pass){ return createUserWithEmailAndPassword(auth, email, pass); },
+    async login(email, pass){ return signInWithEmailAndPassword(auth, email, pass); },
+    async logout(){ return signOut(auth); },
+    onAuthChange(cb){ if(auth) onAuthStateChanged(auth, cb); },
+    async pushState(lang, stateObj){
+      if(!auth || !auth.currentUser) return;
+      await setDoc(doc(db, 'users', auth.currentUser.uid, 'progress', lang), stateObj);
+    },
+    async pullState(lang){
+      if(!auth || !auth.currentUser) return null;
+      const snap = await getDoc(doc(db, 'users', auth.currentUser.uid, 'progress', lang));
+      return snap.exists() ? snap.data() : null;
+    }
+  };
+
+  window.dispatchEvent(new Event('cloud-ready'));
 </script>
 </body>
 </html>
