@@ -198,6 +198,23 @@
   .bp-done{ text-align:center; padding: 20px 10px; }
   .bp-done .n{ font-family:'Fraunces', serif; font-size:22px; color: var(--accent); margin-bottom:6px; }
 
+  /* classifica */
+  .lb-divider{ height:1px; background: var(--hair); margin: 20px 0 16px; }
+  .lb-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .lb-row{
+    display:flex; align-items:center; gap:10px; padding: 10px 12px; background: var(--panel-2);
+    border-radius:10px; margin-bottom:6px; font-size:13.5px;
+  }
+  .lb-row.me{ border:1px solid var(--accent); background: var(--accent-soft); }
+  .lb-rank{ font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--ink-dim); width:22px; flex-shrink:0; }
+  .lb-name{ flex:1; color: var(--ink); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lb-score{ font-family:'IBM Plex Mono', monospace; font-weight:600; color: var(--accent); }
+
+  /* onboarding */
+  .ob-dots{ display:flex; gap:6px; justify-content:center; margin-top:16px; }
+  .ob-dot{ width:7px; height:7px; border-radius:50%; background: var(--hair); transition: background-color .25s ease; }
+  .ob-dot.active{ background: var(--accent); }
+
   /* bottom nav */
   nav.tabs{
     position: fixed; left:0; right:0; bottom:0;
@@ -282,6 +299,7 @@
           <button data-mode="login" class="active">Accedi</button>
           <button data-mode="signup">Registrati</button>
         </div>
+        <input type="text" id="authNickname" placeholder="Nome pubblico (visibile in classifica)" autocomplete="nickname" maxlength="20" class="hidden">
         <input type="email" id="authEmail" placeholder="Email" autocomplete="email">
         <input type="password" id="authPass" placeholder="Password (min. 6 caratteri)" autocomplete="current-password">
         <div class="auth-feedback" id="authFeedback"></div>
@@ -294,6 +312,21 @@
         <p style="font-weight:600; margin: 0 0 16px; font-size:15px;" id="authUserEmail">&mdash;</p>
         <p class="sub">I progressi di tutte e 4 le lingue si sincronizzano automaticamente su ogni dispositivo dove accedi con questo account.</p>
         <button class="ghost" id="authLogout" style="width:100%; margin-top:14px;">Esci</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="onboardModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="onboardTitle">Benvenuto</h3>
+        <button class="modal-close" id="onboardSkip">&times;</button>
+      </div>
+      <div id="onboardSlides"></div>
+      <div class="ob-dots" id="obDots"></div>
+      <div class="row" style="margin-top:16px;">
+        <button class="ghost hidden" id="obPrev">Indietro</button>
+        <button class="primary" id="obNext">Avanti</button>
       </div>
     </div>
   </div>
@@ -332,6 +365,14 @@
       <button class="ghost" id="bpSkip">Salta</button>
     </div>
     <button class="ghost" id="bpReset" style="width:100%; margin-top:8px;">Ricomincia questa direzione</button>
+
+    <div class="lb-divider"></div>
+    <div class="lb-head">
+      <span class="tag" style="margin-bottom:0;">Classifica &middot; punti totali</span>
+      <button class="ghost" id="lbRefresh" style="padding:6px 12px; font-size:12px;">Aggiorna</button>
+    </div>
+    <div id="leaderboardLoggedOut" class="empty">Accedi o registrati (icona in alto a destra) per partecipare alla classifica e vedere come ti posizioni rispetto agli altri.</div>
+    <div id="leaderboardList" class="hidden"></div>
   </section>
 
   <!-- SHADOWING -->
@@ -905,6 +946,9 @@ document.getElementById('bpCheck').onclick = async ()=>{
     fb.className='bp-feedback ok';
     fb.textContent = `Corretto ✓  +${gained} punti`;
     await saveState(currentLang);
+    if(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser){
+      window.cloudAPI.addPoints(gained).then(()=>renderLeaderboard()).catch(()=>{});
+    }
     setTimeout(bpAdvance, 800);
   } else {
     ds.wrong = (ds.wrong||0)+1;
@@ -984,6 +1028,9 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     btn.classList.add('active');
     document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
     document.getElementById('tab-'+btn.dataset.tab).classList.remove('hidden');
+    if(btn.dataset.tab === 'percorso' && typeof renderLeaderboard === 'function'){
+      renderLeaderboard();
+    }
   };
 });
 
@@ -1032,6 +1079,7 @@ document.querySelectorAll('#authTabs button').forEach(btn=>{
     document.getElementById('authSubmit').textContent = authMode === 'login' ? 'Accedi' : 'Crea account';
     document.getElementById('authModalTitle').textContent = authMode === 'login' ? 'Accedi' : 'Registrati';
     document.getElementById('authFeedback').textContent = '';
+    document.getElementById('authNickname').classList.toggle('hidden', authMode !== 'signup');
   };
 });
 
@@ -1044,9 +1092,15 @@ document.getElementById('authSubmit').onclick = async ()=>{
   }
   const email = document.getElementById('authEmail').value.trim();
   const pass = document.getElementById('authPass').value;
+  const nickname = document.getElementById('authNickname').value.trim();
   if(!email || pass.length < 6){
     fb.className='auth-feedback err';
     fb.textContent = 'Inserisci un\'email valida e una password di almeno 6 caratteri.';
+    return;
+  }
+  if(authMode === 'signup' && !nickname){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Scegli un nome pubblico per la classifica.';
     return;
   }
   fb.className='auth-feedback'; fb.textContent = 'Un momento...';
@@ -1054,6 +1108,7 @@ document.getElementById('authSubmit').onclick = async ()=>{
     if(authMode === 'login'){
       await window.cloudAPI.login(email, pass);
     } else {
+      pendingSignupNickname = nickname;
       await window.cloudAPI.signup(email, pass);
     }
     fb.textContent = '';
@@ -1081,7 +1136,18 @@ function translateAuthError(e){
   return map[code] || 'Qualcosa è andato storto, riprova.';
 }
 
+let pendingSignupNickname = null;
+
+function sumBeginnerScore(stateObj){
+  if(!stateObj || !stateObj.beginner) return 0;
+  const b = stateObj.beginner;
+  const a = (b.to_target && b.to_target.score) || 0;
+  const c = (b.to_it && b.to_it.score) || 0;
+  return a + c;
+}
+
 async function syncAllLanguagesFromCloud(){
+  let backfillTotal = 0;
   for(const lang of Object.keys(LANGS)){
     let cloudData = null;
     try{ cloudData = await window.cloudAPI.pullState(lang); }catch(e){ console.warn('pull error', lang, e); }
@@ -1090,12 +1156,105 @@ async function syncAllLanguagesFromCloud(){
     } else {
       try{
         const localRaw = localStorage.getItem('state:'+lang);
-        if(localRaw){ await window.cloudAPI.pushState(lang, JSON.parse(localRaw)); }
+        if(localRaw){
+          const parsed = JSON.parse(localRaw);
+          await window.cloudAPI.pushState(lang, parsed);
+          backfillTotal += sumBeginnerScore(parsed);
+        }
       }catch(e){ console.warn('push error', lang, e); }
     }
   }
+  try{
+    await window.cloudAPI.initLeaderboardIfEmpty(backfillTotal, pendingSignupNickname);
+  }catch(e){ console.warn('leaderboard init error', e); }
+  pendingSignupNickname = null;
   await switchLang(currentLang);
+  renderLeaderboard();
 }
+
+/* ---------- CLASSIFICA ---------- */
+async function renderLeaderboard(){
+  const loggedOutEl = document.getElementById('leaderboardLoggedOut');
+  const listEl = document.getElementById('leaderboardList');
+  const loggedIn = window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser;
+  loggedOutEl.classList.toggle('hidden', !!loggedIn);
+  listEl.classList.toggle('hidden', !loggedIn);
+  if(!loggedIn) return;
+  listEl.innerHTML = '<div class="empty">Carico la classifica...</div>';
+  listEl.classList.remove('hidden');
+  try{
+    const rows = await window.cloudAPI.getLeaderboard(15);
+    if(rows.length === 0){
+      listEl.innerHTML = '<div class="empty">Ancora nessun punteggio in classifica. Fai qualche frase nel percorso per essere il primo!</div>';
+      return;
+    }
+    const myUid = window.cloudAPI.currentUser.uid;
+    listEl.innerHTML = rows.map((r, i)=>{
+      const isMe = r.uid === myUid;
+      return `<div class="lb-row${isMe ? ' me':''}">
+        <span class="lb-rank">#${i+1}</span>
+        <span class="lb-name">${(r.nickname||'Anonimo')}${isMe ? ' (tu)':''}</span>
+        <span class="lb-score">${r.totalScore||0}</span>
+      </div>`;
+    }).join('');
+  }catch(e){
+    console.warn('leaderboard load error', e);
+    listEl.innerHTML = '<div class="empty">Non sono riuscito a caricare la classifica. Riprova con "Aggiorna".</div>';
+  }
+}
+document.getElementById('lbRefresh').onclick = renderLeaderboard;
+
+/* ---------- TUTORIAL DI BENVENUTO ---------- */
+const ONBOARD_SLIDES = [
+  {
+    title: "Benvenuto in Quattro Voci",
+    body: "Un ecosistema di immersione in quattro lingue — Inglese, Français, العربية e Español — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
+  },
+  {
+    title: "Un'app, sette strumenti",
+    body: "Sfida del giorno, percorso Base da zero, timer di shadowing, suoni critici di pronuncia, dialoghi di role-play, quaderno di correzione e cronologia dei progressi. Tutto in un unico posto, per ogni lingua."
+  },
+  {
+    title: "Comunicazione prima, grammatica dopo",
+    body: "L'obiettivo non è la frase perfetta al primo colpo: è farti parlare, sbagliare, e correggerti dopo con calma. Non aspettare di sentirti pronto per iniziare."
+  },
+  {
+    title: "Facoltativo: account e classifica",
+    body: "Puoi usare l'app così com'è, con i progressi salvati solo su questo dispositivo. Oppure creare un account gratuito (icona in alto a destra) per sincronizzare tutto e competere in classifica nel percorso Base."
+  }
+];
+let obIndex = 0;
+function renderOnboard(){
+  const s = ONBOARD_SLIDES[obIndex];
+  document.getElementById('onboardTitle').textContent = s.title;
+  document.getElementById('onboardSlides').innerHTML = `<p class="sub" style="font-size:14.5px; line-height:1.6;">${s.body}</p>`;
+  document.getElementById('obDots').innerHTML = ONBOARD_SLIDES.map((_,i)=>`<span class="ob-dot${i===obIndex?' active':''}"></span>`).join('');
+  document.getElementById('obPrev').classList.toggle('hidden', obIndex===0);
+  document.getElementById('obNext').textContent = obIndex === ONBOARD_SLIDES.length-1 ? 'Inizia' : 'Avanti';
+}
+function openOnboard(){
+  obIndex = 0;
+  renderOnboard();
+  document.getElementById('onboardModal').classList.remove('hidden');
+}
+function closeOnboard(){
+  document.getElementById('onboardModal').classList.add('hidden');
+  try{ localStorage.setItem('qv_onboarding_done', '1'); }catch(e){}
+}
+document.getElementById('obNext').onclick = ()=>{
+  if(obIndex < ONBOARD_SLIDES.length - 1){ obIndex++; renderOnboard(); }
+  else { closeOnboard(); }
+};
+document.getElementById('obPrev').onclick = ()=>{
+  if(obIndex > 0){ obIndex--; renderOnboard(); }
+};
+document.getElementById('onboardSkip').onclick = closeOnboard;
+
+(function maybeShowOnboarding(){
+  try{
+    if(!localStorage.getItem('qv_onboarding_done')){ openOnboard(); }
+  }catch(e){}
+})();
 
 window.addEventListener('cloud-ready', ()=>{
   if(!window.cloudAPI || !window.cloudAPI.enabled) return;
@@ -1108,6 +1267,8 @@ window.addEventListener('cloud-ready', ()=>{
     }
     if(user){
       await syncAllLanguagesFromCloud();
+    } else {
+      renderLeaderboard();
     }
   });
 });
@@ -1129,7 +1290,8 @@ window.addEventListener('cloud-ready', ()=>{
     onAuthStateChanged, signOut
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
-    getFirestore, doc, getDoc, setDoc
+    getFirestore, doc, getDoc, setDoc, increment,
+    collection, query, orderBy, limit, getDocs
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -1167,6 +1329,33 @@ window.addEventListener('cloud-ready', ()=>{
       if(!auth || !auth.currentUser) return null;
       const snap = await getDoc(doc(db, 'users', auth.currentUser.uid, 'progress', lang));
       return snap.exists() ? snap.data() : null;
+    },
+    async setNickname(nickname){
+      if(!auth || !auth.currentUser) return;
+      await setDoc(doc(db, 'leaderboard', auth.currentUser.uid), { nickname }, { merge:true });
+    },
+    async addPoints(amount){
+      if(!auth || !auth.currentUser || !amount) return;
+      await setDoc(doc(db, 'leaderboard', auth.currentUser.uid), {
+        totalScore: increment(amount),
+        updatedAt: Date.now()
+      }, { merge:true });
+    },
+    async initLeaderboardIfEmpty(startScore, nickname){
+      if(!auth || !auth.currentUser) return;
+      const ref = doc(db, 'leaderboard', auth.currentUser.uid);
+      const snap = await getDoc(ref);
+      if(!snap.exists()){
+        await setDoc(ref, { nickname: nickname || 'Anonimo', totalScore: startScore || 0, updatedAt: Date.now() });
+      }
+    },
+    async getLeaderboard(topN){
+      if(!db) return [];
+      const q = query(collection(db, 'leaderboard'), orderBy('totalScore', 'desc'), limit(topN || 15));
+      const snap = await getDocs(q);
+      const out = [];
+      snap.forEach(d => out.push({ uid: d.id, ...d.data() }));
+      return out;
     }
   };
 
