@@ -152,12 +152,17 @@
   }
 
   /* notebook */
-  textarea, input[type=text]{
+  textarea, input[type=text], input[type=email], input[type=password]{
     width:100%; background: var(--panel-2); border:1px solid var(--hair); color: var(--ink);
-    border-radius:10px; padding: 10px 12px; font-family:'IBM Plex Sans'; font-size:14px;
-    margin-bottom:8px; resize:vertical;
+    border-radius:10px; padding: 14px 14px; font-family:'IBM Plex Sans'; font-size:15px;
+    margin-bottom:10px; resize:vertical; -webkit-appearance:none; appearance:none;
   }
   textarea:focus, input:focus{ outline:none; border-color: var(--accent); }
+  input:-webkit-autofill{
+    -webkit-box-shadow: 0 0 0px 1000px var(--panel-2) inset !important;
+    -webkit-text-fill-color: var(--ink) !important;
+    caret-color: var(--ink);
+  }
   .entry{
     padding:10px 12px; background: var(--panel-2); border-radius:10px; margin-bottom:8px;
     font-size:13.5px; border-left: 3px solid var(--hair);
