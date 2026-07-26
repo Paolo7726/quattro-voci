@@ -138,6 +138,18 @@
     font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--accent);
     margin-top:6px; letter-spacing:.02em;
   }
+  .sound-tip{
+    font-size:12.5px; color: var(--ink-dim); margin-top:8px; padding:8px 10px;
+    background: var(--panel-2); border-radius:8px; line-height:1.45; font-style:italic;
+  }
+
+  /* registrazione vocale */
+  .rec-divider{ height:1px; background: var(--hair); margin: 20px 0 16px; }
+  .rec-box{ margin-top:12px; }
+  .rec-status{ font-size:13px; color: var(--ink-dim); margin-bottom:10px; }
+  .rec-status.recording{ color:#D96C6C; font-weight:600; }
+  .rec-status.recording::before{ content:'● '; }
+  #recToggle.recording{ background:#D96C6C; }
 
   /* roleplay */
   .level-tabs{ display:flex; gap:6px; margin-bottom: 12px; }
@@ -333,9 +345,23 @@
 
   <!-- SFIDA -->
   <section class="card" id="tab-sfida">
-    <span class="tag">Sfida del giorno &middot; slot <span id="slotNum">1</span>/30</span>
-    <h2>Parla per 60 secondi</h2>
-    <p class="sub">Registrati a voce, di getto, senza scrivere nulla prima. Il messaggio conta più della forma.</p>
+    <span class="tag">Sfida del giorno</span>
+    <h2 id="sfidaTitle">Parla per 60 secondi</h2>
+    <p class="sub">Scegli il tuo livello, poi registrati a voce di getto, senza scrivere nulla prima. Il messaggio conta più della forma.</p>
+
+    <div class="level-tabs" id="sfidaLevelTabs">
+      <button data-level="principiante" class="active">Principiante</button>
+      <button data-level="intermedio">Intermedio</button>
+      <button data-level="avanzato">Avanzato</button>
+    </div>
+
+    <div class="level-tabs" id="sfidaDirTabs">
+      <button data-dir="to_target" id="sfidaDirToTarget" class="active">Italiano &rarr; Lingua</button>
+      <button data-dir="to_it" id="sfidaDirToIt">Lingua &rarr; Italiano</button>
+    </div>
+    <p class="sub" id="sfidaDirNote" style="margin-top:-6px;"></p>
+
+    <span class="tag" id="sfidaSlotTag">Slot 1/10</span>
     <div class="challenge-text" id="challengeText">&mdash;</div>
     <div class="row">
       <button class="primary" id="btnDone">Segna come fatta</button>
@@ -386,6 +412,18 @@
     <div class="row">
       <button class="primary" id="btnTimerToggle">Avvia</button>
       <button class="ghost" id="btnTimerReset">Reimposta</button>
+    </div>
+
+    <div class="rec-divider"></div>
+    <span class="tag">Fase 4 &middot; registra e confronta</span>
+    <p class="sub" style="margin-top:-2px;">Registra la tua voce, riascoltala e confrontala con l'originale. Resta solo per questa sessione: chiudendo o ricaricando la pagina va persa, quindi non serve per conservarla.</p>
+    <div class="rec-box">
+      <div class="rec-status" id="recStatus">Pronto a registrare</div>
+      <div class="row">
+        <button class="primary" id="recToggle">&#9679; Registra</button>
+        <button class="ghost hidden" id="recClear">Cancella</button>
+      </div>
+      <audio id="recPlayer" class="hidden" controls style="width:100%; margin-top:12px;"></audio>
     </div>
   </section>
 
@@ -472,69 +510,83 @@ const LANGS = {
   en: {
     label:'English', script:'Aa', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
     sounds:[
-      {sym:'θ/ð', name:'Th sordo e sonoro (think / this)', desc:'Lingua tra i denti, non dietro. L\'errore tipico è dire "sink" invece di "think".', pairs:'think / sink &middot; this / dis'},
-      {sym:'ə', name:'Vocali ridotte (schwa)', desc:'Le sillabe atone collassano in un suono neutro. L\'italiano tende a pronunciare ogni vocale piena.', pairs:'banana &rarr; ba-NÆ-nə &middot; about &rarr; ə-BAUT'},
-      {sym:'-d/-t', name:'Consonanti finali sonore/sorde', desc:'La differenza cambia il significato: non appiattire tutto su un suono neutro.', pairs:'bed / bet &middot; bad / bat'}
+      {sym:'θ/ð', name:'Th sordo e sonoro (think / this)', desc:'Lingua tra i denti, non dietro. L\'errore tipico è dire "sink" invece di "think".', pairs:'think / sink &middot; this / dis', tip:'Metti la lingua tra i denti davanti a uno specchio e soffia leggermente: se non vedi la punta della lingua, non è un vero th.'},
+      {sym:'ə', name:'Vocali ridotte (schwa)', desc:'Le sillabe atone collassano in un suono neutro. L\'italiano tende a pronunciare ogni vocale piena.', pairs:'banana &rarr; ba-NÆ-nə &middot; about &rarr; ə-BAUT', tip:'Individua la sillaba tonica della parola e "schiaccia" tutte le altre verso un suono breve e neutro, quasi mugugnato.'},
+      {sym:'-d/-t', name:'Consonanti finali sonore/sorde', desc:'La differenza cambia il significato: non appiattire tutto su un suono neutro.', pairs:'bed / bet &middot; bad / bat', tip:'Metti una mano sulla gola: con "bed" senti una vibrazione fino alla fine, con "bet" si interrompe prima.'},
+      {sym:'v/w', name:'V e W', desc:'L\'italiano tende a confonderli. La V si forma con denti superiori sul labbro inferiore, la W arrotondando le labbra senza toccare i denti.', pairs:'vine / wine &middot; vet / wet', tip:'Prova a dire "vvv" mordendoti leggermente il labbro, poi "www" solo con le labbra arrotondate, senza denti coinvolti.'},
+      {sym:'h', name:'H aspirata', desc:'In italiano la h è muta o assente; in inglese va sempre soffiata all\'inizio della parola.', pairs:'hat vs "at" &middot; hill vs "ill"', tip:'Prova a "appannare uno specchio" con il fiato prima della parola: quella spinta d\'aria è la tua H.'},
     ],
   },
   fr: {
     label:'Français', script:'Fr', word:'Voix', accent:'#6C7BC4', dir:'ltr', rtlText:false,
     sounds:[
-      {sym:'ɑ̃/ɛ̃', name:'Vocali nasali (an / en / in / un)', desc:'Prova con una mano sul naso: deve vibrare. È il tratto che più smaschera un accento italiano.', pairs:'sans / sang &middot; vin / vent'},
-      {sym:'ʁ', name:'R uvulare', desc:'Dal fondo della gola, non arrotolata come in italiano. Si forma quasi come una raschiata leggera.', pairs:'rue / roue'},
-      {sym:'liaison', name:'Liaison', desc:'Le parole si legano tra loro: "les amis" si pronuncia come una parola sola, non due separate.', pairs:'les_amis &rarr; [le.za.mi]'}
+      {sym:'ɑ̃/ɛ̃', name:'Vocali nasali (an / en / in / un)', desc:'Prova con una mano sul naso: deve vibrare. È il tratto che più smaschera un accento italiano.', pairs:'sans / sang &middot; vin / vent', tip:'Chiudi il velo del palato come se avessi il raffreddore: l\'aria deve uscire in parte dal naso mentre pronunci la vocale.'},
+      {sym:'ʁ', name:'R uvulare', desc:'Dal fondo della gola, non arrotolata come in italiano. Si forma quasi come una raschiata leggera.', pairs:'rue / roue', tip:'Prova a fare il gargarismo senza acqua: quella vibrazione nella gola è vicina al suono della R francese.'},
+      {sym:'liaison', name:'Liaison', desc:'Le parole si legano tra loro: "les amis" si pronuncia come una parola sola, non due separate.', pairs:'les_amis &rarr; [le.za.mi]', tip:'Quando la parola successiva inizia per vocale, prova a "scivolare" senza mai fermarti tra le due parole.'},
+      {sym:'y', name:'La vocale U francese', desc:'Diversa sia dalla U che dalla I italiana: labbra arrotondate come per dire "u", ma lingua in posizione da "i".', pairs:'tu / tout &middot; du / doux', tip:'Metti la bocca a "o" stretta come per fischiare, poi prova a dire "i" senza muovere le labbra.'},
+      {sym:'ø/œ', name:'Vocali eu (peu / peur)', desc:'Non esistono in italiano: sono vocali arrotondate a metà tra la "e" e la "o".', pairs:'peu / peur &middot; deux / neuf', tip:'Parti da una "e" chiusa, poi arrotonda le labbra come per fare una "o" senza cambiare la posizione della lingua.'},
     ],
   },
   ar: {
     label:'العربية', script:'ع', word:'أصوات', accent:'#D4A73D', dir:'rtl', rtlText:true,
     sounds:[
-      {sym:'ص/ط', name:'Consonanti enfatiche', desc:'Stessa lettera della non-enfatica ma con la radice della lingua abbassata e la bocca più ampia.', pairs:'سِر / صِر'},
-      {sym:'ع', name:'Ayn', desc:'Costrizione faringea, non una semplice vocale. È il suono più difficile per un italofono: servono settimane di lavoro dedicato.', pairs:'عين (occhio)'},
-      {sym:'ق', name:'Qaf', desc:'Occlusiva uvulare, prodotta più indietro nella gola rispetto alla "c" italiana.', pairs:'قلب (cuore)'}
+      {sym:'ص/ط', name:'Consonanti enfatiche', desc:'Stessa lettera della non-enfatica ma con la radice della lingua abbassata e la bocca più ampia.', pairs:'سِر / صِر', tip:'Abbassa il dorso della lingua e allarga leggermente la gola, come se stessi per sbadigliare, mentre pronunci la consonante.'},
+      {sym:'ع', name:'Ayn', desc:'Costrizione faringea, non una semplice vocale. È il suono più difficile per un italofono: servono settimane di lavoro dedicato.', pairs:'عين (occhio)', tip:'Stringi i muscoli della gola come quando fai uno sforzo fisico leggero, e prova a emettere un suono da quella costrizione.'},
+      {sym:'ق', name:'Qaf', desc:'Occlusiva uvulare, prodotta più indietro nella gola rispetto alla "c" italiana.', pairs:'قلب (cuore)', tip:'Prova a dire "c" spostando il punto di contatto sempre più indietro, fino quasi all\'ugola.'},
+      {sym:'ح', name:'Ha faringale', desc:'Diversa dalla semplice H aspirata (ه): qui il suono nasce dalla costrizione della faringe, con un fruscio più forte.', pairs:'حب (amore) vs هو (lui)', tip:'Immagina di appannare uno specchio ma dal profondo della gola, non dalla bocca.'},
+      {sym:'ث/ذ', name:'Th arabo (interdentali)', desc:'Come il th inglese: non esistono in italiano. La lingua tocca leggermente i denti superiori.', pairs:'ثلاثة (tre) &middot; ذهب (oro)', tip:'Stessa posizione della lingua del th inglese: puntala leggermente tra i denti e lascia uscire l\'aria.'},
     ],
   },
   es: {
     label:'Español', script:'Es', word:'Voces', accent:'#C1432E', dir:'ltr', rtlText:false,
     sounds:[
-      {sym:'b/v', name:'B e V (stesso suono)', desc:'In spagnolo sono lo stesso fonema, spesso una approssimante morbida, non un\'occlusiva piena come in italiano.', pairs:'vaca / baca (identiche)'},
-      {sym:'rr', name:'R multivibrante', desc:'Distinzione fonemica reale rispetto alla r semplice: cambia il significato della parola.', pairs:'perro / pero'},
-      {sym:'ritmo', name:'Ritmo sillabico', desc:'Più veloce e piatto dell\'italiano, con meno enfasi tonica marcata sulle sillabe.', pairs:'—'}
+      {sym:'b/v', name:'B e V (stesso suono)', desc:'In spagnolo sono lo stesso fonema, spesso una approssimante morbida, non un\'occlusiva piena come in italiano.', pairs:'vaca / baca (identiche)', tip:'Tra le vocali, non chiudere del tutto le labbra: lasciale quasi a contatto e lascia passare un filo d\'aria.'},
+      {sym:'rr', name:'R multivibrante', desc:'Distinzione fonemica reale rispetto alla r semplice: cambia il significato della parola.', pairs:'perro / pero', tip:'Metti la lingua contro il palato appena dietro i denti e lasciala vibrare libera con un getto d\'aria più forte del normale.'},
+      {sym:'ritmo', name:'Ritmo sillabico', desc:'Più veloce e piatto dell\'italiano, con meno enfasi tonica marcata sulle sillabe.', pairs:'—', tip:'Batti un ritmo regolare con la mano mentre parli: ogni sillaba deve durare più o meno lo stesso tempo, senza allungamenti.'},
+      {sym:'j/g', name:'J e G velare (jamón, gente)', desc:'Suono fricativo gutturale che non esiste in italiano: molto più "raschiato" della nostra h aspirata.', pairs:'jamón &middot; gente &middot; jugar', tip:'Parti dal suono della "c" di "casa" detta in gola, poi ammorbidiscilo in un fruscio continuo, come uno sfregamento.'},
+      {sym:'d suave', name:'D intervocalica morbida', desc:'Tra le vocali, la D si ammorbidisce quasi come il th inglese di "this", non è mai una D piena come in italiano.', pairs:'nada &middot; todo &middot; cansado', tip:'Metti la lingua vicino ai denti superiori senza toccarli del tutto: deve restare un suono leggero, quasi sfumato.'},
     ],
   },
 };
 
-const CHALLENGES = [
-"Descrivi la tua giornata di ieri come se fosse successa a un amico immaginario.",
-"Convinci qualcuno a provare il tuo piatto preferito, in 60 secondi, come un venditore.",
-"Racconta un ricordo d'infanzia con almeno un dettaglio sensoriale (odore, suono).",
-"Lamentati, in modo educato, di un servizio immaginario andato male.",
-"Spiega una regola di un gioco o sport a qualcuno che non lo conosce.",
-"Difendi un'opinione impopolare, ad esempio sulla pizza con l'ananas.",
-"Racconta le previsioni del tempo di oggi come un meteorologo in diretta TV.",
-"Descrivi a voce il percorso da casa tua al posto che frequenti di più.",
-"Improvvisa un'intervista immaginaria a te stesso tra 10 anni.",
-"Spiega perché stai imparando questa lingua a un potenziale compagno di scambio.",
-"Racconta la trama di un film visto di recente, in 90 secondi, senza spoiler eccessivi.",
-"Fai un reclamo formale, come un messaggio vocale, per un pacco mai arrivato.",
-"Descrivi una persona che ammiri, concentrandoti sul carattere più che sull'aspetto.",
-"Improvvisa gli annunci di un aeroporto per un volo in ritardo.",
-"Racconta un sogno che ricordi, anche vago, riempiendo i buchi con l'immaginazione.",
-"Convinci un amico a cambiare programma all'ultimo minuto per un imprevisto.",
-"Spiega una ricetta a memoria, passo dopo passo, come in un cooking show.",
-"Discuti i pro e i contro del lavoro da remoto rispetto all'ufficio.",
-"Racconta un litigio leggero che hai avuto e come si è risolto.",
-"Fai da guida turistica per la tua città a un visitatore immaginario.",
-"Improvvisa una lite scherzosa tra due tifosi di squadre o marche rivali.",
-"Racconta cosa faresti se vincessi una somma di denaro moderata.",
-"Descrivi un errore che hai fatto e cosa hai imparato.",
-"Fai una previsione assurda ma argomentata su come sarà il mondo tra 20 anni.",
-"Improvvisa una chiamata al servizio clienti per cancellare un abbonamento.",
-"Racconta una tradizione di famiglia e perché è importante per te.",
-"Convinci qualcuno a non fare qualcosa che stava per fare, in modo protettivo.",
-"Descrivi il tuo lavoro ideale, anche se non esiste ancora.",
-"Fai un elogio scherzoso per un oggetto rotto a cui eri affezionato.",
-"Riassumi cosa hai imparato in queste settimane, riflettendo a voce alta."
-];
+const CHALLENGES = {
+  principiante: [
+    { it:"Dì il tuo nome e da dove vieni.", en:"Say your name and where you're from.", fr:"Dis ton nom et d'où tu viens.", ar:"قل اسمك ومن أين أنت.", es:"Di tu nombre y de dónde eres." },
+    { it:"Descrivi il tempo che fa oggi in una frase.", en:"Describe today's weather in one sentence.", fr:"Décris le temps qu'il fait aujourd'hui en une phrase.", ar:"صف الطقس اليوم في جملة واحدة.", es:"Describe el clima de hoy en una frase." },
+    { it:"Racconta cosa hai mangiato a colazione.", en:"Talk about what you had for breakfast.", fr:"Parle de ce que tu as mangé au petit-déjeuner.", ar:"تحدث عمّا تناولته في الإفطار.", es:"Habla sobre lo que desayunaste." },
+    { it:"Di' tre cose che ti piacciono.", en:"Say three things you like.", fr:"Dis trois choses que tu aimes.", ar:"قل ثلاثة أشياء تحبها.", es:"Di tres cosas que te gustan." },
+    { it:"Descrivi la stanza in cui ti trovi ora.", en:"Describe the room you're in right now.", fr:"Décris la pièce où tu te trouves maintenant.", ar:"صف الغرفة التي أنت فيها الآن.", es:"Describe la habitación en la que estás ahora." },
+    { it:"Racconta cosa farai più tardi oggi.", en:"Talk about what you'll do later today.", fr:"Parle de ce que tu feras plus tard aujourd'hui.", ar:"تحدث عمّا ستفعله لاحقًا اليوم.", es:"Habla sobre lo que harás más tarde hoy." },
+    { it:"Di' che ore sono e cosa stai facendo.", en:"Say what time it is and what you're doing.", fr:"Dis quelle heure il est et ce que tu fais.", ar:"قل كم الساعة وماذا تفعل.", es:"Di qué hora es y qué estás haciendo." },
+    { it:"Descrivi il tuo animale preferito.", en:"Describe your favorite animal.", fr:"Décris ton animal préféré.", ar:"صف حيوانك المفضل.", es:"Describe tu animal favorito." },
+    { it:"Racconta come hai dormito stanotte.", en:"Talk about how you slept last night.", fr:"Parle de la façon dont tu as dormi cette nuit.", ar:"تحدث عن كيف نمت الليلة الماضية.", es:"Habla sobre cómo dormiste anoche." },
+    { it:"Di' il tuo colore preferito e perché.", en:"Say your favorite color and why.", fr:"Dis ta couleur préférée et pourquoi.", ar:"قل لونك المفضل ولماذا.", es:"Di tu color favorito y por qué." },
+  ],
+  intermedio: [
+    { it:"Descrivi la tua giornata di ieri come se fosse successa a un amico immaginario." },
+    { it:"Racconta un ricordo d'infanzia con almeno un dettaglio sensoriale (odore, suono)." },
+    { it:"Spiega una regola di un gioco o sport a qualcuno che non lo conosce." },
+    { it:"Racconta le previsioni del tempo di oggi come un meteorologo in diretta TV." },
+    { it:"Descrivi a voce il percorso da casa tua al posto che frequenti di più." },
+    { it:"Racconta la trama di un film visto di recente, in 90 secondi, senza spoiler eccessivi." },
+    { it:"Descrivi una persona che ammiri, concentrandoti sul carattere più che sull'aspetto." },
+    { it:"Racconta un sogno che ricordi, anche vago, riempiendo i buchi con l'immaginazione." },
+    { it:"Spiega una ricetta a memoria, passo dopo passo, come in un cooking show." },
+    { it:"Fai da guida turistica per la tua città a un visitatore immaginario." },
+  ],
+  avanzato: [
+    { it:"Convinci qualcuno a provare il tuo piatto preferito, in 60 secondi, come un venditore." },
+    { it:"Lamentati, in modo educato, di un servizio immaginario andato male." },
+    { it:"Difendi un'opinione impopolare, ad esempio sulla pizza con l'ananas." },
+    { it:"Improvvisa un'intervista immaginaria a te stesso tra 10 anni." },
+    { it:"Fai un reclamo formale, come un messaggio vocale, per un pacco mai arrivato." },
+    { it:"Improvvisa gli annunci di un aeroporto per un volo in ritardo." },
+    { it:"Discuti i pro e i contro del lavoro da remoto rispetto all'ufficio." },
+    { it:"Improvvisa una lite scherzosa tra due tifosi di squadre o marche rivali." },
+    { it:"Fai una previsione assurda ma argomentata su come sarà il mondo tra 20 anni." },
+    { it:"Improvvisa una chiamata al servizio clienti per cancellare un abbonamento." },
+  ],
+};
 
 const SCENARIOS = [
   ["Ordina al bar e scopri che non hanno più il piatto che volevi: gestisci il cambio.",
@@ -661,7 +713,7 @@ const PHASES = [
 ];
 
 function todayStr(){ return new Date().toISOString().slice(0,10); }
-function dayOfMonthIndex(){ return (new Date().getDate() - 1) % CHALLENGES.length; }
+function dayOfMonthIndex(len){ return (new Date().getDate() - 1) % len; }
 
 async function loadState(lang){
   try{
@@ -675,6 +727,9 @@ async function loadState(lang){
       to_target: { index: oldIndex, wrong:0, score:0, correctFirstTry:0, completed:0 },
       to_it: { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 }
     };
+  }
+  if(!state.sfida){
+    state.sfida = { level: 'principiante', direction: 'to_target' };
   }
 }
 async function saveState(lang){
@@ -726,16 +781,63 @@ function renderStreak(){
 }
 
 /* ---------- SFIDA ---------- */
+const SFIDA_DURATION = { principiante: '30 secondi', intermedio: '60 secondi', avanzato: '60 secondi' };
+
+function currentSfidaList(){ return CHALLENGES[state.sfida.level]; }
+
 function renderChallenge(){
-  currentSlot = dayOfMonthIndex();
-  document.getElementById('slotNum').textContent = currentSlot+1;
-  document.getElementById('challengeText').textContent = CHALLENGES[currentSlot];
-  const isDone = state.done.includes(todayStr()+':'+currentSlot);
+  const list = currentSfidaList();
+  const level = state.sfida.level;
+  const dir = state.sfida.direction;
+
+  document.querySelectorAll('#sfidaLevelTabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.level === level);
+  });
+  document.getElementById('sfidaTitle').textContent = `Parla per ${SFIDA_DURATION[level]}`;
+
+  const isPrincipiante = (level === 'principiante');
+  document.getElementById('sfidaDirTabs').classList.toggle('hidden', !isPrincipiante);
+  document.getElementById('sfidaDirToTarget').textContent = `Italiano \u2192 ${LANGS[currentLang].label}`;
+  document.getElementById('sfidaDirToIt').textContent = `${LANGS[currentLang].label} \u2192 Italiano`;
+  document.querySelectorAll('#sfidaDirTabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.dir === dir);
+  });
+  document.getElementById('sfidaDirNote').textContent = isPrincipiante
+    ? ''
+    : 'A questo livello la frase resta in italiano: l\'obiettivo è la scioltezza nella lingua target.';
+
+  currentSlot = dayOfMonthIndex(list.length);
+  document.getElementById('sfidaSlotTag').textContent = `Slot ${currentSlot+1}/${list.length}`;
+
+  const item = list[currentSlot];
+  const showTarget = isPrincipiante && dir === 'to_it' && item[currentLang];
+  const promptEl = document.getElementById('challengeText');
+  promptEl.textContent = showTarget ? item[currentLang] : item.it;
+  const showingArabic = showTarget && currentLang === 'ar';
+  promptEl.setAttribute('dir', showingArabic ? 'rtl' : 'ltr');
+  promptEl.classList.toggle('rtl-text', showingArabic);
+
+  const key = todayStr()+':'+level+':'+currentSlot;
+  const isDone = state.done.includes(key);
   document.getElementById('btnDone').textContent = isDone ? 'Fatta oggi ✓' : 'Segna come fatta';
   document.getElementById('btnDone').disabled = isDone;
 }
+document.querySelectorAll('#sfidaLevelTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.sfida.level = btn.dataset.level;
+    await saveState(currentLang);
+    renderChallenge();
+  };
+});
+document.querySelectorAll('#sfidaDirTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.sfida.direction = btn.dataset.dir;
+    await saveState(currentLang);
+    renderChallenge();
+  };
+});
 document.getElementById('btnDone').onclick = async ()=>{
-  const key = todayStr()+':'+currentSlot;
+  const key = todayStr()+':'+state.sfida.level+':'+currentSlot;
   if(state.done.includes(key)) return;
   state.done.push(key);
   const y = new Date(); y.setDate(y.getDate()-1);
@@ -746,12 +848,9 @@ document.getElementById('btnDone').onclick = async ()=>{
   renderStreak(); renderChallenge(); renderHistory();
 };
 document.getElementById('btnAnother').onclick = ()=>{
-  currentSlot = Math.floor(Math.random()*CHALLENGES.length);
-  document.getElementById('slotNum').textContent = currentSlot+1;
-  document.getElementById('challengeText').textContent = CHALLENGES[currentSlot];
-  const isDone = state.done.includes(todayStr()+':'+currentSlot);
-  document.getElementById('btnDone').textContent = isDone ? 'Fatta oggi ✓' : 'Segna come fatta';
-  document.getElementById('btnDone').disabled = isDone;
+  const list = currentSfidaList();
+  currentSlot = Math.floor(Math.random()*list.length);
+  renderChallenge();
 };
 
 /* ---------- SHADOWING TIMER ---------- */
@@ -796,6 +895,69 @@ document.getElementById('btnTimerToggle').onclick = ()=>{
   },1000);
 };
 
+/* ---------- REGISTRAZIONE VOCALE (temporanea, non salvata) ---------- */
+let mediaRecorder = null;
+let recChunks = [];
+let recStream = null;
+let isRecording = false;
+
+function recSetStatus(text, recording){
+  const el = document.getElementById('recStatus');
+  el.textContent = text;
+  el.classList.toggle('recording', !!recording);
+}
+
+document.getElementById('recToggle').onclick = async ()=>{
+  const btn = document.getElementById('recToggle');
+  if(isRecording){
+    mediaRecorder.stop();
+    return;
+  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined'){
+    recSetStatus('Registrazione non disponibile in questo browser/ambiente. Usa il registratore vocale del telefono.', false);
+    return;
+  }
+  try{
+    recStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    recChunks = [];
+    mediaRecorder = new MediaRecorder(recStream);
+    mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recChunks.push(e.data); };
+    mediaRecorder.onstop = ()=>{
+      isRecording = false;
+      btn.classList.remove('recording');
+      btn.innerHTML = '&#9679; Registra';
+      recStream.getTracks().forEach(t=>t.stop());
+      if(recChunks.length === 0){
+        recSetStatus('Nessun audio registrato.', false);
+        return;
+      }
+      const blob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+      const url = URL.createObjectURL(blob);
+      const player = document.getElementById('recPlayer');
+      player.src = url;
+      player.classList.remove('hidden');
+      document.getElementById('recClear').classList.remove('hidden');
+      recSetStatus('Registrazione pronta — riascoltala qui sotto.', false);
+    };
+    mediaRecorder.start();
+    isRecording = true;
+    btn.classList.add('recording');
+    btn.innerHTML = '&#9632; Ferma';
+    recSetStatus('Registrazione in corso...', true);
+  }catch(e){
+    console.warn('mic error', e);
+    recSetStatus('Non riesco ad accedere al microfono (permesso negato o non disponibile). Usa il registratore vocale del telefono come alternativa.', false);
+  }
+};
+document.getElementById('recClear').onclick = ()=>{
+  const player = document.getElementById('recPlayer');
+  if(player.src){ URL.revokeObjectURL(player.src); }
+  player.removeAttribute('src');
+  player.classList.add('hidden');
+  document.getElementById('recClear').classList.add('hidden');
+  recSetStatus('Pronto a registrare', false);
+};
+
 /* ---------- SUONI ---------- */
 function renderSounds(){
   const box = document.getElementById('soundsList');
@@ -804,7 +966,8 @@ function renderSounds(){
     const div = document.createElement('div');
     div.className='sound-item';
     div.innerHTML = `<div><span class="sym">${s.sym}</span><span class="name">${s.name}</span></div>
-      <p>${s.desc}</p><div class="pairs">${s.pairs}</div>`;
+      <p>${s.desc}</p><div class="pairs">${s.pairs}</div>
+      ${s.tip ? `<div class="sound-tip">✎ ${s.tip}</div>` : ''}`;
     box.appendChild(div);
   });
 }
@@ -997,8 +1160,15 @@ function renderHistory(){
   }
   const sorted = [...state.done].sort().reverse();
   list.innerHTML = sorted.map(d=>{
-    const [date, slot] = d.split(':');
-    return `<div class="hist-item"><span class="htext">${CHALLENGES[Number(slot)]}</span><span class="hdate">${date}</span></div>`;
+    const parts = d.split(':');
+    const date = parts[0];
+    let text = 'Sfida completata';
+    if(parts.length === 3){
+      const arr = CHALLENGES[parts[1]];
+      const item = arr && arr[Number(parts[2])];
+      if(item) text = item.it;
+    }
+    return `<div class="hist-item"><span class="htext">${text}</span><span class="hdate">${date}</span></div>`;
   }).join('');
 }
 
