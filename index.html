@@ -175,6 +175,15 @@
     -webkit-text-fill-color: var(--ink) !important;
     caret-color: var(--ink);
   }
+  .pw-wrap{ position:relative; margin-bottom:10px; }
+  .pw-wrap input{ padding-right:44px; margin-bottom:0; }
+  .pw-toggle{
+    position:absolute; right:6px; top:50%; transform:translateY(-50%);
+    width:32px; height:32px; background:none; border:none; color: var(--ink-dim);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .pw-toggle svg{ width:19px; height:19px; }
+  .pw-toggle.showing{ color: var(--accent); }
   .entry{
     padding:10px 12px; background: var(--panel-2); border-radius:10px; margin-bottom:8px;
     font-size:13.5px; border-left: 3px solid var(--hair);
@@ -254,12 +263,11 @@
   /* account */
   header{ position:relative; }
   .account-btn{
-    position:absolute; top:8px; right:2px; width:36px; height:36px; border-radius:50%;
-    background: var(--panel); border:1px solid var(--hair); color: var(--ink-dim);
+    position:absolute; top:46px; right:2px; width:36px; height:36px; border-radius:50%;
+    background: var(--panel); border:1px solid var(--accent); color: var(--accent);
     display:flex; align-items:center; justify-content:center; cursor:pointer;
   }
   .account-btn svg{ width:18px; height:18px; }
-  .account-btn.logged-in{ border-color: var(--accent); color: var(--accent); }
   .account-dot{
     position:absolute; top:-2px; right:-2px; width:9px; height:9px; border-radius:50%;
     background:#7FBF7F; border:2px solid var(--bg); display:none;
@@ -313,7 +321,12 @@
         </div>
         <input type="text" id="authNickname" placeholder="Nome pubblico (visibile in classifica)" autocomplete="nickname" maxlength="20" class="hidden">
         <input type="email" id="authEmail" placeholder="Email" autocomplete="email">
-        <input type="password" id="authPass" placeholder="Password (min. 6 caratteri)" autocomplete="current-password">
+        <div class="pw-wrap">
+          <input type="password" id="authPass" placeholder="Password (min. 6 caratteri)" autocomplete="current-password">
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostra password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
         <div class="auth-feedback" id="authFeedback"></div>
         <button class="primary" id="authSubmit" style="width:100%">Accedi</button>
         <p class="sub" style="margin-top:12px;">Facoltativo: puoi continuare a usare l'app senza account. In quel caso i progressi restano salvati solo su questo dispositivo.</p>
@@ -425,6 +438,11 @@
       </div>
       <audio id="recPlayer" class="hidden" controls style="width:100%; margin-top:12px;"></audio>
     </div>
+
+    <div class="rec-divider"></div>
+    <span class="tag">Prima di iniziare: da dove ascoltare</span>
+    <p class="sub" style="margin-top:-2px;">Il timer qui sopra scandisce solo i tempi: l'audio va cercato e riprodotto da un'altra app (YouTube, Spotify, un podcast) tenuta aperta in parallelo. Ecco dove cercarlo per ogni lingua:</p>
+    <div id="audioSourcesList"></div>
   </section>
 
   <!-- SUONI -->
@@ -509,6 +527,7 @@
 const LANGS = {
   en: {
     label:'English', script:'Aa', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
+    audioSource:{ name:'BBC 6 Minute English', where:'YouTube', tip:'Episodi brevi, parlato chiaro e naturale — cerca esattamente questo nome del programma.' },
     sounds:[
       {sym:'θ/ð', name:'Th sordo e sonoro (think / this)', desc:'Lingua tra i denti, non dietro. L\'errore tipico è dire "sink" invece di "think".', pairs:'think / sink &middot; this / dis', tip:'Metti la lingua tra i denti davanti a uno specchio e soffia leggermente: se non vedi la punta della lingua, non è un vero th.'},
       {sym:'ə', name:'Vocali ridotte (schwa)', desc:'Le sillabe atone collassano in un suono neutro. L\'italiano tende a pronunciare ogni vocale piena.', pairs:'banana &rarr; ba-NÆ-nə &middot; about &rarr; ə-BAUT', tip:'Individua la sillaba tonica della parola e "schiaccia" tutte le altre verso un suono breve e neutro, quasi mugugnato.'},
@@ -519,6 +538,7 @@ const LANGS = {
   },
   fr: {
     label:'Français', script:'Fr', word:'Voix', accent:'#6C7BC4', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Innerfrench', where:'YouTube o Spotify (podcast)', tip:'Parlato lento e chiaro, pensato apposta per chi impara. In alternativa cerca "France Inter podcast".' },
     sounds:[
       {sym:'ɑ̃/ɛ̃', name:'Vocali nasali (an / en / in / un)', desc:'Prova con una mano sul naso: deve vibrare. È il tratto che più smaschera un accento italiano.', pairs:'sans / sang &middot; vin / vent', tip:'Chiudi il velo del palato come se avessi il raffreddore: l\'aria deve uscire in parte dal naso mentre pronunci la vocale.'},
       {sym:'ʁ', name:'R uvulare', desc:'Dal fondo della gola, non arrotolata come in italiano. Si forma quasi come una raschiata leggera.', pairs:'rue / roue', tip:'Prova a fare il gargarismo senza acqua: quella vibrazione nella gola è vicina al suono della R francese.'},
@@ -529,6 +549,7 @@ const LANGS = {
   },
   ar: {
     label:'العربية', script:'ع', word:'أصوات', accent:'#D4A73D', dir:'rtl', rtlText:true,
+    audioSource:{ name:'Al Jazeera (notiziari)', where:'YouTube', tip:'Cerca notiziari in arabo standard (fus\'ha/MSA), coerenti con quello scelto per il percorso Base.' },
     sounds:[
       {sym:'ص/ط', name:'Consonanti enfatiche', desc:'Stessa lettera della non-enfatica ma con la radice della lingua abbassata e la bocca più ampia.', pairs:'سِر / صِر', tip:'Abbassa il dorso della lingua e allarga leggermente la gola, come se stessi per sbadigliare, mentre pronunci la consonante.'},
       {sym:'ع', name:'Ayn', desc:'Costrizione faringea, non una semplice vocale. È il suono più difficile per un italofono: servono settimane di lavoro dedicato.', pairs:'عين (occhio)', tip:'Stringi i muscoli della gola come quando fai uno sforzo fisico leggero, e prova a emettere un suono da quella costrizione.'},
@@ -539,6 +560,7 @@ const LANGS = {
   },
   es: {
     label:'Español', script:'Es', word:'Voces', accent:'#C1432E', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Dreaming Spanish', where:'YouTube', tip:'Video pensati per l\'apprendimento con parlato comprensibile a diversi livelli.' },
     sounds:[
       {sym:'b/v', name:'B e V (stesso suono)', desc:'In spagnolo sono lo stesso fonema, spesso una approssimante morbida, non un\'occlusiva piena come in italiano.', pairs:'vaca / baca (identiche)', tip:'Tra le vocali, non chiudere del tutto le labbra: lasciale quasi a contatto e lascia passare un filo d\'aria.'},
       {sym:'rr', name:'R multivibrante', desc:'Distinzione fonemica reale rispetto alla r semplice: cambia il significato della parola.', pairs:'perro / pero', tip:'Metti la lingua contro il palato appena dietro i denti e lasciala vibrare libera con un getto d\'aria più forte del normale.'},
@@ -770,6 +792,7 @@ async function switchLang(key){
   renderStreak();
   renderChallenge();
   renderSounds();
+  renderAudioSource();
   renderScenario();
   renderNotebook();
   renderHistory();
@@ -970,6 +993,17 @@ function renderSounds(){
       ${s.tip ? `<div class="sound-tip">✎ ${s.tip}</div>` : ''}`;
     box.appendChild(div);
   });
+}
+
+function renderAudioSource(){
+  const box = document.getElementById('audioSourcesList');
+  const src = LANGS[currentLang].audioSource;
+  if(!src){ box.innerHTML=''; return; }
+  box.innerHTML = `<div class="sound-item" style="border-top:none; padding-top:0;">
+    <div><span class="sym">&#9835;</span><span class="name">${src.name}</span></div>
+    <p><b style="color:var(--ink);">Dove:</b> ${src.where}</p>
+    <div class="sound-tip">✎ ${src.tip}</div>
+  </div>`;
 }
 
 /* ---------- DIALOGHI ---------- */
@@ -1253,6 +1287,13 @@ document.querySelectorAll('#authTabs button').forEach(btn=>{
   };
 });
 
+document.getElementById('pwToggle').onclick = ()=>{
+  const input = document.getElementById('authPass');
+  const btn = document.getElementById('pwToggle');
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  btn.classList.toggle('showing', !showing);
+};
 document.getElementById('authSubmit').onclick = async ()=>{
   const fb = document.getElementById('authFeedback');
   if(!window.cloudAPI || !window.cloudAPI.enabled){
