@@ -26,21 +26,27 @@
     --radius: 14px;
   }
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  html,body{margin:0;padding:0;height:100%;}
   body{
     background: var(--bg);
     color: var(--ink);
     font-family:'IBM Plex Sans', sans-serif;
-    min-height:100vh;
     -webkit-font-smoothing:antialiased;
     transition: background .4s ease;
-    padding-bottom: 84px;
+    overflow:hidden;
   }
   ::selection{ background: var(--accent-soft); }
-  .app{ max-width: 480px; margin:0 auto; padding: 18px 16px 8px; }
+  .app{
+    max-width: 480px; margin:0 auto; height:100vh; height:100dvh;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  .scroll-area{
+    flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding: 0 16px 16px;
+  }
 
   /* Header */
-  header{ padding: 10px 2px 4px; }
+  header{ padding: 28px 18px 4px; flex-shrink:0; position:relative; }
   .eyebrow{
     font-family:'IBM Plex Mono', monospace;
     font-size: 11px; letter-spacing:.14em; text-transform:uppercase;
@@ -266,11 +272,10 @@
 
   /* bottom nav */
   nav.tabs{
-    position: fixed; left:0; right:0; bottom:0;
+    flex-shrink:0;
     background: rgba(27,25,22,0.92); backdrop-filter: blur(10px);
     border-top: 1px solid var(--hair);
     display:flex; justify-content:space-around; padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
-    max-width: 480px; margin: 0 auto;
     overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
   }
   nav.tabs::-webkit-scrollbar{ display:none; }
@@ -289,9 +294,8 @@
   .hidden{ display:none !important; }
 
   /* account */
-  header{ position:relative; }
   .account-btn{
-    position:absolute; top:46px; right:2px; width:36px; height:36px; border-radius:50%;
+    position:absolute; top:64px; right:2px; width:36px; height:36px; border-radius:50%;
     background: var(--panel); border:1px solid var(--accent); color: var(--accent);
     display:flex; align-items:center; justify-content:center; cursor:pointer;
   }
@@ -383,6 +387,8 @@
       </div>
     </div>
   </div>
+
+  <div class="scroll-area">
 
   <!-- SFIDA -->
   <section class="card" id="tab-sfida">
@@ -531,22 +537,20 @@
     <div id="historyList"></div>
   </section>
 
+  </div><!-- fine scroll-area -->
 
-
-</div>
-
-<nav class="tabs">
+  <nav class="tabs">
   <button data-tab="mappa">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 16.5L10.5 9M13.5 9L16 16.5"/></svg>
     Mappa
   </button>
-  <button data-tab="sfida" class="active">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-    Sfida
-  </button>
   <button data-tab="percorso">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V6a2 2 0 012-2h9l5 5v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M9 12l2 2 4-4"/></svg>
     Base
+  </button>
+  <button data-tab="sfida" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    Sfida
   </button>
   <button data-tab="shadow">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v10m0 0a4 4 0 004-4M12 13a4 4 0 01-4-4"/><path d="M8 19h8M12 17v2"/></svg>
@@ -569,6 +573,7 @@
     Storia
   </button>
 </nav>
+</div><!-- fine .app -->
 
 <script>
 /* ---------- DATA ---------- */
