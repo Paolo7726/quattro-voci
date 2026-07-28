@@ -75,6 +75,24 @@
   .voice-btn .script{ display:block; font-size: 15px; margin-bottom:1px; }
   .voice-btn.active{ color: #17140F; background: var(--accent); font-weight:600; }
 
+  /* indicatori "si può scorrere" */
+  .scroll-hint-wrap{ position:relative; }
+  .scroll-fade{
+    position:absolute; top:0; bottom:0; width:32px; pointer-events:none; z-index:5;
+    display:flex; align-items:center; opacity:0; transition:opacity .25s ease;
+    font-family:'IBM Plex Sans', sans-serif; font-size:15px; font-weight:700; color: var(--accent);
+  }
+  .scroll-fade.show{ opacity:1; }
+  .scroll-fade.left{ left:0; justify-content:flex-start; padding-left:6px;
+    background: linear-gradient(to right, var(--panel) 35%, transparent); border-radius:999px 0 0 999px; }
+  .scroll-fade.right{ right:0; justify-content:flex-end; padding-right:6px;
+    background: linear-gradient(to left, var(--panel) 35%, transparent); border-radius:0 999px 999px 0; }
+  .scroll-fade.left::before{ content:'\2039'; }
+  .scroll-fade.right::before{ content:'\203A'; }
+  .nav-hint-wrap .scroll-fade.left{ background: linear-gradient(to right, rgba(27,25,22,0.95) 45%, transparent); border-radius:0; }
+  .nav-hint-wrap .scroll-fade.right{ background: linear-gradient(to left, rgba(27,25,22,0.95) 45%, transparent); border-radius:0; }
+  .nav-hint-wrap{ flex-shrink:0; }
+
   /* streak strip */
   .streak{
     display:flex; align-items:center; justify-content:space-between;
@@ -332,7 +350,11 @@
     </button>
     <p class="eyebrow">Ecosistema di pratica &middot; parlato prima, forma dopo</p>
     <h1>Quattro <span id="voiceWord">Voci</span></h1>
-    <div class="ring" id="ring"></div>
+    <div class="scroll-hint-wrap" id="ringWrap">
+      <div class="ring" id="ring"></div>
+      <div class="scroll-fade left"></div>
+      <div class="scroll-fade right"></div>
+    </div>
     <div class="streak">
       <span>Serie di pratica &mdash; <b id="langLabel">English</b></span>
       <span><span class="flame">&#9679;</span> <b id="streakCount">0</b> giorni</span>
@@ -539,6 +561,7 @@
 
   </div><!-- fine scroll-area -->
 
+  <div class="scroll-hint-wrap nav-hint-wrap" id="navWrap">
   <nav class="tabs">
   <button data-tab="mappa">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 16.5L10.5 9M13.5 9L16 16.5"/></svg>
@@ -572,7 +595,10 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
     Storia
   </button>
-</nav>
+  </nav>
+  <div class="scroll-fade nav-fade left"></div>
+  <div class="scroll-fade nav-fade right"></div>
+  </div>
 </div><!-- fine .app -->
 
 <script>
@@ -1760,6 +1786,27 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
   await switchLang('en');
   resetTimer();
 })();
+
+/* Indicatori "si può scorrere" per l'anello lingue e la barra di navigazione */
+function setupScrollHint(scrollEl, wrapId){
+  if(!scrollEl) return;
+  const wrap = document.getElementById(wrapId);
+  const left = wrap.querySelector('.scroll-fade.left');
+  const right = wrap.querySelector('.scroll-fade.right');
+  function update(){
+    const canLeft = scrollEl.scrollLeft > 4;
+    const canRight = scrollEl.scrollLeft < (scrollEl.scrollWidth - scrollEl.clientWidth - 4);
+    left.classList.toggle('show', canLeft);
+    right.classList.toggle('show', canRight);
+  }
+  scrollEl.addEventListener('scroll', update, { passive:true });
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update);
+  update();
+  setTimeout(update, 300); // dopo che i font sono caricati e le larghezze si sono assestate
+}
+setupScrollHint(document.getElementById('ring'), 'ringWrap');
+setupScrollHint(document.querySelector('nav.tabs'), 'navWrap');
 
 /* Registra il service worker solo se disponibile (non nell'ambiente artifact di Claude) */
 if('serviceWorker' in navigator){
