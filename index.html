@@ -160,6 +160,9 @@
     color: var(--ink-dim); font-size:12.5px; cursor:pointer; font-family:'IBM Plex Sans'; font-weight:500;
   }
   .level-tabs button.active{ border-color: var(--accent); color: var(--ink); background: var(--accent-soft); }
+  #bpLevelTabs{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; flex-wrap:nowrap; }
+  #bpLevelTabs::-webkit-scrollbar{ display:none; }
+  #bpLevelTabs button{ flex: 0 0 auto; min-width: 76px; }
   .scenario-box{
     font-size:14.5px; line-height:1.55; padding:14px; background:var(--panel-2);
     border-radius:10px; margin-bottom:12px; min-height: 60px;
@@ -232,6 +235,29 @@
   .lb-rank{ font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--ink-dim); width:22px; flex-shrink:0; }
   .lb-name{ flex:1; color: var(--ink); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .lb-score{ font-family:'IBM Plex Mono', monospace; font-weight:600; color: var(--accent); }
+
+  /* mappa a tappe */
+  .map-wrap{ position:relative; padding: 10px 0 8px; }
+  .map-wrap::before{
+    content:''; position:absolute; left:50%; top:10px; bottom:30px; width:2px;
+    background: repeating-linear-gradient(to bottom, var(--hair) 0 6px, transparent 6px 12px);
+    transform: translateX(-50%); z-index:0;
+  }
+  .map-node-row{ position:relative; z-index:1; margin-bottom: 8px; display:flex; }
+  .map-node-col{ display:flex; flex-direction:column; align-items:center; width:100%; }
+  .map-node{
+    width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:3px solid var(--hair); background: var(--panel-2); color: var(--ink-dim);
+    font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:16px; cursor:pointer;
+    transition: transform .12s ease; flex-shrink:0;
+  }
+  .map-node svg{ width:24px; height:24px; }
+  .map-node.done{ background: var(--accent); border-color: var(--accent); color:#17140F; }
+  .map-node.current{ border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); }
+  .map-node.locked{ opacity:.45; cursor:default; }
+  .map-node:active{ transform: scale(.93); }
+  .map-node-label{ font-size:11.5px; color: var(--ink-dim); margin-top:8px; text-align:center; max-width:100px; line-height:1.3; }
+  .map-node-label.done{ color: var(--ink); }
 
   /* onboarding */
   .ob-dots{ display:flex; gap:6px; justify-content:center; margin-top:16px; }
@@ -393,6 +419,8 @@
       <button data-level="1" class="active">Livello 1</button>
       <button data-level="2">Livello 2</button>
       <button data-level="3">Livello 3</button>
+      <button data-level="4">Livello 4</button>
+      <button data-level="5">Livello 5</button>
     </div>
     <div class="level-tabs" id="bpDirTabs">
       <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -485,6 +513,15 @@
     <div id="entriesList"></div>
   </section>
 
+  <!-- MAPPA -->
+  <section class="card hidden" id="tab-mappa">
+    <span class="tag">Percorso a tappe</span>
+    <h2>La tua mappa &mdash; <span id="mapLangLabel">English</span></h2>
+    <p class="sub">Ogni tappa si sblocca completando la precedente. Tocca una tappa sbloccata per andare subito a quel modulo.</p>
+    <div class="map-wrap" id="mapPath"></div>
+    <button class="ghost" id="mapToLeaderboard" style="width:100%; margin-top:6px;">Vedi la classifica &rarr;</button>
+  </section>
+
   <!-- CRONOLOGIA -->
   <section class="card hidden" id="tab-cronologia">
     <span class="tag">Cronologia</span>
@@ -499,6 +536,10 @@
 </div>
 
 <nav class="tabs">
+  <button data-tab="mappa">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 16.5L10.5 9M13.5 9L16 16.5"/></svg>
+    Mappa
+  </button>
   <button data-tab="sfida" class="active">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
     Sfida
@@ -690,6 +731,34 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["it's hard to explain exactly how i feel","it is hard to explain exactly how i feel"]},
       {it:"Spero che tutto vada per il meglio.", ans:["i hope everything goes well"]},
     ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["last week i visited a city i didn't know","last week i visited a city i did not know"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["i usually wake up early during the week"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["could you recommend a good restaurant nearby"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["i just finished reading a very interesting book"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["tomorrow i'm supposed to meet a friend but i might be late","tomorrow i am supposed to meet a friend but i might be late"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["in the last few months i've changed some habits","in the last few months i have changed some habits"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["excuse me i'm looking for the information office","excuse me i am looking for the information office"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["i can't wait to start my vacation","i cannot wait to start my vacation"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["could you repeat that more slowly please"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["we decided to postpone the meeting until tomorrow"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["i'm trying to improve my pronunciation every day","i am trying to improve my pronunciation every day"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["what's the difference between these two options","what is the difference between these two options"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["if i could go back i would make different choices"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["it's important to listen to viewpoints different from your own","it is important to listen to viewpoints different from your own"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["i realized that i was wrong"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["despite the difficulties i never stopped trying"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["i'd like to go deeper into this topic when i have more time","i would like to go deeper into this topic when i have more time"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["sometimes it's better to stay silent than to say the wrong thing","sometimes it is better to stay silent than to say the wrong thing"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["i would never have imagined it would end like this"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["we should also consider the long-term consequences"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["i was told that the project has been postponed"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["i would rather discuss it in person than on the phone"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["whatever happens i'll try to stay calm","whatever happens i will try to stay calm"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["in hindsight i would have done things differently"]},
+    ],
   ],
   fr: [
     [ // Livello 1
@@ -739,6 +808,34 @@ const BEGINNER = {
       {it:"Se dipendesse da me, cambierei tutto.", ans:["si ca ne tenait qu'a moi je changerais tout","si ça ne tenait qua moi je changerais tout"]},
       {it:"È difficile spiegare esattamente come mi sento.", ans:["c'est difficile d'expliquer exactement ce que je ressens","cest difficile dexpliquer exactement ce que je ressens"]},
       {it:"Spero che tutto vada per il meglio.", ans:["j'espere que tout se passera bien","jespere que tout se passera bien"]},
+    ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["la semaine derniere j'ai visite une ville que je ne connaissais pas","la semaine dernière jai visité une ville que je ne connaissais pas"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["d'habitude je me reveille tot en semaine","dhabitude je me réveille tôt en semaine"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["pourrais-tu me recommander un bon restaurant pres d'ici","pourrais tu me recommander un bon restaurant près dici"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["je viens de finir de lire un livre tres interessant"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["demain je dois retrouver un ami mais je pourrais etre en retard"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["ces derniers mois j'ai change certaines habitudes","ces derniers mois jai changé certaines habitudes"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["excusez-moi je cherche le bureau d'information","excusez moi je cherche le bureau dinformation"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["j'ai hate de commencer les vacances","jai hâte de commencer les vacances"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["pourriez-vous repeter plus lentement s'il vous plait","pourriez vous répéter plus lentement sil vous plait"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["nous avons decide de reporter la reunion a demain"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["j'essaie d'ameliorer ma prononciation chaque jour","jessaie daméliorer ma prononciation chaque jour"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["quelle est la difference entre ces deux options"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["si je pouvais revenir en arriere je ferais des choix differents"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["il est important d'ecouter des points de vue differents du sien","il est important découter des points de vue différents du sien"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["je me suis rendu compte que j'avais tort","je me suis rendu compte que javais tort"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["malgre les difficultes je n'ai jamais arrete d'essayer","malgré les difficultés je nai jamais arrêté dessayer"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["j'aimerais approfondir ce sujet quand j'aurai plus de temps","jaimerais approfondir ce sujet quand jaurai plus de temps"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["parfois il vaut mieux se taire que de dire la mauvaise chose"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["je n'aurais jamais imagine que ca finirait comme ca","je naurais jamais imaginé que ça finirait comme ça"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["il faudrait aussi considerer les consequences a long terme"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["on m'a dit que le projet avait ete reporte","on ma dit que le projet avait été reporté"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["je prefererais en discuter en personne plutot qu'au telephone","je préférerais en discuter en personne plutôt quau téléphone"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["quoi qu'il arrive j'essaierai de rester calme","quoi quil arrive jessaierai de rester calme"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["avec le recul j'aurais fait les choses differemment","avec le recul jaurais fait les choses différemment"]},
     ],
   ],
   ar: [
@@ -790,6 +887,34 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["من الصعب أن أشرح بالضبط كيف أشعر","min as-sa'b an ashraha bidh-dhabt kayfa ash'ur"]},
       {it:"Spero che tutto vada per il meglio.", ans:["أتمنى أن يسير كل شيء على ما يرام","atamanna an yasira kullu shay' ala ma yuram"]},
     ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["الأسبوع الماضي زرت مدينة لم أكن أعرفها","al-usbu al-madi zurtu madina lam akun a'rifuha"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["عادة أستيقظ مبكرا خلال الأسبوع","adatan astayqizu mubakkiran khilala al-usbu"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["هل يمكنك أن تنصحني بمطعم جيد قريب من هنا","hal yumkinuka an tansahani bimat'am jayyid qarib min huna"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["لقد انتهيت للتو من قراءة كتاب مثير جدا للاهتمام","laqad intahaytu littawi min qira'at kitab muthir jiddan lil-ihtimam"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["غدا من المفترض أن ألتقي صديقا لكن قد أتأخر","ghadan min al-mafrud an altaqi sadiqan lakin qad ata'akhar"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["في الأشهر الأخيرة غيرت بعض العادات","fi al-ashhur al-akhira ghayyartu ba'da al-'adat"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["عفوا أنا أبحث عن مكتب المعلومات","afwan ana abhathu 'an maktab al-ma'lumat"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["لا أطيق الانتظار لبدء العطلة","la atiqu al-intizar libad' al-'utla"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["هل يمكنك أن تكرر ذلك ببطء أكثر من فضلك","hal yumkinuka an tukarrira dhalika bibut' akthar min fadlik"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["قررنا تأجيل الاجتماع إلى الغد","qararna ta'jil al-ijtima' ila al-ghad"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["أحاول تحسين نطقي كل يوم","uhawilu tahsin nutqi kulla yawm"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["ما الفرق بين هذين الخيارين","ma al-farq bayna hadhayni al-khiyarayn"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["لو استطعت العودة إلى الوراء لاتخذت خيارات مختلفة","law istata'tu al-'awda ila al-wara' la'ittakhadhtu khiyarat mukhtalifa"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["من المهم الاستماع إلى وجهات نظر مختلفة عن وجهة نظرك","min al-muhimm al-istima' ila wijhat nazar mukhtalifa 'an wijhat nazarik"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["أدركت أنني كنت مخطئا","adraktu annani kuntu mukhti'an"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["رغم الصعوبات لم أتوقف أبدا عن المحاولة","raghma as-su'ubat lam atawaqqaf abadan 'an al-muhawala"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["أود التعمق في هذا الموضوع عندما يكون لدي وقت أكثر","awaddu at-ta'ammuq fi hadha al-mawdu' 'indama yakoun ladayya waqt akthar"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["أحيانا يكون الصمت أفضل من قول الشيء الخاطئ","ahyanan yakoun as-samt afdal min qawl ash-shay' al-khati"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["لم أكن لأتخيل أبدا أن الأمر سينتهي هكذا","lam akun li'atakhayyala abadan anna al-amr sayantahi hakadha"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["ينبغي أيضا مراعاة العواقب على المدى الطويل","yanbaghi aydan mura'at al-'awaqib 'ala al-mada at-tawil"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["قيل لي إن المشروع قد تم تأجيله","qila li inna al-mashru' qad tamma ta'jiluhu"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["أفضل مناقشة الأمر شخصيا بدلا من الهاتف","ufaddilu munaqashat al-amr shakhsiyyan badalan min al-hatif"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["مهما حدث سأحاول أن أبقى هادئا","mahma hadatha sa'uhawilu an abqa hadi'an"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["بعد التفكير كنت سأفعل الأشياء بشكل مختلف","ba'da at-tafkir kuntu sa'af'alu al-ashya' bishaklin mukhtalif"]},
+    ],
   ],
   es: [
     [ // Livello 1
@@ -839,6 +964,34 @@ const BEGINNER = {
       {it:"Se dipendesse da me, cambierei tutto.", ans:["si dependiera de mi cambiaria todo","si dependiera de mí cambiaría todo"]},
       {it:"È difficile spiegare esattamente come mi sento.", ans:["es dificil explicar exactamente como me siento","es difícil explicar exactamente cómo me siento"]},
       {it:"Spero che tutto vada per il meglio.", ans:["espero que todo salga bien"]},
+    ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["la semana pasada visite una ciudad que no conocia","la semana pasada visité una ciudad que no conocía"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["normalmente me despierto temprano entre semana"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["podrias recomendarme un buen restaurante cerca de aqui","podrías recomendarme un buen restaurante cerca de aquí"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["acabo de terminar de leer un libro muy interesante"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["manana se supone que voy a ver a un amigo pero puede que llegue tarde","mañana se supone que voy a ver a un amigo pero puede que llegue tarde"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["en los ultimos meses he cambiado algunos habitos","en los últimos meses he cambiado algunos hábitos"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["disculpe estoy buscando la oficina de informacion","disculpe estoy buscando la oficina de información"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["tengo muchas ganas de que empiecen las vacaciones"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["podria repetirlo mas despacio por favor","podría repetirlo más despacio por favor"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["decidimos posponer la reunion hasta manana","decidimos posponer la reunión hasta mañana"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["estoy intentando mejorar mi pronunciacion todos los dias","estoy intentando mejorar mi pronunciación todos los días"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["cual es la diferencia entre estas dos opciones","cuál es la diferencia entre estas dos opciones"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["si pudiera volver atras tomaria decisiones diferentes","si pudiera volver atrás tomaría decisiones diferentes"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["es importante escuchar puntos de vista diferentes al propio"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["me di cuenta de que estaba equivocado"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["a pesar de las dificultades nunca deje de intentarlo","a pesar de las dificultades nunca dejé de intentarlo"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["me gustaria profundizar en este tema cuando tenga mas tiempo","me gustaría profundizar en este tema cuando tenga más tiempo"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["a veces es mejor callar que decir lo incorrecto"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["nunca me habria imaginado que terminaria asi","nunca me habría imaginado que terminaría así"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["tambien habria que considerar las consecuencias a largo plazo","también habría que considerar las consecuencias a largo plazo"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["me dijeron que el proyecto se ha pospuesto"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["preferiria discutirlo en persona en lugar de por telefono","preferiría discutirlo en persona en lugar de por teléfono"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["pase lo que pase intentare mantener la calma","pase lo que pase intentaré mantener la calma"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["en retrospectiva habria hecho las cosas de otra manera","en retrospectiva habría hecho las cosas de otra manera"]},
     ],
   ],
   de: [
@@ -890,6 +1043,34 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["es ist schwer genau zu erklaren wie ich mich fuhle","es ist schwer genau zu erklären wie ich mich fühle"]},
       {it:"Spero che tutto vada per il meglio.", ans:["ich hoffe dass alles gut wird","ich hoffe alles wird gut"]},
     ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["letzte woche habe ich eine stadt besucht die ich nicht kannte"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["normalerweise wache ich unter der woche fruh auf","normalerweise wache ich unter der woche früh auf"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["konntest du mir ein gutes restaurant in der nahe empfehlen","könntest du mir ein gutes restaurant in der nähe empfehlen"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["ich habe gerade ein sehr interessantes buch zu ende gelesen"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["morgen soll ich einen freund treffen aber ich konnte zu spat kommen","morgen soll ich einen freund treffen aber ich könnte zu spät kommen"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["in den letzten monaten habe ich einige gewohnheiten geandert","in den letzten monaten habe ich einige gewohnheiten geändert"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["entschuldigung ich suche das informationsburo","entschuldigung ich suche das informationsbüro"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["ich kann es kaum erwarten dass die ferien beginnen"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["konnten sie das bitte langsamer wiederholen","könnten sie das bitte langsamer wiederholen"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["wir haben beschlossen das treffen auf morgen zu verschieben"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["ich versuche meine aussprache jeden tag zu verbessern"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["was ist der unterschied zwischen diesen beiden optionen"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["wenn ich zuruckgehen konnte wurde ich andere entscheidungen treffen","wenn ich zurückgehen könnte würde ich andere entscheidungen treffen"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["es ist wichtig auf andere sichtweisen als die eigene zu horen","es ist wichtig auf andere sichtweisen als die eigene zu hören"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["mir ist klar geworden dass ich falsch lag"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["trotz der schwierigkeiten habe ich nie aufgehort es zu versuchen","trotz der schwierigkeiten habe ich nie aufgehört es zu versuchen"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["ich wurde dieses thema gerne vertiefen wenn ich mehr zeit habe","ich würde dieses thema gerne vertiefen wenn ich mehr zeit habe"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["manchmal ist es besser zu schweigen als das falsche zu sagen"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["ich hatte nie gedacht dass es so enden wurde","ich hätte nie gedacht dass es so enden würde"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["man sollte auch die langfristigen folgen bedenken"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["mir wurde gesagt dass das projekt verschoben wurde"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["ich wurde es lieber personlich besprechen als am telefon","ich würde es lieber persönlich besprechen als am telefon"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["was auch immer passiert ich werde versuchen ruhig zu bleiben"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["im nachhinein hatte ich die dinge anders gemacht","im nachhinein hätte ich die dinge anders gemacht"]},
+    ],
   ],
 };
 
@@ -936,7 +1117,11 @@ async function loadState(lang){
   if(!state.beginner){
     state.beginner = {
       direction:'to_target', level:1,
-      progress:{ 1:{to_target:freshDirState(), to_it:freshDirState()}, 2:{to_target:freshDirState(), to_it:freshDirState()}, 3:{to_target:freshDirState(), to_it:freshDirState()} }
+      progress:{
+        1:{to_target:freshDirState(), to_it:freshDirState()}, 2:{to_target:freshDirState(), to_it:freshDirState()},
+        3:{to_target:freshDirState(), to_it:freshDirState()}, 4:{to_target:freshDirState(), to_it:freshDirState()},
+        5:{to_target:freshDirState(), to_it:freshDirState()}
+      }
     };
   } else if(!state.beginner.progress){
     let oldToTarget, oldToIt;
@@ -955,10 +1140,12 @@ async function loadState(lang){
         1: { to_target: oldToTarget, to_it: oldToIt },
         2: { to_target: freshDirState(), to_it: freshDirState() },
         3: { to_target: freshDirState(), to_it: freshDirState() },
+        4: { to_target: freshDirState(), to_it: freshDirState() },
+        5: { to_target: freshDirState(), to_it: freshDirState() },
       }
     };
   } else {
-    [1,2,3].forEach(lvl=>{
+    [1,2,3,4,5].forEach(lvl=>{
       if(!state.beginner.progress[lvl]) state.beginner.progress[lvl] = { to_target: freshDirState(), to_it: freshDirState() };
     });
     if(!state.beginner.level) state.beginner.level = 1;
@@ -1011,6 +1198,7 @@ async function switchLang(key){
   renderNotebook();
   renderHistory();
   renderBeginner();
+  renderMap();
 }
 
 function renderStreak(){
@@ -1082,7 +1270,7 @@ document.getElementById('btnDone').onclick = async ()=>{
   state.streak = (state.lastDate === todayStr()) ? state.streak : (wasYesterday ? state.streak+1 : 1);
   state.lastDate = todayStr();
   await saveState(currentLang);
-  renderStreak(); renderChallenge(); renderHistory();
+  renderStreak(); renderChallenge(); renderHistory(); renderMap();
 };
 document.getElementById('btnAnother').onclick = ()=>{
   const list = currentSfidaList();
@@ -1314,7 +1502,7 @@ function renderBeginner(){
     document.getElementById('bpPrompt').removeAttribute('dir');
     document.getElementById('bpPrompt').classList.remove('rtl-text');
 
-    const nextLevel = level < 3 ? level + 1 : null;
+    const nextLevel = level < 5 ? level + 1 : null;
     const otherDirDone = state.beginner.progress[level][dir === 'to_target' ? 'to_it' : 'to_target'].index >= list.length;
     let nextStepMsg;
     if(nextLevel && otherDirDone){
@@ -1324,7 +1512,7 @@ function renderBeginner(){
     } else if(!otherDirDone){
       nextStepMsg = `Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}" per completare anche questa direzione.`;
     } else {
-      nextStepMsg = `Hai completato tutti e 3 i livelli in entrambe le direzioni per ${LANGS[currentLang].label}. Passa alle Sfide o ai Dialoghi per continuare a esercitarti.`;
+      nextStepMsg = `Hai completato tutti e 5 i livelli in entrambe le direzioni per ${LANGS[currentLang].label}. Passa alle Sfide o ai Dialoghi per continuare a esercitarti.`;
     }
     document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">Livello ${level} completato ✓</div>${nextStepMsg}</div>`;
     document.getElementById('bpInput').classList.add('hidden');
@@ -1351,6 +1539,7 @@ async function bpAdvance(){
   ds.wrong = 0;
   await saveState(currentLang);
   renderBeginner();
+  renderMap();
 }
 document.getElementById('bpCheck').onclick = async ()=>{
   const list = currentBeginnerList();
@@ -1416,6 +1605,88 @@ document.querySelectorAll('#bpDirTabs button').forEach(btn=>{
   };
 });
 
+/* ---------- MAPPA A TAPPE ---------- */
+const MAP_NODES = [
+  { id:'base-1', label:'Percorso Base · Livello 1', kind:'percorso', level:1 },
+  { id:'sfida-principiante', label:'Sfida · Principiante', kind:'sfida', level:'principiante' },
+  { id:'base-2', label:'Percorso Base · Livello 2', kind:'percorso', level:2 },
+  { id:'base-3', label:'Percorso Base · Livello 3', kind:'percorso', level:3 },
+  { id:'sfida-intermedio', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio' },
+  { id:'base-4', label:'Percorso Base · Livello 4', kind:'percorso', level:4 },
+  { id:'base-5', label:'Percorso Base · Livello 5', kind:'percorso', level:5 },
+  { id:'sfida-avanzato', label:'Sfida · Avanzato', kind:'sfida', level:'avanzato' },
+];
+
+function isMapNodeComplete(node){
+  if(node.kind === 'percorso'){
+    const list = BEGINNER[currentLang][node.level - 1];
+    const ds = state.beginner.progress[node.level] && state.beginner.progress[node.level].to_target;
+    return !!ds && ds.index >= list.length;
+  } else {
+    const count = state.done.filter(d => d.split(':')[1] === node.level).length;
+    return count >= 3;
+  }
+}
+
+function switchToTab(tabName){
+  const btn = document.querySelector(`nav.tabs button[data-tab="${tabName}"]`);
+  if(btn) btn.click();
+}
+
+function renderMap(){
+  document.getElementById('mapLangLabel').textContent = LANGS[currentLang].label;
+  const wrap = document.getElementById('mapPath');
+  wrap.innerHTML = '';
+  let prevComplete = true;
+  MAP_NODES.forEach((node, i)=>{
+    const complete = isMapNodeComplete(node);
+    const unlocked = prevComplete;
+    const status = complete ? 'done' : (unlocked ? 'current' : 'locked');
+    prevComplete = complete;
+
+    const row = document.createElement('div');
+    row.className = 'map-node-row';
+    const col = document.createElement('div');
+    col.className = 'map-node-col';
+    const offset = Math.round(Math.sin(i * 0.85) * 60);
+    col.style.transform = `translateX(${offset}px)`;
+
+    const nodeEl = document.createElement('div');
+    nodeEl.className = 'map-node ' + status;
+    nodeEl.innerHTML = status === 'done'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg>'
+      : status === 'locked'
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>'
+        : String(i + 1);
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'map-node-label' + (status === 'done' ? ' done' : '');
+    labelEl.textContent = node.label;
+
+    if(status !== 'locked'){
+      nodeEl.onclick = async ()=>{
+        if(node.kind === 'percorso'){
+          state.beginner.level = node.level;
+          state.beginner.direction = 'to_target';
+          await saveState(currentLang);
+          switchToTab('percorso');
+          renderBeginner();
+        } else {
+          state.sfida.level = node.level;
+          await saveState(currentLang);
+          switchToTab('sfida');
+          renderChallenge();
+        }
+      };
+    }
+
+    col.appendChild(nodeEl);
+    col.appendChild(labelEl);
+    row.appendChild(col);
+    wrap.appendChild(row);
+  });
+}
+document.getElementById('mapToLeaderboard').onclick = ()=> switchToTab('percorso');
 
 /* ---------- CRONOLOGIA ---------- */
 function renderHistory(){
