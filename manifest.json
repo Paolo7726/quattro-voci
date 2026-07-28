@@ -1,7 +1,7 @@
 {
   "name": "Quattro Voci",
   "short_name": "4 Voci",
-  "description": "Ecosistema di immersione EN / FR / AR / ES — sfide, shadowing, pronuncia, dialoghi e percorso iniziale",
+  "description": "Ecosistema di immersione EN / FR / AR / ES / DE — sfide, shadowing, pronuncia, dialoghi e percorso iniziale",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
