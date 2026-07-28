@@ -386,7 +386,12 @@
   <section class="card hidden" id="tab-percorso">
     <span class="tag">Percorso iniziale &middot; da zero</span>
     <h2>Traduci con la tastiera</h2>
-    <p class="sub">Scegli la direzione, poi scrivi la traduzione. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
+    <p class="sub">Scegli livello e direzione, poi scrivi la traduzione. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
+    <div class="level-tabs" id="bpLevelTabs">
+      <button data-level="1" class="active">Livello 1</button>
+      <button data-level="2">Livello 2</button>
+      <button data-level="3">Livello 3</button>
+    </div>
     <div class="level-tabs" id="bpDirTabs">
       <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
       <button data-dir="to_it" id="bpDirToIt">Lingua &rarr; Italiano</button>
@@ -624,84 +629,204 @@ const SCENARIOS = [
 
 const BEGINNER = {
   en: [
-    {it:"Ciao", ans:["hello","hi"]},
-    {it:"Buongiorno", ans:["good morning"]},
-    {it:"Buonasera", ans:["good evening"]},
-    {it:"Grazie", ans:["thank you","thanks"]},
-    {it:"Prego", ans:["you're welcome","youre welcome"]},
-    {it:"Per favore", ans:["please"]},
-    {it:"Mi chiamo Marco", ans:["my name is marco","i am marco","im marco"]},
-    {it:"Come stai?", ans:["how are you"]},
-    {it:"Sto bene, grazie", ans:["i am fine thank you","im fine thank you","i am fine thanks","im fine thanks","i'm fine thank you","i'm fine thanks","i'm good thanks","i am good thanks"]},
-    {it:"Quanti anni hai?", ans:["how old are you"]},
-    {it:"Dove abiti?", ans:["where do you live"]},
-    {it:"Non capisco", ans:["i dont understand","i don't understand","i do not understand"]},
-    {it:"Puoi ripetere?", ans:["can you repeat","can you repeat that","could you repeat"]},
-    {it:"Quanto costa?", ans:["how much does it cost","how much is it"]},
-    {it:"Mi piace il caffè", ans:["i like coffee"]},
-    {it:"Che ore sono?", ans:["what time is it"]},
-    {it:"Vorrei un caffè, per favore", ans:["i would like a coffee please","id like a coffee please","i'd like a coffee please"]},
-    {it:"A che ora parte il treno?", ans:["what time does the train leave","what time does the train depart"]},
+    [ // Livello 1
+      {it:"Ciao", ans:["hello","hi"]},
+      {it:"Buongiorno", ans:["good morning"]},
+      {it:"Buonasera", ans:["good evening"]},
+      {it:"Grazie", ans:["thank you","thanks"]},
+      {it:"Prego", ans:["you're welcome","youre welcome"]},
+      {it:"Per favore", ans:["please"]},
+      {it:"Mi chiamo Marco", ans:["my name is marco","i am marco","im marco"]},
+      {it:"Come stai?", ans:["how are you"]},
+      {it:"Sto bene, grazie", ans:["i am fine thank you","im fine thank you","i am fine thanks","im fine thanks","i'm fine thank you","i'm fine thanks","i'm good thanks","i am good thanks"]},
+      {it:"Quanti anni hai?", ans:["how old are you"]},
+      {it:"Dove abiti?", ans:["where do you live"]},
+      {it:"Non capisco", ans:["i dont understand","i don't understand","i do not understand"]},
+      {it:"Puoi ripetere?", ans:["can you repeat","can you repeat that","could you repeat"]},
+      {it:"Quanto costa?", ans:["how much does it cost","how much is it"]},
+      {it:"Mi piace il caffè", ans:["i like coffee"]},
+      {it:"Che ore sono?", ans:["what time is it"]},
+      {it:"Vorrei un caffè, per favore", ans:["i would like a coffee please","id like a coffee please","i'd like a coffee please"]},
+      {it:"A che ora parte il treno?", ans:["what time does the train leave","what time does the train depart"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["yesterday i went to the market"]},
+      {it:"Che lavoro fai?", ans:["what do you do for work","what do you do"]},
+      {it:"Sono nato in Italia.", ans:["i was born in italy"]},
+      {it:"Posso pagare con la carta?", ans:["can i pay by card","can i pay with card"]},
+      {it:"Dov'è la stazione più vicina?", ans:["where is the nearest station"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["i need help please"]},
+      {it:"A che ora apre il negozio?", ans:["what time does the shop open","what time does the store open"]},
+      {it:"Questo è troppo caro.", ans:["this is too expensive"]},
+      {it:"Posso avere il conto, per favore?", ans:["can i have the bill please","can i have the check please"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["i've been learning this language for a short time","i have been learning this language for a short time"]},
+      {it:"Che programmi hai per il weekend?", ans:["what plans do you have for the weekend"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["i'm lost can you help me","i am lost can you help me"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["i think this city is very interesting"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["if i had more time i would travel more"]},
+      {it:"Preferisco il tè al caffè.", ans:["i prefer tea to coffee"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["i'm not sure if it's a good idea","i am not sure if it is a good idea"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["i'd like to learn to cook better","i would like to learn to cook better"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["it would be great if we could meet soon"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["i think i understood but i could be wrong"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["despite the rain we went out anyway"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["i'm sorry i misunderstood what you said","i am sorry i misunderstood what you said"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["if it were up to me i would change everything"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["it's hard to explain exactly how i feel","it is hard to explain exactly how i feel"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["i hope everything goes well"]},
+    ],
   ],
   fr: [
-    {it:"Ciao", ans:["salut","bonjour"]},
-    {it:"Buongiorno", ans:["bonjour"]},
-    {it:"Buonasera", ans:["bonsoir"]},
-    {it:"Grazie", ans:["merci"]},
-    {it:"Prego", ans:["de rien"]},
-    {it:"Per favore", ans:["s'il te plait","s'il vous plait","stp","svp"]},
-    {it:"Mi chiamo Marco", ans:["je m'appelle marco","je mappelle marco"]},
-    {it:"Come stai?", ans:["comment ca va","comment vas-tu","comment vas tu"]},
-    {it:"Sto bene, grazie", ans:["je vais bien merci","ca va bien merci","ça va bien merci"]},
-    {it:"Quanti anni hai?", ans:["quel age as-tu","quel age as tu","tu as quel age"]},
-    {it:"Dove abiti?", ans:["ou habites-tu","ou habites tu","tu habites ou"]},
-    {it:"Non capisco", ans:["je ne comprends pas"]},
-    {it:"Puoi ripetere?", ans:["peux-tu repeter","peux tu repeter","tu peux repeter"]},
-    {it:"Quanto costa?", ans:["combien ca coute","combien ça coûte"]},
-    {it:"Mi piace il caffè", ans:["j'aime le cafe","jaime le cafe"]},
-    {it:"Che ore sono?", ans:["quelle heure est-il","quelle heure est il","quelle heure il est"]},
-    {it:"Vorrei un caffè, per favore", ans:["je voudrais un cafe s'il vous plait","je voudrais un cafe stp"]},
-    {it:"A che ora parte il treno?", ans:["a quelle heure part le train"]},
+    [ // Livello 1
+      {it:"Ciao", ans:["salut","bonjour"]},
+      {it:"Buongiorno", ans:["bonjour"]},
+      {it:"Buonasera", ans:["bonsoir"]},
+      {it:"Grazie", ans:["merci"]},
+      {it:"Prego", ans:["de rien"]},
+      {it:"Per favore", ans:["s'il te plait","s'il vous plait","stp","svp"]},
+      {it:"Mi chiamo Marco", ans:["je m'appelle marco","je mappelle marco"]},
+      {it:"Come stai?", ans:["comment ca va","comment vas-tu","comment vas tu"]},
+      {it:"Sto bene, grazie", ans:["je vais bien merci","ca va bien merci","ça va bien merci"]},
+      {it:"Quanti anni hai?", ans:["quel age as-tu","quel age as tu","tu as quel age"]},
+      {it:"Dove abiti?", ans:["ou habites-tu","ou habites tu","tu habites ou"]},
+      {it:"Non capisco", ans:["je ne comprends pas"]},
+      {it:"Puoi ripetere?", ans:["peux-tu repeter","peux tu repeter","tu peux repeter"]},
+      {it:"Quanto costa?", ans:["combien ca coute","combien ça coûte"]},
+      {it:"Mi piace il caffè", ans:["j'aime le cafe","jaime le cafe"]},
+      {it:"Che ore sono?", ans:["quelle heure est-il","quelle heure est il","quelle heure il est"]},
+      {it:"Vorrei un caffè, per favore", ans:["je voudrais un cafe s'il vous plait","je voudrais un cafe stp"]},
+      {it:"A che ora parte il treno?", ans:["a quelle heure part le train"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["hier je suis alle au marche","hier je suis allé au marché"]},
+      {it:"Che lavoro fai?", ans:["qu'est-ce que tu fais dans la vie","quest ce que tu fais dans la vie"]},
+      {it:"Sono nato in Italia.", ans:["je suis ne en italie","je suis né en italie"]},
+      {it:"Posso pagare con la carta?", ans:["est-ce que je peux payer par carte","je peux payer par carte"]},
+      {it:"Dov'è la stazione più vicina?", ans:["ou est la gare la plus proche"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["j'ai besoin d'aide s'il vous plait","jai besoin daide sil vous plait"]},
+      {it:"A che ora apre il negozio?", ans:["a quelle heure ouvre le magasin"]},
+      {it:"Questo è troppo caro.", ans:["c'est trop cher","cest trop cher"]},
+      {it:"Posso avere il conto, per favore?", ans:["est-ce que je peux avoir l'addition s'il vous plait","je peux avoir laddition sil vous plait"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["j'apprends cette langue depuis peu de temps","japprends cette langue depuis peu de temps"]},
+      {it:"Che programmi hai per il weekend?", ans:["quels sont tes projets pour le week-end","quels sont tes projets pour le weekend"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["je suis perdu tu peux m'aider","je suis perdu tu peux maider"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["je pense que cette ville est tres interessante"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["si j'avais plus de temps je voyagerais plus","si javais plus de temps je voyagerais plus"]},
+      {it:"Preferisco il tè al caffè.", ans:["je prefere le the au cafe","je préfère le thé au café"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["je ne suis pas sur que ce soit une bonne idee"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["j'aimerais apprendre a mieux cuisiner","jaimerais apprendre a mieux cuisiner"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["ce serait genial si on pouvait se voir bientot"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["je crois avoir compris mais je peux me tromper"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["malgre la pluie nous sommes sortis quand meme"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["je suis desole j'ai mal compris ce que tu as dit","je suis désolé jai mal compris ce que tu as dit"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["si ca ne tenait qu'a moi je changerais tout","si ça ne tenait qua moi je changerais tout"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["c'est difficile d'expliquer exactement ce que je ressens","cest difficile dexpliquer exactement ce que je ressens"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["j'espere que tout se passera bien","jespere que tout se passera bien"]},
+    ],
   ],
   ar: [
-    {it:"Ciao", ans:["مرحبا","marhaban"]},
-    {it:"Buongiorno", ans:["صباح الخير","sabah al khayr","sabah el kheir"]},
-    {it:"Buonasera", ans:["مساء الخير","masa al khayr","masa el kheir"]},
-    {it:"Grazie", ans:["شكرا","shukran"]},
-    {it:"Prego", ans:["عفوا","afwan"]},
-    {it:"Per favore", ans:["من فضلك","min fadlik","min fadlak"]},
-    {it:"Mi chiamo Marco", ans:["اسمي ماركو","ismi marco"]},
-    {it:"Come stai?", ans:["كيف حالك","kayfa haluk","kayf halak"]},
-    {it:"Sto bene, grazie", ans:["أنا بخير شكرا","ana bikhayr shukran"]},
-    {it:"Quanti anni hai?", ans:["كم عمرك","kam umruk"]},
-    {it:"Dove abiti?", ans:["أين تسكن","ayna taskun"]},
-    {it:"Non capisco", ans:["لا أفهم","la afham"]},
-    {it:"Puoi ripetere?", ans:["هل يمكنك أن تكرر","hal yumkinuka an tukarrir"]},
-    {it:"Quanto costa?", ans:["كم السعر","kam al-si'r","kam alsir"]},
-    {it:"Mi piace il caffè", ans:["أحب القهوة","uhibbu al-qahwa","ohebo alqahwa"]},
-    {it:"Che ore sono?", ans:["كم الساعة","kam al-sa'a","kam alsaa"]},
-    {it:"Vorrei un caffè, per favore", ans:["أريد قهوة من فضلك","ureedu qahwa min fadlik"]},
-    {it:"A che ora parte il treno?", ans:["متى يغادر القطار","mata yughadir al-qitar"]},
+    [ // Livello 1
+      {it:"Ciao", ans:["مرحبا","marhaban"]},
+      {it:"Buongiorno", ans:["صباح الخير","sabah al khayr","sabah el kheir"]},
+      {it:"Buonasera", ans:["مساء الخير","masa al khayr","masa el kheir"]},
+      {it:"Grazie", ans:["شكرا","shukran"]},
+      {it:"Prego", ans:["عفوا","afwan"]},
+      {it:"Per favore", ans:["من فضلك","min fadlik","min fadlak"]},
+      {it:"Mi chiamo Marco", ans:["اسمي ماركو","ismi marco"]},
+      {it:"Come stai?", ans:["كيف حالك","kayfa haluk","kayf halak"]},
+      {it:"Sto bene, grazie", ans:["أنا بخير شكرا","ana bikhayr shukran"]},
+      {it:"Quanti anni hai?", ans:["كم عمرك","kam umruk"]},
+      {it:"Dove abiti?", ans:["أين تسكن","ayna taskun"]},
+      {it:"Non capisco", ans:["لا أفهم","la afham"]},
+      {it:"Puoi ripetere?", ans:["هل يمكنك أن تكرر","hal yumkinuka an tukarrir"]},
+      {it:"Quanto costa?", ans:["كم السعر","kam al-si'r","kam alsir"]},
+      {it:"Mi piace il caffè", ans:["أحب القهوة","uhibbu al-qahwa","ohebo alqahwa"]},
+      {it:"Che ore sono?", ans:["كم الساعة","kam al-sa'a","kam alsaa"]},
+      {it:"Vorrei un caffè, per favore", ans:["أريد قهوة من فضلك","ureedu qahwa min fadlik"]},
+      {it:"A che ora parte il treno?", ans:["متى يغادر القطار","mata yughadir al-qitar"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["أمس ذهبت إلى السوق","ams dhahabtu ila al-souq"]},
+      {it:"Che lavoro fai?", ans:["ما هي مهنتك","ma hiya mihnatuka"]},
+      {it:"Sono nato in Italia.", ans:["ولدت في إيطاليا","wulidtu fi eetalia"]},
+      {it:"Posso pagare con la carta?", ans:["هل يمكنني الدفع بالبطاقة","hal yumkinuni al-daf' bil-bitaqa"]},
+      {it:"Dov'è la stazione più vicina?", ans:["أين أقرب محطة","ayna aqrab mahatta"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["أحتاج إلى مساعدة من فضلك","ahtaju ila musa'ada min fadlik"]},
+      {it:"A che ora apre il negozio?", ans:["متى يفتح المتجر","mata yaftah al-matjar"]},
+      {it:"Questo è troppo caro.", ans:["هذا غال جدا","hadha ghalin jiddan"]},
+      {it:"Posso avere il conto, per favore?", ans:["هل يمكنني الحصول على الفاتورة من فضلك","hal yumkinuni al-husul ala al-fatura min fadlik"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["أتعلم هذه اللغة منذ وقت قصير","ata'allamu hadhihi al-lugha mundhu waqtin qasir"]},
+      {it:"Che programmi hai per il weekend?", ans:["ما هي خططك لعطلة نهاية الأسبوع","ma hiya khitatuka li'utlat nihayat al-usbu'"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["أنا تائه هل يمكنك مساعدتي","ana ta'ih hal yumkinuka musa'adati"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["أعتقد أن هذه المدينة مثيرة للاهتمام جدا","a'taqidu anna hadhihi al-madina muthira lil-ihtimam jiddan"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["لو كان لدي وقت أكثر لكنت سافرت أكثر","law kana ladayya waqt akthar lakuntu safartu akthar"]},
+      {it:"Preferisco il tè al caffè.", ans:["أفضل الشاي على القهوة","ufaddilu ash-shay ala al-qahwa"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["لست متأكدا إذا كانت فكرة جيدة","lastu muta'akkidan idha kanat fikra jayyida"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["أود أن أتعلم الطبخ بشكل أفضل","awaddu an ata'allama at-tabkh bishaklin afdal"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["سيكون رائعا لو استطعنا أن نلتقي قريبا","sayakoun ra'i'an law istata'na an naltaqi qariban"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["أعتقد أنني فهمت لكن قد أكون مخطئا","a'taqidu annani fahimtu lakin qad akoun mukhti'an"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["رغم المطر خرجنا على أي حال","raghma al-matar kharajna ala ayyi hal"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["آسف لقد أسأت فهم ما قلته","asif laqad asa'tu fahma ma qultahu"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["لو كان الأمر بيدي لغيرت كل شيء","law kana al-amru biyadi laghayyartu kulla shay'"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["من الصعب أن أشرح بالضبط كيف أشعر","min as-sa'b an ashraha bidh-dhabt kayfa ash'ur"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["أتمنى أن يسير كل شيء على ما يرام","atamanna an yasira kullu shay' ala ma yuram"]},
+    ],
   ],
   es: [
-    {it:"Ciao", ans:["hola"]},
-    {it:"Buongiorno", ans:["buenos dias","buenos días"]},
-    {it:"Buonasera", ans:["buenas tardes","buenas noches"]},
-    {it:"Grazie", ans:["gracias"]},
-    {it:"Prego", ans:["de nada"]},
-    {it:"Per favore", ans:["por favor"]},
-    {it:"Mi chiamo Marco", ans:["me llamo marco"]},
-    {it:"Come stai?", ans:["como estas","cómo estás"]},
-    {it:"Sto bene, grazie", ans:["estoy bien gracias"]},
-    {it:"Quanti anni hai?", ans:["cuantos anos tienes","cuántos años tienes"]},
-    {it:"Dove abiti?", ans:["donde vives","dónde vives"]},
-    {it:"Non capisco", ans:["no entiendo"]},
-    {it:"Puoi ripetere?", ans:["puedes repetir"]},
-    {it:"Quanto costa?", ans:["cuanto cuesta","cuánto cuesta"]},
-    {it:"Mi piace il caffè", ans:["me gusta el cafe"]},
-    {it:"Che ore sono?", ans:["que hora es","qué hora es"]},
-    {it:"Vorrei un caffè, per favore", ans:["quisiera un cafe por favor"]},
-    {it:"A che ora parte il treno?", ans:["a que hora sale el tren","a qué hora sale el tren"]},
+    [ // Livello 1
+      {it:"Ciao", ans:["hola"]},
+      {it:"Buongiorno", ans:["buenos dias","buenos días"]},
+      {it:"Buonasera", ans:["buenas tardes","buenas noches"]},
+      {it:"Grazie", ans:["gracias"]},
+      {it:"Prego", ans:["de nada"]},
+      {it:"Per favore", ans:["por favor"]},
+      {it:"Mi chiamo Marco", ans:["me llamo marco"]},
+      {it:"Come stai?", ans:["como estas","cómo estás"]},
+      {it:"Sto bene, grazie", ans:["estoy bien gracias"]},
+      {it:"Quanti anni hai?", ans:["cuantos anos tienes","cuántos años tienes"]},
+      {it:"Dove abiti?", ans:["donde vives","dónde vives"]},
+      {it:"Non capisco", ans:["no entiendo"]},
+      {it:"Puoi ripetere?", ans:["puedes repetir"]},
+      {it:"Quanto costa?", ans:["cuanto cuesta","cuánto cuesta"]},
+      {it:"Mi piace il caffè", ans:["me gusta el cafe"]},
+      {it:"Che ore sono?", ans:["que hora es","qué hora es"]},
+      {it:"Vorrei un caffè, per favore", ans:["quisiera un cafe por favor"]},
+      {it:"A che ora parte il treno?", ans:["a que hora sale el tren","a qué hora sale el tren"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["ayer fui al mercado"]},
+      {it:"Che lavoro fai?", ans:["a que te dedicas","a qué te dedicas"]},
+      {it:"Sono nato in Italia.", ans:["naci en italia","nací en italia"]},
+      {it:"Posso pagare con la carta?", ans:["puedo pagar con tarjeta"]},
+      {it:"Dov'è la stazione più vicina?", ans:["donde esta la estacion mas cercana","dónde está la estación más cercana"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["necesito ayuda por favor"]},
+      {it:"A che ora apre il negozio?", ans:["a que hora abre la tienda","a qué hora abre la tienda"]},
+      {it:"Questo è troppo caro.", ans:["esto es demasiado caro"]},
+      {it:"Posso avere il conto, per favore?", ans:["puedo tener la cuenta por favor"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["llevo poco tiempo aprendiendo este idioma"]},
+      {it:"Che programmi hai per il weekend?", ans:["que planes tienes para el fin de semana","qué planes tienes para el fin de semana"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["estoy perdido puedes ayudarme"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["creo que esta ciudad es muy interesante"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["si tuviera mas tiempo viajaria mas","si tuviera más tiempo viajaría más"]},
+      {it:"Preferisco il tè al caffè.", ans:["prefiero el te al cafe","prefiero el té al café"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["no estoy seguro de que sea una buena idea"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["me gustaria aprender a cocinar mejor","me gustaría aprender a cocinar mejor"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["seria genial si pudieramos vernos pronto","sería genial si pudiéramos vernos pronto"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["creo que entendi pero puedo equivocarme","creo que entendí pero puedo equivocarme"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["a pesar de la lluvia salimos de todas formas"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["lo siento entendi mal lo que dijiste","lo siento entendí mal lo que dijiste"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["si dependiera de mi cambiaria todo","si dependiera de mí cambiaría todo"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["es dificil explicar exactamente como me siento","es difícil explicar exactamente cómo me siento"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["espero que todo salga bien"]},
+    ],
   ],
 };
 
@@ -737,19 +862,45 @@ const PHASES = [
 function todayStr(){ return new Date().toISOString().slice(0,10); }
 function dayOfMonthIndex(len){ return (new Date().getDate() - 1) % len; }
 
+function freshDirState(){ return { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 }; }
+
 async function loadState(lang){
   try{
     const r = await storageAdapter.get('state:'+lang);
     state = r ? JSON.parse(r.value) : { streak:0, lastDate:null, done:[], notebook:[] };
   }catch(e){ state = { streak:0, lastDate:null, done:[], notebook:[] }; }
-  if(!state.beginner || !state.beginner.to_target){
-    const oldIndex = (state.beginner && typeof state.beginner.index === 'number') ? state.beginner.index : 0;
+
+  if(!state.beginner){
     state.beginner = {
-      direction: 'to_target',
-      to_target: { index: oldIndex, wrong:0, score:0, correctFirstTry:0, completed:0 },
-      to_it: { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 }
+      direction:'to_target', level:1,
+      progress:{ 1:{to_target:freshDirState(), to_it:freshDirState()}, 2:{to_target:freshDirState(), to_it:freshDirState()}, 3:{to_target:freshDirState(), to_it:freshDirState()} }
     };
+  } else if(!state.beginner.progress){
+    let oldToTarget, oldToIt;
+    if(state.beginner.to_target){
+      oldToTarget = state.beginner.to_target;
+      oldToIt = state.beginner.to_it || freshDirState();
+    } else {
+      const oldIndex = typeof state.beginner.index === 'number' ? state.beginner.index : 0;
+      oldToTarget = { index: oldIndex, wrong:0, score:0, correctFirstTry:0, completed:0 };
+      oldToIt = freshDirState();
+    }
+    state.beginner = {
+      direction: state.beginner.direction || 'to_target',
+      level: 1,
+      progress: {
+        1: { to_target: oldToTarget, to_it: oldToIt },
+        2: { to_target: freshDirState(), to_it: freshDirState() },
+        3: { to_target: freshDirState(), to_it: freshDirState() },
+      }
+    };
+  } else {
+    [1,2,3].forEach(lvl=>{
+      if(!state.beginner.progress[lvl]) state.beginner.progress[lvl] = { to_target: freshDirState(), to_it: freshDirState() };
+    });
+    if(!state.beginner.level) state.beginner.level = 1;
   }
+
   if(!state.sfida){
     state.sfida = { level: 'principiante', direction: 'to_target' };
   }
@@ -1057,14 +1208,19 @@ function normalizeAnswer(str, isArabic){
   s = s.replace(/['’`.,!?¿¡"]/g,'').replace(/\s+/g,' ').trim();
   return s;
 }
-function currentDirState(){ return state.beginner[state.beginner.direction]; }
+function currentBeginnerList(){ return BEGINNER[currentLang][state.beginner.level - 1]; }
+function currentDirState(){ return state.beginner.progress[state.beginner.level][state.beginner.direction]; }
 
 function renderBeginner(){
-  const list = BEGINNER[currentLang];
+  const list = currentBeginnerList();
   const dir = state.beginner.direction;
+  const level = state.beginner.level;
   const ds = currentDirState();
   const idx = ds.index;
 
+  document.querySelectorAll('#bpLevelTabs button').forEach(b=>{
+    b.classList.toggle('active', Number(b.dataset.level) === level);
+  });
   document.querySelectorAll('#bpDirTabs button').forEach(b=>{
     b.classList.toggle('active', b.dataset.dir === dir);
   });
@@ -1093,7 +1249,20 @@ function renderBeginner(){
     document.getElementById('bpProgressLabel').textContent = `Completato · ${list.length}/${list.length}`;
     document.getElementById('bpPrompt').removeAttribute('dir');
     document.getElementById('bpPrompt').classList.remove('rtl-text');
-    document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">Direzione completata ✓</div>Hai finito questa direzione per ${LANGS[currentLang].label}. Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}" oppure passa alle Sfide.</div>`;
+
+    const nextLevel = level < 3 ? level + 1 : null;
+    const otherDirDone = state.beginner.progress[level][dir === 'to_target' ? 'to_it' : 'to_target'].index >= list.length;
+    let nextStepMsg;
+    if(nextLevel && otherDirDone){
+      nextStepMsg = `Hai completato tutto il Livello ${level}. Passa al <b>Livello ${nextLevel}</b> qui sopra per continuare.`;
+    } else if(nextLevel){
+      nextStepMsg = `Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}", oppure passa direttamente al <b>Livello ${nextLevel}</b>.`;
+    } else if(!otherDirDone){
+      nextStepMsg = `Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}" per completare anche questa direzione.`;
+    } else {
+      nextStepMsg = `Hai completato tutti e 3 i livelli in entrambe le direzioni per ${LANGS[currentLang].label}. Passa alle Sfide o ai Dialoghi per continuare a esercitarti.`;
+    }
+    document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">Livello ${level} completato ✓</div>${nextStepMsg}</div>`;
     document.getElementById('bpInput').classList.add('hidden');
     document.getElementById('bpCheck').classList.add('hidden');
     document.getElementById('bpSkip').classList.add('hidden');
@@ -1120,7 +1289,7 @@ async function bpAdvance(){
   renderBeginner();
 }
 document.getElementById('bpCheck').onclick = async ()=>{
-  const list = BEGINNER[currentLang];
+  const list = currentBeginnerList();
   const dir = state.beginner.direction;
   const ds = currentDirState();
   const idx = ds.index;
@@ -1164,10 +1333,17 @@ document.getElementById('bpInput').addEventListener('keydown', (e)=>{
 });
 document.getElementById('bpSkip').onclick = bpAdvance;
 document.getElementById('bpReset').onclick = async ()=>{
-  state.beginner[state.beginner.direction] = { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 };
+  state.beginner.progress[state.beginner.level][state.beginner.direction] = { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 };
   await saveState(currentLang);
   renderBeginner();
 };
+document.querySelectorAll('#bpLevelTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.beginner.level = Number(btn.dataset.level);
+    await saveState(currentLang);
+    renderBeginner();
+  };
+});
 document.querySelectorAll('#bpDirTabs button').forEach(btn=>{
   btn.onclick = async ()=>{
     state.beginner.direction = btn.dataset.dir;
