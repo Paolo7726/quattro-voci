@@ -57,10 +57,12 @@
   .ring{
     display:flex; gap:8px; padding:5px;
     background: var(--panel); border-radius: 999px; border:1px solid var(--hair);
+    overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
   }
+  .ring::-webkit-scrollbar{ display:none; }
   .voice-btn{
-    flex:1; border:none; background:transparent; color: var(--ink-dim);
-    padding: 10px 4px; border-radius: 999px; font-family:'IBM Plex Sans', sans-serif;
+    flex: 0 0 auto; min-width: 84px; border:none; background:transparent; color: var(--ink-dim);
+    padding: 10px 10px; border-radius: 999px; font-family:'IBM Plex Sans', sans-serif;
     font-size: 13.5px; font-weight:500; cursor:pointer; position:relative;
     transition: color .3s ease, background-color .3s ease;
   }
@@ -574,20 +576,31 @@ const LANGS = {
       {sym:'d suave', name:'D intervocalica morbida', desc:'Tra le vocali, la D si ammorbidisce quasi come il th inglese di "this", non è mai una D piena come in italiano.', pairs:'nada &middot; todo &middot; cansado', tip:'Metti la lingua vicino ai denti superiori senza toccarli del tutto: deve restare un suono leggero, quasi sfumato.'},
     ],
   },
+  de: {
+    label:'Deutsch', script:'De', word:'Stimmen', accent:'#8B5FA3', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Easy German', where:'YouTube', tip:'Interviste di strada con sottotitoli in tedesco e inglese, ottimo per abituarsi al parlato reale.' },
+    sounds:[
+      {sym:'ü', name:'La vocale Ü', desc:'Non esiste in italiano: labbra arrotondate come per dire "u", ma lingua in posizione da "i".', pairs:'für / Fuhr', tip:'Metti la bocca a "o" stretta come per fischiare, poi prova a dire "i" senza muovere le labbra.'},
+      {sym:'ö', name:'La vocale Ö', desc:'Vocale arrotondata a metà tra la "e" e la "o", assente in italiano.', pairs:'schon / schön', tip:'Parti da una "e" chiusa, poi arrotonda le labbra come per fare una "o" senza cambiare la posizione della lingua.'},
+      {sym:'ch', name:'Ich-Laut e Ach-Laut (due suoni CH)', desc:'Dopo vocali anteriori (i, e, ö, ü) il ch è morbido come in "ich"; dopo vocali posteriori (a, o, u) è gutturale come in "ach", "Bach".', pairs:'ich / ach &middot; nicht / Nacht', tip:'Per il suono morbido, stringi la lingua vicino al palato come per soffiare una "hy". Per quello duro, raschia dal fondo della gola come la J spagnola.'},
+      {sym:'r', name:'R uvulare tedesca', desc:'Come in francese: si forma nella parte posteriore della gola, non arrotolata come in italiano.', pairs:'rot / Brot', tip:'Prova un gargarismo leggero senza acqua, dal fondo della gola.'},
+      {sym:'-d/-b/-g', name:'Consonanti finali sorde (Auslautverhärtung)', desc:'A fine parola, le consonanti b/d/g diventano sorde (p/t/k): una regola che non esiste in italiano.', pairs:'Rad (si dice come "Rat") / Räder (qui la D si sente)', tip:'A fine parola, "ammorbidisci" la consonante fino a farla suonare come la sua versione sorda: b\u2192p, d\u2192t, g\u2192k.'},
+    ],
+  },
 };
 
 const CHALLENGES = {
   principiante: [
-    { it:"Dì il tuo nome e da dove vieni.", en:"Say your name and where you're from.", fr:"Dis ton nom et d'où tu viens.", ar:"قل اسمك ومن أين أنت.", es:"Di tu nombre y de dónde eres." },
-    { it:"Descrivi il tempo che fa oggi in una frase.", en:"Describe today's weather in one sentence.", fr:"Décris le temps qu'il fait aujourd'hui en une phrase.", ar:"صف الطقس اليوم في جملة واحدة.", es:"Describe el clima de hoy en una frase." },
-    { it:"Racconta cosa hai mangiato a colazione.", en:"Talk about what you had for breakfast.", fr:"Parle de ce que tu as mangé au petit-déjeuner.", ar:"تحدث عمّا تناولته في الإفطار.", es:"Habla sobre lo que desayunaste." },
-    { it:"Di' tre cose che ti piacciono.", en:"Say three things you like.", fr:"Dis trois choses que tu aimes.", ar:"قل ثلاثة أشياء تحبها.", es:"Di tres cosas que te gustan." },
-    { it:"Descrivi la stanza in cui ti trovi ora.", en:"Describe the room you're in right now.", fr:"Décris la pièce où tu te trouves maintenant.", ar:"صف الغرفة التي أنت فيها الآن.", es:"Describe la habitación en la que estás ahora." },
-    { it:"Racconta cosa farai più tardi oggi.", en:"Talk about what you'll do later today.", fr:"Parle de ce que tu feras plus tard aujourd'hui.", ar:"تحدث عمّا ستفعله لاحقًا اليوم.", es:"Habla sobre lo que harás más tarde hoy." },
-    { it:"Di' che ore sono e cosa stai facendo.", en:"Say what time it is and what you're doing.", fr:"Dis quelle heure il est et ce que tu fais.", ar:"قل كم الساعة وماذا تفعل.", es:"Di qué hora es y qué estás haciendo." },
-    { it:"Descrivi il tuo animale preferito.", en:"Describe your favorite animal.", fr:"Décris ton animal préféré.", ar:"صف حيوانك المفضل.", es:"Describe tu animal favorito." },
-    { it:"Racconta come hai dormito stanotte.", en:"Talk about how you slept last night.", fr:"Parle de la façon dont tu as dormi cette nuit.", ar:"تحدث عن كيف نمت الليلة الماضية.", es:"Habla sobre cómo dormiste anoche." },
-    { it:"Di' il tuo colore preferito e perché.", en:"Say your favorite color and why.", fr:"Dis ta couleur préférée et pourquoi.", ar:"قل لونك المفضل ولماذا.", es:"Di tu color favorito y por qué." },
+    { it:"Dì il tuo nome e da dove vieni.", en:"Say your name and where you're from.", fr:"Dis ton nom et d'où tu viens.", ar:"قل اسمك ومن أين أنت.", es:"Di tu nombre y de dónde eres.", de:"Sag deinen Namen und woher du kommst." },
+    { it:"Descrivi il tempo che fa oggi in una frase.", en:"Describe today's weather in one sentence.", fr:"Décris le temps qu'il fait aujourd'hui en une phrase.", ar:"صف الطقس اليوم في جملة واحدة.", es:"Describe el clima de hoy en una frase.", de:"Beschreibe das Wetter heute in einem Satz." },
+    { it:"Racconta cosa hai mangiato a colazione.", en:"Talk about what you had for breakfast.", fr:"Parle de ce que tu as mangé au petit-déjeuner.", ar:"تحدث عمّا تناولته في الإفطار.", es:"Habla sobre lo que desayunaste.", de:"Erzähl, was du zum Frühstück gegessen hast." },
+    { it:"Di' tre cose che ti piacciono.", en:"Say three things you like.", fr:"Dis trois choses que tu aimes.", ar:"قل ثلاثة أشياء تحبها.", es:"Di tres cosas que te gustan.", de:"Nenne drei Dinge, die dir gefallen." },
+    { it:"Descrivi la stanza in cui ti trovi ora.", en:"Describe the room you're in right now.", fr:"Décris la pièce où tu te trouves maintenant.", ar:"صف الغرفة التي أنت فيها الآن.", es:"Describe la habitación en la que estás ahora.", de:"Beschreibe den Raum, in dem du gerade bist." },
+    { it:"Racconta cosa farai più tardi oggi.", en:"Talk about what you'll do later today.", fr:"Parle de ce que tu feras plus tard aujourd'hui.", ar:"تحدث عمّا ستفعله لاحقًا اليوم.", es:"Habla sobre lo que harás más tarde hoy.", de:"Erzähl, was du später heute machen wirst." },
+    { it:"Di' che ore sono e cosa stai facendo.", en:"Say what time it is and what you're doing.", fr:"Dis quelle heure il est et ce que tu fais.", ar:"قل كم الساعة وماذا تفعل.", es:"Di qué hora es y qué estás haciendo.", de:"Sag, wie spät es ist und was du gerade machst." },
+    { it:"Descrivi il tuo animale preferito.", en:"Describe your favorite animal.", fr:"Décris ton animal préféré.", ar:"صف حيوانك المفضل.", es:"Describe tu animal favorito.", de:"Beschreibe dein Lieblingstier." },
+    { it:"Racconta come hai dormito stanotte.", en:"Talk about how you slept last night.", fr:"Parle de la façon dont tu as dormi cette nuit.", ar:"تحدث عن كيف نمت الليلة الماضية.", es:"Habla sobre cómo dormiste anoche.", de:"Erzähl, wie du letzte Nacht geschlafen hast." },
+    { it:"Di' il tuo colore preferito e perché.", en:"Say your favorite color and why.", fr:"Dis ta couleur préférée et pourquoi.", ar:"قل لونك المفضل ولماذا.", es:"Di tu color favorito y por qué.", de:"Sag deine Lieblingsfarbe und warum." },
   ],
   intermedio: [
     { it:"Descrivi la tua giornata di ieri come se fosse successa a un amico immaginario." },
@@ -826,6 +839,56 @@ const BEGINNER = {
       {it:"Se dipendesse da me, cambierei tutto.", ans:["si dependiera de mi cambiaria todo","si dependiera de mí cambiaría todo"]},
       {it:"È difficile spiegare esattamente come mi sento.", ans:["es dificil explicar exactamente como me siento","es difícil explicar exactamente cómo me siento"]},
       {it:"Spero che tutto vada per il meglio.", ans:["espero que todo salga bien"]},
+    ],
+  ],
+  de: [
+    [ // Livello 1
+      {it:"Ciao", ans:["hallo","hi"]},
+      {it:"Buongiorno", ans:["guten morgen"]},
+      {it:"Buonasera", ans:["guten abend"]},
+      {it:"Grazie", ans:["danke","danke schon","danke schön"]},
+      {it:"Prego", ans:["bitte","gern geschehen"]},
+      {it:"Per favore", ans:["bitte"]},
+      {it:"Mi chiamo Marco", ans:["ich heisse marco","ich heiße marco"]},
+      {it:"Come stai?", ans:["wie geht es dir","wie gehts","wie geht's dir"]},
+      {it:"Sto bene, grazie", ans:["mir geht es gut danke","es geht mir gut danke"]},
+      {it:"Quanti anni hai?", ans:["wie alt bist du"]},
+      {it:"Dove abiti?", ans:["wo wohnst du"]},
+      {it:"Non capisco", ans:["ich verstehe nicht"]},
+      {it:"Puoi ripetere?", ans:["kannst du das wiederholen"]},
+      {it:"Quanto costa?", ans:["wie viel kostet das","wieviel kostet das"]},
+      {it:"Mi piace il caffè", ans:["ich mag kaffee"]},
+      {it:"Che ore sono?", ans:["wie spat ist es","wie spät ist es","wieviel uhr ist es"]},
+      {it:"Vorrei un caffè, per favore", ans:["ich hatte gern einen kaffee bitte","ich hätte gern einen kaffee bitte","ich mochte einen kaffee bitte","ich möchte einen kaffee bitte"]},
+      {it:"A che ora parte il treno?", ans:["wann fahrt der zug ab","wann fährt der zug ab","um wieviel uhr fahrt der zug"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["gestern bin ich zum markt gegangen"]},
+      {it:"Che lavoro fai?", ans:["was arbeitest du","was machst du beruflich"]},
+      {it:"Sono nato in Italia.", ans:["ich bin in italien geboren"]},
+      {it:"Posso pagare con la carta?", ans:["kann ich mit karte bezahlen"]},
+      {it:"Dov'è la stazione più vicina?", ans:["wo ist der nachste bahnhof","wo ist der nächste bahnhof"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["ich brauche hilfe bitte"]},
+      {it:"A che ora apre il negozio?", ans:["wann offnet das geschaft","wann öffnet das geschäft","um wieviel uhr offnet der laden"]},
+      {it:"Questo è troppo caro.", ans:["das ist zu teuer"]},
+      {it:"Posso avere il conto, per favore?", ans:["kann ich bitte die rechnung haben"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["ich lerne diese sprache erst seit kurzem"]},
+      {it:"Che programmi hai per il weekend?", ans:["was hast du am wochenende vor","welche plane hast du fur das wochenende","welche pläne hast du für das wochenende"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["ich habe mich verlaufen kannst du mir helfen"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["ich denke dass diese stadt sehr interessant ist"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["wenn ich mehr zeit hatte wurde ich mehr reisen","wenn ich mehr zeit hätte würde ich mehr reisen"]},
+      {it:"Preferisco il tè al caffè.", ans:["ich bevorzuge tee gegenuber kaffee","ich bevorzuge tee gegenüber kaffee","ich mag tee lieber als kaffee"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["ich bin nicht sicher ob das eine gute idee ist"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["ich wurde gerne besser kochen lernen","ich würde gerne besser kochen lernen"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["es ware toll wenn wir uns bald sehen konnten","es wäre toll wenn wir uns bald sehen könnten"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["ich glaube ich habe es verstanden aber ich kann mich irren"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["trotz des regens sind wir trotzdem rausgegangen"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["es tut mir leid ich habe missverstanden was du gesagt hast"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["wenn es von mir abhinge wurde ich alles andern","wenn es von mir abhinge würde ich alles ändern"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["es ist schwer genau zu erklaren wie ich mich fuhle","es ist schwer genau zu erklären wie ich mich fühle"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["ich hoffe dass alles gut wird","ich hoffe alles wird gut"]},
     ],
   ],
 };
@@ -1203,6 +1266,7 @@ function normalizeAnswer(str, isArabic){
     s = s.replace(/[\u064B-\u0652\u0670\u0640]/g,''); // harakat/tatweel
     s = s.replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه');
   } else {
+    s = s.replace(/ß/g, 'ss'); // sz tedesca equiparata a "ss"
     s = s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); // accenti latini
   }
   s = s.replace(/['’`.,!?¿¡"]/g,'').replace(/\s+/g,' ').trim();
@@ -1595,7 +1659,7 @@ document.getElementById('lbRefresh').onclick = renderLeaderboard;
 const ONBOARD_SLIDES = [
   {
     title: "Benvenuto in Quattro Voci",
-    body: "Un ecosistema di immersione in quattro lingue — Inglese, Français, العربية e Español — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
+    body: "Un ecosistema di immersione in cinque lingue — Inglese, Français, العربية, Español e Deutsch — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
   },
   {
     title: "Un'app, sette strumenti",
