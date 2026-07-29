@@ -390,8 +390,20 @@
         <p class="sub" style="margin-bottom:4px;">Connesso come</p>
         <p style="font-weight:600; margin: 0 0 16px; font-size:15px;" id="authUserEmail">&mdash;</p>
         <p class="sub">I progressi di tutte e 4 le lingue si sincronizzano automaticamente su ogni dispositivo dove accedi con questo account.</p>
-        <button class="ghost" id="authLogout" style="width:100%; margin-top:14px;">Esci</button>
+        <button class="ghost hidden" id="authAdminBtn" style="width:100%; margin-top:10px;">Pannello amministratore &rarr;</button>
+        <button class="ghost" id="authLogout" style="width:100%; margin-top:10px;">Esci</button>
       </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="adminModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Amministrazione</h3>
+        <button class="modal-close" id="adminModalClose">&times;</button>
+      </div>
+      <p class="sub" id="adminCount">Carico elenco iscritti...</p>
+      <div id="adminList"></div>
     </div>
   </div>
 
@@ -1500,6 +1512,7 @@ function renderBeginner(){
   const level = state.beginner.level;
   const ds = currentDirState();
   const idx = ds.index;
+  ds.wrong = 0;
 
   document.querySelectorAll('#bpLevelTabs button').forEach(b=>{
     b.classList.toggle('active', Number(b.dataset.level) === level);
@@ -1827,6 +1840,8 @@ function openAuthModal(){
   if(loggedIn){
     document.getElementById('authUserEmail').textContent = window.cloudAPI.currentUser.email;
     document.getElementById('authModalTitle').textContent = 'Account';
+    const isAdmin = !!(window.cloudAPI.adminUid && window.cloudAPI.currentUser.uid === window.cloudAPI.adminUid);
+    document.getElementById('authAdminBtn').classList.toggle('hidden', !isAdmin);
   } else {
     document.getElementById('authModalTitle').textContent = authMode === 'login' ? 'Accedi' : 'Registrati';
   }
@@ -1884,6 +1899,7 @@ document.getElementById('authSubmit').onclick = async ()=>{
     } else {
       pendingSignupNickname = nickname;
       await window.cloudAPI.signup(email, pass);
+      window.cloudAPI.registerDirectory(nickname).catch(()=>{});
     }
     fb.textContent = '';
   }catch(e){
@@ -1895,6 +1911,46 @@ document.getElementById('authLogout').onclick = async ()=>{
   if(window.cloudAPI) await window.cloudAPI.logout();
   closeAuthModal();
 };
+
+/* ---------- PANNELLO AMMINISTRATORE ---------- */
+document.getElementById('authAdminBtn').onclick = ()=>{
+  closeAuthModal();
+  document.getElementById('adminModal').classList.remove('hidden');
+  renderAdminPanel();
+};
+document.getElementById('adminModalClose').onclick = ()=>{
+  document.getElementById('adminModal').classList.add('hidden');
+};
+async function renderAdminPanel(){
+  const listEl = document.getElementById('adminList');
+  const countEl = document.getElementById('adminCount');
+  listEl.innerHTML = '<div class="empty">Carico elenco iscritti...</div>';
+  countEl.textContent = 'Carico...';
+  try{
+    const [directory, leaderboard] = await Promise.all([
+      window.cloudAPI.getDirectory(),
+      window.cloudAPI.getLeaderboard(1000)
+    ]);
+    const scoreByUid = {};
+    leaderboard.forEach(r => scoreByUid[r.uid] = r.totalScore || 0);
+    countEl.textContent = `${directory.length} iscritti totali`;
+    if(directory.length === 0){
+      listEl.innerHTML = '<div class="empty">Nessun iscritto ancora.</div>';
+      return;
+    }
+    listEl.innerHTML = directory.map(u=>{
+      const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString('it-IT') : '&mdash;';
+      return `<div class="lb-row">
+        <span class="lb-name" style="flex:2;">${u.email || '&mdash;'}<br><span style="font-size:11px;color:var(--ink-dim);">${u.nickname || 'senza nickname'} &middot; dal ${date}</span></span>
+        <span class="lb-score">${scoreByUid[u.uid] ?? 0}</span>
+      </div>`;
+    }).join('');
+  }catch(e){
+    console.warn('admin panel error', e);
+    listEl.innerHTML = '<div class="empty">Non riesco a caricare l\'elenco. Verifica di aver impostato correttamente il tuo UID sia nel codice (ADMIN_UID) sia nelle regole Firestore.</div>';
+    countEl.textContent = '';
+  }
+}
 
 function translateAuthError(e){
   const code = (e && e.code) || '';
@@ -2077,6 +2133,11 @@ window.addEventListener('cloud-ready', ()=>{
     appId: "1:621886572166:web:eea48f5ef7b3e7cee97307"
   };
 
+  // ⚠️ Dopo aver creato il TUO account (quello che userai come amministratore),
+  // sostituisci questa stringa con il tuo UID, che trovi in:
+  // Console Firebase → Authentication → tab "Utenti" → colonna "UID" della tua riga.
+  const ADMIN_UID = "Xyx8cvHdpnUbyqgSCJZTg8780UM2";
+
   let app = null, auth = null, db = null;
   const isConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('INCOLLA');
 
@@ -2126,6 +2187,23 @@ window.addEventListener('cloud-ready', ()=>{
     async getLeaderboard(topN){
       if(!db) return [];
       const q = query(collection(db, 'leaderboard'), orderBy('totalScore', 'desc'), limit(topN || 15));
+      const snap = await getDocs(q);
+      const out = [];
+      snap.forEach(d => out.push({ uid: d.id, ...d.data() }));
+      return out;
+    },
+    adminUid: ADMIN_UID,
+    async registerDirectory(nickname){
+      if(!auth || !auth.currentUser) return;
+      await setDoc(doc(db, 'directory', auth.currentUser.uid), {
+        email: auth.currentUser.email || '',
+        nickname: nickname || '',
+        createdAt: Date.now()
+      });
+    },
+    async getDirectory(){
+      if(!db) return [];
+      const q = query(collection(db, 'directory'), orderBy('createdAt', 'desc'));
       const snap = await getDocs(q);
       const out = [];
       snap.forEach(d => out.push({ uid: d.id, ...d.data() }));
