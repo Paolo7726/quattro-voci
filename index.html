@@ -678,20 +678,42 @@ const LANGS = {
       {sym:'-d/-b/-g', name:'Consonanti finali sorde (Auslautverhärtung)', desc:'A fine parola, le consonanti b/d/g diventano sorde (p/t/k): una regola che non esiste in italiano.', pairs:'Rad (si dice come "Rat") / Räder (qui la D si sente)', tip:'A fine parola, "ammorbidisci" la consonante fino a farla suonare come la sua versione sorda: b\u2192p, d\u2192t, g\u2192k.'},
     ],
   },
+  zh: {
+    label:'中文', script:'中', word:'语音', accent:'#3F9973', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Mandarin Corner', where:'YouTube', tip:'Interviste di strada per le vie della Cina con sottotitoli in cinese e inglese, ottimo per il parlato reale.' },
+    sounds:[
+      {sym:'ā á ǎ à', name:'I quattro toni', desc:'Il mandarino è una lingua tonale: la stessa sillaba cambia significato secondo l\'intonazione. È il tratto assente in italiano che più smaschera un accento straniero.', pairs:'mā (mamma) / mǎ (cavallo)', tip:'Esagera il movimento del tono con la mano mentre parli: su per il 2° tono, giù-su per il 3°, giù deciso per il 4°.'},
+      {sym:'zh/j', name:'Retroflesse vs palatali', desc:'zh, ch, sh si pronunciano con la punta della lingua arrotolata indietro; j, q, x con la lingua piatta contro il palato. L\'italiano non distingue questi due gruppi.', pairs:'zhī / jī', tip:'Per le retroflesse arrotola la punta della lingua verso l\'alto e indietro; per le palatali tienila piatta e in avanti, quasi a sorridere.'},
+      {sym:'p/b', name:'Aspirate vs non aspirate', desc:'La differenza non è sonora/sorda come in italiano, ma un soffio d\'aria o la sua assenza.', pairs:'pā (aspirata) / bā (non aspirata)', tip:'Tieni un foglio di carta davanti alla bocca: con le aspirate deve muoversi visibilmente, con le non aspirate deve restare quasi fermo.'},
+      {sym:'ü', name:'La vocale Ü', desc:'Come in francese e tedesco: labbra arrotondate come per dire "u", lingua in posizione da "i". Compare in ju, qu, xu, yu.', pairs:'lü (verde) / lu (strada)', tip:'Metti la bocca a "o" stretta come per fischiare, poi prova a dire "i" senza muovere le labbra.'},
+      {sym:'r', name:'La R cinese', desc:'Suono retroflesso che non esiste in italiano: a metà tra una R e una J francese, con la lingua arrotolata indietro.', pairs:'rì (sole/giorno)', tip:'Arrotola la punta della lingua verso il palato senza toccarlo, e lascia vibrare l\'aria attorno.'},
+    ],
+  },
+  ja: {
+    label:'日本語', script:'あ', word:'声', accent:'#3D5A80', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Comprehensible Japanese', where:'YouTube', tip:'Video con parlato naturale ma comprensibile, pensati apposta per chi impara.' },
+    sounds:[
+      {sym:'ā / a', name:'Vocali lunghe vs brevi', desc:'La durata della vocale cambia il significato della parola: un tratto quasi assente in italiano.', pairs:'おばさん obasan (zia) / おばあさん obaasan (nonna)', tip:'Conta mentalmente "due tempi" per le vocali lunghe invece di uno, come se le raddoppiassi leggermente.'},
+      {sym:'っ', name:'Consonanti doppie (piccolo tsu)', desc:'Una pausa breve prima della consonante seguente raddoppia il suono, cambiando completamente la parola.', pairs:'きて kite (vieni) / きって kitte (francobollo)', tip:'Prima di pronunciare la doppia, fai una piccola pausa muta, come quando in italiano dici "fat-to" invece di "fato".'},
+      {sym:'ら/り/る/れ/ろ', name:'La R giapponese', desc:'Non è né una R né una L italiana: è un colpo rapido della lingua contro il palato, a metà tra le due.', pairs:'ありがとう arigatou', tip:'Prova a dire una D molto leggera e veloce con la punta della lingua: il suono giapponese è vicino a quello.'},
+      {sym:'ふ', name:'Il suono FU', desc:'Non è una F come in italiano (labbro su denti), ma un soffio prodotto tra le due labbra, senza toccare i denti.', pairs:'ふじさん Fujisan (Monte Fuji)', tip:'Metti le labbra come per spegnere una candela e soffia leggermente, senza portare i denti sul labbro inferiore.'},
+      {sym:'accento tonale', name:'Intonazione delle parole', desc:'Alcune parole si distinguono solo dall\'andamento alto/basso del tono, non da un accento di intensità come in italiano.', pairs:'はし hashi (bacchette, tono alto-basso) / はし hashi (ponte, tono basso-alto)', tip:'Ascolta la melodia della parola intera più che la singola sillaba: sali o scendi di tono in modo netto, non graduale.'},
+    ],
+  },
 };
 
 const CHALLENGES = {
   principiante: [
-    { it:"Dì il tuo nome e da dove vieni.", en:"Say your name and where you're from.", fr:"Dis ton nom et d'où tu viens.", ar:"قل اسمك ومن أين أنت.", es:"Di tu nombre y de dónde eres.", de:"Sag deinen Namen und woher du kommst." },
-    { it:"Descrivi il tempo che fa oggi in una frase.", en:"Describe today's weather in one sentence.", fr:"Décris le temps qu'il fait aujourd'hui en une phrase.", ar:"صف الطقس اليوم في جملة واحدة.", es:"Describe el clima de hoy en una frase.", de:"Beschreibe das Wetter heute in einem Satz." },
-    { it:"Racconta cosa hai mangiato a colazione.", en:"Talk about what you had for breakfast.", fr:"Parle de ce que tu as mangé au petit-déjeuner.", ar:"تحدث عمّا تناولته في الإفطار.", es:"Habla sobre lo que desayunaste.", de:"Erzähl, was du zum Frühstück gegessen hast." },
-    { it:"Di' tre cose che ti piacciono.", en:"Say three things you like.", fr:"Dis trois choses que tu aimes.", ar:"قل ثلاثة أشياء تحبها.", es:"Di tres cosas que te gustan.", de:"Nenne drei Dinge, die dir gefallen." },
-    { it:"Descrivi la stanza in cui ti trovi ora.", en:"Describe the room you're in right now.", fr:"Décris la pièce où tu te trouves maintenant.", ar:"صف الغرفة التي أنت فيها الآن.", es:"Describe la habitación en la que estás ahora.", de:"Beschreibe den Raum, in dem du gerade bist." },
-    { it:"Racconta cosa farai più tardi oggi.", en:"Talk about what you'll do later today.", fr:"Parle de ce que tu feras plus tard aujourd'hui.", ar:"تحدث عمّا ستفعله لاحقًا اليوم.", es:"Habla sobre lo que harás más tarde hoy.", de:"Erzähl, was du später heute machen wirst." },
-    { it:"Di' che ore sono e cosa stai facendo.", en:"Say what time it is and what you're doing.", fr:"Dis quelle heure il est et ce que tu fais.", ar:"قل كم الساعة وماذا تفعل.", es:"Di qué hora es y qué estás haciendo.", de:"Sag, wie spät es ist und was du gerade machst." },
-    { it:"Descrivi il tuo animale preferito.", en:"Describe your favorite animal.", fr:"Décris ton animal préféré.", ar:"صف حيوانك المفضل.", es:"Describe tu animal favorito.", de:"Beschreibe dein Lieblingstier." },
-    { it:"Racconta come hai dormito stanotte.", en:"Talk about how you slept last night.", fr:"Parle de la façon dont tu as dormi cette nuit.", ar:"تحدث عن كيف نمت الليلة الماضية.", es:"Habla sobre cómo dormiste anoche.", de:"Erzähl, wie du letzte Nacht geschlafen hast." },
-    { it:"Di' il tuo colore preferito e perché.", en:"Say your favorite color and why.", fr:"Dis ta couleur préférée et pourquoi.", ar:"قل لونك المفضل ولماذا.", es:"Di tu color favorito y por qué.", de:"Sag deine Lieblingsfarbe und warum." },
+    { it:"Dì il tuo nome e da dove vieni.", en:"Say your name and where you're from.", fr:"Dis ton nom et d'où tu viens.", ar:"قل اسمك ومن أين أنت.", es:"Di tu nombre y de dónde eres.", de:"Sag deinen Namen und woher du kommst.", zh:"说出你的名字和你来自哪里。", ja:"名前と出身地を言ってください。" },
+    { it:"Descrivi il tempo che fa oggi in una frase.", en:"Describe today's weather in one sentence.", fr:"Décris le temps qu'il fait aujourd'hui en une phrase.", ar:"صف الطقس اليوم في جملة واحدة.", es:"Describe el clima de hoy en una frase.", de:"Beschreibe das Wetter heute in einem Satz.", zh:"用一句话描述今天的天气。", ja:"今日の天気を一文で説明してください。" },
+    { it:"Racconta cosa hai mangiato a colazione.", en:"Talk about what you had for breakfast.", fr:"Parle de ce que tu as mangé au petit-déjeuner.", ar:"تحدث عمّا تناولته في الإفطار.", es:"Habla sobre lo que desayunaste.", de:"Erzähl, was du zum Frühstück gegessen hast.", zh:"说说你早餐吃了什么。", ja:"朝ごはんに何を食べたか話してください。" },
+    { it:"Di' tre cose che ti piacciono.", en:"Say three things you like.", fr:"Dis trois choses que tu aimes.", ar:"قل ثلاثة أشياء تحبها.", es:"Di tres cosas que te gustan.", de:"Nenne drei Dinge, die dir gefallen.", zh:"说出三件你喜欢的事情。", ja:"好きなことを三つ言ってください。" },
+    { it:"Descrivi la stanza in cui ti trovi ora.", en:"Describe the room you're in right now.", fr:"Décris la pièce où tu te trouves maintenant.", ar:"صف الغرفة التي أنت فيها الآن.", es:"Describe la habitación en la que estás ahora.", de:"Beschreibe den Raum, in dem du gerade bist.", zh:"描述一下你现在所在的房间。", ja:"今いる部屋を説明してください。" },
+    { it:"Racconta cosa farai più tardi oggi.", en:"Talk about what you'll do later today.", fr:"Parle de ce que tu feras plus tard aujourd'hui.", ar:"تحدث عمّا ستفعله لاحقًا اليوم.", es:"Habla sobre lo que harás más tarde hoy.", de:"Erzähl, was du später heute machen wirst.", zh:"说说你今天晚些时候要做什么。", ja:"今日この後何をするか話してください。" },
+    { it:"Di' che ore sono e cosa stai facendo.", en:"Say what time it is and what you're doing.", fr:"Dis quelle heure il est et ce que tu fais.", ar:"قل كم الساعة وماذا تفعل.", es:"Di qué hora es y qué estás haciendo.", de:"Sag, wie spät es ist und was du gerade machst.", zh:"说说现在几点，你在做什么。", ja:"今何時か、そして何をしているか言ってください。" },
+    { it:"Descrivi il tuo animale preferito.", en:"Describe your favorite animal.", fr:"Décris ton animal préféré.", ar:"صف حيوانك المفضل.", es:"Describe tu animal favorito.", de:"Beschreibe dein Lieblingstier.", zh:"描述一下你最喜欢的动物。", ja:"好きな動物を説明してください。" },
+    { it:"Racconta come hai dormito stanotte.", en:"Talk about how you slept last night.", fr:"Parle de la façon dont tu as dormi cette nuit.", ar:"تحدث عن كيف نمت الليلة الماضية.", es:"Habla sobre cómo dormiste anoche.", de:"Erzähl, wie du letzte Nacht geschlafen hast.", zh:"说说你昨晚睡得怎么样。", ja:"昨夜どのように眠ったか話してください。" },
+    { it:"Di' il tuo colore preferito e perché.", en:"Say your favorite color and why.", fr:"Dis ta couleur préférée et pourquoi.", ar:"قل لونك المفضل ولماذا.", es:"Di tu color favorito y por qué.", de:"Sag deine Lieblingsfarbe und warum.", zh:"说出你最喜欢的颜色以及原因。", ja:"好きな色とその理由を言ってください。" },
   ],
   intermedio: [
     { it:"Descrivi la tua giornata di ieri come se fosse successa a un amico immaginario." },
@@ -1472,6 +1494,50 @@ const BEGINNER = {
       {it:"Alla lunga, la sincerità paga sempre.", ans:["auf dauer zahlt sich ehrlichkeit immer aus"]},
     ],
   ],
+  zh: [
+    [ // Livello 1
+      {it:"Ciao", ans:["你好","ni hao"]},
+      {it:"Buongiorno", ans:["早上好","zao shang hao"]},
+      {it:"Buonasera", ans:["晚上好","wan shang hao"]},
+      {it:"Grazie", ans:["谢谢","xie xie"]},
+      {it:"Prego", ans:["不客气","bu ke qi"]},
+      {it:"Per favore", ans:["请","qing"]},
+      {it:"Mi chiamo Marco", ans:["我叫马可","wo jiao ma ke"]},
+      {it:"Come stai?", ans:["你好吗","ni hao ma"]},
+      {it:"Sto bene, grazie", ans:["我很好谢谢","wo hen hao xie xie"]},
+      {it:"Quanti anni hai?", ans:["你多大了","ni duo da le"]},
+      {it:"Dove abiti?", ans:["你住在哪里","ni zhu zai na li"]},
+      {it:"Non capisco", ans:["我不明白","wo bu ming bai"]},
+      {it:"Puoi ripetere?", ans:["你能再说一遍吗","ni neng zai shuo yi bian ma"]},
+      {it:"Quanto costa?", ans:["多少钱","duo shao qian"]},
+      {it:"Mi piace il caffè", ans:["我喜欢咖啡","wo xi huan ka fei"]},
+      {it:"Che ore sono?", ans:["现在几点","xian zai ji dian"]},
+      {it:"Vorrei un caffè, per favore", ans:["我要一杯咖啡谢谢","wo yao yi bei ka fei xie xie"]},
+      {it:"A che ora parte il treno?", ans:["火车几点开","huo che ji dian kai"]},
+    ],
+  ],
+  ja: [
+    [ // Livello 1
+      {it:"Ciao", ans:["こんにちは","konnichiwa"]},
+      {it:"Buongiorno", ans:["おはようございます","ohayou gozaimasu"]},
+      {it:"Buonasera", ans:["こんばんは","konbanwa"]},
+      {it:"Grazie", ans:["ありがとうございます","arigatou gozaimasu"]},
+      {it:"Prego", ans:["どういたしまして","dou itashimashite"]},
+      {it:"Per favore", ans:["お願いします","onegaishimasu"]},
+      {it:"Mi chiamo Marco", ans:["私はマルコです","watashi wa maruko desu"]},
+      {it:"Come stai?", ans:["元気ですか","genki desu ka"]},
+      {it:"Sto bene, grazie", ans:["元気ですありがとうございます","genki desu arigatou gozaimasu"]},
+      {it:"Quanti anni hai?", ans:["何歳ですか","nansai desu ka"]},
+      {it:"Dove abiti?", ans:["どこに住んでいますか","doko ni sunde imasu ka"]},
+      {it:"Non capisco", ans:["わかりません","wakarimasen"]},
+      {it:"Puoi ripetere?", ans:["もう一度言ってください","mou ichido itte kudasai"]},
+      {it:"Quanto costa?", ans:["いくらですか","ikura desu ka"]},
+      {it:"Mi piace il caffè", ans:["コーヒーが好きです","koohii ga suki desu"]},
+      {it:"Che ore sono?", ans:["今何時ですか","ima nanji desu ka"]},
+      {it:"Vorrei un caffè, per favore", ans:["コーヒーをお願いします","koohii wo onegaishimasu"]},
+      {it:"A che ora parte il treno?", ans:["電車は何時に出発しますか","densha wa nanji ni shuppatsu shimasu ka"]},
+    ],
+  ],
 };
 
 /* ---------- STORAGE ADAPTER ----------
@@ -1842,11 +1908,18 @@ document.getElementById('btnAddEntry').onclick = async ()=>{
 
 /* ---------- PERCORSO INIZIALE ---------- */
 function normalizeAnswer(str, isArabic){
-  let s = str.toLowerCase().trim();
-  if(isArabic){
-    s = s.replace(/[\u064B-\u0652\u0670\u0640]/g,''); // harakat/tatweel
+  let s = str.trim();
+  if(/[\u0600-\u06FF]/.test(s)){
+    // Arabo: rimuovi vocali brevi/tatwil e unifica alcune lettere equivalenti
+    s = s.toLowerCase();
+    s = s.replace(/[\u064B-\u0652\u0670\u0640]/g,'');
     s = s.replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه');
+  } else if(/[\u4E00-\u9FFF\u3040-\u30FF\uFF66-\uFF9F]/.test(s)){
+    // Cinese/Giapponese: nessuno spazio tra i caratteri, niente maiuscole/accenti da gestire
+    s = s.replace(/[\s，。？！：；、,.!?;:]/g,'');
+    return s;
   } else {
+    s = s.toLowerCase();
     s = s.replace(/ß/g, 'ss'); // sz tedesca equiparata a "ss"
     s = s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); // accenti latini
   }
@@ -1870,6 +1943,20 @@ function renderBeginner(){
   document.querySelectorAll('#bpDirTabs button').forEach(b=>{
     b.classList.toggle('active', b.dataset.dir === dir);
   });
+
+  if(!list){
+    document.getElementById('bpStatsRow').innerHTML = '';
+    document.getElementById('bpProgressFill').style.width = '0%';
+    document.getElementById('bpProgressLabel').textContent = 'Non ancora disponibile';
+    document.getElementById('bpPrompt').removeAttribute('dir');
+    document.getElementById('bpPrompt').classList.remove('rtl-text');
+    document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">In arrivo</div>Questo livello per ${LANGS[currentLang].label} sarà disponibile a breve. Prova nel frattempo un altro livello o un'altra lingua.</div>`;
+    document.getElementById('bpInput').classList.add('hidden');
+    document.getElementById('bpCheck').classList.add('hidden');
+    document.getElementById('bpSkip').classList.add('hidden');
+    return;
+  }
+
   document.getElementById('bpDirToTarget').textContent = `Italiano \u2192 ${LANGS[currentLang].label}`;
   document.getElementById('bpDirToIt').textContent = `${LANGS[currentLang].label} \u2192 Italiano`;
 
@@ -2021,6 +2108,7 @@ const MAP_NODES = [
 function isMapNodeComplete(node){
   if(node.kind === 'percorso'){
     const list = BEGINNER[currentLang][node.level - 1];
+    if(!list) return false;
     const ds = state.beginner.progress[node.level] && state.beginner.progress[node.level].to_target;
     return !!ds && ds.index >= list.length;
   } else {
