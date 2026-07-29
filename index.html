@@ -279,6 +279,8 @@
   .map-node.done{ background: var(--accent); border-color: var(--accent); color:#17140F; }
   .map-node.current{ border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); }
   .map-node.locked{ opacity:.45; cursor:default; }
+  .map-node.checkpoint{ width:48px; height:48px; border-style:dashed; }
+  .map-node.checkpoint svg{ width:20px; height:20px; }
   .map-node:active{ transform: scale(.93); }
   .map-node-label{ font-size:11.5px; color: var(--ink-dim); margin-top:8px; text-align:center; max-width:100px; line-height:1.3; }
   .map-node-label.done{ color: var(--ink); }
@@ -461,6 +463,11 @@
       <button data-level="3">Livello 3</button>
       <button data-level="4">Livello 4</button>
       <button data-level="5">Livello 5</button>
+      <button data-level="6">Livello 6</button>
+      <button data-level="7">Livello 7</button>
+      <button data-level="8">Livello 8</button>
+      <button data-level="9">Livello 9</button>
+      <button data-level="10">Livello 10</button>
     </div>
     <div class="level-tabs" id="bpDirTabs">
       <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -557,7 +564,7 @@
   <section class="card hidden" id="tab-mappa">
     <span class="tag">Percorso a tappe</span>
     <h2>La tua mappa &mdash; <span id="mapLangLabel">English</span></h2>
-    <p class="sub">Ogni tappa si sblocca completando la precedente. Tocca una tappa sbloccata per andare subito a quel modulo.</p>
+    <p class="sub">Le tappe del Percorso Base si sbloccano completando la precedente. Le tappe Sfida (bordo tratteggiato) sono facoltative: se hai difficoltà, tocca pure quella successiva e vai avanti.</p>
     <div class="map-wrap" id="mapPath"></div>
     <button class="ghost" id="mapToLeaderboard" style="width:100%; margin-top:6px;">Vedi la classifica &rarr;</button>
   </section>
@@ -802,6 +809,76 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["whatever happens i'll try to stay calm","whatever happens i will try to stay calm"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["in hindsight i would have done things differently"]},
     ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["in my opinion we should try a different approach"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["i don't completely agree with what you said","i do not completely agree with what you said"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["i wonder if it's really the best choice","i wonder if it is really the best choice"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["we need more time to decide calmly"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["would you like to talk about it later calmly"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["i wasn't expecting a reply so quickly","i was not expecting a reply so quickly"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["can you explain better what you mean by that"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["it seems like a reasonable solution for now"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["i'd like to hear your point of view too","i would like to hear your point of view too"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["it's not easy to find a balance between work and personal life","it is not easy to find a balance between work and personal life"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["if i were you i'd think twice","if i were you i would think twice"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["all things considered it was worth it"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["last year i took a trip that changed the way i see things"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["when i was younger i used to spend hours reading at the library"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["i still remember the first time i tried this dish"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["we laughed so much our cheeks hurt"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["i never thought i'd find myself in this situation","i never thought i would find myself in this situation"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["it was an experience i'll always carry with me","it was an experience i will always carry with me"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["in the end everything turned out better than expected"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["thinking back i could have handled it differently"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["that day stayed etched in my memory"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["we haven't talked since then","we have not talked since then"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["over time i've learned to accept my mistakes","over time i have learned to accept my mistakes"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["looking back i'm happy with the path i've taken","looking back i am happy with the path i have taken"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["we need to submit the project by friday"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["could we organize a meeting to clarify the details"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["my boss asked me to review the report"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["we received positive feedback from the client"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["something unexpected came up and we need to review the timeline"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["i'm trying to balance several projects at the same time","i am trying to balance several projects at the same time"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["could you forward me that email when you have a moment"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["we need additional resources to complete the work"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["the deadline has been moved to next week"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["i'd like to propose a different idea for the project","i would like to propose a different idea for the project"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["the interview went better than i expected"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["we need to find a compromise that works for everyone"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["if everyone did their part the world would be a better place"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["it's likely that things will change in the coming years","it is likely that things will change in the coming years"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["you can't always predict how things will turn out","you cannot always predict how things will turn out"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["sometimes you have to accept situations you can't control","sometimes you have to accept situations you cannot control"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["if i had known earlier i would have acted differently"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["it's easier to judge than to truly understand a situation","it is easier to judge than to truly understand a situation"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["everyone has the right to express their own opinion"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["not every question has a simple answer"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["in the long run patience often pays off"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["one should learn from one's mistakes not repeat them"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["in an ideal world everyone would have the same opportunities"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["appearances can sometimes be deceiving"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["i don't want to beat around the bush we need to talk about it seriously","i do not want to beat around the bush we need to talk about it seriously"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["let's call it like it is without too much beating around the bush","let us call it like it is without too much beating around the bush"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["i realize it wasn't easy for anyone","i realize it was not easy for anyone"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["at the end of the day what matters is the result"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["it's not so much what you say but how you say it","it is not so much what you say but how you say it"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["there's always a way to meet each other halfway","there is always a way to meet each other halfway"]},
+      {it:"Meglio tardi che mai, no?", ans:["better late than never right"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["slow and steady wins the race as they say"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["sometimes bad things happen for a reason"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["everyone sees things their own way"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["you never really stop learning after all"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["in the long run honesty always pays off"]},
+    ],
   ],
   fr: [
     [ // Livello 1
@@ -879,6 +956,76 @@ const BEGINNER = {
       {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["je prefererais en discuter en personne plutot qu'au telephone","je préférerais en discuter en personne plutôt quau téléphone"]},
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["quoi qu'il arrive j'essaierai de rester calme","quoi quil arrive jessaierai de rester calme"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["avec le recul j'aurais fait les choses differemment","avec le recul jaurais fait les choses différemment"]},
+    ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["a mon avis nous devrions essayer une approche differente"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["je ne suis pas tout a fait d'accord avec ce que tu as dit","je ne suis pas tout à fait daccord avec ce que tu as dit"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["je me demande si c'est vraiment le meilleur choix","je me demande si cest vraiment le meilleur choix"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["nous avons besoin de plus de temps pour decider calmement"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["ca te dirait d'en parler plus tard tranquillement","ça te dirait den parler plus tard tranquillement"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["je ne m'attendais pas a une reponse aussi rapide","je ne mattendais pas à une réponse aussi rapide"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["peux-tu m'expliquer mieux ce que tu veux dire par la","peux tu mexpliquer mieux ce que tu veux dire par là"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["ca me semble une solution raisonnable pour l'instant","ça me semble une solution raisonnable pour linstant"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["j'aimerais aussi entendre ton point de vue","jaimerais aussi entendre ton point de vue"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["ce n'est pas facile de trouver un equilibre entre travail et vie privee","ce nest pas facile de trouver un équilibre entre travail et vie privée"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["si j'etais toi j'y reflechirais a deux fois","si jétais toi jy réfléchirais à deux fois"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["tout compte fait ca en valait la peine","tout compte fait ça en valait la peine"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["l'annee derniere j'ai fait un voyage qui a change ma facon de voir les choses","lannée dernière jai fait un voyage qui a changé ma façon de voir les choses"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["quand j'etais plus jeune je passais des heures a lire a la bibliotheque","quand jétais plus jeune je passais des heures à lire à la bibliothèque"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["je me souviens encore de la premiere fois que j'ai goute ce plat","je me souviens encore de la première fois que jai goûté ce plat"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["on a tellement ri que nos joues nous faisaient mal"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["je n'aurais jamais pense me retrouver dans cette situation","je naurais jamais pensé me retrouver dans cette situation"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["c'etait une experience que je garderai toujours avec moi","cétait une expérience que je garderai toujours avec moi"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["finalement tout s'est arrange mieux que prevu","finalement tout sest arrangé mieux que prévu"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["en y repensant j'aurais pu gerer ca differemment","en y repensant jaurais pu gérer ça différemment"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["cette journee est restee gravee dans ma memoire","cette journée est restée gravée dans ma mémoire"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["on ne s'est plus parle depuis","on ne sest plus parlé depuis"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["avec le temps j'ai appris a accepter mes erreurs","avec le temps jai appris à accepter mes erreurs"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["en regardant en arriere je suis content du chemin parcouru","en regardant en arrière je suis content du chemin parcouru"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["nous devons rendre le projet avant vendredi"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["pourrions-nous organiser une reunion pour clarifier les details","pourrions nous organiser une réunion pour clarifier les détails"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mon patron m'a demande de revoir le rapport","mon patron ma demandé de revoir le rapport"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["nous avons recu un retour positif du client","nous avons reçu un retour positif du client"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["il y a eu un imprevu et nous devons revoir les delais","il y a eu un imprévu et nous devons revoir les délais"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["j'essaie de gerer plusieurs projets en meme temps","jessaie de gérer plusieurs projets en même temps"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["pourriez-vous me transferer cet e-mail quand vous aurez un moment","pourriez vous me transférer cet e-mail quand vous aurez un moment"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["nous avons besoin de ressources supplementaires pour terminer le travail","nous avons besoin de ressources supplémentaires pour terminer le travail"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["la date limite a ete reportee a la semaine prochaine","la date limite a été reportée à la semaine prochaine"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["j'aimerais proposer une idee differente pour le projet","jaimerais proposer une idée différente pour le projet"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["l'entretien s'est mieux passe que je ne le pensais","lentretien sest mieux passé que je ne le pensais"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["nous devons trouver un compromis qui convienne a tout le monde"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["si tout le monde faisait sa part le monde serait meilleur"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["il est probable que les choses changent dans les prochaines annees","il est probable que les choses changent dans les prochaines années"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["on ne peut pas toujours prevoir comment les choses vont tourner","on ne peut pas toujours prévoir comment les choses vont tourner"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["parfois il faut accepter des situations qu'on ne peut pas controler","parfois il faut accepter des situations quon ne peut pas contrôler"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["si je l'avais su plus tot j'aurais agi differemment","si je lavais su plus tôt jaurais agi différemment"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["il est plus facile de juger que de vraiment comprendre une situation"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["chacun a le droit d'exprimer son opinion","chacun a le droit dexprimer son opinion"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["toutes les questions n'ont pas de reponse simple","toutes les questions nont pas de réponse simple"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["a long terme la patience paie souvent","à long terme la patience paie souvent"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["il faudrait apprendre de ses erreurs pas les repeter","il faudrait apprendre de ses erreurs pas les répéter"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["dans un monde ideal tout le monde aurait les memes chances","dans un monde idéal tout le monde aurait les mêmes chances"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["les apparences sont parfois trompeuses"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["je ne veux pas tourner autour du pot nous devons en parler serieusement","je ne veux pas tourner autour du pot nous devons en parler sérieusement"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["disons les choses comme elles sont sans trop de detours","disons les choses comme elles sont sans trop de détours"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["je me rends compte que ca n'a ete facile pour personne","je me rends compte que ça na été facile pour personne"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["en fin de compte ce qui compte c'est le resultat","en fin de compte ce qui compte cest le résultat"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["ce n'est pas tant ce que tu dis mais comment tu le dis","ce nest pas tant ce que tu dis mais comment tu le dis"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["il y a toujours un moyen de trouver un terrain d'entente","il y a toujours un moyen de trouver un terrain dentente"]},
+      {it:"Meglio tardi che mai, no?", ans:["mieux vaut tard que jamais non"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["qui persevere finit par reussir comme on dit","qui persévère finit par réussir comme on dit"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["parfois a quelque chose malheur est bon","parfois à quelque chose malheur est bon"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["chacun voit les choses a sa facon","chacun voit les choses à sa façon"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["on n'arrete jamais vraiment d'apprendre au fond","on narrête jamais vraiment dapprendre au fond"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["a la longue la sincerite paie toujours","à la longue la sincérité paie toujours"]},
     ],
   ],
   ar: [
@@ -958,6 +1105,76 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["مهما حدث سأحاول أن أبقى هادئا","mahma hadatha sa'uhawilu an abqa hadi'an"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["بعد التفكير كنت سأفعل الأشياء بشكل مختلف","ba'da at-tafkir kuntu sa'af'alu al-ashya' bishaklin mukhtalif"]},
     ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["في رأيي يجب أن نجرب نهجا مختلفا","fi ra'yi yajib an nujarrib nahjan mukhtalifan"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["لست متفقا تماما مع ما قلته","lastu muttafiqan tamaman ma'a ma qultahu"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["أتساءل إن كان هذا حقا الخيار الأفضل","atasa'alu in kana hadha haqqan al-khiyar al-afdal"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["نحتاج إلى مزيد من الوقت لنقرر بهدوء","nahtaju ila mazid min al-waqt linuqarrira bihudu"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["هل تود أن نتحدث عن ذلك لاحقا بهدوء","hal tawaddu an natahaddath 'an dhalika lahiqan bihudu"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["لم أكن أتوقع ردا بهذه السرعة","lam akun atawaqqa' raddan bihadhihi as-sur'a"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["هل يمكنك أن توضح لي أكثر ماذا تقصد بهذا","hal yumkinuka an tuwaddiha li akthar madha taqsudu bihadha"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["يبدو لي حلا معقولا في الوقت الحالي","yabdu li hallan ma'qulan fi al-waqt al-hali"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["أود أن أسمع وجهة نظرك أيضا","awaddu an asma' wijhat nazarika aydan"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["ليس من السهل إيجاد توازن بين العمل والحياة الشخصية","laysa min as-sahl ijad tawazun bayna al-'amal wal-hayat ash-shakhsiyya"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["لو كنت مكانك لفكرت مرتين","law kuntu makanaka lafakkartu marratayn"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["في النهاية كان الأمر يستحق العناء","fi an-nihaya kana al-amr yastahiqqu al-'ana"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["في العام الماضي قمت برحلة غيرت طريقة رؤيتي للأشياء","fi al-'am al-madi qumtu birihla ghayyarat tariqat ru'yati lil-ashya"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["عندما كنت أصغر سنا كنت أقضي ساعات في القراءة في المكتبة","'indama kuntu asghar sinnan kuntu aqdi sa'at fi al-qira'a fi al-maktaba"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["ما زلت أتذكر أول مرة جربت فيها هذا الطبق","ma ziltu atadhakkaru awwal marra jarrabtu fiha hadha at-tabaq"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["ضحكنا كثيرا لدرجة أن خدودنا آلمتنا","dahikna kathiran lidaraja anna khududana alamatna"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["لم أكن لأتصور أبدا أن أجد نفسي في هذا الموقف","lam akun li'atasawwara abadan an ajida nafsi fi hadha al-mawqif"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["كانت تجربة سأحملها معي دائما","kanat tajriba sa'ahmiluha ma'i da'iman"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["في النهاية سار كل شيء بشكل أفضل من المتوقع","fi an-nihaya sara kullu shay' bishaklin afdal min al-mutawaqqa"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["بالتفكير في الأمر كان بإمكاني التعامل معه بشكل مختلف","bit-tafkir fi al-amr kana bi'imkani at-ta'amul ma'ahu bishaklin mukhtalif"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["ذلك اليوم بقي محفورا في ذاكرتي","dhalika al-yawm baqiya mahfuran fi dhakirati"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["لم نتحدث منذ ذلك الحين","lam natahaddath mundhu dhalika al-hin"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["مع الوقت تعلمت أن أتقبل أخطائي","ma'a al-waqt ta'allamtu an ataqabbala akhta'i"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["بالنظر إلى الوراء أنا سعيد بالطريق الذي سلكته","bin-nazar ila al-wara' ana sa'id bit-tariq alladhi salaktuhu"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["يجب أن نسلم المشروع بحلول يوم الجمعة","yajib an nusallim al-mashru' bihulul yawm al-jum'a"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["هل يمكننا تنظيم اجتماع لتوضيح التفاصيل","hal yumkinuna tanzim ijtima' litawdih at-tafasil"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["طلب مني مديري مراجعة التقرير","talaba minni mudiri muraja'at at-taqrir"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["تلقينا ملاحظات إيجابية من العميل","talaqqayna mulahazat ijabiyya min al-'amil"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["حدث أمر غير متوقع ويجب أن نراجع الجدول الزمني","hadatha amr ghayr mutawaqqa' wayajib an nuraji' al-jadwal az-zamani"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["أحاول الموازنة بين عدة مشاريع في نفس الوقت","uhawilu al-muwazana bayna 'iddat mashari' fi nafs al-waqt"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["هل يمكنك إعادة توجيه ذلك البريد الإلكتروني عندما يتسنى لك ذلك","hal yumkinuka i'adat tawjih dhalika al-barid al-iliktruni 'indama yatasanna laka dhalika"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["نحتاج إلى موارد إضافية لإكمال العمل","nahtaju ila mawarid idafiyya li'ikmal al-'amal"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["تم تأجيل الموعد النهائي إلى الأسبوع القادم","tamma ta'jil al-maw'id an-nihai ila al-usbu' al-qadim"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["أود أن أقترح فكرة مختلفة للمشروع","awaddu an aqtariha fikra mukhtalifa lil-mashru"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["سارت المقابلة بشكل أفضل مما توقعت","sarat al-muqabala bishaklin afdal mimma tawaqqa'tu"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["يجب أن نجد حلا وسطا يناسب الجميع","yajib an najida hallan wasatan yunasibu al-jami"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["لو قام الجميع بدورهم لكان العالم مكانا أفضل","law qama al-jami' bidawrihim lakana al-'alam makanan afdal"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["من المرجح أن تتغير الأمور في السنوات القادمة","min al-murajjah an tataghayyar al-umur fi as-sanawat al-qadima"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["لا يمكن دائما التنبؤ بكيفية سير الأمور","la yumkin da'iman at-tanabbu' bikayfiyyat sayr al-umur"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["أحيانا يجب علينا تقبل مواقف لا يمكننا التحكم فيها","ahyanan yajib 'alayna taqabbul mawaqif la yumkinuna at-tahakkum fiha"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["لو كنت أعرف من قبل لتصرفت بشكل مختلف","law kuntu a'rifu min qabl latasarraftu bishaklin mukhtalif"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["من الأسهل أن نحكم من أن نفهم الموقف حقا","min al-ashal an nahkuma min an nafhama al-mawqif haqqan"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["لكل شخص الحق في التعبير عن رأيه","likulli shakhs al-haqq fi at-ta'bir 'an ra'yihi"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["ليست كل الأسئلة لها إجابة بسيطة","laysat kullu al-as'ila laha ijaba basita"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["على المدى الطويل غالبا ما يؤتي الصبر ثماره","'ala al-mada at-tawil ghaliban ma yu'ti as-sabr thimarahu"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["ينبغي أن نتعلم من أخطائنا لا أن نكررها","yanbaghi an nata'allama min akhta'ina la an nukarriraha"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["في عالم مثالي سيكون لدى الجميع نفس الفرص","fi 'alam mithali sayakoun ladá al-jami' nafs al-furas"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["المظاهر أحيانا تخدع","al-mazahir ahyanan takhda"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["لا أريد المراوغة يجب أن نتحدث عن هذا بجدية","la uridu al-muraawagha yajib an natahaddath 'an hadha bijiddiyya"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["لنقل الأمور كما هي دون لف ودوران كثير","linaqul al-umur kama hiya dun laff wadawaran kathir"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["أدرك أن الأمر لم يكن سهلا على أحد","udriku anna al-amr lam yakun sahlan 'ala ahad"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["في نهاية المطاف ما يهم هو النتيجة","fi nihayat al-mataf ma yuhimm huwa an-natija"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["الأمر لا يتعلق كثيرا بما تقوله بل بكيفية قوله","al-amr la yata'allaq kathiran bima taquluhu bal bikayfiyyat qawlihi"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["هناك دائما طريقة للتوصل إلى حل وسط","hunaka da'iman tariqa lit-tawassul ila hall wasat"]},
+      {it:"Meglio tardi che mai, no?", ans:["أفضل متأخرا من ألا يحدث أبدا أليس كذلك","afdal muta'akhkhiran min alla yahdutha abadan alaysa kadhalik"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["من يصبر ينل كما يقال","man yasbir yanal kama yuqal"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["أحيانا يكون في الشر خير","ahyanan yakoun fi ash-sharr khayr"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["كل شخص يرى الأمور بطريقته الخاصة","kullu shakhs yara al-umur bitariqatihi al-khassa"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["لا نتوقف أبدا عن التعلم في النهاية","la natawaqqaf abadan 'an at-ta'allum fi an-nihaya"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["على المدى الطويل الصدق يثمر دائما","'ala al-mada at-tawil as-sidq yuthmir da'iman"]},
+    ],
   ],
   es: [
     [ // Livello 1
@@ -1035,6 +1252,76 @@ const BEGINNER = {
       {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["preferiria discutirlo en persona en lugar de por telefono","preferiría discutirlo en persona en lugar de por teléfono"]},
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["pase lo que pase intentare mantener la calma","pase lo que pase intentaré mantener la calma"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["en retrospectiva habria hecho las cosas de otra manera","en retrospectiva habría hecho las cosas de otra manera"]},
+    ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["en mi opinion deberiamos probar un enfoque diferente","en mi opinión deberíamos probar un enfoque diferente"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["no estoy del todo de acuerdo con lo que dijiste"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["me pregunto si es realmente la mejor opcion","me pregunto si es realmente la mejor opción"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["necesitamos mas tiempo para decidir con calma","necesitamos más tiempo para decidir con calma"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["te gustaria hablarlo mas tarde con calma","te gustaría hablarlo más tarde con calma"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["no esperaba una respuesta tan rapido","no esperaba una respuesta tan rápido"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["puedes explicarme mejor que quieres decir con eso","puedes explicarme mejor qué quieres decir con eso"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["me parece una solucion razonable por ahora","me parece una solución razonable por ahora"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["me gustaria escuchar tambien tu punto de vista","me gustaría escuchar también tu punto de vista"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["no es facil encontrar un equilibrio entre el trabajo y la vida personal","no es fácil encontrar un equilibrio entre el trabajo y la vida personal"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["si yo fuera tu me lo pensaria dos veces","si yo fuera tú me lo pensaría dos veces"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["a fin de cuentas valio la pena","a fin de cuentas valió la pena"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["el ano pasado hice un viaje que cambio mi forma de ver las cosas","el año pasado hice un viaje que cambió mi forma de ver las cosas"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["cuando era mas joven pasaba horas leyendo en la biblioteca","cuando era más joven pasaba horas leyendo en la biblioteca"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["todavia recuerdo la primera vez que probe este plato","todavía recuerdo la primera vez que probé este plato"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["nos reimos tanto que nos dolian las mejillas","nos reímos tanto que nos dolían las mejillas"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["nunca pense que me encontraria en esta situacion","nunca pensé que me encontraría en esta situación"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["fue una experiencia que llevare siempre conmigo","fue una experiencia que llevaré siempre conmigo"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["al final todo salio mejor de lo esperado","al final todo salió mejor de lo esperado"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["pensandolo bien podria haberlo manejado de otra manera","pensándolo bien podría haberlo manejado de otra manera"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["ese dia quedo grabado en mi memoria","ese día quedó grabado en mi memoria"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["no hemos vuelto a hablar desde entonces"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["con el tiempo he aprendido a aceptar mis errores"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["mirando atras estoy contento con el camino que he recorrido","mirando atrás estoy contento con el camino que he recorrido"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["tenemos que entregar el proyecto antes del viernes"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["podriamos organizar una reunion para aclarar los detalles","podríamos organizar una reunión para aclarar los detalles"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mi jefe me pidio que revisara el informe","mi jefe me pidió que revisara el informe"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["recibimos comentarios positivos del cliente"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["surgio un imprevisto y tenemos que revisar los plazos","surgió un imprevisto y tenemos que revisar los plazos"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["estoy intentando equilibrar varios proyectos al mismo tiempo"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["podria reenviarme ese correo cuando tenga un momento","podría reenviarme ese correo cuando tenga un momento"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["necesitamos recursos adicionales para completar el trabajo"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["la fecha limite se ha movido a la proxima semana","la fecha límite se ha movido a la próxima semana"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["me gustaria proponer una idea diferente para el proyecto","me gustaría proponer una idea diferente para el proyecto"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["la entrevista fue mejor de lo que esperaba"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["tenemos que encontrar un compromiso que funcione para todos"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["si todos hicieran su parte el mundo seria un lugar mejor","si todos hicieran su parte el mundo sería un lugar mejor"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["es probable que las cosas cambien en los proximos anos","es probable que las cosas cambien en los próximos años"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["no siempre se puede predecir como saldran las cosas","no siempre se puede predecir cómo saldrán las cosas"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["a veces hay que aceptar situaciones que no podemos controlar"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["si lo hubiera sabido antes habria actuado de otra manera","si lo hubiera sabido antes habría actuado de otra manera"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["es mas facil juzgar que entender realmente una situacion","es más fácil juzgar que entender realmente una situación"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["todos tienen derecho a expresar su propia opinion","todos tienen derecho a expresar su propia opinión"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["no todas las preguntas tienen una respuesta sencilla"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["a largo plazo la paciencia suele dar sus frutos"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["habria que aprender de los propios errores no repetirlos","habría que aprender de los propios errores no repetirlos"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["en un mundo ideal todos tendrian las mismas oportunidades","en un mundo ideal todos tendrían las mismas oportunidades"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["las apariencias a veces enganan","las apariencias a veces engañan"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["no quiero andarme con rodeos tenemos que hablarlo en serio"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["digamos las cosas como son sin muchos rodeos"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["me doy cuenta de que no fue facil para nadie","me doy cuenta de que no fue fácil para nadie"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["a fin de cuentas lo que importa es el resultado"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["no es tanto lo que dices sino como lo dices","no es tanto lo que dices sino cómo lo dices"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["siempre hay una forma de llegar a un punto medio"]},
+      {it:"Meglio tardi che mai, no?", ans:["mas vale tarde que nunca no","más vale tarde que nunca no"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["quien la sigue la consigue como se suele decir"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["a veces no hay mal que por bien no venga"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["cada uno ve las cosas a su manera"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["en el fondo nunca se deja de aprender"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["a la larga la sinceridad siempre da sus frutos"]},
     ],
   ],
   de: [
@@ -1114,6 +1401,76 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["was auch immer passiert ich werde versuchen ruhig zu bleiben"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["im nachhinein hatte ich die dinge anders gemacht","im nachhinein hätte ich die dinge anders gemacht"]},
     ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["meiner meinung nach sollten wir einen anderen ansatz versuchen"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["ich stimme nicht ganz mit dem uberein was du gesagt hast","ich stimme nicht ganz mit dem überein was du gesagt hast"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["ich frage mich ob das wirklich die beste wahl ist"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["wir brauchen mehr zeit um in ruhe zu entscheiden"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["mochtest du spater in ruhe daruber sprechen","möchtest du später in ruhe darüber sprechen"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["ich hatte nicht mit einer so schnellen antwort gerechnet"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["kannst du mir besser erklaren was du damit meinst","kannst du mir besser erklären was du damit meinst"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["das scheint mir vorerst eine vernunftige losung zu sein","das scheint mir vorerst eine vernünftige lösung zu sein"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["ich wurde auch gerne deine meinung horen","ich würde auch gerne deine meinung hören"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["es ist nicht leicht ein gleichgewicht zwischen arbeit und privatleben zu finden"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["wenn ich du ware wurde ich zweimal nachdenken","wenn ich du wäre würde ich zweimal nachdenken"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["alles in allem hat es sich gelohnt"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["letztes jahr habe ich eine reise gemacht die meine sichtweise verandert hat","letztes jahr habe ich eine reise gemacht die meine sichtweise verändert hat"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["als ich junger war verbrachte ich stunden mit lesen in der bibliothek","als ich jünger war verbrachte ich stunden mit lesen in der bibliothek"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["ich erinnere mich noch an das erste mal als ich dieses gericht probiert habe"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["wir haben so viel gelacht dass unsere wangen wehtaten"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["ich hatte nie gedacht dass ich mich in dieser situation wiederfinden wurde","ich hätte nie gedacht dass ich mich in dieser situation wiederfinden würde"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["es war eine erfahrung die ich immer bei mir tragen werde"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["am ende ist alles besser gelaufen als erwartet"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["im nachhinein hatte ich es anders handhaben konnen","im nachhinein hätte ich es anders handhaben können"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["dieser tag ist mir in erinnerung geblieben"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["wir haben seitdem nicht mehr miteinander gesprochen"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["mit der zeit habe ich gelernt meine fehler zu akzeptieren"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["ruckblickend bin ich zufrieden mit dem weg den ich gegangen bin","rückblickend bin ich zufrieden mit dem weg den ich gegangen bin"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["wir mussen das projekt bis freitag abgeben","wir müssen das projekt bis freitag abgeben"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["konnten wir ein treffen organisieren um die details zu klaren","könnten wir ein treffen organisieren um die details zu klären"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mein chef hat mich gebeten den bericht zu uberprufen","mein chef hat mich gebeten den bericht zu überprüfen"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["wir haben positives feedback vom kunden erhalten"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["es gab etwas unerwartetes und wir mussen den zeitplan uberprufen","es gab etwas unerwartetes und wir müssen den zeitplan überprüfen"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["ich versuche mehrere projekte gleichzeitig zu jonglieren"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["konnten sie mir diese e-mail weiterleiten wenn sie einen moment zeit haben","könnten sie mir diese e-mail weiterleiten wenn sie einen moment zeit haben"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["wir brauchen zusatzliche ressourcen um die arbeit abzuschliessen","wir brauchen zusätzliche ressourcen um die arbeit abzuschließen"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["die frist wurde auf nachste woche verschoben","die frist wurde auf nächste woche verschoben"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["ich mochte eine andere idee fur das projekt vorschlagen","ich möchte eine andere idee für das projekt vorschlagen"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["das vorstellungsgesprach lief besser als erwartet","das vorstellungsgespräch lief besser als erwartet"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["wir mussen einen kompromiss finden der fur alle passt","wir müssen einen kompromiss finden der für alle passt"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["wenn jeder seinen teil beitragen wurde ware die welt ein besserer ort","wenn jeder seinen teil beitragen würde wäre die welt ein besserer ort"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["es ist wahrscheinlich dass sich die dinge in den kommenden jahren andern","es ist wahrscheinlich dass sich die dinge in den kommenden jahren ändern"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["man kann nicht immer vorhersehen wie die dinge sich entwickeln"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["manchmal muss man situationen akzeptieren die man nicht kontrollieren kann"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["wenn ich es fruher gewusst hatte hatte ich anders gehandelt","wenn ich es früher gewusst hätte hätte ich anders gehandelt"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["es ist leichter zu urteilen als eine situation wirklich zu verstehen"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["jeder hat das recht seine eigene meinung zu aussern","jeder hat das recht seine eigene meinung zu äußern"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["nicht jede frage hat eine einfache antwort"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["auf lange sicht zahlt sich geduld oft aus"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["man sollte aus seinen fehlern lernen sie nicht wiederholen"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["in einer idealen welt hatten alle die gleichen chancen","in einer idealen welt hätten alle die gleichen chancen"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["der schein trugt manchmal","der schein trügt manchmal"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["ich will nicht um den heissen brei herumreden wir mussen ernsthaft daruber sprechen","ich will nicht um den heißen brei herumreden wir müssen ernsthaft darüber sprechen"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["sagen wir die dinge wie sie sind ohne gross drumherum zu reden","sagen wir die dinge wie sie sind ohne groß drumherum zu reden"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["mir ist klar dass es fur niemanden leicht war","mir ist klar dass es für niemanden leicht war"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["letzten endes zahlt das ergebnis"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["es kommt nicht so sehr darauf an was du sagst sondern wie du es sagst"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["es gibt immer einen weg sich entgegenzukommen"]},
+      {it:"Meglio tardi che mai, no?", ans:["besser spat als nie oder","besser spät als nie oder"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["wer beharrlich bleibt gewinnt am ende wie man sagt"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["manchmal hat auch etwas schlechtes sein gutes"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["jeder sieht die dinge auf seine eigene weise"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["man hort im grunde nie auf zu lernen","man hört im grunde nie auf zu lernen"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["auf dauer zahlt sich ehrlichkeit immer aus"]},
+    ],
   ],
 };
 
@@ -1150,6 +1507,11 @@ function todayStr(){ return new Date().toISOString().slice(0,10); }
 function dayOfMonthIndex(len){ return (new Date().getDate() - 1) % len; }
 
 function freshDirState(){ return { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 }; }
+function freshProgressAllLevels(){
+  const p = {};
+  for(let lvl=1; lvl<=10; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
+  return p;
+}
 
 async function loadState(lang){
   try{
@@ -1158,14 +1520,7 @@ async function loadState(lang){
   }catch(e){ state = { streak:0, lastDate:null, done:[], notebook:[] }; }
 
   if(!state.beginner){
-    state.beginner = {
-      direction:'to_target', level:1,
-      progress:{
-        1:{to_target:freshDirState(), to_it:freshDirState()}, 2:{to_target:freshDirState(), to_it:freshDirState()},
-        3:{to_target:freshDirState(), to_it:freshDirState()}, 4:{to_target:freshDirState(), to_it:freshDirState()},
-        5:{to_target:freshDirState(), to_it:freshDirState()}
-      }
-    };
+    state.beginner = { direction:'to_target', level:1, progress: freshProgressAllLevels() };
   } else if(!state.beginner.progress){
     let oldToTarget, oldToIt;
     if(state.beginner.to_target){
@@ -1179,18 +1534,13 @@ async function loadState(lang){
     state.beginner = {
       direction: state.beginner.direction || 'to_target',
       level: 1,
-      progress: {
-        1: { to_target: oldToTarget, to_it: oldToIt },
-        2: { to_target: freshDirState(), to_it: freshDirState() },
-        3: { to_target: freshDirState(), to_it: freshDirState() },
-        4: { to_target: freshDirState(), to_it: freshDirState() },
-        5: { to_target: freshDirState(), to_it: freshDirState() },
-      }
+      progress: freshProgressAllLevels()
     };
+    state.beginner.progress[1] = { to_target: oldToTarget, to_it: oldToIt };
   } else {
-    [1,2,3,4,5].forEach(lvl=>{
+    for(let lvl=1; lvl<=10; lvl++){
       if(!state.beginner.progress[lvl]) state.beginner.progress[lvl] = { to_target: freshDirState(), to_it: freshDirState() };
-    });
+    }
     if(!state.beginner.level) state.beginner.level = 1;
   }
 
@@ -1546,7 +1896,7 @@ function renderBeginner(){
     document.getElementById('bpPrompt').removeAttribute('dir');
     document.getElementById('bpPrompt').classList.remove('rtl-text');
 
-    const nextLevel = level < 5 ? level + 1 : null;
+    const nextLevel = level < 10 ? level + 1 : null;
     const otherDirDone = state.beginner.progress[level][dir === 'to_target' ? 'to_it' : 'to_target'].index >= list.length;
     let nextStepMsg;
     if(nextLevel && otherDirDone){
@@ -1556,7 +1906,7 @@ function renderBeginner(){
     } else if(!otherDirDone){
       nextStepMsg = `Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}" per completare anche questa direzione.`;
     } else {
-      nextStepMsg = `Hai completato tutti e 5 i livelli in entrambe le direzioni per ${LANGS[currentLang].label}. Passa alle Sfide o ai Dialoghi per continuare a esercitarti.`;
+      nextStepMsg = `Hai completato tutti e 10 i livelli in entrambe le direzioni per ${LANGS[currentLang].label}. Passa alle Sfide o ai Dialoghi per continuare a esercitarti.`;
     }
     document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">Livello ${level} completato ✓</div>${nextStepMsg}</div>`;
     document.getElementById('bpInput').classList.add('hidden');
@@ -1602,7 +1952,7 @@ document.getElementById('bpCheck').onclick = async ()=>{
 
   const fb = document.getElementById('bpFeedback');
   if(ok){
-    const gained = ds.wrong === 0 ? 10 : 5;
+    const gained = ds.wrong === 0 ? 10 : (ds.wrong === 1 ? 5 : 2);
     ds.score += gained;
     if(ds.wrong === 0) ds.correctFirstTry++;
     ds.completed++;
@@ -1616,7 +1966,7 @@ document.getElementById('bpCheck').onclick = async ()=>{
   } else {
     ds.wrong = (ds.wrong||0)+1;
     fb.className='bp-feedback ko';
-    if(ds.wrong >= 2){
+    if(ds.wrong >= 3){
       const correctAnswer = (dir === 'to_target') ? item.ans[0] : item.it;
       fb.innerHTML = 'Non ancora corretto.<span class="hint">Suggerimento: ' + correctAnswer + '</span>';
     } else {
@@ -1651,14 +2001,21 @@ document.querySelectorAll('#bpDirTabs button').forEach(btn=>{
 
 /* ---------- MAPPA A TAPPE ---------- */
 const MAP_NODES = [
-  { id:'base-1', label:'Percorso Base · Livello 1', kind:'percorso', level:1 },
-  { id:'sfida-principiante', label:'Sfida · Principiante', kind:'sfida', level:'principiante' },
-  { id:'base-2', label:'Percorso Base · Livello 2', kind:'percorso', level:2 },
-  { id:'base-3', label:'Percorso Base · Livello 3', kind:'percorso', level:3 },
-  { id:'sfida-intermedio', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio' },
-  { id:'base-4', label:'Percorso Base · Livello 4', kind:'percorso', level:4 },
-  { id:'base-5', label:'Percorso Base · Livello 5', kind:'percorso', level:5 },
-  { id:'sfida-avanzato', label:'Sfida · Avanzato', kind:'sfida', level:'avanzato' },
+  { id:'base-1', label:'Percorso Base · Livello 1', kind:'percorso', level:1, gating:true },
+  { id:'base-2', label:'Percorso Base · Livello 2', kind:'percorso', level:2, gating:true },
+  { id:'base-3', label:'Percorso Base · Livello 3', kind:'percorso', level:3, gating:true },
+  { id:'base-4', label:'Percorso Base · Livello 4', kind:'percorso', level:4, gating:true },
+  { id:'sfida-1', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-5', label:'Percorso Base · Livello 5', kind:'percorso', level:5, gating:true },
+  { id:'sfida-2', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-6', label:'Percorso Base · Livello 6', kind:'percorso', level:6, gating:true },
+  { id:'base-7', label:'Percorso Base · Livello 7', kind:'percorso', level:7, gating:true },
+  { id:'sfida-3', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-8', label:'Percorso Base · Livello 8', kind:'percorso', level:8, gating:true },
+  { id:'sfida-4', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-9', label:'Percorso Base · Livello 9', kind:'percorso', level:9, gating:true },
+  { id:'base-10', label:'Percorso Base · Livello 10', kind:'percorso', level:10, gating:true },
+  { id:'sfida-5', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
 ];
 
 function isMapNodeComplete(node){
@@ -1681,12 +2038,12 @@ function renderMap(){
   document.getElementById('mapLangLabel').textContent = LANGS[currentLang].label;
   const wrap = document.getElementById('mapPath');
   wrap.innerHTML = '';
-  let prevComplete = true;
+  let prevGateComplete = true;
   MAP_NODES.forEach((node, i)=>{
     const complete = isMapNodeComplete(node);
-    const unlocked = prevComplete;
+    const unlocked = prevGateComplete;
     const status = complete ? 'done' : (unlocked ? 'current' : 'locked');
-    prevComplete = complete;
+    if(node.gating){ prevGateComplete = complete; }
 
     const row = document.createElement('div');
     row.className = 'map-node-row';
@@ -1696,16 +2053,16 @@ function renderMap(){
     col.style.transform = `translateX(${offset}px)`;
 
     const nodeEl = document.createElement('div');
-    nodeEl.className = 'map-node ' + status;
+    nodeEl.className = 'map-node ' + status + (node.gating ? '' : ' checkpoint');
     nodeEl.innerHTML = status === 'done'
       ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg>'
       : status === 'locked'
         ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>'
-        : String(i + 1);
+        : (node.gating ? String(i + 1) : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>');
 
     const labelEl = document.createElement('div');
     labelEl.className = 'map-node-label' + (status === 'done' ? ' done' : '');
-    labelEl.textContent = node.label;
+    labelEl.textContent = node.label + (node.gating ? '' : ' (facoltativa)');
 
     if(status !== 'locked'){
       nodeEl.onclick = async ()=>{
