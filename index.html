@@ -426,6 +426,32 @@
 
   <div class="scroll-area">
 
+  <!-- IMPARA LA LINGUA (da zero assoluto) -->
+  <section class="card hidden" id="tab-impara">
+    <span class="tag">Impara la lingua &middot; da zero assoluto</span>
+    <h2>Scrivi e pronuncia</h2>
+    <p class="sub">Il punto di partenza se non conosci ancora questa lingua: leggi la frase in italiano, scrivila nella lingua che stai imparando, poi guarda (e ascolta) come si pronuncia.</p>
+    <div class="level-tabs" id="imLevelTabs">
+      <button data-level="1" class="active">1 &middot; Parole</button>
+      <button data-level="2">2 &middot; Frasi brevi</button>
+      <button data-level="3">3 &middot; Frasi complesse</button>
+    </div>
+    <div class="stats-row" id="imStatsRow"></div>
+    <div class="bp-progress-wrap">
+      <div class="bp-progress-bar"><div class="bp-progress-fill" id="imProgressFill"></div></div>
+      <div class="bp-progress-label" id="imProgressLabel">Frase 1 di 8</div>
+    </div>
+    <div class="challenge-text" id="imPrompt">&mdash;</div>
+    <input type="text" id="imInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="bp-feedback" id="imFeedback"></div>
+    <div class="row">
+      <button class="primary" id="imCheck">Verifica</button>
+      <button class="ghost" id="imHint">&#128161; Suggerimento</button>
+    </div>
+    <button class="ghost" id="imSkip" style="width:100%; margin-top:8px;">Salta</button>
+    <button class="ghost" id="imReset" style="width:100%; margin-top:8px;">Ricomincia questo livello</button>
+  </section>
+
   <!-- SFIDA -->
   <section class="card" id="tab-sfida">
     <span class="tag">Sfida del giorno</span>
@@ -582,6 +608,10 @@
 
   <div class="scroll-hint-wrap nav-hint-wrap" id="navWrap">
   <nav class="tabs">
+  <button data-tab="impara">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4L3 8l9 4 9-4-9-4z"/><path d="M6 10v6c0 1.5 3 2.5 6 2.5s6-1 6-2.5v-6"/></svg>
+    Impara
+  </button>
   <button data-tab="mappa">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 16.5L10.5 9M13.5 9L16 16.5"/></svg>
     Mappa
@@ -1540,6 +1570,163 @@ const BEGINNER = {
   ],
 };
 
+/* ---------- IMPARA LA LINGUA: dataset con fonetica "all'italiana" ---------- */
+const LEARN = {
+  en: [
+    [ // Livello 1 · parole e saluti
+      {it:"Ciao", ans:["hello","hi"], phon:"he-LO"},
+      {it:"Buongiorno", ans:["good morning"], phon:"gud MOR-ning"},
+      {it:"Buonasera", ans:["good evening"], phon:"gud IV-ning"},
+      {it:"Grazie", ans:["thank you","thanks"], phon:"THENK-iu"},
+      {it:"Per favore", ans:["please"], phon:"pliz"},
+      {it:"Sì", ans:["yes"], phon:"ies"},
+      {it:"No", ans:["no"], phon:"nou"},
+      {it:"Scusa", ans:["sorry"], phon:"SO-ri"},
+    ],
+    [ // Livello 2 · frasi brevi
+      {it:"Come stai?", ans:["how are you"], phon:"hau ar iu"},
+      {it:"Mi chiamo Marco", ans:["my name is marco","i am marco","im marco","i'm marco"], phon:"mai neim iz MAR-co"},
+      {it:"Dove abiti?", ans:["where do you live"], phon:"uer du iu liv"},
+      {it:"Non capisco", ans:["i dont understand","i don't understand","i do not understand"], phon:"ai dont anderSTEND"},
+      {it:"Quanto costa?", ans:["how much is it","how much does it cost"], phon:"hau mac iz it"},
+      {it:"Che ore sono?", ans:["what time is it"], phon:"uot taim iz it"},
+    ],
+    [ // Livello 3 · frasi complesse
+      {it:"Hai dormito bene stanotte?", ans:["did you sleep well last night"], phon:"did iu slip uel last nait"},
+      {it:"Sei passato dal supermercato?", ans:["did you go to the supermarket"], phon:"did iu gou tu de SU-per-mar-ket"},
+      {it:"Hai fatto il biglietto del treno?", ans:["did you buy the train ticket"], phon:"did iu bai de trein TI-ket"},
+      {it:"A che ora ci vediamo domani?", ans:["what time are we meeting tomorrow"], phon:"uot taim ar ui MI-ting tu-MO-rou"},
+      {it:"Puoi chiudere la finestra, per favore?", ans:["can you close the window please"], phon:"ken iu clouz de UIN-dou pliz"},
+      {it:"Che cosa hai fatto questo weekend?", ans:["what did you do this weekend"], phon:"uot did iu du dis UIK-end"},
+    ],
+  ],
+  fr: [
+    [ // Livello 1
+      {it:"Ciao", ans:["salut","bonjour"], phon:"sa-LU"},
+      {it:"Buongiorno", ans:["bonjour"], phon:"bon-JUR"},
+      {it:"Buonasera", ans:["bonsoir"], phon:"bon-SUAR"},
+      {it:"Grazie", ans:["merci"], phon:"mer-SI"},
+      {it:"Per favore", ans:["s'il te plait","s'il vous plait","stp","svp"], phon:"sil tuh PLE"},
+      {it:"Sì", ans:["oui"], phon:"UI"},
+      {it:"No", ans:["non"], phon:"NON"},
+      {it:"Scusa", ans:["pardon"], phon:"par-DON"},
+    ],
+    [ // Livello 2
+      {it:"Come stai?", ans:["comment ca va","comment vas-tu","comment vas tu"], phon:"co-MAN sa VA"},
+      {it:"Mi chiamo Marco", ans:["je m'appelle marco","je mappelle marco"], phon:"jeu ma-PEL MAR-co"},
+      {it:"Dove abiti?", ans:["ou habites-tu","ou habites tu","tu habites ou"], phon:"u a-BIT tu"},
+      {it:"Non capisco", ans:["je ne comprends pas"], phon:"jeu neu com-PRAN pa"},
+      {it:"Quanto costa?", ans:["combien ca coute"], phon:"kom-BIEN sa KUT"},
+      {it:"Che ore sono?", ans:["quelle heure est-il","quelle heure est il","quelle heure il est"], phon:"kel EUR e-TIL"},
+    ],
+    [ // Livello 3
+      {it:"Hai dormito bene stanotte?", ans:["as-tu bien dormi cette nuit","as tu bien dormi cette nuit"], phon:"a-tu bien dor-MI set NUI"},
+      {it:"Sei passato dal supermercato?", ans:["es-tu passe au supermarche","es tu passe au supermarche"], phon:"e-tu pa-SE o su-per-mar-SHE"},
+      {it:"Hai fatto il biglietto del treno?", ans:["as-tu achete le billet de train","as tu achete le billet de train"], phon:"a-tu ash-TE leu bi-YE deu TRIN"},
+      {it:"A che ora ci vediamo domani?", ans:["a quelle heure on se voit demain"], phon:"a kel EUR on seu VUA deu-MIN"},
+      {it:"Puoi chiudere la finestra, per favore?", ans:["peux-tu fermer la fenetre s'il te plait","peux tu fermer la fenetre sil te plait"], phon:"peu-tu fer-ME la feu-NE-tr sil teu PLE"},
+      {it:"Che cosa hai fatto questo weekend?", ans:["qu'est-ce que tu as fait ce week-end","quest ce que tu as fait ce week-end","quest ce que tu as fait ce weekend"], phon:"kes-keu tu a FE seu ui-KEND"},
+    ],
+  ],
+  ar: [
+    [ // Livello 1
+      {it:"Ciao", ans:["مرحبا","marhaban"], phon:"mar-ha-BAN"},
+      {it:"Buongiorno", ans:["صباح الخير","sabah al khayr","sabah el kheir"], phon:"sa-BAH el KHEIR"},
+      {it:"Buonasera", ans:["مساء الخير","masa al khayr","masa el kheir"], phon:"ma-SA el KHEIR"},
+      {it:"Grazie", ans:["شكرا","shukran"], phon:"SHU-kran"},
+      {it:"Per favore", ans:["من فضلك","min fadlik","min fadlak"], phon:"min FAD-lik"},
+      {it:"Sì", ans:["نعم","naam"], phon:"NA-am"},
+      {it:"No", ans:["لا","la"], phon:"LA"},
+      {it:"Scusa", ans:["آسف","asif"], phon:"A-sif"},
+    ],
+    [ // Livello 2
+      {it:"Come stai?", ans:["كيف حالك","kayfa haluk","kayf halak"], phon:"kaif HA-lak"},
+      {it:"Mi chiamo Marco", ans:["اسمي ماركو","ismi marco"], phon:"IS-mi MAR-co"},
+      {it:"Dove abiti?", ans:["أين تسكن","ayna taskun"], phon:"AI-na TAS-kun"},
+      {it:"Non capisco", ans:["لا أفهم","la afham"], phon:"la AF-ham"},
+      {it:"Quanto costa?", ans:["كم السعر","kam al-si'r","kam alsir"], phon:"kam a-SI-er"},
+      {it:"Che ore sono?", ans:["كم الساعة","kam al-sa'a","kam alsaa"], phon:"kam a-SA-a"},
+    ],
+    [ // Livello 3
+      {it:"Hai dormito bene stanotte?", ans:["هل نمت جيدا الليلة الماضية","hal nimta jayyidan al-layla al-madiya"], phon:"hal NIM-ta JAY-yi-dan al-LAY-la al-ma-DI-ya"},
+      {it:"Sei passato dal supermercato?", ans:["هل مررت بالسوبر ماركت","hal mararta bis-supermarket"], phon:"hal ma-RAR-ta bis-SU-per-MAR-ket"},
+      {it:"Hai fatto il biglietto del treno?", ans:["هل اشتريت تذكرة القطار","hal ishtarayta tadhkirat al-qitar"], phon:"hal ish-ta-RAY-ta tadh-KI-rat al-qi-TAR"},
+      {it:"A che ora ci vediamo domani?", ans:["في أي ساعة سنلتقي غدا","fi ayyi saa sanaltaqi ghadan"], phon:"fi AY-yi SA-a sa-nal-TA-qi gha-DAN"},
+      {it:"Puoi chiudere la finestra, per favore?", ans:["هل يمكنك إغلاق النافذة من فضلك","hal yumkinuka ighlaq al-nafidha min fadlik"], phon:"hal yum-KI-nu-ka igh-LAQ an-NA-fi-dha min FAD-lik"},
+      {it:"Che cosa hai fatto questo weekend?", ans:["ماذا فعلت في نهاية هذا الأسبوع","madha faalta fi nihayat hadha al-usbu"], phon:"MA-dha fa-AL-ta fi ni-HA-yat HA-dha al-us-BU"},
+    ],
+  ],
+  es: [
+    [ // Livello 1
+      {it:"Ciao", ans:["hola"], phon:"O-la"},
+      {it:"Buongiorno", ans:["buenos dias","buenos días"], phon:"BUE-nos DI-as"},
+      {it:"Buonasera", ans:["buenas tardes"], phon:"BUE-nas TAR-des"},
+      {it:"Grazie", ans:["gracias"], phon:"GRA-sias"},
+      {it:"Per favore", ans:["por favor"], phon:"por fa-VOR"},
+      {it:"Sì", ans:["si","sí"], phon:"SI"},
+      {it:"No", ans:["no"], phon:"NO"},
+      {it:"Scusa", ans:["perdon","perdón"], phon:"per-DON"},
+    ],
+    [ // Livello 2
+      {it:"Come stai?", ans:["como estas","cómo estás"], phon:"CO-mo es-TAS"},
+      {it:"Mi chiamo Marco", ans:["me llamo marco"], phon:"me YA-mo MAR-co"},
+      {it:"Dove abiti?", ans:["donde vives","dónde vives"], phon:"DON-de VI-ves"},
+      {it:"Non capisco", ans:["no entiendo"], phon:"no en-TIEN-do"},
+      {it:"Quanto costa?", ans:["cuanto cuesta","cuánto cuesta"], phon:"CUAN-to CUES-ta"},
+      {it:"Che ore sono?", ans:["que hora es","qué hora es"], phon:"ke O-ra es"},
+    ],
+    [ // Livello 3
+      {it:"Hai dormito bene stanotte?", ans:["dormiste bien anoche"], phon:"dor-MIS-te bien a-NO-che"},
+      {it:"Sei passato dal supermercato?", ans:["pasaste por el supermercado"], phon:"pa-SAS-te por el su-per-mer-CA-do"},
+      {it:"Hai fatto il biglietto del treno?", ans:["compraste el billete de tren"], phon:"com-PRAS-te el bi-YE-te de TREN"},
+      {it:"A che ora ci vediamo domani?", ans:["a que hora nos vemos manana","a qué hora nos vemos mañana"], phon:"a ke O-ra nos VE-mos ma-NYA-na"},
+      {it:"Puoi chiudere la finestra, per favore?", ans:["puedes cerrar la ventana por favor"], phon:"PUE-des ce-RRAR la ven-TA-na por fa-VOR"},
+      {it:"Che cosa hai fatto questo weekend?", ans:["que hiciste este fin de semana","qué hiciste este fin de semana"], phon:"ke i-CIS-te ES-te fin de se-MA-na"},
+    ],
+  ],
+  de: [
+    [ // Livello 1
+      {it:"Ciao", ans:["hallo","hi"], phon:"HA-lo"},
+      {it:"Buongiorno", ans:["guten morgen"], phon:"GU-ten MOR-ghen"},
+      {it:"Buonasera", ans:["guten abend"], phon:"GU-ten A-bent"},
+      {it:"Grazie", ans:["danke","danke schon","danke schön"], phon:"DAN-ke"},
+      {it:"Per favore", ans:["bitte"], phon:"BI-te"},
+      {it:"Sì", ans:["ja"], phon:"IA"},
+      {it:"No", ans:["nein"], phon:"NAIN"},
+      {it:"Scusa", ans:["entschuldigung"], phon:"ent-SHUL-di-gung"},
+    ],
+    [ // Livello 2
+      {it:"Come stai?", ans:["wie geht es dir","wie gehts","wie geht's dir"], phon:"vi GHETS dir"},
+      {it:"Mi chiamo Marco", ans:["ich heisse marco","ich heiße marco"], phon:"ish HAI-se MAR-co"},
+      {it:"Dove abiti?", ans:["wo wohnst du"], phon:"vo VONST du"},
+      {it:"Non capisco", ans:["ich verstehe nicht"], phon:"ish fer-SHTE-e nisht"},
+      {it:"Quanto costa?", ans:["wie viel kostet das","wieviel kostet das"], phon:"vi fil KOS-tet das"},
+      {it:"Che ore sono?", ans:["wie spat ist es","wie spät ist es","wieviel uhr ist es"], phon:"vi SHPET ist es"},
+    ],
+    [ // Livello 3
+      {it:"Hai dormito bene stanotte?", ans:["hast du letzte nacht gut geschlafen"], phon:"hast du LETS-te nakht gut ge-SHLA-fen"},
+      {it:"Sei passato dal supermercato?", ans:["warst du im supermarkt"], phon:"varst du im SU-per-markt"},
+      {it:"Hai fatto il biglietto del treno?", ans:["hast du die zugfahrkarte gekauft"], phon:"hast du di TSUK-far-kar-te ge-KAUFT"},
+      {it:"A che ora ci vediamo domani?", ans:["um wie viel uhr treffen wir uns morgen"], phon:"um vi fil UR TRE-fen vir uns MOR-ghen"},
+      {it:"Puoi chiudere la finestra, per favore?", ans:["kannst du bitte das fenster schliessen","kannst du bitte das fenster schließen"], phon:"kanst du BI-te das FENS-ter SHLI-sen"},
+      {it:"Che cosa hai fatto questo weekend?", ans:["was hast du dieses wochenende gemacht"], phon:"vas hast du DI-zes vo-khen-EN-de ge-MAKHT"},
+    ],
+  ],
+};
+
+/* Sintesi vocale del browser: legge ad alta voce la frase nella lingua target */
+const TTS_LANG = { en:'en-US', fr:'fr-FR', ar:'ar-SA', es:'es-ES', de:'de-DE' };
+function speak(text, langKey){
+  try{
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = TTS_LANG[langKey] || 'en-US';
+    u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  }catch(e){ console.warn('tts error', e); }
+}
+
 /* ---------- STORAGE ADAPTER ----------
    Dentro Claude usa window.storage. Fuori (GitHub Pages, file locale) non esiste:
    in quel caso si passa in automatico a localStorage del telefono/browser. */
@@ -1613,6 +1800,13 @@ async function loadState(lang){
   if(!state.sfida){
     state.sfida = { level: 'principiante', direction: 'to_target' };
   }
+
+  if(!state.impara){
+    state.impara = { level:1, progress:{1:freshDirState(), 2:freshDirState(), 3:freshDirState()} };
+  } else {
+    [1,2,3].forEach(lvl=>{ if(!state.impara.progress[lvl]) state.impara.progress[lvl] = freshDirState(); });
+    if(!state.impara.level) state.impara.level = 1;
+  }
 }
 async function saveState(lang){
   try{ await storageAdapter.set('state:'+lang, JSON.stringify(state)); }catch(e){ console.warn('storage error', e); }
@@ -1658,6 +1852,7 @@ async function switchLang(key){
   renderHistory();
   renderBeginner();
   renderMap();
+  renderImpara();
 }
 
 function renderStreak(){
@@ -2083,6 +2278,149 @@ document.querySelectorAll('#bpDirTabs button').forEach(btn=>{
     state.beginner.direction = btn.dataset.dir;
     await saveState(currentLang);
     renderBeginner();
+  };
+});
+
+/* ---------- IMPARA LA LINGUA (da zero assoluto) ---------- */
+function currentImparaList(){ return LEARN[currentLang][state.impara.level - 1]; }
+function currentImparaState(){ return state.impara.progress[state.impara.level]; }
+
+function renderImpara(){
+  const list = currentImparaList();
+  const level = state.impara.level;
+  const ds = currentImparaState();
+  const idx = ds.index;
+  ds.wrong = 0;
+  ds.hintUsed = false;
+
+  document.querySelectorAll('#imLevelTabs button').forEach(b=>{
+    b.classList.toggle('active', Number(b.dataset.level) === level);
+  });
+
+  const precisione = ds.completed>0 ? Math.round(ds.correctFirstTry/ds.completed*100) : null;
+  document.getElementById('imStatsRow').innerHTML = `
+    <div class="stat-box"><div class="n">${ds.score}</div><div class="l">PUNTI</div></div>
+    <div class="stat-box"><div class="n">${precisione===null?'&mdash;':precisione+'%'}</div><div class="l">PRECISIONE</div></div>
+    <div class="stat-box"><div class="n">${ds.completed}</div><div class="l">COMPLETATE</div></div>
+  `;
+
+  document.getElementById('imFeedback').textContent='';
+  document.getElementById('imFeedback').className='bp-feedback';
+  document.getElementById('imInput').value='';
+  document.getElementById('imInput').dir = (currentLang==='ar') ? 'rtl' : 'ltr';
+  document.getElementById('imInput').placeholder = `Scrivi in ${LANGS[currentLang].label}...`;
+
+  if(idx >= list.length){
+    document.getElementById('imProgressFill').style.width='100%';
+    document.getElementById('imProgressLabel').textContent = `Completato · ${list.length}/${list.length}`;
+    const nextLevel = level < 3 ? level+1 : null;
+    const msg = nextLevel
+      ? `Ottimo lavoro! Passa al <b>Livello ${nextLevel}</b> qui sopra per continuare.`
+      : `Hai completato "Impara la lingua" per ${LANGS[currentLang].label}. Ora prova il <b>Percorso Base</b> per consolidare quello che hai imparato.`;
+    document.getElementById('imPrompt').innerHTML = `<div class="bp-done"><div class="n">Livello ${level} completato ✓</div>${msg}</div>`;
+    document.getElementById('imInput').classList.add('hidden');
+    document.getElementById('imCheck').classList.add('hidden');
+    document.getElementById('imHint').classList.add('hidden');
+    document.getElementById('imSkip').classList.add('hidden');
+    return;
+  }
+  document.getElementById('imInput').classList.remove('hidden');
+  document.getElementById('imCheck').classList.remove('hidden');
+  document.getElementById('imHint').classList.remove('hidden');
+  document.getElementById('imSkip').classList.remove('hidden');
+  document.getElementById('imProgressFill').style.width = (idx/list.length*100)+'%';
+  document.getElementById('imProgressLabel').textContent = `Frase ${idx+1} di ${list.length}`;
+
+  const item = list[idx];
+  const promptEl = document.getElementById('imPrompt');
+  promptEl.textContent = item.it;
+  promptEl.setAttribute('dir','ltr');
+  promptEl.classList.remove('rtl-text');
+}
+
+async function imAdvance(){
+  const ds = currentImparaState();
+  ds.index++;
+  ds.wrong = 0;
+  ds.hintUsed = false;
+  await saveState(currentLang);
+  renderImpara();
+}
+
+document.getElementById('imCheck').onclick = async ()=>{
+  const list = currentImparaList();
+  const ds = currentImparaState();
+  const idx = ds.index;
+  if(idx >= list.length) return;
+  const item = list[idx];
+  const isArInput = (currentLang === 'ar');
+  const given = normalizeAnswer(document.getElementById('imInput').value, isArInput);
+  if(!given) return;
+  const ok = item.ans.some(a => normalizeAnswer(a, isArInput) === given);
+  const fb = document.getElementById('imFeedback');
+  if(ok){
+    const gained = (ds.wrong === 0 && !ds.hintUsed) ? 10 : 5;
+    ds.score += gained;
+    if(ds.wrong === 0 && !ds.hintUsed) ds.correctFirstTry++;
+    ds.completed++;
+    fb.className='bp-feedback ok';
+    fb.innerHTML = `Corretto ✓  +${gained} punti
+      <div class="sound-tip" style="margin-top:8px; font-style:normal;">Si dice così: <b>${item.ans[0]}</b><br>Si pronuncia circa: <b>${item.phon}</b></div>`;
+    const speakBtn = document.createElement('button');
+    speakBtn.className = 'ghost';
+    speakBtn.type = 'button';
+    speakBtn.style.marginTop = '8px';
+    speakBtn.innerHTML = '&#128266; Ascolta pronuncia';
+    speakBtn.onclick = ()=> speak(item.ans[0], currentLang);
+    fb.appendChild(speakBtn);
+    await saveState(currentLang);
+    setTimeout(imAdvance, 1600);
+  } else {
+    ds.wrong = (ds.wrong||0)+1;
+    fb.className='bp-feedback ko';
+    if(ds.wrong >= 2){
+      fb.innerHTML = `Non ancora corretto.<span class="hint">Risposta corretta: <b>${item.ans[0]}</b> &middot; pronuncia: ${item.phon}</span>`;
+    } else {
+      fb.textContent = 'Non ancora corretto, riprova.';
+    }
+    await saveState(currentLang);
+  }
+};
+
+document.getElementById('imHint').onclick = ()=>{
+  const list = currentImparaList();
+  const ds = currentImparaState();
+  const idx = ds.index;
+  if(idx >= list.length) return;
+  const item = list[idx];
+  ds.hintUsed = true;
+  const fb = document.getElementById('imFeedback');
+  fb.className = 'bp-feedback';
+  fb.innerHTML = `<div class="sound-tip" style="font-style:normal;">Si dice: <b>${item.ans[0]}</b><br>Pronuncia: <b>${item.phon}</b></div>`;
+  const speakBtn = document.createElement('button');
+  speakBtn.className = 'ghost';
+  speakBtn.type = 'button';
+  speakBtn.style.marginTop = '8px';
+  speakBtn.innerHTML = '&#128266; Ascolta pronuncia';
+  speakBtn.onclick = ()=> speak(item.ans[0], currentLang);
+  fb.appendChild(speakBtn);
+  speak(item.ans[0], currentLang);
+};
+
+document.getElementById('imInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ document.getElementById('imCheck').click(); }
+});
+document.getElementById('imSkip').onclick = imAdvance;
+document.getElementById('imReset').onclick = async ()=>{
+  state.impara.progress[state.impara.level] = freshDirState();
+  await saveState(currentLang);
+  renderImpara();
+};
+document.querySelectorAll('#imLevelTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.impara.level = Number(btn.dataset.level);
+    await saveState(currentLang);
+    renderImpara();
   };
 });
 
