@@ -1,0 +1,2662 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Quattro Voci</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1B1916">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Quattro Voci">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1B1916;
+    --panel: #242119;
+    --panel-2: #2C2820;
+    --ink: #EDE6D8;
+    --ink-dim: #A79C89;
+    --hair: #3A352B;
+    --accent: #5EA8A0;
+    --accent-soft: rgba(94,168,160,0.16);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    transition: background .4s ease;
+    overflow:hidden;
+  }
+  ::selection{ background: var(--accent-soft); }
+  .app{
+    max-width: 480px; margin:0 auto; height:100vh; height:100dvh;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  .scroll-area{
+    flex:1 1 auto; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding: 0 16px 16px;
+  }
+
+  /* Header */
+  header{ padding: 28px 18px 4px; flex-shrink:0; position:relative; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px; letter-spacing:.14em; text-transform:uppercase;
+    color: var(--ink-dim); margin:0 0 4px;
+  }
+  h1{
+    font-family:'Fraunces', serif; font-weight:600; font-optical-sizing:auto;
+    font-size: 30px; line-height:1.05; margin: 0 0 14px; letter-spacing:-.01em;
+    color: var(--ink);
+  }
+  h1 span{ color: var(--accent); transition: color .4s ease; }
+
+  /* voice ring selector */
+  .ring{
+    display:flex; gap:8px; padding:5px;
+    background: var(--panel); border-radius: 999px; border:1px solid var(--hair);
+    overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  .ring::-webkit-scrollbar{ display:none; }
+  .voice-btn{
+    flex: 0 0 auto; min-width: 84px; border:none; background:transparent; color: var(--ink-dim);
+    padding: 10px 10px; border-radius: 999px; font-family:'IBM Plex Sans', sans-serif;
+    font-size: 13.5px; font-weight:500; cursor:pointer; position:relative;
+    transition: color .3s ease, background-color .3s ease;
+  }
+  .voice-btn .script{ display:block; font-size: 15px; margin-bottom:1px; }
+  .voice-btn.active{ color: #17140F; background: var(--accent); font-weight:600; }
+
+  /* indicatori "si può scorrere" */
+  .scroll-hint-wrap{ position:relative; }
+  .scroll-fade{
+    position:absolute; top:0; bottom:0; width:32px; pointer-events:none; z-index:5;
+    display:flex; align-items:center; opacity:0; transition:opacity .25s ease;
+    font-family:'IBM Plex Sans', sans-serif; font-size:15px; font-weight:700; color: var(--accent);
+  }
+  .scroll-fade.show{ opacity:1; }
+  .scroll-fade.left{ left:0; justify-content:flex-start; padding-left:6px;
+    background: linear-gradient(to right, var(--panel) 35%, transparent); border-radius:999px 0 0 999px; }
+  .scroll-fade.right{ right:0; justify-content:flex-end; padding-right:6px;
+    background: linear-gradient(to left, var(--panel) 35%, transparent); border-radius:0 999px 999px 0; }
+  .scroll-fade.left::before{ content:'\2039'; }
+  .scroll-fade.right::before{ content:'\203A'; }
+  .nav-hint-wrap .scroll-fade.left{ background: linear-gradient(to right, rgba(27,25,22,0.95) 45%, transparent); border-radius:0; }
+  .nav-hint-wrap .scroll-fade.right{ background: linear-gradient(to left, rgba(27,25,22,0.95) 45%, transparent); border-radius:0; }
+  .nav-hint-wrap{ flex-shrink:0; }
+
+  /* streak strip */
+  .streak{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top: 14px; padding: 12px 14px; background: var(--panel);
+    border:1px solid var(--hair); border-radius: var(--radius);
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--ink-dim);
+  }
+  .streak b{ color: var(--ink); font-size: 15px; font-family:'IBM Plex Sans'; font-weight:600; }
+  .flame{ color: var(--accent); }
+
+  /* module card */
+  .card{
+    background: var(--panel); border:1px solid var(--hair); border-radius: var(--radius);
+    padding: 18px 16px 16px; margin-top: 14px;
+  }
+  .card h2{
+    font-family:'Fraunces', serif; font-size: 19px; font-weight:600; margin: 0 0 4px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .card .sub{ color: var(--ink-dim); font-size:13px; margin: 0 0 14px; line-height:1.45;}
+  .tag{
+    display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    letter-spacing:.08em; text-transform:uppercase; color: var(--accent);
+    background: var(--accent-soft); padding: 3px 8px; border-radius: 6px; margin-bottom:10px;
+  }
+
+  .challenge-text{
+    font-family:'Fraunces', serif; font-size: 20px; line-height:1.35; font-weight:500;
+    padding: 14px; background: var(--panel-2); border-radius: 10px; border-left: 3px solid var(--accent);
+    margin-bottom: 12px;
+  }
+  .row{ display:flex; gap:10px; }
+  button.primary{
+    flex:1; background: var(--accent); color:#17140F; border:none; border-radius: 10px;
+    padding: 12px; font-weight:600; font-size:14px; cursor:pointer; font-family:'IBM Plex Sans';
+    transition: filter .15s ease, transform .1s ease;
+  }
+  button.primary:active{ transform: scale(.98); }
+  button.ghost{
+    background: transparent; color: var(--ink); border:1px solid var(--hair); border-radius:10px;
+    padding: 12px 14px; font-size:14px; cursor:pointer; font-family:'IBM Plex Sans'; font-weight:500;
+  }
+  button.ghost:hover{ border-color: var(--accent); }
+  button:disabled{ opacity:.45; cursor:default; }
+
+  /* shadowing timer */
+  .timer-display{
+    font-family:'IBM Plex Mono', monospace; font-size: 44px; font-weight:600;
+    text-align:center; padding: 18px 0 6px; letter-spacing:.02em; color: var(--ink);
+  }
+  .phase-label{ text-align:center; font-size:13px; color: var(--accent); margin-bottom:14px; font-weight:500;}
+  .phase-list{ list-style:none; padding:0; margin: 0 0 14px; display:flex; flex-direction:column; gap:6px; }
+  .phase-list li{
+    font-size: 13px; color: var(--ink-dim); padding: 8px 10px; border-radius:8px;
+    background: var(--panel-2); display:flex; justify-content:space-between; gap:8px;
+  }
+  .phase-list li.current{ color: var(--ink); background: var(--accent-soft); }
+  .phase-list li b{ color: inherit; font-family:'IBM Plex Mono'; font-size:11px; }
+
+  /* sounds */
+  .sound-item{ padding: 12px 0; border-top:1px solid var(--hair); }
+  .sound-item:first-child{ border-top:none; padding-top:0; }
+  .sound-item .sym{
+    font-family:'Fraunces', serif; font-size: 22px; color: var(--accent); margin-right:6px;
+  }
+  .sound-item .name{ font-weight:600; font-size:14.5px; }
+  .sound-item p{ font-size:13px; color: var(--ink-dim); margin: 4px 0 0; line-height:1.5; }
+  .pairs{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--accent);
+    margin-top:6px; letter-spacing:.02em;
+  }
+  .sound-tip{
+    font-size:12.5px; color: var(--ink-dim); margin-top:8px; padding:8px 10px;
+    background: var(--panel-2); border-radius:8px; line-height:1.45; font-style:italic;
+  }
+
+  /* registrazione vocale */
+  .rec-divider{ height:1px; background: var(--hair); margin: 20px 0 16px; }
+  .rec-box{ margin-top:12px; }
+  .rec-status{ font-size:13px; color: var(--ink-dim); margin-bottom:10px; }
+  .rec-status.recording{ color:#D96C6C; font-weight:600; }
+  .rec-status.recording::before{ content:'● '; }
+  #recToggle.recording{ background:#D96C6C; }
+
+  /* roleplay */
+  .level-tabs{ display:flex; gap:6px; margin-bottom: 12px; }
+  .level-tabs button{
+    flex:1; padding:8px 4px; border-radius:8px; border:1px solid var(--hair); background:transparent;
+    color: var(--ink-dim); font-size:12.5px; cursor:pointer; font-family:'IBM Plex Sans'; font-weight:500;
+  }
+  .level-tabs button.active{ border-color: var(--accent); color: var(--ink); background: var(--accent-soft); }
+  #bpLevelTabs{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; flex-wrap:nowrap; }
+  #bpLevelTabs::-webkit-scrollbar{ display:none; }
+  #bpLevelTabs button{ flex: 0 0 auto; min-width: 76px; }
+  .scenario-box{
+    font-size:14.5px; line-height:1.55; padding:14px; background:var(--panel-2);
+    border-radius:10px; margin-bottom:12px; min-height: 60px;
+  }
+
+  /* notebook */
+  textarea, input[type=text], input[type=email], input[type=password]{
+    width:100%; background: var(--panel-2); border:1px solid var(--hair); color: var(--ink);
+    border-radius:10px; padding: 14px 14px; font-family:'IBM Plex Sans'; font-size:15px;
+    margin-bottom:10px; resize:vertical; -webkit-appearance:none; appearance:none;
+  }
+  textarea:focus, input:focus{ outline:none; border-color: var(--accent); }
+  input:-webkit-autofill{
+    -webkit-box-shadow: 0 0 0px 1000px var(--panel-2) inset !important;
+    -webkit-text-fill-color: var(--ink) !important;
+    caret-color: var(--ink);
+  }
+  .pw-wrap{ position:relative; margin-bottom:10px; }
+  .pw-wrap input{ padding-right:44px; margin-bottom:0; }
+  .pw-toggle{
+    position:absolute; right:6px; top:50%; transform:translateY(-50%);
+    width:32px; height:32px; background:none; border:none; color: var(--ink-dim);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .pw-toggle svg{ width:19px; height:19px; }
+  .pw-toggle.showing{ color: var(--accent); }
+  .entry{
+    padding:10px 12px; background: var(--panel-2); border-radius:10px; margin-bottom:8px;
+    font-size:13.5px; border-left: 3px solid var(--hair);
+  }
+  .entry .orig{ color: var(--ink-dim); text-decoration: line-through; }
+  .entry .corr{ color: var(--ink); font-weight:500; margin-top:3px; }
+  .entry .meta{ font-family:'IBM Plex Mono'; font-size:10px; color: var(--ink-dim); margin-top:6px; }
+  .empty{ color: var(--ink-dim); font-size:13px; padding: 10px 2px; }
+
+  /* cronologia */
+  .stats-row{ display:flex; gap:8px; margin-bottom:14px; }
+  .stat-box{
+    flex:1; background: var(--panel-2); border-radius:10px; padding: 12px 10px; text-align:center;
+  }
+  .stat-box .n{ font-family:'IBM Plex Mono', monospace; font-size:22px; font-weight:600; color: var(--accent); }
+  .stat-box .l{ font-size:10.5px; color: var(--ink-dim); margin-top:2px; letter-spacing:.03em; }
+  .hist-item{
+    display:flex; justify-content:space-between; gap:10px; padding: 10px 12px;
+    background: var(--panel-2); border-radius:10px; margin-bottom:8px; font-size:13px;
+  }
+  .hist-item .htext{ color: var(--ink); line-height:1.4; }
+  .hist-item .hdate{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; color: var(--ink-dim); white-space:nowrap; padding-top:2px; }
+
+  /* percorso iniziale */
+  .bp-progress-wrap{ margin-bottom:12px; }
+  .bp-progress-bar{ height:6px; background: var(--panel-2); border-radius:99px; overflow:hidden; }
+  .bp-progress-fill{ height:100%; background: var(--accent); width:0%; transition: width .3s ease; }
+  .bp-progress-label{ font-family:'IBM Plex Mono', monospace; font-size:11px; color: var(--ink-dim); margin-top:6px; }
+  .bp-feedback{ min-height: 20px; font-size:13px; font-weight:500; margin: 8px 2px 10px; line-height:1.5; }
+  .bp-feedback.ok{ color:#7FBF7F; }
+  .bp-feedback.ko{ color:#D96C6C; }
+  .bp-feedback .hint{ display:block; color: var(--ink-dim); font-weight:400; margin-top:4px; font-size:12.5px; }
+  .bp-done{ text-align:center; padding: 20px 10px; }
+  .bp-done .n{ font-family:'Fraunces', serif; font-size:22px; color: var(--accent); margin-bottom:6px; }
+
+  /* classifica */
+  .lb-divider{ height:1px; background: var(--hair); margin: 20px 0 16px; }
+  .lb-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .lb-row{
+    display:flex; align-items:center; gap:10px; padding: 10px 12px; background: var(--panel-2);
+    border-radius:10px; margin-bottom:6px; font-size:13.5px;
+  }
+  .lb-row.me{ border:1px solid var(--accent); background: var(--accent-soft); }
+  .lb-rank{ font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--ink-dim); width:22px; flex-shrink:0; }
+  .lb-name{ flex:1; color: var(--ink); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .lb-score{ font-family:'IBM Plex Mono', monospace; font-weight:600; color: var(--accent); }
+
+  /* mappa a tappe */
+  .map-wrap{ position:relative; padding: 10px 0 8px; }
+  .map-wrap::before{
+    content:''; position:absolute; left:50%; top:10px; bottom:30px; width:2px;
+    background: repeating-linear-gradient(to bottom, var(--hair) 0 6px, transparent 6px 12px);
+    transform: translateX(-50%); z-index:0;
+  }
+  .map-node-row{ position:relative; z-index:1; margin-bottom: 8px; display:flex; }
+  .map-node-col{ display:flex; flex-direction:column; align-items:center; width:100%; }
+  .map-node{
+    width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:3px solid var(--hair); background: var(--panel-2); color: var(--ink-dim);
+    font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:16px; cursor:pointer;
+    transition: transform .12s ease; flex-shrink:0;
+  }
+  .map-node svg{ width:24px; height:24px; }
+  .map-node.done{ background: var(--accent); border-color: var(--accent); color:#17140F; }
+  .map-node.current{ border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); }
+  .map-node.locked{ opacity:.45; cursor:default; }
+  .map-node.checkpoint{ width:48px; height:48px; border-style:dashed; }
+  .map-node.checkpoint svg{ width:20px; height:20px; }
+  .map-node:active{ transform: scale(.93); }
+  .map-node-label{ font-size:11.5px; color: var(--ink-dim); margin-top:8px; text-align:center; max-width:100px; line-height:1.3; }
+  .map-node-label.done{ color: var(--ink); }
+
+  /* onboarding */
+  .ob-dots{ display:flex; gap:6px; justify-content:center; margin-top:16px; }
+  .ob-dot{ width:7px; height:7px; border-radius:50%; background: var(--hair); transition: background-color .25s ease; }
+  .ob-dot.active{ background: var(--accent); }
+
+  /* bottom nav */
+  nav.tabs{
+    flex-shrink:0;
+    background: rgba(27,25,22,0.92); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--hair);
+    display:flex; justify-content:space-around; padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+    overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{ display:none; }
+  nav.tabs button{
+    background:none; border:none; color: var(--ink-dim); display:flex; flex-direction:column;
+    align-items:center; gap:3px; font-size:10.5px; font-family:'IBM Plex Sans'; font-weight:500;
+    cursor:pointer; padding: 4px 8px; flex: 0 0 auto; min-width: 58px;
+  }
+  nav.tabs button svg{ width:20px; height:20px; }
+  nav.tabs button.active{ color: var(--accent); }
+
+  [dir="rtl"] .challenge-text, [dir="rtl"] .scenario-box{ text-align:right; }
+  .challenge-text[dir="rtl"], .scenario-box[dir="rtl"]{ text-align:right; }
+  .rtl-text{ direction: rtl; font-family:'IBM Plex Sans Arabic', sans-serif; }
+
+  .hidden{ display:none !important; }
+
+  /* account */
+  .account-btn{
+    position:absolute; top:64px; right:2px; width:36px; height:36px; border-radius:50%;
+    background: var(--panel); border:1px solid var(--accent); color: var(--accent);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .account-btn svg{ width:18px; height:18px; }
+  .account-dot{
+    position:absolute; top:-2px; right:-2px; width:9px; height:9px; border-radius:50%;
+    background:#7FBF7F; border:2px solid var(--bg); display:none;
+  }
+  .account-btn.logged-in .account-dot{ display:block; }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:50;
+    display:flex; align-items:flex-end; justify-content:center;
+  }
+  .modal-box{
+    width:100%; max-width:480px; background: var(--panel); border-top:1px solid var(--hair);
+    border-radius: 20px 20px 0 0; padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+    max-height:85vh; overflow-y:auto;
+  }
+  .modal-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .modal-head h3{ font-family:'Fraunces', serif; font-size:20px; margin:0; font-weight:600; }
+  .modal-close{ background:none; border:none; color: var(--ink-dim); font-size:22px; cursor:pointer; line-height:1; padding:4px; }
+  .auth-feedback{ min-height:18px; font-size:12.5px; margin: 4px 2px 10px; }
+  .auth-feedback.err{ color:#D96C6C; }
+  .auth-feedback.ok{ color:#7FBF7F; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="account-btn" id="accountBtn" aria-label="Account">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"/></svg>
+      <span class="account-dot"></span>
+    </button>
+    <p class="eyebrow">Ecosistema di pratica &middot; parlato prima, forma dopo</p>
+    <h1>Quattro <span id="voiceWord">Voci</span></h1>
+    <div class="scroll-hint-wrap" id="ringWrap">
+      <div class="ring" id="ring"></div>
+      <div class="scroll-fade left"></div>
+      <div class="scroll-fade right"></div>
+    </div>
+    <div class="streak">
+      <span>Serie di pratica &mdash; <b id="langLabel">English</b></span>
+      <span><span class="flame">&#9679;</span> <b id="streakCount">0</b> giorni</span>
+    </div>
+  </header>
+
+  <div class="modal-overlay hidden" id="authModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="authModalTitle">Accedi</h3>
+        <button class="modal-close" id="authModalClose">&times;</button>
+      </div>
+
+      <div id="authLoggedOut">
+        <div class="level-tabs" id="authTabs">
+          <button data-mode="login" class="active">Accedi</button>
+          <button data-mode="signup">Registrati</button>
+        </div>
+        <input type="text" id="authNickname" placeholder="Nome pubblico (visibile in classifica)" autocomplete="nickname" maxlength="20" class="hidden">
+        <input type="email" id="authEmail" placeholder="Email" autocomplete="email">
+        <div class="pw-wrap">
+          <input type="password" id="authPass" placeholder="Password (min. 6 caratteri)" autocomplete="current-password">
+          <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostra password">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div class="auth-feedback" id="authFeedback"></div>
+        <button class="primary" id="authSubmit" style="width:100%">Accedi</button>
+        <p class="sub" style="margin-top:12px;">Facoltativo: puoi continuare a usare l'app senza account. In quel caso i progressi restano salvati solo su questo dispositivo.</p>
+      </div>
+
+      <div id="authLoggedIn" class="hidden">
+        <p class="sub" style="margin-bottom:4px;">Connesso come</p>
+        <p style="font-weight:600; margin: 0 0 16px; font-size:15px;" id="authUserEmail">&mdash;</p>
+        <p class="sub">I progressi di tutte le lingue si sincronizzano automaticamente su ogni dispositivo dove accedi con questo account.</p>
+        <button class="ghost hidden" id="authAdminBtn" style="width:100%; margin-top:10px;">Pannello amministratore &rarr;</button>
+        <button class="ghost" id="authLogout" style="width:100%; margin-top:10px;">Esci</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="adminModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3>Amministrazione</h3>
+        <button class="modal-close" id="adminModalClose">&times;</button>
+      </div>
+      <p class="sub" id="adminCount">Carico elenco iscritti...</p>
+      <div id="adminList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="onboardModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="onboardTitle">Benvenuto</h3>
+        <button class="modal-close" id="onboardSkip">&times;</button>
+      </div>
+      <div id="onboardSlides"></div>
+      <div class="ob-dots" id="obDots"></div>
+      <div class="row" style="margin-top:16px;">
+        <button class="ghost hidden" id="obPrev">Indietro</button>
+        <button class="primary" id="obNext">Avanti</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-area">
+
+  <!-- SFIDA -->
+  <section class="card" id="tab-sfida">
+    <span class="tag">Sfida del giorno</span>
+    <h2 id="sfidaTitle">Parla per 60 secondi</h2>
+    <p class="sub">Scegli il tuo livello, poi registrati a voce di getto, senza scrivere nulla prima. Il messaggio conta più della forma.</p>
+
+    <div class="level-tabs" id="sfidaLevelTabs">
+      <button data-level="principiante" class="active">Principiante</button>
+      <button data-level="intermedio">Intermedio</button>
+      <button data-level="avanzato">Avanzato</button>
+    </div>
+
+    <div class="level-tabs" id="sfidaDirTabs">
+      <button data-dir="to_target" id="sfidaDirToTarget" class="active">Italiano &rarr; Lingua</button>
+      <button data-dir="to_it" id="sfidaDirToIt">Lingua &rarr; Italiano</button>
+    </div>
+    <p class="sub" id="sfidaDirNote" style="margin-top:-6px;"></p>
+
+    <span class="tag" id="sfidaSlotTag">Slot 1/10</span>
+    <div class="challenge-text" id="challengeText">&mdash;</div>
+    <div class="row">
+      <button class="primary" id="btnDone">Segna come fatta</button>
+      <button class="ghost" id="btnAnother">Un'altra</button>
+    </div>
+  </section>
+
+  <!-- PERCORSO INIZIALE -->
+  <section class="card hidden" id="tab-percorso">
+    <span class="tag">Percorso iniziale &middot; da zero</span>
+    <h2>Traduci con la tastiera</h2>
+    <p class="sub">Scegli livello e direzione, poi scrivi la traduzione. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
+    <div class="level-tabs" id="bpLevelTabs">
+      <button data-level="1" class="active">Livello 1</button>
+      <button data-level="2">Livello 2</button>
+      <button data-level="3">Livello 3</button>
+      <button data-level="4">Livello 4</button>
+      <button data-level="5">Livello 5</button>
+      <button data-level="6">Livello 6</button>
+      <button data-level="7">Livello 7</button>
+      <button data-level="8">Livello 8</button>
+      <button data-level="9">Livello 9</button>
+      <button data-level="10">Livello 10</button>
+    </div>
+    <div class="level-tabs" id="bpDirTabs">
+      <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
+      <button data-dir="to_it" id="bpDirToIt">Lingua &rarr; Italiano</button>
+    </div>
+    <div class="stats-row" id="bpStatsRow"></div>
+    <div class="bp-progress-wrap">
+      <div class="bp-progress-bar"><div class="bp-progress-fill" id="bpProgressFill"></div></div>
+      <div class="bp-progress-label" id="bpProgressLabel">Frase 1 di 18</div>
+    </div>
+    <div class="challenge-text" id="bpPrompt">&mdash;</div>
+    <input type="text" id="bpInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
+    <div class="bp-feedback" id="bpFeedback"></div>
+    <div class="row">
+      <button class="primary" id="bpCheck">Verifica</button>
+      <button class="ghost" id="bpSkip">Salta</button>
+    </div>
+    <button class="ghost" id="bpReset" style="width:100%; margin-top:8px;">Ricomincia questa direzione</button>
+
+    <div class="lb-divider"></div>
+    <div class="lb-head">
+      <span class="tag" style="margin-bottom:0;">Classifica &middot; punti totali</span>
+      <button class="ghost" id="lbRefresh" style="padding:6px 12px; font-size:12px;">Aggiorna</button>
+    </div>
+    <div id="leaderboardLoggedOut" class="empty">Accedi o registrati (icona in alto a destra) per partecipare alla classifica e vedere come ti posizioni rispetto agli altri.</div>
+    <div id="leaderboardList" class="hidden"></div>
+  </section>
+
+  <!-- SHADOWING -->
+  <section class="card hidden" id="tab-shadow">
+    <span class="tag">Shadowing</span>
+    <h2>Timer a 4 fasi</h2>
+    <p class="sub">Segui il protocollo: ascolto passivo &rarr; ombra &rarr; con testo &rarr; registra e confronta.</p>
+    <div class="timer-display" id="timerDisplay">05:00</div>
+    <div class="phase-label" id="phaseLabel">Fase 1 &middot; Ascolto passivo</div>
+    <ul class="phase-list" id="phaseList"></ul>
+    <div class="row">
+      <button class="primary" id="btnTimerToggle">Avvia</button>
+      <button class="ghost" id="btnTimerReset">Reimposta</button>
+    </div>
+
+    <div class="rec-divider"></div>
+    <span class="tag">Fase 4 &middot; registra e confronta</span>
+    <p class="sub" style="margin-top:-2px;">Registra la tua voce, riascoltala e confrontala con l'originale. Resta solo per questa sessione: chiudendo o ricaricando la pagina va persa, quindi non serve per conservarla.</p>
+    <div class="rec-box">
+      <div class="rec-status" id="recStatus">Pronto a registrare</div>
+      <div class="row">
+        <button class="primary" id="recToggle">&#9679; Registra</button>
+        <button class="ghost hidden" id="recClear">Cancella</button>
+      </div>
+      <audio id="recPlayer" class="hidden" controls style="width:100%; margin-top:12px;"></audio>
+    </div>
+
+    <div class="rec-divider"></div>
+    <span class="tag">Prima di iniziare: da dove ascoltare</span>
+    <p class="sub" style="margin-top:-2px;">Il timer qui sopra scandisce solo i tempi: l'audio va cercato e riprodotto da un'altra app (YouTube, Spotify, un podcast) tenuta aperta in parallelo. Ecco dove cercarlo per ogni lingua:</p>
+    <div id="audioSourcesList"></div>
+  </section>
+
+  <!-- SUONI -->
+  <section class="card hidden" id="tab-suoni">
+    <span class="tag">Pronuncia mirata</span>
+    <h2>Suoni critici</h2>
+    <p class="sub">I suoni che più spesso tradiscono l'accento italiano in questa lingua. 10 minuti al giorno, non di più.</p>
+    <div id="soundsList"></div>
+  </section>
+
+  <!-- DIALOGHI -->
+  <section class="card hidden" id="tab-dialoghi">
+    <span class="tag">Role-play</span>
+    <h2>Scenario da interpretare</h2>
+    <div class="level-tabs" id="levelTabs">
+      <button data-level="0" class="active">Sopravvivenza</button>
+      <button data-level="1">Funzionale</button>
+      <button data-level="2">Naturalezza</button>
+    </div>
+    <div class="scenario-box" id="scenarioBox">&mdash;</div>
+    <button class="ghost" id="btnNewScenario" style="width:100%">Nuovo scenario</button>
+  </section>
+
+  <!-- QUADERNO -->
+  <section class="card hidden" id="tab-quaderno">
+    <span class="tag">Delayed correction</span>
+    <h2>Quaderno di correzione</h2>
+    <p class="sub">Entro 24h: annota una frase che non suonava bene e la sua forma corretta. Poi ripetila 3 volte in un contesto nuovo.</p>
+    <input type="text" id="inputOrig" placeholder="Frase detta (non suonava bene)...">
+    <input type="text" id="inputCorr" placeholder="Forma corretta...">
+    <button class="primary" id="btnAddEntry" style="width:100%; margin-bottom:10px;">Aggiungi al quaderno</button>
+    <button class="ghost" id="btnExport" style="width:100%; margin-bottom:14px;">Esporta quaderno (.txt)</button>
+    <div id="entriesList"></div>
+  </section>
+
+  <!-- MAPPA -->
+  <section class="card hidden" id="tab-mappa">
+    <span class="tag">Percorso a tappe</span>
+    <h2>La tua mappa &mdash; <span id="mapLangLabel">English</span></h2>
+    <p class="sub">Le tappe del Percorso Base si sbloccano completando la precedente. Le tappe Sfida (bordo tratteggiato) sono facoltative: se hai difficoltà, tocca pure quella successiva e vai avanti.</p>
+    <div class="map-wrap" id="mapPath"></div>
+    <button class="ghost" id="mapToLeaderboard" style="width:100%; margin-top:6px;">Vedi la classifica &rarr;</button>
+  </section>
+
+  <!-- CRONOLOGIA -->
+  <section class="card hidden" id="tab-cronologia">
+    <span class="tag">Cronologia</span>
+    <h2>Il tuo percorso</h2>
+    <p class="sub">Sfide completate e serie di pratica per <span id="cronoLangLabel">English</span>.</p>
+    <div class="stats-row" id="statsRow"></div>
+    <div id="historyList"></div>
+  </section>
+
+  </div><!-- fine scroll-area -->
+
+  <div class="scroll-hint-wrap nav-hint-wrap" id="navWrap">
+  <nav class="tabs">
+  <button data-tab="mappa">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 16.5L10.5 9M13.5 9L16 16.5"/></svg>
+    Mappa
+  </button>
+  <button data-tab="percorso">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V6a2 2 0 012-2h9l5 5v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M9 12l2 2 4-4"/></svg>
+    Base
+  </button>
+  <button data-tab="sfida" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    Sfida
+  </button>
+  <button data-tab="shadow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v10m0 0a4 4 0 004-4M12 13a4 4 0 01-4-4"/><path d="M8 19h8M12 17v2"/></svg>
+    Shadow
+  </button>
+  <button data-tab="suoni">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10v4M7 6v12M11 3v18M15 7v10M19 9v6"/></svg>
+    Suoni
+  </button>
+  <button data-tab="dialoghi">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h11v8H8l-4 4V4z"/><path d="M20 9v8l-3-3h-4"/></svg>
+    Dialoghi
+  </button>
+  <button data-tab="quaderno">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12v18l-6-3-6 3V3z"/></svg>
+    Quaderno
+  </button>
+  <button data-tab="cronologia">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
+    Storia
+  </button>
+  </nav>
+  <div class="scroll-fade nav-fade left"></div>
+  <div class="scroll-fade nav-fade right"></div>
+  </div>
+</div><!-- fine .app -->
+
+<script>
+/* ---------- DATA ---------- */
+const LANGS = {
+  en: {
+    label:'English', script:'Aa', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
+    audioSource:{ name:'BBC 6 Minute English', where:'YouTube', tip:'Episodi brevi, parlato chiaro e naturale — cerca esattamente questo nome del programma.' },
+    sounds:[
+      {sym:'θ/ð', name:'Th sordo e sonoro (think / this)', desc:'Lingua tra i denti, non dietro. L\'errore tipico è dire "sink" invece di "think".', pairs:'think / sink &middot; this / dis', tip:'Metti la lingua tra i denti davanti a uno specchio e soffia leggermente: se non vedi la punta della lingua, non è un vero th.'},
+      {sym:'ə', name:'Vocali ridotte (schwa)', desc:'Le sillabe atone collassano in un suono neutro. L\'italiano tende a pronunciare ogni vocale piena.', pairs:'banana &rarr; ba-NÆ-nə &middot; about &rarr; ə-BAUT', tip:'Individua la sillaba tonica della parola e "schiaccia" tutte le altre verso un suono breve e neutro, quasi mugugnato.'},
+      {sym:'-d/-t', name:'Consonanti finali sonore/sorde', desc:'La differenza cambia il significato: non appiattire tutto su un suono neutro.', pairs:'bed / bet &middot; bad / bat', tip:'Metti una mano sulla gola: con "bed" senti una vibrazione fino alla fine, con "bet" si interrompe prima.'},
+      {sym:'v/w', name:'V e W', desc:'L\'italiano tende a confonderli. La V si forma con denti superiori sul labbro inferiore, la W arrotondando le labbra senza toccare i denti.', pairs:'vine / wine &middot; vet / wet', tip:'Prova a dire "vvv" mordendoti leggermente il labbro, poi "www" solo con le labbra arrotondate, senza denti coinvolti.'},
+      {sym:'h', name:'H aspirata', desc:'In italiano la h è muta o assente; in inglese va sempre soffiata all\'inizio della parola.', pairs:'hat vs "at" &middot; hill vs "ill"', tip:'Prova a "appannare uno specchio" con il fiato prima della parola: quella spinta d\'aria è la tua H.'},
+    ],
+  },
+  fr: {
+    label:'Français', script:'Fr', word:'Voix', accent:'#6C7BC4', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Innerfrench', where:'YouTube o Spotify (podcast)', tip:'Parlato lento e chiaro, pensato apposta per chi impara. In alternativa cerca "France Inter podcast".' },
+    sounds:[
+      {sym:'ɑ̃/ɛ̃', name:'Vocali nasali (an / en / in / un)', desc:'Prova con una mano sul naso: deve vibrare. È il tratto che più smaschera un accento italiano.', pairs:'sans / sang &middot; vin / vent', tip:'Chiudi il velo del palato come se avessi il raffreddore: l\'aria deve uscire in parte dal naso mentre pronunci la vocale.'},
+      {sym:'ʁ', name:'R uvulare', desc:'Dal fondo della gola, non arrotolata come in italiano. Si forma quasi come una raschiata leggera.', pairs:'rue / roue', tip:'Prova a fare il gargarismo senza acqua: quella vibrazione nella gola è vicina al suono della R francese.'},
+      {sym:'liaison', name:'Liaison', desc:'Le parole si legano tra loro: "les amis" si pronuncia come una parola sola, non due separate.', pairs:'les_amis &rarr; [le.za.mi]', tip:'Quando la parola successiva inizia per vocale, prova a "scivolare" senza mai fermarti tra le due parole.'},
+      {sym:'y', name:'La vocale U francese', desc:'Diversa sia dalla U che dalla I italiana: labbra arrotondate come per dire "u", ma lingua in posizione da "i".', pairs:'tu / tout &middot; du / doux', tip:'Metti la bocca a "o" stretta come per fischiare, poi prova a dire "i" senza muovere le labbra.'},
+      {sym:'ø/œ', name:'Vocali eu (peu / peur)', desc:'Non esistono in italiano: sono vocali arrotondate a metà tra la "e" e la "o".', pairs:'peu / peur &middot; deux / neuf', tip:'Parti da una "e" chiusa, poi arrotonda le labbra come per fare una "o" senza cambiare la posizione della lingua.'},
+    ],
+  },
+  ar: {
+    label:'العربية', script:'ع', word:'أصوات', accent:'#D4A73D', dir:'rtl', rtlText:true,
+    audioSource:{ name:'Al Jazeera (notiziari)', where:'YouTube', tip:'Cerca notiziari in arabo standard (fus\'ha/MSA), coerenti con quello scelto per il percorso Base.' },
+    sounds:[
+      {sym:'ص/ط', name:'Consonanti enfatiche', desc:'Stessa lettera della non-enfatica ma con la radice della lingua abbassata e la bocca più ampia.', pairs:'سِر / صِر', tip:'Abbassa il dorso della lingua e allarga leggermente la gola, come se stessi per sbadigliare, mentre pronunci la consonante.'},
+      {sym:'ع', name:'Ayn', desc:'Costrizione faringea, non una semplice vocale. È il suono più difficile per un italofono: servono settimane di lavoro dedicato.', pairs:'عين (occhio)', tip:'Stringi i muscoli della gola come quando fai uno sforzo fisico leggero, e prova a emettere un suono da quella costrizione.'},
+      {sym:'ق', name:'Qaf', desc:'Occlusiva uvulare, prodotta più indietro nella gola rispetto alla "c" italiana.', pairs:'قلب (cuore)', tip:'Prova a dire "c" spostando il punto di contatto sempre più indietro, fino quasi all\'ugola.'},
+      {sym:'ح', name:'Ha faringale', desc:'Diversa dalla semplice H aspirata (ه): qui il suono nasce dalla costrizione della faringe, con un fruscio più forte.', pairs:'حب (amore) vs هو (lui)', tip:'Immagina di appannare uno specchio ma dal profondo della gola, non dalla bocca.'},
+      {sym:'ث/ذ', name:'Th arabo (interdentali)', desc:'Come il th inglese: non esistono in italiano. La lingua tocca leggermente i denti superiori.', pairs:'ثلاثة (tre) &middot; ذهب (oro)', tip:'Stessa posizione della lingua del th inglese: puntala leggermente tra i denti e lascia uscire l\'aria.'},
+    ],
+  },
+  es: {
+    label:'Español', script:'Es', word:'Voces', accent:'#C1432E', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Dreaming Spanish', where:'YouTube', tip:'Video pensati per l\'apprendimento con parlato comprensibile a diversi livelli.' },
+    sounds:[
+      {sym:'b/v', name:'B e V (stesso suono)', desc:'In spagnolo sono lo stesso fonema, spesso una approssimante morbida, non un\'occlusiva piena come in italiano.', pairs:'vaca / baca (identiche)', tip:'Tra le vocali, non chiudere del tutto le labbra: lasciale quasi a contatto e lascia passare un filo d\'aria.'},
+      {sym:'rr', name:'R multivibrante', desc:'Distinzione fonemica reale rispetto alla r semplice: cambia il significato della parola.', pairs:'perro / pero', tip:'Metti la lingua contro il palato appena dietro i denti e lasciala vibrare libera con un getto d\'aria più forte del normale.'},
+      {sym:'ritmo', name:'Ritmo sillabico', desc:'Più veloce e piatto dell\'italiano, con meno enfasi tonica marcata sulle sillabe.', pairs:'—', tip:'Batti un ritmo regolare con la mano mentre parli: ogni sillaba deve durare più o meno lo stesso tempo, senza allungamenti.'},
+      {sym:'j/g', name:'J e G velare (jamón, gente)', desc:'Suono fricativo gutturale che non esiste in italiano: molto più "raschiato" della nostra h aspirata.', pairs:'jamón &middot; gente &middot; jugar', tip:'Parti dal suono della "c" di "casa" detta in gola, poi ammorbidiscilo in un fruscio continuo, come uno sfregamento.'},
+      {sym:'d suave', name:'D intervocalica morbida', desc:'Tra le vocali, la D si ammorbidisce quasi come il th inglese di "this", non è mai una D piena come in italiano.', pairs:'nada &middot; todo &middot; cansado', tip:'Metti la lingua vicino ai denti superiori senza toccarli del tutto: deve restare un suono leggero, quasi sfumato.'},
+    ],
+  },
+  de: {
+    label:'Deutsch', script:'De', word:'Stimmen', accent:'#8B5FA3', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Easy German', where:'YouTube', tip:'Interviste di strada con sottotitoli in tedesco e inglese, ottimo per abituarsi al parlato reale.' },
+    sounds:[
+      {sym:'ü', name:'La vocale Ü', desc:'Non esiste in italiano: labbra arrotondate come per dire "u", ma lingua in posizione da "i".', pairs:'für / Fuhr', tip:'Metti la bocca a "o" stretta come per fischiare, poi prova a dire "i" senza muovere le labbra.'},
+      {sym:'ö', name:'La vocale Ö', desc:'Vocale arrotondata a metà tra la "e" e la "o", assente in italiano.', pairs:'schon / schön', tip:'Parti da una "e" chiusa, poi arrotonda le labbra come per fare una "o" senza cambiare la posizione della lingua.'},
+      {sym:'ch', name:'Ich-Laut e Ach-Laut (due suoni CH)', desc:'Dopo vocali anteriori (i, e, ö, ü) il ch è morbido come in "ich"; dopo vocali posteriori (a, o, u) è gutturale come in "ach", "Bach".', pairs:'ich / ach &middot; nicht / Nacht', tip:'Per il suono morbido, stringi la lingua vicino al palato come per soffiare una "hy". Per quello duro, raschia dal fondo della gola come la J spagnola.'},
+      {sym:'r', name:'R uvulare tedesca', desc:'Come in francese: si forma nella parte posteriore della gola, non arrotolata come in italiano.', pairs:'rot / Brot', tip:'Prova un gargarismo leggero senza acqua, dal fondo della gola.'},
+      {sym:'-d/-b/-g', name:'Consonanti finali sorde (Auslautverhärtung)', desc:'A fine parola, le consonanti b/d/g diventano sorde (p/t/k): una regola che non esiste in italiano.', pairs:'Rad (si dice come "Rat") / Räder (qui la D si sente)', tip:'A fine parola, "ammorbidisci" la consonante fino a farla suonare come la sua versione sorda: b\u2192p, d\u2192t, g\u2192k.'},
+    ],
+  },
+  zh: {
+    label:'中文', script:'中', word:'语音', accent:'#3F9973', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Mandarin Corner', where:'YouTube', tip:'Interviste di strada per le vie della Cina con sottotitoli in cinese e inglese, ottimo per il parlato reale.' },
+    sounds:[
+      {sym:'ā á ǎ à', name:'I quattro toni', desc:'Il mandarino è una lingua tonale: la stessa sillaba cambia significato secondo l\'intonazione. È il tratto assente in italiano che più smaschera un accento straniero.', pairs:'mā (mamma) / mǎ (cavallo)', tip:'Esagera il movimento del tono con la mano mentre parli: su per il 2° tono, giù-su per il 3°, giù deciso per il 4°.'},
+      {sym:'zh/j', name:'Retroflesse vs palatali', desc:'zh, ch, sh si pronunciano con la punta della lingua arrotolata indietro; j, q, x con la lingua piatta contro il palato. L\'italiano non distingue questi due gruppi.', pairs:'zhī / jī', tip:'Per le retroflesse arrotola la punta della lingua verso l\'alto e indietro; per le palatali tienila piatta e in avanti, quasi a sorridere.'},
+      {sym:'p/b', name:'Aspirate vs non aspirate', desc:'La differenza non è sonora/sorda come in italiano, ma un soffio d\'aria o la sua assenza.', pairs:'pā (aspirata) / bā (non aspirata)', tip:'Tieni un foglio di carta davanti alla bocca: con le aspirate deve muoversi visibilmente, con le non aspirate deve restare quasi fermo.'},
+      {sym:'ü', name:'La vocale Ü', desc:'Come in francese e tedesco: labbra arrotondate come per dire "u", lingua in posizione da "i". Compare in ju, qu, xu, yu.', pairs:'lü (verde) / lu (strada)', tip:'Metti la bocca a "o" stretta come per fischiare, poi prova a dire "i" senza muovere le labbra.'},
+      {sym:'r', name:'La R cinese', desc:'Suono retroflesso che non esiste in italiano: a metà tra una R e una J francese, con la lingua arrotolata indietro.', pairs:'rì (sole/giorno)', tip:'Arrotola la punta della lingua verso il palato senza toccarlo, e lascia vibrare l\'aria attorno.'},
+    ],
+  },
+  ja: {
+    label:'日本語', script:'あ', word:'声', accent:'#3D5A80', dir:'ltr', rtlText:false,
+    audioSource:{ name:'Comprehensible Japanese', where:'YouTube', tip:'Video con parlato naturale ma comprensibile, pensati apposta per chi impara.' },
+    sounds:[
+      {sym:'ā / a', name:'Vocali lunghe vs brevi', desc:'La durata della vocale cambia il significato della parola: un tratto quasi assente in italiano.', pairs:'おばさん obasan (zia) / おばあさん obaasan (nonna)', tip:'Conta mentalmente "due tempi" per le vocali lunghe invece di uno, come se le raddoppiassi leggermente.'},
+      {sym:'っ', name:'Consonanti doppie (piccolo tsu)', desc:'Una pausa breve prima della consonante seguente raddoppia il suono, cambiando completamente la parola.', pairs:'きて kite (vieni) / きって kitte (francobollo)', tip:'Prima di pronunciare la doppia, fai una piccola pausa muta, come quando in italiano dici "fat-to" invece di "fato".'},
+      {sym:'ら/り/る/れ/ろ', name:'La R giapponese', desc:'Non è né una R né una L italiana: è un colpo rapido della lingua contro il palato, a metà tra le due.', pairs:'ありがとう arigatou', tip:'Prova a dire una D molto leggera e veloce con la punta della lingua: il suono giapponese è vicino a quello.'},
+      {sym:'ふ', name:'Il suono FU', desc:'Non è una F come in italiano (labbro su denti), ma un soffio prodotto tra le due labbra, senza toccare i denti.', pairs:'ふじさん Fujisan (Monte Fuji)', tip:'Metti le labbra come per spegnere una candela e soffia leggermente, senza portare i denti sul labbro inferiore.'},
+      {sym:'accento tonale', name:'Intonazione delle parole', desc:'Alcune parole si distinguono solo dall\'andamento alto/basso del tono, non da un accento di intensità come in italiano.', pairs:'はし hashi (bacchette, tono alto-basso) / はし hashi (ponte, tono basso-alto)', tip:'Ascolta la melodia della parola intera più che la singola sillaba: sali o scendi di tono in modo netto, non graduale.'},
+    ],
+  },
+};
+
+const CHALLENGES = {
+  principiante: [
+    { it:"Dì il tuo nome e da dove vieni.", en:"Say your name and where you're from.", fr:"Dis ton nom et d'où tu viens.", ar:"قل اسمك ومن أين أنت.", es:"Di tu nombre y de dónde eres.", de:"Sag deinen Namen und woher du kommst.", zh:"说出你的名字和你来自哪里。", ja:"名前と出身地を言ってください。" },
+    { it:"Descrivi il tempo che fa oggi in una frase.", en:"Describe today's weather in one sentence.", fr:"Décris le temps qu'il fait aujourd'hui en une phrase.", ar:"صف الطقس اليوم في جملة واحدة.", es:"Describe el clima de hoy en una frase.", de:"Beschreibe das Wetter heute in einem Satz.", zh:"用一句话描述今天的天气。", ja:"今日の天気を一文で説明してください。" },
+    { it:"Racconta cosa hai mangiato a colazione.", en:"Talk about what you had for breakfast.", fr:"Parle de ce que tu as mangé au petit-déjeuner.", ar:"تحدث عمّا تناولته في الإفطار.", es:"Habla sobre lo que desayunaste.", de:"Erzähl, was du zum Frühstück gegessen hast.", zh:"说说你早餐吃了什么。", ja:"朝ごはんに何を食べたか話してください。" },
+    { it:"Di' tre cose che ti piacciono.", en:"Say three things you like.", fr:"Dis trois choses que tu aimes.", ar:"قل ثلاثة أشياء تحبها.", es:"Di tres cosas que te gustan.", de:"Nenne drei Dinge, die dir gefallen.", zh:"说出三件你喜欢的事情。", ja:"好きなことを三つ言ってください。" },
+    { it:"Descrivi la stanza in cui ti trovi ora.", en:"Describe the room you're in right now.", fr:"Décris la pièce où tu te trouves maintenant.", ar:"صف الغرفة التي أنت فيها الآن.", es:"Describe la habitación en la que estás ahora.", de:"Beschreibe den Raum, in dem du gerade bist.", zh:"描述一下你现在所在的房间。", ja:"今いる部屋を説明してください。" },
+    { it:"Racconta cosa farai più tardi oggi.", en:"Talk about what you'll do later today.", fr:"Parle de ce que tu feras plus tard aujourd'hui.", ar:"تحدث عمّا ستفعله لاحقًا اليوم.", es:"Habla sobre lo que harás más tarde hoy.", de:"Erzähl, was du später heute machen wirst.", zh:"说说你今天晚些时候要做什么。", ja:"今日この後何をするか話してください。" },
+    { it:"Di' che ore sono e cosa stai facendo.", en:"Say what time it is and what you're doing.", fr:"Dis quelle heure il est et ce que tu fais.", ar:"قل كم الساعة وماذا تفعل.", es:"Di qué hora es y qué estás haciendo.", de:"Sag, wie spät es ist und was du gerade machst.", zh:"说说现在几点，你在做什么。", ja:"今何時か、そして何をしているか言ってください。" },
+    { it:"Descrivi il tuo animale preferito.", en:"Describe your favorite animal.", fr:"Décris ton animal préféré.", ar:"صف حيوانك المفضل.", es:"Describe tu animal favorito.", de:"Beschreibe dein Lieblingstier.", zh:"描述一下你最喜欢的动物。", ja:"好きな動物を説明してください。" },
+    { it:"Racconta come hai dormito stanotte.", en:"Talk about how you slept last night.", fr:"Parle de la façon dont tu as dormi cette nuit.", ar:"تحدث عن كيف نمت الليلة الماضية.", es:"Habla sobre cómo dormiste anoche.", de:"Erzähl, wie du letzte Nacht geschlafen hast.", zh:"说说你昨晚睡得怎么样。", ja:"昨夜どのように眠ったか話してください。" },
+    { it:"Di' il tuo colore preferito e perché.", en:"Say your favorite color and why.", fr:"Dis ta couleur préférée et pourquoi.", ar:"قل لونك المفضل ولماذا.", es:"Di tu color favorito y por qué.", de:"Sag deine Lieblingsfarbe und warum.", zh:"说出你最喜欢的颜色以及原因。", ja:"好きな色とその理由を言ってください。" },
+  ],
+  intermedio: [
+    { it:"Descrivi la tua giornata di ieri come se fosse successa a un amico immaginario." },
+    { it:"Racconta un ricordo d'infanzia con almeno un dettaglio sensoriale (odore, suono)." },
+    { it:"Spiega una regola di un gioco o sport a qualcuno che non lo conosce." },
+    { it:"Racconta le previsioni del tempo di oggi come un meteorologo in diretta TV." },
+    { it:"Descrivi a voce il percorso da casa tua al posto che frequenti di più." },
+    { it:"Racconta la trama di un film visto di recente, in 90 secondi, senza spoiler eccessivi." },
+    { it:"Descrivi una persona che ammiri, concentrandoti sul carattere più che sull'aspetto." },
+    { it:"Racconta un sogno che ricordi, anche vago, riempiendo i buchi con l'immaginazione." },
+    { it:"Spiega una ricetta a memoria, passo dopo passo, come in un cooking show." },
+    { it:"Fai da guida turistica per la tua città a un visitatore immaginario." },
+  ],
+  avanzato: [
+    { it:"Convinci qualcuno a provare il tuo piatto preferito, in 60 secondi, come un venditore." },
+    { it:"Lamentati, in modo educato, di un servizio immaginario andato male." },
+    { it:"Difendi un'opinione impopolare, ad esempio sulla pizza con l'ananas." },
+    { it:"Improvvisa un'intervista immaginaria a te stesso tra 10 anni." },
+    { it:"Fai un reclamo formale, come un messaggio vocale, per un pacco mai arrivato." },
+    { it:"Improvvisa gli annunci di un aeroporto per un volo in ritardo." },
+    { it:"Discuti i pro e i contro del lavoro da remoto rispetto all'ufficio." },
+    { it:"Improvvisa una lite scherzosa tra due tifosi di squadre o marche rivali." },
+    { it:"Fai una previsione assurda ma argomentata su come sarà il mondo tra 20 anni." },
+    { it:"Improvvisa una chiamata al servizio clienti per cancellare un abbonamento." },
+  ],
+};
+
+const SCENARIOS = [
+  ["Ordina al bar e scopri che non hanno più il piatto che volevi: gestisci il cambio.",
+   "Chiedi indicazioni per strada, ma non capisci la risposta: chiedi di ripetere o riformulare.",
+   "Fai il check-in in hotel e c'è un problema con la tua prenotazione."],
+  ["Sostieni un breve colloquio di lavoro: presentati e rispondi a una domanda inaspettata.",
+   "Fai un reclamo educato per un servizio scadente ricevuto.",
+   "Negozia il prezzo di un oggetto al mercato o sposta la data di un appuntamento."],
+  ["Discuti un'opinione su un tema leggero (cibo, film, viaggi) e devi dissentire con educazione.",
+   "Racconta un aneddoto personale che si conclude con un colpo di scena.",
+   "Gestisci un piccolo malinteso o conflitto con un amico."]
+];
+
+const BEGINNER = {
+  en: [
+    [ // Livello 1
+      {it:"Ciao", ans:["hello","hi"]},
+      {it:"Buongiorno", ans:["good morning"]},
+      {it:"Buonasera", ans:["good evening"]},
+      {it:"Grazie", ans:["thank you","thanks"]},
+      {it:"Prego", ans:["you're welcome","youre welcome"]},
+      {it:"Per favore", ans:["please"]},
+      {it:"Mi chiamo Marco", ans:["my name is marco","i am marco","im marco"]},
+      {it:"Come stai?", ans:["how are you"]},
+      {it:"Sto bene, grazie", ans:["i am fine thank you","im fine thank you","i am fine thanks","im fine thanks","i'm fine thank you","i'm fine thanks","i'm good thanks","i am good thanks"]},
+      {it:"Quanti anni hai?", ans:["how old are you"]},
+      {it:"Dove abiti?", ans:["where do you live"]},
+      {it:"Non capisco", ans:["i dont understand","i don't understand","i do not understand"]},
+      {it:"Puoi ripetere?", ans:["can you repeat","can you repeat that","could you repeat"]},
+      {it:"Quanto costa?", ans:["how much does it cost","how much is it"]},
+      {it:"Mi piace il caffè", ans:["i like coffee"]},
+      {it:"Che ore sono?", ans:["what time is it"]},
+      {it:"Vorrei un caffè, per favore", ans:["i would like a coffee please","id like a coffee please","i'd like a coffee please"]},
+      {it:"A che ora parte il treno?", ans:["what time does the train leave","what time does the train depart"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["yesterday i went to the market"]},
+      {it:"Che lavoro fai?", ans:["what do you do for work","what do you do"]},
+      {it:"Sono nato in Italia.", ans:["i was born in italy"]},
+      {it:"Posso pagare con la carta?", ans:["can i pay by card","can i pay with card"]},
+      {it:"Dov'è la stazione più vicina?", ans:["where is the nearest station"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["i need help please"]},
+      {it:"A che ora apre il negozio?", ans:["what time does the shop open","what time does the store open"]},
+      {it:"Questo è troppo caro.", ans:["this is too expensive"]},
+      {it:"Posso avere il conto, per favore?", ans:["can i have the bill please","can i have the check please"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["i've been learning this language for a short time","i have been learning this language for a short time"]},
+      {it:"Che programmi hai per il weekend?", ans:["what plans do you have for the weekend"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["i'm lost can you help me","i am lost can you help me"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["i think this city is very interesting"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["if i had more time i would travel more"]},
+      {it:"Preferisco il tè al caffè.", ans:["i prefer tea to coffee"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["i'm not sure if it's a good idea","i am not sure if it is a good idea"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["i'd like to learn to cook better","i would like to learn to cook better"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["it would be great if we could meet soon"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["i think i understood but i could be wrong"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["despite the rain we went out anyway"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["i'm sorry i misunderstood what you said","i am sorry i misunderstood what you said"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["if it were up to me i would change everything"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["it's hard to explain exactly how i feel","it is hard to explain exactly how i feel"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["i hope everything goes well"]},
+    ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["last week i visited a city i didn't know","last week i visited a city i did not know"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["i usually wake up early during the week"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["could you recommend a good restaurant nearby"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["i just finished reading a very interesting book"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["tomorrow i'm supposed to meet a friend but i might be late","tomorrow i am supposed to meet a friend but i might be late"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["in the last few months i've changed some habits","in the last few months i have changed some habits"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["excuse me i'm looking for the information office","excuse me i am looking for the information office"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["i can't wait to start my vacation","i cannot wait to start my vacation"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["could you repeat that more slowly please"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["we decided to postpone the meeting until tomorrow"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["i'm trying to improve my pronunciation every day","i am trying to improve my pronunciation every day"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["what's the difference between these two options","what is the difference between these two options"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["if i could go back i would make different choices"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["it's important to listen to viewpoints different from your own","it is important to listen to viewpoints different from your own"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["i realized that i was wrong"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["despite the difficulties i never stopped trying"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["i'd like to go deeper into this topic when i have more time","i would like to go deeper into this topic when i have more time"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["sometimes it's better to stay silent than to say the wrong thing","sometimes it is better to stay silent than to say the wrong thing"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["i would never have imagined it would end like this"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["we should also consider the long-term consequences"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["i was told that the project has been postponed"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["i would rather discuss it in person than on the phone"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["whatever happens i'll try to stay calm","whatever happens i will try to stay calm"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["in hindsight i would have done things differently"]},
+    ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["in my opinion we should try a different approach"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["i don't completely agree with what you said","i do not completely agree with what you said"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["i wonder if it's really the best choice","i wonder if it is really the best choice"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["we need more time to decide calmly"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["would you like to talk about it later calmly"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["i wasn't expecting a reply so quickly","i was not expecting a reply so quickly"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["can you explain better what you mean by that"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["it seems like a reasonable solution for now"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["i'd like to hear your point of view too","i would like to hear your point of view too"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["it's not easy to find a balance between work and personal life","it is not easy to find a balance between work and personal life"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["if i were you i'd think twice","if i were you i would think twice"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["all things considered it was worth it"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["last year i took a trip that changed the way i see things"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["when i was younger i used to spend hours reading at the library"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["i still remember the first time i tried this dish"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["we laughed so much our cheeks hurt"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["i never thought i'd find myself in this situation","i never thought i would find myself in this situation"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["it was an experience i'll always carry with me","it was an experience i will always carry with me"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["in the end everything turned out better than expected"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["thinking back i could have handled it differently"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["that day stayed etched in my memory"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["we haven't talked since then","we have not talked since then"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["over time i've learned to accept my mistakes","over time i have learned to accept my mistakes"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["looking back i'm happy with the path i've taken","looking back i am happy with the path i have taken"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["we need to submit the project by friday"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["could we organize a meeting to clarify the details"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["my boss asked me to review the report"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["we received positive feedback from the client"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["something unexpected came up and we need to review the timeline"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["i'm trying to balance several projects at the same time","i am trying to balance several projects at the same time"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["could you forward me that email when you have a moment"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["we need additional resources to complete the work"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["the deadline has been moved to next week"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["i'd like to propose a different idea for the project","i would like to propose a different idea for the project"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["the interview went better than i expected"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["we need to find a compromise that works for everyone"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["if everyone did their part the world would be a better place"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["it's likely that things will change in the coming years","it is likely that things will change in the coming years"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["you can't always predict how things will turn out","you cannot always predict how things will turn out"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["sometimes you have to accept situations you can't control","sometimes you have to accept situations you cannot control"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["if i had known earlier i would have acted differently"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["it's easier to judge than to truly understand a situation","it is easier to judge than to truly understand a situation"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["everyone has the right to express their own opinion"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["not every question has a simple answer"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["in the long run patience often pays off"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["one should learn from one's mistakes not repeat them"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["in an ideal world everyone would have the same opportunities"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["appearances can sometimes be deceiving"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["i don't want to beat around the bush we need to talk about it seriously","i do not want to beat around the bush we need to talk about it seriously"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["let's call it like it is without too much beating around the bush","let us call it like it is without too much beating around the bush"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["i realize it wasn't easy for anyone","i realize it was not easy for anyone"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["at the end of the day what matters is the result"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["it's not so much what you say but how you say it","it is not so much what you say but how you say it"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["there's always a way to meet each other halfway","there is always a way to meet each other halfway"]},
+      {it:"Meglio tardi che mai, no?", ans:["better late than never right"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["slow and steady wins the race as they say"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["sometimes bad things happen for a reason"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["everyone sees things their own way"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["you never really stop learning after all"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["in the long run honesty always pays off"]},
+    ],
+  ],
+  fr: [
+    [ // Livello 1
+      {it:"Ciao", ans:["salut","bonjour"]},
+      {it:"Buongiorno", ans:["bonjour"]},
+      {it:"Buonasera", ans:["bonsoir"]},
+      {it:"Grazie", ans:["merci"]},
+      {it:"Prego", ans:["de rien"]},
+      {it:"Per favore", ans:["s'il te plait","s'il vous plait","stp","svp"]},
+      {it:"Mi chiamo Marco", ans:["je m'appelle marco","je mappelle marco"]},
+      {it:"Come stai?", ans:["comment ca va","comment vas-tu","comment vas tu"]},
+      {it:"Sto bene, grazie", ans:["je vais bien merci","ca va bien merci","ça va bien merci"]},
+      {it:"Quanti anni hai?", ans:["quel age as-tu","quel age as tu","tu as quel age"]},
+      {it:"Dove abiti?", ans:["ou habites-tu","ou habites tu","tu habites ou"]},
+      {it:"Non capisco", ans:["je ne comprends pas"]},
+      {it:"Puoi ripetere?", ans:["peux-tu repeter","peux tu repeter","tu peux repeter"]},
+      {it:"Quanto costa?", ans:["combien ca coute","combien ça coûte"]},
+      {it:"Mi piace il caffè", ans:["j'aime le cafe","jaime le cafe"]},
+      {it:"Che ore sono?", ans:["quelle heure est-il","quelle heure est il","quelle heure il est"]},
+      {it:"Vorrei un caffè, per favore", ans:["je voudrais un cafe s'il vous plait","je voudrais un cafe stp"]},
+      {it:"A che ora parte il treno?", ans:["a quelle heure part le train"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["hier je suis alle au marche","hier je suis allé au marché"]},
+      {it:"Che lavoro fai?", ans:["qu'est-ce que tu fais dans la vie","quest ce que tu fais dans la vie"]},
+      {it:"Sono nato in Italia.", ans:["je suis ne en italie","je suis né en italie"]},
+      {it:"Posso pagare con la carta?", ans:["est-ce que je peux payer par carte","je peux payer par carte"]},
+      {it:"Dov'è la stazione più vicina?", ans:["ou est la gare la plus proche"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["j'ai besoin d'aide s'il vous plait","jai besoin daide sil vous plait"]},
+      {it:"A che ora apre il negozio?", ans:["a quelle heure ouvre le magasin"]},
+      {it:"Questo è troppo caro.", ans:["c'est trop cher","cest trop cher"]},
+      {it:"Posso avere il conto, per favore?", ans:["est-ce que je peux avoir l'addition s'il vous plait","je peux avoir laddition sil vous plait"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["j'apprends cette langue depuis peu de temps","japprends cette langue depuis peu de temps"]},
+      {it:"Che programmi hai per il weekend?", ans:["quels sont tes projets pour le week-end","quels sont tes projets pour le weekend"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["je suis perdu tu peux m'aider","je suis perdu tu peux maider"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["je pense que cette ville est tres interessante"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["si j'avais plus de temps je voyagerais plus","si javais plus de temps je voyagerais plus"]},
+      {it:"Preferisco il tè al caffè.", ans:["je prefere le the au cafe","je préfère le thé au café"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["je ne suis pas sur que ce soit une bonne idee"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["j'aimerais apprendre a mieux cuisiner","jaimerais apprendre a mieux cuisiner"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["ce serait genial si on pouvait se voir bientot"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["je crois avoir compris mais je peux me tromper"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["malgre la pluie nous sommes sortis quand meme"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["je suis desole j'ai mal compris ce que tu as dit","je suis désolé jai mal compris ce que tu as dit"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["si ca ne tenait qu'a moi je changerais tout","si ça ne tenait qua moi je changerais tout"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["c'est difficile d'expliquer exactement ce que je ressens","cest difficile dexpliquer exactement ce que je ressens"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["j'espere que tout se passera bien","jespere que tout se passera bien"]},
+    ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["la semaine derniere j'ai visite une ville que je ne connaissais pas","la semaine dernière jai visité une ville que je ne connaissais pas"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["d'habitude je me reveille tot en semaine","dhabitude je me réveille tôt en semaine"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["pourrais-tu me recommander un bon restaurant pres d'ici","pourrais tu me recommander un bon restaurant près dici"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["je viens de finir de lire un livre tres interessant"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["demain je dois retrouver un ami mais je pourrais etre en retard"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["ces derniers mois j'ai change certaines habitudes","ces derniers mois jai changé certaines habitudes"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["excusez-moi je cherche le bureau d'information","excusez moi je cherche le bureau dinformation"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["j'ai hate de commencer les vacances","jai hâte de commencer les vacances"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["pourriez-vous repeter plus lentement s'il vous plait","pourriez vous répéter plus lentement sil vous plait"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["nous avons decide de reporter la reunion a demain"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["j'essaie d'ameliorer ma prononciation chaque jour","jessaie daméliorer ma prononciation chaque jour"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["quelle est la difference entre ces deux options"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["si je pouvais revenir en arriere je ferais des choix differents"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["il est important d'ecouter des points de vue differents du sien","il est important découter des points de vue différents du sien"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["je me suis rendu compte que j'avais tort","je me suis rendu compte que javais tort"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["malgre les difficultes je n'ai jamais arrete d'essayer","malgré les difficultés je nai jamais arrêté dessayer"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["j'aimerais approfondir ce sujet quand j'aurai plus de temps","jaimerais approfondir ce sujet quand jaurai plus de temps"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["parfois il vaut mieux se taire que de dire la mauvaise chose"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["je n'aurais jamais imagine que ca finirait comme ca","je naurais jamais imaginé que ça finirait comme ça"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["il faudrait aussi considerer les consequences a long terme"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["on m'a dit que le projet avait ete reporte","on ma dit que le projet avait été reporté"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["je prefererais en discuter en personne plutot qu'au telephone","je préférerais en discuter en personne plutôt quau téléphone"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["quoi qu'il arrive j'essaierai de rester calme","quoi quil arrive jessaierai de rester calme"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["avec le recul j'aurais fait les choses differemment","avec le recul jaurais fait les choses différemment"]},
+    ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["a mon avis nous devrions essayer une approche differente"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["je ne suis pas tout a fait d'accord avec ce que tu as dit","je ne suis pas tout à fait daccord avec ce que tu as dit"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["je me demande si c'est vraiment le meilleur choix","je me demande si cest vraiment le meilleur choix"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["nous avons besoin de plus de temps pour decider calmement"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["ca te dirait d'en parler plus tard tranquillement","ça te dirait den parler plus tard tranquillement"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["je ne m'attendais pas a une reponse aussi rapide","je ne mattendais pas à une réponse aussi rapide"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["peux-tu m'expliquer mieux ce que tu veux dire par la","peux tu mexpliquer mieux ce que tu veux dire par là"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["ca me semble une solution raisonnable pour l'instant","ça me semble une solution raisonnable pour linstant"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["j'aimerais aussi entendre ton point de vue","jaimerais aussi entendre ton point de vue"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["ce n'est pas facile de trouver un equilibre entre travail et vie privee","ce nest pas facile de trouver un équilibre entre travail et vie privée"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["si j'etais toi j'y reflechirais a deux fois","si jétais toi jy réfléchirais à deux fois"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["tout compte fait ca en valait la peine","tout compte fait ça en valait la peine"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["l'annee derniere j'ai fait un voyage qui a change ma facon de voir les choses","lannée dernière jai fait un voyage qui a changé ma façon de voir les choses"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["quand j'etais plus jeune je passais des heures a lire a la bibliotheque","quand jétais plus jeune je passais des heures à lire à la bibliothèque"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["je me souviens encore de la premiere fois que j'ai goute ce plat","je me souviens encore de la première fois que jai goûté ce plat"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["on a tellement ri que nos joues nous faisaient mal"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["je n'aurais jamais pense me retrouver dans cette situation","je naurais jamais pensé me retrouver dans cette situation"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["c'etait une experience que je garderai toujours avec moi","cétait une expérience que je garderai toujours avec moi"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["finalement tout s'est arrange mieux que prevu","finalement tout sest arrangé mieux que prévu"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["en y repensant j'aurais pu gerer ca differemment","en y repensant jaurais pu gérer ça différemment"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["cette journee est restee gravee dans ma memoire","cette journée est restée gravée dans ma mémoire"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["on ne s'est plus parle depuis","on ne sest plus parlé depuis"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["avec le temps j'ai appris a accepter mes erreurs","avec le temps jai appris à accepter mes erreurs"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["en regardant en arriere je suis content du chemin parcouru","en regardant en arrière je suis content du chemin parcouru"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["nous devons rendre le projet avant vendredi"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["pourrions-nous organiser une reunion pour clarifier les details","pourrions nous organiser une réunion pour clarifier les détails"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mon patron m'a demande de revoir le rapport","mon patron ma demandé de revoir le rapport"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["nous avons recu un retour positif du client","nous avons reçu un retour positif du client"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["il y a eu un imprevu et nous devons revoir les delais","il y a eu un imprévu et nous devons revoir les délais"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["j'essaie de gerer plusieurs projets en meme temps","jessaie de gérer plusieurs projets en même temps"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["pourriez-vous me transferer cet e-mail quand vous aurez un moment","pourriez vous me transférer cet e-mail quand vous aurez un moment"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["nous avons besoin de ressources supplementaires pour terminer le travail","nous avons besoin de ressources supplémentaires pour terminer le travail"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["la date limite a ete reportee a la semaine prochaine","la date limite a été reportée à la semaine prochaine"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["j'aimerais proposer une idee differente pour le projet","jaimerais proposer une idée différente pour le projet"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["l'entretien s'est mieux passe que je ne le pensais","lentretien sest mieux passé que je ne le pensais"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["nous devons trouver un compromis qui convienne a tout le monde"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["si tout le monde faisait sa part le monde serait meilleur"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["il est probable que les choses changent dans les prochaines annees","il est probable que les choses changent dans les prochaines années"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["on ne peut pas toujours prevoir comment les choses vont tourner","on ne peut pas toujours prévoir comment les choses vont tourner"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["parfois il faut accepter des situations qu'on ne peut pas controler","parfois il faut accepter des situations quon ne peut pas contrôler"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["si je l'avais su plus tot j'aurais agi differemment","si je lavais su plus tôt jaurais agi différemment"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["il est plus facile de juger que de vraiment comprendre une situation"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["chacun a le droit d'exprimer son opinion","chacun a le droit dexprimer son opinion"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["toutes les questions n'ont pas de reponse simple","toutes les questions nont pas de réponse simple"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["a long terme la patience paie souvent","à long terme la patience paie souvent"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["il faudrait apprendre de ses erreurs pas les repeter","il faudrait apprendre de ses erreurs pas les répéter"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["dans un monde ideal tout le monde aurait les memes chances","dans un monde idéal tout le monde aurait les mêmes chances"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["les apparences sont parfois trompeuses"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["je ne veux pas tourner autour du pot nous devons en parler serieusement","je ne veux pas tourner autour du pot nous devons en parler sérieusement"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["disons les choses comme elles sont sans trop de detours","disons les choses comme elles sont sans trop de détours"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["je me rends compte que ca n'a ete facile pour personne","je me rends compte que ça na été facile pour personne"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["en fin de compte ce qui compte c'est le resultat","en fin de compte ce qui compte cest le résultat"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["ce n'est pas tant ce que tu dis mais comment tu le dis","ce nest pas tant ce que tu dis mais comment tu le dis"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["il y a toujours un moyen de trouver un terrain d'entente","il y a toujours un moyen de trouver un terrain dentente"]},
+      {it:"Meglio tardi che mai, no?", ans:["mieux vaut tard que jamais non"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["qui persevere finit par reussir comme on dit","qui persévère finit par réussir comme on dit"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["parfois a quelque chose malheur est bon","parfois à quelque chose malheur est bon"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["chacun voit les choses a sa facon","chacun voit les choses à sa façon"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["on n'arrete jamais vraiment d'apprendre au fond","on narrête jamais vraiment dapprendre au fond"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["a la longue la sincerite paie toujours","à la longue la sincérité paie toujours"]},
+    ],
+  ],
+  ar: [
+    [ // Livello 1
+      {it:"Ciao", ans:["مرحبا","marhaban"]},
+      {it:"Buongiorno", ans:["صباح الخير","sabah al khayr","sabah el kheir"]},
+      {it:"Buonasera", ans:["مساء الخير","masa al khayr","masa el kheir"]},
+      {it:"Grazie", ans:["شكرا","shukran"]},
+      {it:"Prego", ans:["عفوا","afwan"]},
+      {it:"Per favore", ans:["من فضلك","min fadlik","min fadlak"]},
+      {it:"Mi chiamo Marco", ans:["اسمي ماركو","ismi marco"]},
+      {it:"Come stai?", ans:["كيف حالك","kayfa haluk","kayf halak"]},
+      {it:"Sto bene, grazie", ans:["أنا بخير شكرا","ana bikhayr shukran"]},
+      {it:"Quanti anni hai?", ans:["كم عمرك","kam umruk"]},
+      {it:"Dove abiti?", ans:["أين تسكن","ayna taskun"]},
+      {it:"Non capisco", ans:["لا أفهم","la afham"]},
+      {it:"Puoi ripetere?", ans:["هل يمكنك أن تكرر","hal yumkinuka an tukarrir"]},
+      {it:"Quanto costa?", ans:["كم السعر","kam al-si'r","kam alsir"]},
+      {it:"Mi piace il caffè", ans:["أحب القهوة","uhibbu al-qahwa","ohebo alqahwa"]},
+      {it:"Che ore sono?", ans:["كم الساعة","kam al-sa'a","kam alsaa"]},
+      {it:"Vorrei un caffè, per favore", ans:["أريد قهوة من فضلك","ureedu qahwa min fadlik"]},
+      {it:"A che ora parte il treno?", ans:["متى يغادر القطار","mata yughadir al-qitar"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["أمس ذهبت إلى السوق","ams dhahabtu ila al-souq"]},
+      {it:"Che lavoro fai?", ans:["ما هي مهنتك","ma hiya mihnatuka"]},
+      {it:"Sono nato in Italia.", ans:["ولدت في إيطاليا","wulidtu fi eetalia"]},
+      {it:"Posso pagare con la carta?", ans:["هل يمكنني الدفع بالبطاقة","hal yumkinuni al-daf' bil-bitaqa"]},
+      {it:"Dov'è la stazione più vicina?", ans:["أين أقرب محطة","ayna aqrab mahatta"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["أحتاج إلى مساعدة من فضلك","ahtaju ila musa'ada min fadlik"]},
+      {it:"A che ora apre il negozio?", ans:["متى يفتح المتجر","mata yaftah al-matjar"]},
+      {it:"Questo è troppo caro.", ans:["هذا غال جدا","hadha ghalin jiddan"]},
+      {it:"Posso avere il conto, per favore?", ans:["هل يمكنني الحصول على الفاتورة من فضلك","hal yumkinuni al-husul ala al-fatura min fadlik"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["أتعلم هذه اللغة منذ وقت قصير","ata'allamu hadhihi al-lugha mundhu waqtin qasir"]},
+      {it:"Che programmi hai per il weekend?", ans:["ما هي خططك لعطلة نهاية الأسبوع","ma hiya khitatuka li'utlat nihayat al-usbu'"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["أنا تائه هل يمكنك مساعدتي","ana ta'ih hal yumkinuka musa'adati"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["أعتقد أن هذه المدينة مثيرة للاهتمام جدا","a'taqidu anna hadhihi al-madina muthira lil-ihtimam jiddan"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["لو كان لدي وقت أكثر لكنت سافرت أكثر","law kana ladayya waqt akthar lakuntu safartu akthar"]},
+      {it:"Preferisco il tè al caffè.", ans:["أفضل الشاي على القهوة","ufaddilu ash-shay ala al-qahwa"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["لست متأكدا إذا كانت فكرة جيدة","lastu muta'akkidan idha kanat fikra jayyida"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["أود أن أتعلم الطبخ بشكل أفضل","awaddu an ata'allama at-tabkh bishaklin afdal"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["سيكون رائعا لو استطعنا أن نلتقي قريبا","sayakoun ra'i'an law istata'na an naltaqi qariban"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["أعتقد أنني فهمت لكن قد أكون مخطئا","a'taqidu annani fahimtu lakin qad akoun mukhti'an"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["رغم المطر خرجنا على أي حال","raghma al-matar kharajna ala ayyi hal"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["آسف لقد أسأت فهم ما قلته","asif laqad asa'tu fahma ma qultahu"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["لو كان الأمر بيدي لغيرت كل شيء","law kana al-amru biyadi laghayyartu kulla shay'"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["من الصعب أن أشرح بالضبط كيف أشعر","min as-sa'b an ashraha bidh-dhabt kayfa ash'ur"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["أتمنى أن يسير كل شيء على ما يرام","atamanna an yasira kullu shay' ala ma yuram"]},
+    ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["الأسبوع الماضي زرت مدينة لم أكن أعرفها","al-usbu al-madi zurtu madina lam akun a'rifuha"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["عادة أستيقظ مبكرا خلال الأسبوع","adatan astayqizu mubakkiran khilala al-usbu"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["هل يمكنك أن تنصحني بمطعم جيد قريب من هنا","hal yumkinuka an tansahani bimat'am jayyid qarib min huna"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["لقد انتهيت للتو من قراءة كتاب مثير جدا للاهتمام","laqad intahaytu littawi min qira'at kitab muthir jiddan lil-ihtimam"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["غدا من المفترض أن ألتقي صديقا لكن قد أتأخر","ghadan min al-mafrud an altaqi sadiqan lakin qad ata'akhar"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["في الأشهر الأخيرة غيرت بعض العادات","fi al-ashhur al-akhira ghayyartu ba'da al-'adat"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["عفوا أنا أبحث عن مكتب المعلومات","afwan ana abhathu 'an maktab al-ma'lumat"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["لا أطيق الانتظار لبدء العطلة","la atiqu al-intizar libad' al-'utla"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["هل يمكنك أن تكرر ذلك ببطء أكثر من فضلك","hal yumkinuka an tukarrira dhalika bibut' akthar min fadlik"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["قررنا تأجيل الاجتماع إلى الغد","qararna ta'jil al-ijtima' ila al-ghad"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["أحاول تحسين نطقي كل يوم","uhawilu tahsin nutqi kulla yawm"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["ما الفرق بين هذين الخيارين","ma al-farq bayna hadhayni al-khiyarayn"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["لو استطعت العودة إلى الوراء لاتخذت خيارات مختلفة","law istata'tu al-'awda ila al-wara' la'ittakhadhtu khiyarat mukhtalifa"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["من المهم الاستماع إلى وجهات نظر مختلفة عن وجهة نظرك","min al-muhimm al-istima' ila wijhat nazar mukhtalifa 'an wijhat nazarik"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["أدركت أنني كنت مخطئا","adraktu annani kuntu mukhti'an"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["رغم الصعوبات لم أتوقف أبدا عن المحاولة","raghma as-su'ubat lam atawaqqaf abadan 'an al-muhawala"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["أود التعمق في هذا الموضوع عندما يكون لدي وقت أكثر","awaddu at-ta'ammuq fi hadha al-mawdu' 'indama yakoun ladayya waqt akthar"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["أحيانا يكون الصمت أفضل من قول الشيء الخاطئ","ahyanan yakoun as-samt afdal min qawl ash-shay' al-khati"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["لم أكن لأتخيل أبدا أن الأمر سينتهي هكذا","lam akun li'atakhayyala abadan anna al-amr sayantahi hakadha"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["ينبغي أيضا مراعاة العواقب على المدى الطويل","yanbaghi aydan mura'at al-'awaqib 'ala al-mada at-tawil"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["قيل لي إن المشروع قد تم تأجيله","qila li inna al-mashru' qad tamma ta'jiluhu"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["أفضل مناقشة الأمر شخصيا بدلا من الهاتف","ufaddilu munaqashat al-amr shakhsiyyan badalan min al-hatif"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["مهما حدث سأحاول أن أبقى هادئا","mahma hadatha sa'uhawilu an abqa hadi'an"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["بعد التفكير كنت سأفعل الأشياء بشكل مختلف","ba'da at-tafkir kuntu sa'af'alu al-ashya' bishaklin mukhtalif"]},
+    ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["في رأيي يجب أن نجرب نهجا مختلفا","fi ra'yi yajib an nujarrib nahjan mukhtalifan"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["لست متفقا تماما مع ما قلته","lastu muttafiqan tamaman ma'a ma qultahu"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["أتساءل إن كان هذا حقا الخيار الأفضل","atasa'alu in kana hadha haqqan al-khiyar al-afdal"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["نحتاج إلى مزيد من الوقت لنقرر بهدوء","nahtaju ila mazid min al-waqt linuqarrira bihudu"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["هل تود أن نتحدث عن ذلك لاحقا بهدوء","hal tawaddu an natahaddath 'an dhalika lahiqan bihudu"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["لم أكن أتوقع ردا بهذه السرعة","lam akun atawaqqa' raddan bihadhihi as-sur'a"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["هل يمكنك أن توضح لي أكثر ماذا تقصد بهذا","hal yumkinuka an tuwaddiha li akthar madha taqsudu bihadha"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["يبدو لي حلا معقولا في الوقت الحالي","yabdu li hallan ma'qulan fi al-waqt al-hali"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["أود أن أسمع وجهة نظرك أيضا","awaddu an asma' wijhat nazarika aydan"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["ليس من السهل إيجاد توازن بين العمل والحياة الشخصية","laysa min as-sahl ijad tawazun bayna al-'amal wal-hayat ash-shakhsiyya"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["لو كنت مكانك لفكرت مرتين","law kuntu makanaka lafakkartu marratayn"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["في النهاية كان الأمر يستحق العناء","fi an-nihaya kana al-amr yastahiqqu al-'ana"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["في العام الماضي قمت برحلة غيرت طريقة رؤيتي للأشياء","fi al-'am al-madi qumtu birihla ghayyarat tariqat ru'yati lil-ashya"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["عندما كنت أصغر سنا كنت أقضي ساعات في القراءة في المكتبة","'indama kuntu asghar sinnan kuntu aqdi sa'at fi al-qira'a fi al-maktaba"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["ما زلت أتذكر أول مرة جربت فيها هذا الطبق","ma ziltu atadhakkaru awwal marra jarrabtu fiha hadha at-tabaq"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["ضحكنا كثيرا لدرجة أن خدودنا آلمتنا","dahikna kathiran lidaraja anna khududana alamatna"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["لم أكن لأتصور أبدا أن أجد نفسي في هذا الموقف","lam akun li'atasawwara abadan an ajida nafsi fi hadha al-mawqif"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["كانت تجربة سأحملها معي دائما","kanat tajriba sa'ahmiluha ma'i da'iman"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["في النهاية سار كل شيء بشكل أفضل من المتوقع","fi an-nihaya sara kullu shay' bishaklin afdal min al-mutawaqqa"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["بالتفكير في الأمر كان بإمكاني التعامل معه بشكل مختلف","bit-tafkir fi al-amr kana bi'imkani at-ta'amul ma'ahu bishaklin mukhtalif"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["ذلك اليوم بقي محفورا في ذاكرتي","dhalika al-yawm baqiya mahfuran fi dhakirati"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["لم نتحدث منذ ذلك الحين","lam natahaddath mundhu dhalika al-hin"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["مع الوقت تعلمت أن أتقبل أخطائي","ma'a al-waqt ta'allamtu an ataqabbala akhta'i"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["بالنظر إلى الوراء أنا سعيد بالطريق الذي سلكته","bin-nazar ila al-wara' ana sa'id bit-tariq alladhi salaktuhu"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["يجب أن نسلم المشروع بحلول يوم الجمعة","yajib an nusallim al-mashru' bihulul yawm al-jum'a"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["هل يمكننا تنظيم اجتماع لتوضيح التفاصيل","hal yumkinuna tanzim ijtima' litawdih at-tafasil"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["طلب مني مديري مراجعة التقرير","talaba minni mudiri muraja'at at-taqrir"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["تلقينا ملاحظات إيجابية من العميل","talaqqayna mulahazat ijabiyya min al-'amil"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["حدث أمر غير متوقع ويجب أن نراجع الجدول الزمني","hadatha amr ghayr mutawaqqa' wayajib an nuraji' al-jadwal az-zamani"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["أحاول الموازنة بين عدة مشاريع في نفس الوقت","uhawilu al-muwazana bayna 'iddat mashari' fi nafs al-waqt"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["هل يمكنك إعادة توجيه ذلك البريد الإلكتروني عندما يتسنى لك ذلك","hal yumkinuka i'adat tawjih dhalika al-barid al-iliktruni 'indama yatasanna laka dhalika"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["نحتاج إلى موارد إضافية لإكمال العمل","nahtaju ila mawarid idafiyya li'ikmal al-'amal"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["تم تأجيل الموعد النهائي إلى الأسبوع القادم","tamma ta'jil al-maw'id an-nihai ila al-usbu' al-qadim"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["أود أن أقترح فكرة مختلفة للمشروع","awaddu an aqtariha fikra mukhtalifa lil-mashru"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["سارت المقابلة بشكل أفضل مما توقعت","sarat al-muqabala bishaklin afdal mimma tawaqqa'tu"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["يجب أن نجد حلا وسطا يناسب الجميع","yajib an najida hallan wasatan yunasibu al-jami"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["لو قام الجميع بدورهم لكان العالم مكانا أفضل","law qama al-jami' bidawrihim lakana al-'alam makanan afdal"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["من المرجح أن تتغير الأمور في السنوات القادمة","min al-murajjah an tataghayyar al-umur fi as-sanawat al-qadima"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["لا يمكن دائما التنبؤ بكيفية سير الأمور","la yumkin da'iman at-tanabbu' bikayfiyyat sayr al-umur"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["أحيانا يجب علينا تقبل مواقف لا يمكننا التحكم فيها","ahyanan yajib 'alayna taqabbul mawaqif la yumkinuna at-tahakkum fiha"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["لو كنت أعرف من قبل لتصرفت بشكل مختلف","law kuntu a'rifu min qabl latasarraftu bishaklin mukhtalif"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["من الأسهل أن نحكم من أن نفهم الموقف حقا","min al-ashal an nahkuma min an nafhama al-mawqif haqqan"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["لكل شخص الحق في التعبير عن رأيه","likulli shakhs al-haqq fi at-ta'bir 'an ra'yihi"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["ليست كل الأسئلة لها إجابة بسيطة","laysat kullu al-as'ila laha ijaba basita"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["على المدى الطويل غالبا ما يؤتي الصبر ثماره","'ala al-mada at-tawil ghaliban ma yu'ti as-sabr thimarahu"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["ينبغي أن نتعلم من أخطائنا لا أن نكررها","yanbaghi an nata'allama min akhta'ina la an nukarriraha"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["في عالم مثالي سيكون لدى الجميع نفس الفرص","fi 'alam mithali sayakoun ladá al-jami' nafs al-furas"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["المظاهر أحيانا تخدع","al-mazahir ahyanan takhda"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["لا أريد المراوغة يجب أن نتحدث عن هذا بجدية","la uridu al-muraawagha yajib an natahaddath 'an hadha bijiddiyya"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["لنقل الأمور كما هي دون لف ودوران كثير","linaqul al-umur kama hiya dun laff wadawaran kathir"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["أدرك أن الأمر لم يكن سهلا على أحد","udriku anna al-amr lam yakun sahlan 'ala ahad"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["في نهاية المطاف ما يهم هو النتيجة","fi nihayat al-mataf ma yuhimm huwa an-natija"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["الأمر لا يتعلق كثيرا بما تقوله بل بكيفية قوله","al-amr la yata'allaq kathiran bima taquluhu bal bikayfiyyat qawlihi"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["هناك دائما طريقة للتوصل إلى حل وسط","hunaka da'iman tariqa lit-tawassul ila hall wasat"]},
+      {it:"Meglio tardi che mai, no?", ans:["أفضل متأخرا من ألا يحدث أبدا أليس كذلك","afdal muta'akhkhiran min alla yahdutha abadan alaysa kadhalik"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["من يصبر ينل كما يقال","man yasbir yanal kama yuqal"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["أحيانا يكون في الشر خير","ahyanan yakoun fi ash-sharr khayr"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["كل شخص يرى الأمور بطريقته الخاصة","kullu shakhs yara al-umur bitariqatihi al-khassa"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["لا نتوقف أبدا عن التعلم في النهاية","la natawaqqaf abadan 'an at-ta'allum fi an-nihaya"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["على المدى الطويل الصدق يثمر دائما","'ala al-mada at-tawil as-sidq yuthmir da'iman"]},
+    ],
+  ],
+  es: [
+    [ // Livello 1
+      {it:"Ciao", ans:["hola"]},
+      {it:"Buongiorno", ans:["buenos dias","buenos días"]},
+      {it:"Buonasera", ans:["buenas tardes","buenas noches"]},
+      {it:"Grazie", ans:["gracias"]},
+      {it:"Prego", ans:["de nada"]},
+      {it:"Per favore", ans:["por favor"]},
+      {it:"Mi chiamo Marco", ans:["me llamo marco"]},
+      {it:"Come stai?", ans:["como estas","cómo estás"]},
+      {it:"Sto bene, grazie", ans:["estoy bien gracias"]},
+      {it:"Quanti anni hai?", ans:["cuantos anos tienes","cuántos años tienes"]},
+      {it:"Dove abiti?", ans:["donde vives","dónde vives"]},
+      {it:"Non capisco", ans:["no entiendo"]},
+      {it:"Puoi ripetere?", ans:["puedes repetir"]},
+      {it:"Quanto costa?", ans:["cuanto cuesta","cuánto cuesta"]},
+      {it:"Mi piace il caffè", ans:["me gusta el cafe"]},
+      {it:"Che ore sono?", ans:["que hora es","qué hora es"]},
+      {it:"Vorrei un caffè, per favore", ans:["quisiera un cafe por favor"]},
+      {it:"A che ora parte il treno?", ans:["a que hora sale el tren","a qué hora sale el tren"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["ayer fui al mercado"]},
+      {it:"Che lavoro fai?", ans:["a que te dedicas","a qué te dedicas"]},
+      {it:"Sono nato in Italia.", ans:["naci en italia","nací en italia"]},
+      {it:"Posso pagare con la carta?", ans:["puedo pagar con tarjeta"]},
+      {it:"Dov'è la stazione più vicina?", ans:["donde esta la estacion mas cercana","dónde está la estación más cercana"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["necesito ayuda por favor"]},
+      {it:"A che ora apre il negozio?", ans:["a que hora abre la tienda","a qué hora abre la tienda"]},
+      {it:"Questo è troppo caro.", ans:["esto es demasiado caro"]},
+      {it:"Posso avere il conto, per favore?", ans:["puedo tener la cuenta por favor"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["llevo poco tiempo aprendiendo este idioma"]},
+      {it:"Che programmi hai per il weekend?", ans:["que planes tienes para el fin de semana","qué planes tienes para el fin de semana"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["estoy perdido puedes ayudarme"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["creo que esta ciudad es muy interesante"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["si tuviera mas tiempo viajaria mas","si tuviera más tiempo viajaría más"]},
+      {it:"Preferisco il tè al caffè.", ans:["prefiero el te al cafe","prefiero el té al café"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["no estoy seguro de que sea una buena idea"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["me gustaria aprender a cocinar mejor","me gustaría aprender a cocinar mejor"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["seria genial si pudieramos vernos pronto","sería genial si pudiéramos vernos pronto"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["creo que entendi pero puedo equivocarme","creo que entendí pero puedo equivocarme"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["a pesar de la lluvia salimos de todas formas"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["lo siento entendi mal lo que dijiste","lo siento entendí mal lo que dijiste"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["si dependiera de mi cambiaria todo","si dependiera de mí cambiaría todo"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["es dificil explicar exactamente como me siento","es difícil explicar exactamente cómo me siento"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["espero que todo salga bien"]},
+    ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["la semana pasada visite una ciudad que no conocia","la semana pasada visité una ciudad que no conocía"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["normalmente me despierto temprano entre semana"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["podrias recomendarme un buen restaurante cerca de aqui","podrías recomendarme un buen restaurante cerca de aquí"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["acabo de terminar de leer un libro muy interesante"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["manana se supone que voy a ver a un amigo pero puede que llegue tarde","mañana se supone que voy a ver a un amigo pero puede que llegue tarde"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["en los ultimos meses he cambiado algunos habitos","en los últimos meses he cambiado algunos hábitos"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["disculpe estoy buscando la oficina de informacion","disculpe estoy buscando la oficina de información"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["tengo muchas ganas de que empiecen las vacaciones"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["podria repetirlo mas despacio por favor","podría repetirlo más despacio por favor"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["decidimos posponer la reunion hasta manana","decidimos posponer la reunión hasta mañana"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["estoy intentando mejorar mi pronunciacion todos los dias","estoy intentando mejorar mi pronunciación todos los días"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["cual es la diferencia entre estas dos opciones","cuál es la diferencia entre estas dos opciones"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["si pudiera volver atras tomaria decisiones diferentes","si pudiera volver atrás tomaría decisiones diferentes"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["es importante escuchar puntos de vista diferentes al propio"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["me di cuenta de que estaba equivocado"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["a pesar de las dificultades nunca deje de intentarlo","a pesar de las dificultades nunca dejé de intentarlo"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["me gustaria profundizar en este tema cuando tenga mas tiempo","me gustaría profundizar en este tema cuando tenga más tiempo"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["a veces es mejor callar que decir lo incorrecto"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["nunca me habria imaginado que terminaria asi","nunca me habría imaginado que terminaría así"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["tambien habria que considerar las consecuencias a largo plazo","también habría que considerar las consecuencias a largo plazo"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["me dijeron que el proyecto se ha pospuesto"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["preferiria discutirlo en persona en lugar de por telefono","preferiría discutirlo en persona en lugar de por teléfono"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["pase lo que pase intentare mantener la calma","pase lo que pase intentaré mantener la calma"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["en retrospectiva habria hecho las cosas de otra manera","en retrospectiva habría hecho las cosas de otra manera"]},
+    ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["en mi opinion deberiamos probar un enfoque diferente","en mi opinión deberíamos probar un enfoque diferente"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["no estoy del todo de acuerdo con lo que dijiste"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["me pregunto si es realmente la mejor opcion","me pregunto si es realmente la mejor opción"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["necesitamos mas tiempo para decidir con calma","necesitamos más tiempo para decidir con calma"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["te gustaria hablarlo mas tarde con calma","te gustaría hablarlo más tarde con calma"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["no esperaba una respuesta tan rapido","no esperaba una respuesta tan rápido"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["puedes explicarme mejor que quieres decir con eso","puedes explicarme mejor qué quieres decir con eso"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["me parece una solucion razonable por ahora","me parece una solución razonable por ahora"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["me gustaria escuchar tambien tu punto de vista","me gustaría escuchar también tu punto de vista"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["no es facil encontrar un equilibrio entre el trabajo y la vida personal","no es fácil encontrar un equilibrio entre el trabajo y la vida personal"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["si yo fuera tu me lo pensaria dos veces","si yo fuera tú me lo pensaría dos veces"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["a fin de cuentas valio la pena","a fin de cuentas valió la pena"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["el ano pasado hice un viaje que cambio mi forma de ver las cosas","el año pasado hice un viaje que cambió mi forma de ver las cosas"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["cuando era mas joven pasaba horas leyendo en la biblioteca","cuando era más joven pasaba horas leyendo en la biblioteca"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["todavia recuerdo la primera vez que probe este plato","todavía recuerdo la primera vez que probé este plato"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["nos reimos tanto que nos dolian las mejillas","nos reímos tanto que nos dolían las mejillas"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["nunca pense que me encontraria en esta situacion","nunca pensé que me encontraría en esta situación"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["fue una experiencia que llevare siempre conmigo","fue una experiencia que llevaré siempre conmigo"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["al final todo salio mejor de lo esperado","al final todo salió mejor de lo esperado"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["pensandolo bien podria haberlo manejado de otra manera","pensándolo bien podría haberlo manejado de otra manera"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["ese dia quedo grabado en mi memoria","ese día quedó grabado en mi memoria"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["no hemos vuelto a hablar desde entonces"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["con el tiempo he aprendido a aceptar mis errores"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["mirando atras estoy contento con el camino que he recorrido","mirando atrás estoy contento con el camino que he recorrido"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["tenemos que entregar el proyecto antes del viernes"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["podriamos organizar una reunion para aclarar los detalles","podríamos organizar una reunión para aclarar los detalles"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mi jefe me pidio que revisara el informe","mi jefe me pidió que revisara el informe"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["recibimos comentarios positivos del cliente"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["surgio un imprevisto y tenemos que revisar los plazos","surgió un imprevisto y tenemos que revisar los plazos"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["estoy intentando equilibrar varios proyectos al mismo tiempo"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["podria reenviarme ese correo cuando tenga un momento","podría reenviarme ese correo cuando tenga un momento"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["necesitamos recursos adicionales para completar el trabajo"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["la fecha limite se ha movido a la proxima semana","la fecha límite se ha movido a la próxima semana"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["me gustaria proponer una idea diferente para el proyecto","me gustaría proponer una idea diferente para el proyecto"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["la entrevista fue mejor de lo que esperaba"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["tenemos que encontrar un compromiso que funcione para todos"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["si todos hicieran su parte el mundo seria un lugar mejor","si todos hicieran su parte el mundo sería un lugar mejor"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["es probable que las cosas cambien en los proximos anos","es probable que las cosas cambien en los próximos años"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["no siempre se puede predecir como saldran las cosas","no siempre se puede predecir cómo saldrán las cosas"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["a veces hay que aceptar situaciones que no podemos controlar"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["si lo hubiera sabido antes habria actuado de otra manera","si lo hubiera sabido antes habría actuado de otra manera"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["es mas facil juzgar que entender realmente una situacion","es más fácil juzgar que entender realmente una situación"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["todos tienen derecho a expresar su propia opinion","todos tienen derecho a expresar su propia opinión"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["no todas las preguntas tienen una respuesta sencilla"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["a largo plazo la paciencia suele dar sus frutos"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["habria que aprender de los propios errores no repetirlos","habría que aprender de los propios errores no repetirlos"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["en un mundo ideal todos tendrian las mismas oportunidades","en un mundo ideal todos tendrían las mismas oportunidades"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["las apariencias a veces enganan","las apariencias a veces engañan"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["no quiero andarme con rodeos tenemos que hablarlo en serio"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["digamos las cosas como son sin muchos rodeos"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["me doy cuenta de que no fue facil para nadie","me doy cuenta de que no fue fácil para nadie"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["a fin de cuentas lo que importa es el resultado"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["no es tanto lo que dices sino como lo dices","no es tanto lo que dices sino cómo lo dices"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["siempre hay una forma de llegar a un punto medio"]},
+      {it:"Meglio tardi che mai, no?", ans:["mas vale tarde que nunca no","más vale tarde que nunca no"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["quien la sigue la consigue como se suele decir"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["a veces no hay mal que por bien no venga"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["cada uno ve las cosas a su manera"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["en el fondo nunca se deja de aprender"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["a la larga la sinceridad siempre da sus frutos"]},
+    ],
+  ],
+  de: [
+    [ // Livello 1
+      {it:"Ciao", ans:["hallo","hi"]},
+      {it:"Buongiorno", ans:["guten morgen"]},
+      {it:"Buonasera", ans:["guten abend"]},
+      {it:"Grazie", ans:["danke","danke schon","danke schön"]},
+      {it:"Prego", ans:["bitte","gern geschehen"]},
+      {it:"Per favore", ans:["bitte"]},
+      {it:"Mi chiamo Marco", ans:["ich heisse marco","ich heiße marco"]},
+      {it:"Come stai?", ans:["wie geht es dir","wie gehts","wie geht's dir"]},
+      {it:"Sto bene, grazie", ans:["mir geht es gut danke","es geht mir gut danke"]},
+      {it:"Quanti anni hai?", ans:["wie alt bist du"]},
+      {it:"Dove abiti?", ans:["wo wohnst du"]},
+      {it:"Non capisco", ans:["ich verstehe nicht"]},
+      {it:"Puoi ripetere?", ans:["kannst du das wiederholen"]},
+      {it:"Quanto costa?", ans:["wie viel kostet das","wieviel kostet das"]},
+      {it:"Mi piace il caffè", ans:["ich mag kaffee"]},
+      {it:"Che ore sono?", ans:["wie spat ist es","wie spät ist es","wieviel uhr ist es"]},
+      {it:"Vorrei un caffè, per favore", ans:["ich hatte gern einen kaffee bitte","ich hätte gern einen kaffee bitte","ich mochte einen kaffee bitte","ich möchte einen kaffee bitte"]},
+      {it:"A che ora parte il treno?", ans:["wann fahrt der zug ab","wann fährt der zug ab","um wieviel uhr fahrt der zug"]},
+    ],
+    [ // Livello 2
+      {it:"Ieri sono andato al mercato.", ans:["gestern bin ich zum markt gegangen"]},
+      {it:"Che lavoro fai?", ans:["was arbeitest du","was machst du beruflich"]},
+      {it:"Sono nato in Italia.", ans:["ich bin in italien geboren"]},
+      {it:"Posso pagare con la carta?", ans:["kann ich mit karte bezahlen"]},
+      {it:"Dov'è la stazione più vicina?", ans:["wo ist der nachste bahnhof","wo ist der nächste bahnhof"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["ich brauche hilfe bitte"]},
+      {it:"A che ora apre il negozio?", ans:["wann offnet das geschaft","wann öffnet das geschäft","um wieviel uhr offnet der laden"]},
+      {it:"Questo è troppo caro.", ans:["das ist zu teuer"]},
+      {it:"Posso avere il conto, per favore?", ans:["kann ich bitte die rechnung haben"]},
+      {it:"Sto imparando questa lingua da poco tempo.", ans:["ich lerne diese sprache erst seit kurzem"]},
+      {it:"Che programmi hai per il weekend?", ans:["was hast du am wochenende vor","welche plane hast du fur das wochenende","welche pläne hast du für das wochenende"]},
+      {it:"Mi sono perso, puoi aiutarmi?", ans:["ich habe mich verlaufen kannst du mir helfen"]},
+    ],
+    [ // Livello 3
+      {it:"Penso che questa città sia molto interessante.", ans:["ich denke dass diese stadt sehr interessant ist"]},
+      {it:"Se avessi più tempo, viaggerei di più.", ans:["wenn ich mehr zeit hatte wurde ich mehr reisen","wenn ich mehr zeit hätte würde ich mehr reisen"]},
+      {it:"Preferisco il tè al caffè.", ans:["ich bevorzuge tee gegenuber kaffee","ich bevorzuge tee gegenüber kaffee","ich mag tee lieber als kaffee"]},
+      {it:"Non sono sicuro se sia una buona idea.", ans:["ich bin nicht sicher ob das eine gute idee ist"]},
+      {it:"Mi piacerebbe imparare a cucinare meglio.", ans:["ich wurde gerne besser kochen lernen","ich würde gerne besser kochen lernen"]},
+      {it:"Sarebbe fantastico se potessimo vederci presto.", ans:["es ware toll wenn wir uns bald sehen konnten","es wäre toll wenn wir uns bald sehen könnten"]},
+      {it:"Credo di aver capito, ma posso sbagliarmi.", ans:["ich glaube ich habe es verstanden aber ich kann mich irren"]},
+      {it:"Nonostante la pioggia, siamo usciti lo stesso.", ans:["trotz des regens sind wir trotzdem rausgegangen"]},
+      {it:"Mi dispiace, ho frainteso quello che hai detto.", ans:["es tut mir leid ich habe missverstanden was du gesagt hast"]},
+      {it:"Se dipendesse da me, cambierei tutto.", ans:["wenn es von mir abhinge wurde ich alles andern","wenn es von mir abhinge würde ich alles ändern"]},
+      {it:"È difficile spiegare esattamente come mi sento.", ans:["es ist schwer genau zu erklaren wie ich mich fuhle","es ist schwer genau zu erklären wie ich mich fühle"]},
+      {it:"Spero che tutto vada per il meglio.", ans:["ich hoffe dass alles gut wird","ich hoffe alles wird gut"]},
+    ],
+    [ // Livello 4
+      {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["letzte woche habe ich eine stadt besucht die ich nicht kannte"]},
+      {it:"Di solito mi sveglio presto durante la settimana.", ans:["normalerweise wache ich unter der woche fruh auf","normalerweise wache ich unter der woche früh auf"]},
+      {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["konntest du mir ein gutes restaurant in der nahe empfehlen","könntest du mir ein gutes restaurant in der nähe empfehlen"]},
+      {it:"Ho appena finito di leggere un libro molto interessante.", ans:["ich habe gerade ein sehr interessantes buch zu ende gelesen"]},
+      {it:"Domani dovrei incontrare un amico, ma potrei essere in ritardo.", ans:["morgen soll ich einen freund treffen aber ich konnte zu spat kommen","morgen soll ich einen freund treffen aber ich könnte zu spät kommen"]},
+      {it:"Negli ultimi mesi ho cambiato alcune abitudini.", ans:["in den letzten monaten habe ich einige gewohnheiten geandert","in den letzten monaten habe ich einige gewohnheiten geändert"]},
+      {it:"Mi scusi, sto cercando l'ufficio informazioni.", ans:["entschuldigung ich suche das informationsburo","entschuldigung ich suche das informationsbüro"]},
+      {it:"Non vedo l'ora di iniziare le vacanze.", ans:["ich kann es kaum erwarten dass die ferien beginnen"]},
+      {it:"Potrebbe ripetere più lentamente, per favore?", ans:["konnten sie das bitte langsamer wiederholen","könnten sie das bitte langsamer wiederholen"]},
+      {it:"Abbiamo deciso di rimandare la riunione a domani.", ans:["wir haben beschlossen das treffen auf morgen zu verschieben"]},
+      {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["ich versuche meine aussprache jeden tag zu verbessern"]},
+      {it:"Qual è la differenza tra queste due opzioni?", ans:["was ist der unterschied zwischen diesen beiden optionen"]},
+    ],
+    [ // Livello 5
+      {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["wenn ich zuruckgehen konnte wurde ich andere entscheidungen treffen","wenn ich zurückgehen könnte würde ich andere entscheidungen treffen"]},
+      {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["es ist wichtig auf andere sichtweisen als die eigene zu horen","es ist wichtig auf andere sichtweisen als die eigene zu hören"]},
+      {it:"Mi sono reso conto che avevo torto.", ans:["mir ist klar geworden dass ich falsch lag"]},
+      {it:"Nonostante le difficoltà, non ho mai smesso di provarci.", ans:["trotz der schwierigkeiten habe ich nie aufgehort es zu versuchen","trotz der schwierigkeiten habe ich nie aufgehört es zu versuchen"]},
+      {it:"Vorrei approfondire questo argomento quando avrò più tempo.", ans:["ich wurde dieses thema gerne vertiefen wenn ich mehr zeit habe","ich würde dieses thema gerne vertiefen wenn ich mehr zeit habe"]},
+      {it:"A volte è meglio tacere piuttosto che dire la cosa sbagliata.", ans:["manchmal ist es besser zu schweigen als das falsche zu sagen"]},
+      {it:"Non avrei mai immaginato che sarebbe finita così.", ans:["ich hatte nie gedacht dass es so enden wurde","ich hätte nie gedacht dass es so enden würde"]},
+      {it:"Bisognerebbe considerare anche le conseguenze a lungo termine.", ans:["man sollte auch die langfristigen folgen bedenken"]},
+      {it:"Mi hanno detto che il progetto è stato rimandato.", ans:["mir wurde gesagt dass das projekt verschoben wurde"]},
+      {it:"Preferirei discuterne di persona piuttosto che al telefono.", ans:["ich wurde es lieber personlich besprechen als am telefon","ich würde es lieber persönlich besprechen als am telefon"]},
+      {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["was auch immer passiert ich werde versuchen ruhig zu bleiben"]},
+      {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["im nachhinein hatte ich die dinge anders gemacht","im nachhinein hätte ich die dinge anders gemacht"]},
+    ],
+    [ // Livello 6
+      {it:"Secondo me dovremmo provare un approccio diverso.", ans:["meiner meinung nach sollten wir einen anderen ansatz versuchen"]},
+      {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["ich stimme nicht ganz mit dem uberein was du gesagt hast","ich stimme nicht ganz mit dem überein was du gesagt hast"]},
+      {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["ich frage mich ob das wirklich die beste wahl ist"]},
+      {it:"Abbiamo bisogno di più tempo per decidere con calma.", ans:["wir brauchen mehr zeit um in ruhe zu entscheiden"]},
+      {it:"Ti andrebbe di parlarne più tardi con calma?", ans:["mochtest du spater in ruhe daruber sprechen","möchtest du später in ruhe darüber sprechen"]},
+      {it:"Non mi aspettavo una risposta così velocemente.", ans:["ich hatte nicht mit einer so schnellen antwort gerechnet"]},
+      {it:"Puoi spiegarmi meglio cosa intendi con questo?", ans:["kannst du mir besser erklaren was du damit meinst","kannst du mir besser erklären was du damit meinst"]},
+      {it:"Mi sembra una soluzione ragionevole, per ora.", ans:["das scheint mir vorerst eine vernunftige losung zu sein","das scheint mir vorerst eine vernünftige lösung zu sein"]},
+      {it:"Vorrei sentire anche il tuo punto di vista.", ans:["ich wurde auch gerne deine meinung horen","ich würde auch gerne deine meinung hören"]},
+      {it:"Non è facile trovare un equilibrio tra lavoro e vita privata.", ans:["es ist nicht leicht ein gleichgewicht zwischen arbeit und privatleben zu finden"]},
+      {it:"Se fossi in te, ci penserei due volte.", ans:["wenn ich du ware wurde ich zweimal nachdenken","wenn ich du wäre würde ich zweimal nachdenken"]},
+      {it:"A conti fatti, ne è valsa la pena.", ans:["alles in allem hat es sich gelohnt"]},
+    ],
+    [ // Livello 7
+      {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["letztes jahr habe ich eine reise gemacht die meine sichtweise verandert hat","letztes jahr habe ich eine reise gemacht die meine sichtweise verändert hat"]},
+      {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["als ich junger war verbrachte ich stunden mit lesen in der bibliothek","als ich jünger war verbrachte ich stunden mit lesen in der bibliothek"]},
+      {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["ich erinnere mich noch an das erste mal als ich dieses gericht probiert habe"]},
+      {it:"Abbiamo riso così tanto che ci facevano male le guance.", ans:["wir haben so viel gelacht dass unsere wangen wehtaten"]},
+      {it:"Non avrei mai pensato di ritrovarmi in questa situazione.", ans:["ich hatte nie gedacht dass ich mich in dieser situation wiederfinden wurde","ich hätte nie gedacht dass ich mich in dieser situation wiederfinden würde"]},
+      {it:"È stata un'esperienza che porterò sempre con me.", ans:["es war eine erfahrung die ich immer bei mir tragen werde"]},
+      {it:"Alla fine, tutto si è risolto meglio del previsto.", ans:["am ende ist alles besser gelaufen als erwartet"]},
+      {it:"Ripensandoci, avrei potuto gestirlo diversamente.", ans:["im nachhinein hatte ich es anders handhaben konnen","im nachhinein hätte ich es anders handhaben können"]},
+      {it:"Quella giornata è rimasta impressa nella mia memoria.", ans:["dieser tag ist mir in erinnerung geblieben"]},
+      {it:"Non ci siamo più sentiti da allora.", ans:["wir haben seitdem nicht mehr miteinander gesprochen"]},
+      {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["mit der zeit habe ich gelernt meine fehler zu akzeptieren"]},
+      {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["ruckblickend bin ich zufrieden mit dem weg den ich gegangen bin","rückblickend bin ich zufrieden mit dem weg den ich gegangen bin"]},
+    ],
+    [ // Livello 8
+      {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["wir mussen das projekt bis freitag abgeben","wir müssen das projekt bis freitag abgeben"]},
+      {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["konnten wir ein treffen organisieren um die details zu klaren","könnten wir ein treffen organisieren um die details zu klären"]},
+      {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mein chef hat mich gebeten den bericht zu uberprufen","mein chef hat mich gebeten den bericht zu überprüfen"]},
+      {it:"Abbiamo ricevuto un feedback positivo dal cliente.", ans:["wir haben positives feedback vom kunden erhalten"]},
+      {it:"C'è stato un imprevisto e dobbiamo rivedere i tempi.", ans:["es gab etwas unerwartetes und wir mussen den zeitplan uberprufen","es gab etwas unerwartetes und wir müssen den zeitplan überprüfen"]},
+      {it:"Sto cercando di bilanciare più progetti contemporaneamente.", ans:["ich versuche mehrere projekte gleichzeitig zu jonglieren"]},
+      {it:"Potrebbe inoltrarmi quella email quando ha un momento?", ans:["konnten sie mir diese e-mail weiterleiten wenn sie einen moment zeit haben","könnten sie mir diese e-mail weiterleiten wenn sie einen moment zeit haben"]},
+      {it:"Abbiamo bisogno di risorse aggiuntive per completare il lavoro.", ans:["wir brauchen zusatzliche ressourcen um die arbeit abzuschliessen","wir brauchen zusätzliche ressourcen um die arbeit abzuschließen"]},
+      {it:"La scadenza è stata spostata alla settimana prossima.", ans:["die frist wurde auf nachste woche verschoben","die frist wurde auf nächste woche verschoben"]},
+      {it:"Vorrei proporre un'idea diversa per il progetto.", ans:["ich mochte eine andere idee fur das projekt vorschlagen","ich möchte eine andere idee für das projekt vorschlagen"]},
+      {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["das vorstellungsgesprach lief besser als erwartet","das vorstellungsgespräch lief besser als erwartet"]},
+      {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["wir mussen einen kompromiss finden der fur alle passt","wir müssen einen kompromiss finden der für alle passt"]},
+    ],
+    [ // Livello 9
+      {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["wenn jeder seinen teil beitragen wurde ware die welt ein besserer ort","wenn jeder seinen teil beitragen würde wäre die welt ein besserer ort"]},
+      {it:"È probabile che le cose cambino nei prossimi anni.", ans:["es ist wahrscheinlich dass sich die dinge in den kommenden jahren andern","es ist wahrscheinlich dass sich die dinge in den kommenden jahren ändern"]},
+      {it:"Non si può sempre prevedere come andranno le cose.", ans:["man kann nicht immer vorhersehen wie die dinge sich entwickeln"]},
+      {it:"A volte bisogna accettare situazioni che non possiamo controllare.", ans:["manchmal muss man situationen akzeptieren die man nicht kontrollieren kann"]},
+      {it:"Se avessi saputo prima, avrei agito diversamente.", ans:["wenn ich es fruher gewusst hatte hatte ich anders gehandelt","wenn ich es früher gewusst hätte hätte ich anders gehandelt"]},
+      {it:"È più facile giudicare che capire davvero una situazione.", ans:["es ist leichter zu urteilen als eine situation wirklich zu verstehen"]},
+      {it:"Ognuno ha il diritto di esprimere la propria opinione.", ans:["jeder hat das recht seine eigene meinung zu aussern","jeder hat das recht seine eigene meinung zu äußern"]},
+      {it:"Non tutte le domande hanno una risposta semplice.", ans:["nicht jede frage hat eine einfache antwort"]},
+      {it:"A lungo termine, la pazienza spesso ripaga.", ans:["auf lange sicht zahlt sich geduld oft aus"]},
+      {it:"Bisognerebbe imparare dai propri errori, non ripeterli.", ans:["man sollte aus seinen fehlern lernen sie nicht wiederholen"]},
+      {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["in einer idealen welt hatten alle die gleichen chancen","in einer idealen welt hätten alle die gleichen chancen"]},
+      {it:"Le apparenze, a volte, ingannano.", ans:["der schein trugt manchmal","der schein trügt manchmal"]},
+    ],
+    [ // Livello 10
+      {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["ich will nicht um den heissen brei herumreden wir mussen ernsthaft daruber sprechen","ich will nicht um den heißen brei herumreden wir müssen ernsthaft darüber sprechen"]},
+      {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["sagen wir die dinge wie sie sind ohne gross drumherum zu reden","sagen wir die dinge wie sie sind ohne groß drumherum zu reden"]},
+      {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["mir ist klar dass es fur niemanden leicht war","mir ist klar dass es für niemanden leicht war"]},
+      {it:"Alla fine dei conti, ciò che conta è il risultato.", ans:["letzten endes zahlt das ergebnis"]},
+      {it:"Non è tanto quello che dici, quanto come lo dici.", ans:["es kommt nicht so sehr darauf an was du sagst sondern wie du es sagst"]},
+      {it:"C'è sempre un modo per venirsi incontro.", ans:["es gibt immer einen weg sich entgegenzukommen"]},
+      {it:"Meglio tardi che mai, no?", ans:["besser spat als nie oder","besser spät als nie oder"]},
+      {it:"Chi la dura la vince, come si suol dire.", ans:["wer beharrlich bleibt gewinnt am ende wie man sagt"]},
+      {it:"Non tutto il male viene per nuocere, a volte.", ans:["manchmal hat auch etwas schlechtes sein gutes"]},
+      {it:"Ognuno vede le cose a modo suo.", ans:["jeder sieht die dinge auf seine eigene weise"]},
+      {it:"Non si finisce mai di imparare, in fondo.", ans:["man hort im grunde nie auf zu lernen","man hört im grunde nie auf zu lernen"]},
+      {it:"Alla lunga, la sincerità paga sempre.", ans:["auf dauer zahlt sich ehrlichkeit immer aus"]},
+    ],
+  ],
+  zh: [
+    [ // Livello 1
+      {it:"Ciao", ans:["你好","ni hao"]},
+      {it:"Buongiorno", ans:["早上好","zao shang hao"]},
+      {it:"Buonasera", ans:["晚上好","wan shang hao"]},
+      {it:"Grazie", ans:["谢谢","xie xie"]},
+      {it:"Prego", ans:["不客气","bu ke qi"]},
+      {it:"Per favore", ans:["请","qing"]},
+      {it:"Mi chiamo Marco", ans:["我叫马可","wo jiao ma ke"]},
+      {it:"Come stai?", ans:["你好吗","ni hao ma"]},
+      {it:"Sto bene, grazie", ans:["我很好谢谢","wo hen hao xie xie"]},
+      {it:"Quanti anni hai?", ans:["你多大了","ni duo da le"]},
+      {it:"Dove abiti?", ans:["你住在哪里","ni zhu zai na li"]},
+      {it:"Non capisco", ans:["我不明白","wo bu ming bai"]},
+      {it:"Puoi ripetere?", ans:["你能再说一遍吗","ni neng zai shuo yi bian ma"]},
+      {it:"Quanto costa?", ans:["多少钱","duo shao qian"]},
+      {it:"Mi piace il caffè", ans:["我喜欢咖啡","wo xi huan ka fei"]},
+      {it:"Che ore sono?", ans:["现在几点","xian zai ji dian"]},
+      {it:"Vorrei un caffè, per favore", ans:["我要一杯咖啡谢谢","wo yao yi bei ka fei xie xie"]},
+      {it:"A che ora parte il treno?", ans:["火车几点开","huo che ji dian kai"]},
+    ],
+  ],
+  ja: [
+    [ // Livello 1
+      {it:"Ciao", ans:["こんにちは","konnichiwa"]},
+      {it:"Buongiorno", ans:["おはようございます","ohayou gozaimasu"]},
+      {it:"Buonasera", ans:["こんばんは","konbanwa"]},
+      {it:"Grazie", ans:["ありがとうございます","arigatou gozaimasu"]},
+      {it:"Prego", ans:["どういたしまして","dou itashimashite"]},
+      {it:"Per favore", ans:["お願いします","onegaishimasu"]},
+      {it:"Mi chiamo Marco", ans:["私はマルコです","watashi wa maruko desu"]},
+      {it:"Come stai?", ans:["元気ですか","genki desu ka"]},
+      {it:"Sto bene, grazie", ans:["元気ですありがとうございます","genki desu arigatou gozaimasu"]},
+      {it:"Quanti anni hai?", ans:["何歳ですか","nansai desu ka"]},
+      {it:"Dove abiti?", ans:["どこに住んでいますか","doko ni sunde imasu ka"]},
+      {it:"Non capisco", ans:["わかりません","wakarimasen"]},
+      {it:"Puoi ripetere?", ans:["もう一度言ってください","mou ichido itte kudasai"]},
+      {it:"Quanto costa?", ans:["いくらですか","ikura desu ka"]},
+      {it:"Mi piace il caffè", ans:["コーヒーが好きです","koohii ga suki desu"]},
+      {it:"Che ore sono?", ans:["今何時ですか","ima nanji desu ka"]},
+      {it:"Vorrei un caffè, per favore", ans:["コーヒーをお願いします","koohii wo onegaishimasu"]},
+      {it:"A che ora parte il treno?", ans:["電車は何時に出発しますか","densha wa nanji ni shuppatsu shimasu ka"]},
+    ],
+  ],
+};
+
+/* ---------- STORAGE ADAPTER ----------
+   Dentro Claude usa window.storage. Fuori (GitHub Pages, file locale) non esiste:
+   in quel caso si passa in automatico a localStorage del telefono/browser. */
+const storageAdapter = {
+  async get(key){
+    if(window.storage){ try{ return await window.storage.get(key); }catch(e){ return null; } }
+    try{ const v = localStorage.getItem(key); return v!==null ? {key, value:v} : null; }
+    catch(e){ return null; }
+  },
+  async set(key, value){
+    if(window.storage){ try{ return await window.storage.set(key, value); }catch(e){ return null; } }
+    try{ localStorage.setItem(key, value); return {key, value}; }
+    catch(e){ return null; }
+  }
+};
+
+/* ---------- STATE ---------- */
+let currentLang = 'en';
+let state = { streak:0, lastDate:null, done:[], notebook:[] };
+let currentSlot = 1;
+let currentLevel = 0;
+let timer = { seconds: 300, running:false, interval:null, phase:0 };
+const PHASES = [
+  {label:"Fase 1 · Ascolto passivo", secs:60},
+  {label:"Fase 2 · Shadowing ad ombra", secs:180},
+  {label:"Fase 3 · Shadowing con testo", secs:120},
+  {label:"Fase 4 · Registra e confronta", secs:60},
+];
+
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function dayOfMonthIndex(len){ return (new Date().getDate() - 1) % len; }
+
+function freshDirState(){ return { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 }; }
+function freshProgressAllLevels(){
+  const p = {};
+  for(let lvl=1; lvl<=10; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
+  return p;
+}
+
+async function loadState(lang){
+  try{
+    const r = await storageAdapter.get('state:'+lang);
+    state = r ? JSON.parse(r.value) : { streak:0, lastDate:null, done:[], notebook:[] };
+  }catch(e){ state = { streak:0, lastDate:null, done:[], notebook:[] }; }
+
+  if(!state.beginner){
+    state.beginner = { direction:'to_target', level:1, progress: freshProgressAllLevels() };
+  } else if(!state.beginner.progress){
+    let oldToTarget, oldToIt;
+    if(state.beginner.to_target){
+      oldToTarget = state.beginner.to_target;
+      oldToIt = state.beginner.to_it || freshDirState();
+    } else {
+      const oldIndex = typeof state.beginner.index === 'number' ? state.beginner.index : 0;
+      oldToTarget = { index: oldIndex, wrong:0, score:0, correctFirstTry:0, completed:0 };
+      oldToIt = freshDirState();
+    }
+    state.beginner = {
+      direction: state.beginner.direction || 'to_target',
+      level: 1,
+      progress: freshProgressAllLevels()
+    };
+    state.beginner.progress[1] = { to_target: oldToTarget, to_it: oldToIt };
+  } else {
+    for(let lvl=1; lvl<=10; lvl++){
+      if(!state.beginner.progress[lvl]) state.beginner.progress[lvl] = { to_target: freshDirState(), to_it: freshDirState() };
+    }
+    if(!state.beginner.level) state.beginner.level = 1;
+  }
+
+  if(!state.sfida){
+    state.sfida = { level: 'principiante', direction: 'to_target' };
+  }
+}
+async function saveState(lang){
+  try{ await storageAdapter.set('state:'+lang, JSON.stringify(state)); }catch(e){ console.warn('storage error', e); }
+  if(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser){
+    window.cloudAPI.pushState(lang, state).catch((e)=>console.warn('cloud push error', e));
+  }
+}
+
+/* ---------- RENDER: header / ring ---------- */
+function renderRing(){
+  const ring = document.getElementById('ring');
+  ring.innerHTML = '';
+  Object.entries(LANGS).forEach(([key, l])=>{
+    const btn = document.createElement('button');
+    btn.className = 'voice-btn' + (key===currentLang ? ' active':'');
+    btn.innerHTML = `<span class="script">${l.script}</span>${l.label}`;
+    btn.onclick = ()=> switchLang(key);
+    ring.appendChild(btn);
+  });
+}
+
+function applyTheme(){
+  const l = LANGS[currentLang];
+  document.documentElement.style.setProperty('--accent', l.accent);
+  document.documentElement.style.setProperty('--accent-soft', l.accent + '29');
+  document.getElementById('voiceWord').textContent = l.word;
+  document.getElementById('langLabel').textContent = l.label;
+  document.getElementById('challengeText').closest('.card').setAttribute('dir', l.dir);
+  document.getElementById('scenarioBox').closest('.card').setAttribute('dir', l.dir);
+}
+
+async function switchLang(key){
+  currentLang = key;
+  await loadState(key);
+  renderRing();
+  applyTheme();
+  renderStreak();
+  renderChallenge();
+  renderSounds();
+  renderAudioSource();
+  renderScenario();
+  renderNotebook();
+  renderHistory();
+  renderBeginner();
+  renderMap();
+}
+
+function renderStreak(){
+  document.getElementById('streakCount').textContent = state.streak;
+}
+
+/* ---------- SFIDA ---------- */
+const SFIDA_DURATION = { principiante: '30 secondi', intermedio: '60 secondi', avanzato: '60 secondi' };
+
+function currentSfidaList(){ return CHALLENGES[state.sfida.level]; }
+
+function renderChallenge(){
+  const list = currentSfidaList();
+  const level = state.sfida.level;
+  const dir = state.sfida.direction;
+
+  document.querySelectorAll('#sfidaLevelTabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.level === level);
+  });
+  document.getElementById('sfidaTitle').textContent = `Parla per ${SFIDA_DURATION[level]}`;
+
+  const isPrincipiante = (level === 'principiante');
+  document.getElementById('sfidaDirTabs').classList.toggle('hidden', !isPrincipiante);
+  document.getElementById('sfidaDirToTarget').textContent = `Italiano \u2192 ${LANGS[currentLang].label}`;
+  document.getElementById('sfidaDirToIt').textContent = `${LANGS[currentLang].label} \u2192 Italiano`;
+  document.querySelectorAll('#sfidaDirTabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.dir === dir);
+  });
+  document.getElementById('sfidaDirNote').textContent = isPrincipiante
+    ? ''
+    : 'A questo livello la frase resta in italiano: l\'obiettivo è la scioltezza nella lingua target.';
+
+  currentSlot = dayOfMonthIndex(list.length);
+  document.getElementById('sfidaSlotTag').textContent = `Slot ${currentSlot+1}/${list.length}`;
+
+  const item = list[currentSlot];
+  const showTarget = isPrincipiante && dir === 'to_it' && item[currentLang];
+  const promptEl = document.getElementById('challengeText');
+  promptEl.textContent = showTarget ? item[currentLang] : item.it;
+  const showingArabic = showTarget && currentLang === 'ar';
+  promptEl.setAttribute('dir', showingArabic ? 'rtl' : 'ltr');
+  promptEl.classList.toggle('rtl-text', showingArabic);
+
+  const key = todayStr()+':'+level+':'+currentSlot;
+  const isDone = state.done.includes(key);
+  document.getElementById('btnDone').textContent = isDone ? 'Fatta oggi ✓' : 'Segna come fatta';
+  document.getElementById('btnDone').disabled = isDone;
+}
+document.querySelectorAll('#sfidaLevelTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.sfida.level = btn.dataset.level;
+    await saveState(currentLang);
+    renderChallenge();
+  };
+});
+document.querySelectorAll('#sfidaDirTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.sfida.direction = btn.dataset.dir;
+    await saveState(currentLang);
+    renderChallenge();
+  };
+});
+document.getElementById('btnDone').onclick = async ()=>{
+  const key = todayStr()+':'+state.sfida.level+':'+currentSlot;
+  if(state.done.includes(key)) return;
+  state.done.push(key);
+  const y = new Date(); y.setDate(y.getDate()-1);
+  const wasYesterday = state.lastDate === y.toISOString().slice(0,10);
+  state.streak = (state.lastDate === todayStr()) ? state.streak : (wasYesterday ? state.streak+1 : 1);
+  state.lastDate = todayStr();
+  await saveState(currentLang);
+  renderStreak(); renderChallenge(); renderHistory(); renderMap();
+};
+document.getElementById('btnAnother').onclick = ()=>{
+  const list = currentSfidaList();
+  currentSlot = Math.floor(Math.random()*list.length);
+  renderChallenge();
+};
+
+/* ---------- SHADOWING TIMER ---------- */
+function fmt(s){ const m=Math.floor(s/60), sec=s%60; return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0'); }
+function renderPhaseList(){
+  const ul = document.getElementById('phaseList');
+  ul.innerHTML='';
+  PHASES.forEach((p,i)=>{
+    const li = document.createElement('li');
+    li.className = i===timer.phase ? 'current' : '';
+    li.innerHTML = `<span>${p.label}</span><b>${fmt(p.secs)}</b>`;
+    ul.appendChild(li);
+  });
+}
+function resetTimer(){
+  clearInterval(timer.interval);
+  timer.running=false; timer.phase=0; timer.seconds = PHASES[0].secs;
+  document.getElementById('btnTimerToggle').textContent='Avvia';
+  document.getElementById('timerDisplay').textContent = fmt(timer.seconds);
+  document.getElementById('phaseLabel').textContent = PHASES[0].label;
+  renderPhaseList();
+}
+document.getElementById('btnTimerReset').onclick = resetTimer;
+document.getElementById('btnTimerToggle').onclick = ()=>{
+  if(timer.running){
+    clearInterval(timer.interval); timer.running=false;
+    document.getElementById('btnTimerToggle').textContent='Riprendi';
+    return;
+  }
+  timer.running = true;
+  document.getElementById('btnTimerToggle').textContent='Pausa';
+  timer.interval = setInterval(()=>{
+    timer.seconds--;
+    if(timer.seconds < 0){
+      timer.phase++;
+      if(timer.phase >= PHASES.length){ resetTimer(); return; }
+      timer.seconds = PHASES[timer.phase].secs;
+      document.getElementById('phaseLabel').textContent = PHASES[timer.phase].label;
+      renderPhaseList();
+    }
+    document.getElementById('timerDisplay').textContent = fmt(timer.seconds);
+  },1000);
+};
+
+/* ---------- REGISTRAZIONE VOCALE (temporanea, non salvata) ---------- */
+let mediaRecorder = null;
+let recChunks = [];
+let recStream = null;
+let isRecording = false;
+
+function recSetStatus(text, recording){
+  const el = document.getElementById('recStatus');
+  el.textContent = text;
+  el.classList.toggle('recording', !!recording);
+}
+
+document.getElementById('recToggle').onclick = async ()=>{
+  const btn = document.getElementById('recToggle');
+  if(isRecording){
+    mediaRecorder.stop();
+    return;
+  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === 'undefined'){
+    recSetStatus('Registrazione non disponibile in questo browser/ambiente. Usa il registratore vocale del telefono.', false);
+    return;
+  }
+  try{
+    recStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+    recChunks = [];
+    mediaRecorder = new MediaRecorder(recStream);
+    mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recChunks.push(e.data); };
+    mediaRecorder.onstop = ()=>{
+      isRecording = false;
+      btn.classList.remove('recording');
+      btn.innerHTML = '&#9679; Registra';
+      recStream.getTracks().forEach(t=>t.stop());
+      if(recChunks.length === 0){
+        recSetStatus('Nessun audio registrato.', false);
+        return;
+      }
+      const blob = new Blob(recChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+      const url = URL.createObjectURL(blob);
+      const player = document.getElementById('recPlayer');
+      player.src = url;
+      player.classList.remove('hidden');
+      document.getElementById('recClear').classList.remove('hidden');
+      recSetStatus('Registrazione pronta — riascoltala qui sotto.', false);
+    };
+    mediaRecorder.start();
+    isRecording = true;
+    btn.classList.add('recording');
+    btn.innerHTML = '&#9632; Ferma';
+    recSetStatus('Registrazione in corso...', true);
+  }catch(e){
+    console.warn('mic error', e);
+    recSetStatus('Non riesco ad accedere al microfono (permesso negato o non disponibile). Usa il registratore vocale del telefono come alternativa.', false);
+  }
+};
+document.getElementById('recClear').onclick = ()=>{
+  const player = document.getElementById('recPlayer');
+  if(player.src){ URL.revokeObjectURL(player.src); }
+  player.removeAttribute('src');
+  player.classList.add('hidden');
+  document.getElementById('recClear').classList.add('hidden');
+  recSetStatus('Pronto a registrare', false);
+};
+
+/* ---------- SUONI ---------- */
+function renderSounds(){
+  const box = document.getElementById('soundsList');
+  box.innerHTML='';
+  LANGS[currentLang].sounds.forEach(s=>{
+    const div = document.createElement('div');
+    div.className='sound-item';
+    div.innerHTML = `<div><span class="sym">${s.sym}</span><span class="name">${s.name}</span></div>
+      <p>${s.desc}</p><div class="pairs">${s.pairs}</div>
+      ${s.tip ? `<div class="sound-tip">✎ ${s.tip}</div>` : ''}`;
+    box.appendChild(div);
+  });
+}
+
+function renderAudioSource(){
+  const box = document.getElementById('audioSourcesList');
+  const src = LANGS[currentLang].audioSource;
+  if(!src){ box.innerHTML=''; return; }
+  box.innerHTML = `<div class="sound-item" style="border-top:none; padding-top:0;">
+    <div><span class="sym">&#9835;</span><span class="name">${src.name}</span></div>
+    <p><b style="color:var(--ink);">Dove:</b> ${src.where}</p>
+    <div class="sound-tip">✎ ${src.tip}</div>
+  </div>`;
+}
+
+/* ---------- DIALOGHI ---------- */
+function renderScenario(){
+  const list = SCENARIOS[currentLevel];
+  document.getElementById('scenarioBox').textContent = list[Math.floor(Math.random()*list.length)];
+}
+document.getElementById('btnNewScenario').onclick = renderScenario;
+document.querySelectorAll('#levelTabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('#levelTabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentLevel = Number(btn.dataset.level);
+    renderScenario();
+  };
+});
+
+/* ---------- QUADERNO ---------- */
+function renderNotebook(){
+  const box = document.getElementById('entriesList');
+  document.getElementById('btnExport').disabled = state.notebook.length===0;
+  box.innerHTML='';
+  if(state.notebook.length===0){ box.innerHTML = '<div class="empty">Ancora nessuna voce. Aggiungi la tua prima correzione dopo una conversazione di oggi.</div>'; return; }
+  [...state.notebook].reverse().forEach(e=>{
+    const div = document.createElement('div');
+    div.className='entry';
+    div.innerHTML = `<div class="orig">${e.orig}</div><div class="corr">${e.corr}</div><div class="meta">${e.date}</div>`;
+    box.appendChild(div);
+  });
+}
+document.getElementById('btnAddEntry').onclick = async ()=>{
+  const orig = document.getElementById('inputOrig').value.trim();
+  const corr = document.getElementById('inputCorr').value.trim();
+  if(!orig || !corr) return;
+  state.notebook.push({orig, corr, date: todayStr()});
+  await saveState(currentLang);
+  document.getElementById('inputOrig').value='';
+  document.getElementById('inputCorr').value='';
+  renderNotebook();
+};
+
+/* ---------- PERCORSO INIZIALE ---------- */
+function normalizeAnswer(str, isArabic){
+  let s = str.trim();
+  if(/[\u0600-\u06FF]/.test(s)){
+    // Arabo: rimuovi vocali brevi/tatwil e unifica alcune lettere equivalenti
+    s = s.toLowerCase();
+    s = s.replace(/[\u064B-\u0652\u0670\u0640]/g,'');
+    s = s.replace(/[إأآا]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه');
+  } else if(/[\u4E00-\u9FFF\u3040-\u30FF\uFF66-\uFF9F]/.test(s)){
+    // Cinese/Giapponese: nessuno spazio tra i caratteri, niente maiuscole/accenti da gestire
+    s = s.replace(/[\s，。？！：；、,.!?;:]/g,'');
+    return s;
+  } else {
+    s = s.toLowerCase();
+    s = s.replace(/ß/g, 'ss'); // sz tedesca equiparata a "ss"
+    s = s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); // accenti latini
+  }
+  s = s.replace(/['’`.,!?¿¡"]/g,'').replace(/\s+/g,' ').trim();
+  return s;
+}
+function currentBeginnerList(){ return BEGINNER[currentLang][state.beginner.level - 1]; }
+function currentDirState(){ return state.beginner.progress[state.beginner.level][state.beginner.direction]; }
+
+function renderBeginner(){
+  const list = currentBeginnerList();
+  const dir = state.beginner.direction;
+  const level = state.beginner.level;
+  const ds = currentDirState();
+  const idx = ds.index;
+  ds.wrong = 0;
+
+  document.querySelectorAll('#bpLevelTabs button').forEach(b=>{
+    b.classList.toggle('active', Number(b.dataset.level) === level);
+  });
+  document.querySelectorAll('#bpDirTabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.dir === dir);
+  });
+
+  if(!list){
+    document.getElementById('bpStatsRow').innerHTML = '';
+    document.getElementById('bpProgressFill').style.width = '0%';
+    document.getElementById('bpProgressLabel').textContent = 'Non ancora disponibile';
+    document.getElementById('bpPrompt').removeAttribute('dir');
+    document.getElementById('bpPrompt').classList.remove('rtl-text');
+    document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">In arrivo</div>Questo livello per ${LANGS[currentLang].label} sarà disponibile a breve. Prova nel frattempo un altro livello o un'altra lingua.</div>`;
+    document.getElementById('bpInput').classList.add('hidden');
+    document.getElementById('bpCheck').classList.add('hidden');
+    document.getElementById('bpSkip').classList.add('hidden');
+    return;
+  }
+
+  document.getElementById('bpDirToTarget').textContent = `Italiano \u2192 ${LANGS[currentLang].label}`;
+  document.getElementById('bpDirToIt').textContent = `${LANGS[currentLang].label} \u2192 Italiano`;
+
+  const precisione = ds.completed>0 ? Math.round(ds.correctFirstTry/ds.completed*100) : null;
+  document.getElementById('bpStatsRow').innerHTML = `
+    <div class="stat-box"><div class="n">${ds.score}</div><div class="l">PUNTI</div></div>
+    <div class="stat-box"><div class="n">${precisione===null?'&mdash;':precisione+'%'}</div><div class="l">PRECISIONE</div></div>
+    <div class="stat-box"><div class="n">${ds.completed}</div><div class="l">COMPLETATE</div></div>
+  `;
+
+  document.getElementById('bpFeedback').textContent='';
+  document.getElementById('bpFeedback').className='bp-feedback';
+  document.getElementById('bpInput').value='';
+
+  const inputIsArabic = (dir === 'to_target' && currentLang === 'ar');
+  document.getElementById('bpInput').dir = inputIsArabic ? 'rtl' : 'ltr';
+  document.getElementById('bpInput').placeholder = (dir === 'to_target')
+    ? `Scrivi in ${LANGS[currentLang].label}...`
+    : 'Scrivi in italiano...';
+
+  if(idx >= list.length){
+    document.getElementById('bpProgressFill').style.width='100%';
+    document.getElementById('bpProgressLabel').textContent = `Completato · ${list.length}/${list.length}`;
+    document.getElementById('bpPrompt').removeAttribute('dir');
+    document.getElementById('bpPrompt').classList.remove('rtl-text');
+
+    const nextLevel = level < 10 ? level + 1 : null;
+    const otherDirDone = state.beginner.progress[level][dir === 'to_target' ? 'to_it' : 'to_target'].index >= list.length;
+    let nextStepMsg;
+    if(nextLevel && otherDirDone){
+      nextStepMsg = `Hai completato tutto il Livello ${level}. Passa al <b>Livello ${nextLevel}</b> qui sopra per continuare.`;
+    } else if(nextLevel){
+      nextStepMsg = `Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}", oppure passa direttamente al <b>Livello ${nextLevel}</b>.`;
+    } else if(!otherDirDone){
+      nextStepMsg = `Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}" per completare anche questa direzione.`;
+    } else {
+      nextStepMsg = `Hai completato tutti e 10 i livelli in entrambe le direzioni per ${LANGS[currentLang].label}. Passa alle Sfide o ai Dialoghi per continuare a esercitarti.`;
+    }
+    document.getElementById('bpPrompt').innerHTML = `<div class="bp-done"><div class="n">Livello ${level} completato ✓</div>${nextStepMsg}</div>`;
+    document.getElementById('bpInput').classList.add('hidden');
+    document.getElementById('bpCheck').classList.add('hidden');
+    document.getElementById('bpSkip').classList.add('hidden');
+    return;
+  }
+  document.getElementById('bpInput').classList.remove('hidden');
+  document.getElementById('bpCheck').classList.remove('hidden');
+  document.getElementById('bpSkip').classList.remove('hidden');
+  document.getElementById('bpProgressFill').style.width = (idx/list.length*100)+'%';
+  document.getElementById('bpProgressLabel').textContent = `Frase ${idx+1} di ${list.length}`;
+
+  const item = list[idx];
+  const showingArabic = (dir === 'to_it' && currentLang === 'ar');
+  const promptEl = document.getElementById('bpPrompt');
+  promptEl.textContent = (dir === 'to_target') ? item.it : item.ans[0];
+  promptEl.setAttribute('dir', showingArabic ? 'rtl' : 'ltr');
+  promptEl.classList.toggle('rtl-text', showingArabic);
+}
+async function bpAdvance(){
+  const ds = currentDirState();
+  ds.index++;
+  ds.wrong = 0;
+  await saveState(currentLang);
+  renderBeginner();
+  renderMap();
+}
+document.getElementById('bpCheck').onclick = async ()=>{
+  const list = currentBeginnerList();
+  const dir = state.beginner.direction;
+  const ds = currentDirState();
+  const idx = ds.index;
+  if(idx >= list.length) return;
+  const item = list[idx];
+  const isArInput = (dir === 'to_target' && currentLang === 'ar');
+  const given = normalizeAnswer(document.getElementById('bpInput').value, isArInput);
+  if(!given) return;
+
+  const ok = (dir === 'to_target')
+    ? item.ans.some(a => normalizeAnswer(a, isArInput) === given)
+    : normalizeAnswer(item.it, false) === given;
+
+  const fb = document.getElementById('bpFeedback');
+  if(ok){
+    const gained = ds.wrong === 0 ? 10 : (ds.wrong === 1 ? 5 : 2);
+    ds.score += gained;
+    if(ds.wrong === 0) ds.correctFirstTry++;
+    ds.completed++;
+    fb.className='bp-feedback ok';
+    fb.textContent = `Corretto ✓  +${gained} punti`;
+    await saveState(currentLang);
+    if(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser){
+      window.cloudAPI.addPoints(gained).then(()=>renderLeaderboard()).catch(()=>{});
+    }
+    setTimeout(bpAdvance, 800);
+  } else {
+    ds.wrong = (ds.wrong||0)+1;
+    fb.className='bp-feedback ko';
+    if(ds.wrong >= 3){
+      const correctAnswer = (dir === 'to_target') ? item.ans[0] : item.it;
+      fb.innerHTML = 'Non ancora corretto.<span class="hint">Suggerimento: ' + correctAnswer + '</span>';
+    } else {
+      fb.textContent = 'Non ancora corretto, riprova.';
+    }
+    await saveState(currentLang);
+  }
+};
+document.getElementById('bpInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ document.getElementById('bpCheck').click(); }
+});
+document.getElementById('bpSkip').onclick = bpAdvance;
+document.getElementById('bpReset').onclick = async ()=>{
+  state.beginner.progress[state.beginner.level][state.beginner.direction] = { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 };
+  await saveState(currentLang);
+  renderBeginner();
+};
+document.querySelectorAll('#bpLevelTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.beginner.level = Number(btn.dataset.level);
+    await saveState(currentLang);
+    renderBeginner();
+  };
+});
+document.querySelectorAll('#bpDirTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.beginner.direction = btn.dataset.dir;
+    await saveState(currentLang);
+    renderBeginner();
+  };
+});
+
+/* ---------- MAPPA A TAPPE ---------- */
+const MAP_NODES = [
+  { id:'base-1', label:'Percorso Base · Livello 1', kind:'percorso', level:1, gating:true },
+  { id:'base-2', label:'Percorso Base · Livello 2', kind:'percorso', level:2, gating:true },
+  { id:'base-3', label:'Percorso Base · Livello 3', kind:'percorso', level:3, gating:true },
+  { id:'base-4', label:'Percorso Base · Livello 4', kind:'percorso', level:4, gating:true },
+  { id:'sfida-1', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-5', label:'Percorso Base · Livello 5', kind:'percorso', level:5, gating:true },
+  { id:'sfida-2', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-6', label:'Percorso Base · Livello 6', kind:'percorso', level:6, gating:true },
+  { id:'base-7', label:'Percorso Base · Livello 7', kind:'percorso', level:7, gating:true },
+  { id:'sfida-3', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-8', label:'Percorso Base · Livello 8', kind:'percorso', level:8, gating:true },
+  { id:'sfida-4', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-9', label:'Percorso Base · Livello 9', kind:'percorso', level:9, gating:true },
+  { id:'base-10', label:'Percorso Base · Livello 10', kind:'percorso', level:10, gating:true },
+  { id:'sfida-5', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+];
+
+function isMapNodeComplete(node){
+  if(node.kind === 'percorso'){
+    const list = BEGINNER[currentLang][node.level - 1];
+    if(!list) return false;
+    const ds = state.beginner.progress[node.level] && state.beginner.progress[node.level].to_target;
+    return !!ds && ds.index >= list.length;
+  } else {
+    const count = state.done.filter(d => d.split(':')[1] === node.level).length;
+    return count >= 3;
+  }
+}
+
+function switchToTab(tabName){
+  const btn = document.querySelector(`nav.tabs button[data-tab="${tabName}"]`);
+  if(btn) btn.click();
+}
+
+function renderMap(){
+  document.getElementById('mapLangLabel').textContent = LANGS[currentLang].label;
+  const wrap = document.getElementById('mapPath');
+  wrap.innerHTML = '';
+  let prevGateComplete = true;
+  MAP_NODES.forEach((node, i)=>{
+    const complete = isMapNodeComplete(node);
+    const unlocked = prevGateComplete;
+    const status = complete ? 'done' : (unlocked ? 'current' : 'locked');
+    if(node.gating){ prevGateComplete = complete; }
+
+    const row = document.createElement('div');
+    row.className = 'map-node-row';
+    const col = document.createElement('div');
+    col.className = 'map-node-col';
+    const offset = Math.round(Math.sin(i * 0.85) * 60);
+    col.style.transform = `translateX(${offset}px)`;
+
+    const nodeEl = document.createElement('div');
+    nodeEl.className = 'map-node ' + status + (node.gating ? '' : ' checkpoint');
+    nodeEl.innerHTML = status === 'done'
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg>'
+      : status === 'locked'
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>'
+        : (node.gating ? String(i + 1) : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>');
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'map-node-label' + (status === 'done' ? ' done' : '');
+    labelEl.textContent = node.label + (node.gating ? '' : ' (facoltativa)');
+
+    if(status !== 'locked'){
+      nodeEl.onclick = async ()=>{
+        if(node.kind === 'percorso'){
+          state.beginner.level = node.level;
+          state.beginner.direction = 'to_target';
+          await saveState(currentLang);
+          switchToTab('percorso');
+          renderBeginner();
+        } else {
+          state.sfida.level = node.level;
+          await saveState(currentLang);
+          switchToTab('sfida');
+          renderChallenge();
+        }
+      };
+    }
+
+    col.appendChild(nodeEl);
+    col.appendChild(labelEl);
+    row.appendChild(col);
+    wrap.appendChild(row);
+  });
+}
+document.getElementById('mapToLeaderboard').onclick = ()=> switchToTab('percorso');
+
+/* ---------- CRONOLOGIA ---------- */
+function renderHistory(){
+  document.getElementById('cronoLangLabel').textContent = LANGS[currentLang].label;
+  const uniqueDays = new Set(state.done.map(d=>d.split(':')[0])).size;
+  const stats = document.getElementById('statsRow');
+  stats.innerHTML = `
+    <div class="stat-box"><div class="n">${state.streak}</div><div class="l">SERIE ATTUALE</div></div>
+    <div class="stat-box"><div class="n">${uniqueDays}</div><div class="l">GIORNI DI PRATICA</div></div>
+    <div class="stat-box"><div class="n">${state.done.length}</div><div class="l">SFIDE COMPLETATE</div></div>
+  `;
+  const list = document.getElementById('historyList');
+  if(state.done.length===0){
+    list.innerHTML = '<div class="empty">Nessuna sfida completata ancora per questa lingua. Segna la sfida di oggi per iniziare la cronologia.</div>';
+    return;
+  }
+  const sorted = [...state.done].sort().reverse();
+  list.innerHTML = sorted.map(d=>{
+    const parts = d.split(':');
+    const date = parts[0];
+    let text = 'Sfida completata';
+    if(parts.length === 3){
+      const arr = CHALLENGES[parts[1]];
+      const item = arr && arr[Number(parts[2])];
+      if(item) text = item.it;
+    }
+    return `<div class="hist-item"><span class="htext">${text}</span><span class="hdate">${date}</span></div>`;
+  }).join('');
+}
+
+/* ---------- EXPORT QUADERNO ---------- */
+function exportNotebook(){
+  if(state.notebook.length===0) return;
+  let text = `Quaderno di correzione — ${LANGS[currentLang].label}\nEsportato il ${todayStr()}\n\n`;
+  [...state.notebook].reverse().forEach(e=>{
+    text += `[${e.date}]\nDetto:     ${e.orig}\nCorretto:  ${e.corr}\n\n`;
+  });
+  const blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `quaderno-${currentLang}-${todayStr()}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+document.getElementById('btnExport').onclick = exportNotebook;
+
+/* ---------- TABS ---------- */
+document.querySelectorAll('nav.tabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
+    document.getElementById('tab-'+btn.dataset.tab).classList.remove('hidden');
+    if(btn.dataset.tab === 'percorso' && typeof renderLeaderboard === 'function'){
+      renderLeaderboard();
+    }
+  };
+});
+
+/* ---------- INIT ---------- */
+(async function init(){
+  renderRing();
+  await switchLang('en');
+  resetTimer();
+})();
+
+/* Indicatori "si può scorrere" per l'anello lingue e la barra di navigazione */
+function setupScrollHint(scrollEl, wrapId){
+  if(!scrollEl) return;
+  const wrap = document.getElementById(wrapId);
+  const left = wrap.querySelector('.scroll-fade.left');
+  const right = wrap.querySelector('.scroll-fade.right');
+  function update(){
+    const canLeft = scrollEl.scrollLeft > 4;
+    const canRight = scrollEl.scrollLeft < (scrollEl.scrollWidth - scrollEl.clientWidth - 4);
+    left.classList.toggle('show', canLeft);
+    right.classList.toggle('show', canRight);
+  }
+  scrollEl.addEventListener('scroll', update, { passive:true });
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update);
+  update();
+  setTimeout(update, 300); // dopo che i font sono caricati e le larghezze si sono assestate
+}
+setupScrollHint(document.getElementById('ring'), 'ringWrap');
+setupScrollHint(document.querySelector('nav.tabs'), 'navWrap');
+
+/* Registra il service worker solo se disponibile (non nell'ambiente artifact di Claude) */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{ /* niente, va bene anche senza */ });
+  });
+}
+
+/* ---------- ACCOUNT / SINCRONIZZAZIONE CLOUD ---------- */
+let authMode = 'login';
+
+function openAuthModal(){
+  document.getElementById('authModal').classList.remove('hidden');
+  document.getElementById('authFeedback').textContent = '';
+  const loggedIn = window.cloudAPI && window.cloudAPI.currentUser;
+  document.getElementById('authLoggedOut').classList.toggle('hidden', !!loggedIn);
+  document.getElementById('authLoggedIn').classList.toggle('hidden', !loggedIn);
+  if(loggedIn){
+    document.getElementById('authUserEmail').textContent = window.cloudAPI.currentUser.email;
+    document.getElementById('authModalTitle').textContent = 'Account';
+    const isAdmin = !!(window.cloudAPI.adminUid && window.cloudAPI.currentUser.uid === window.cloudAPI.adminUid);
+    document.getElementById('authAdminBtn').classList.toggle('hidden', !isAdmin);
+  } else {
+    document.getElementById('authModalTitle').textContent = authMode === 'login' ? 'Accedi' : 'Registrati';
+  }
+}
+function closeAuthModal(){ document.getElementById('authModal').classList.add('hidden'); }
+
+document.getElementById('accountBtn').onclick = openAuthModal;
+document.getElementById('authModalClose').onclick = closeAuthModal;
+document.getElementById('authModal').addEventListener('click', (e)=>{
+  if(e.target.id === 'authModal') closeAuthModal();
+});
+document.querySelectorAll('#authTabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    authMode = btn.dataset.mode;
+    document.querySelectorAll('#authTabs button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('authSubmit').textContent = authMode === 'login' ? 'Accedi' : 'Crea account';
+    document.getElementById('authModalTitle').textContent = authMode === 'login' ? 'Accedi' : 'Registrati';
+    document.getElementById('authFeedback').textContent = '';
+    document.getElementById('authNickname').classList.toggle('hidden', authMode !== 'signup');
+  };
+});
+
+document.getElementById('pwToggle').onclick = ()=>{
+  const input = document.getElementById('authPass');
+  const btn = document.getElementById('pwToggle');
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  btn.classList.toggle('showing', !showing);
+};
+document.getElementById('authSubmit').onclick = async ()=>{
+  const fb = document.getElementById('authFeedback');
+  if(!window.cloudAPI || !window.cloudAPI.enabled){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Sincronizzazione non ancora configurata su questa copia dell\'app.';
+    return;
+  }
+  const email = document.getElementById('authEmail').value.trim();
+  const pass = document.getElementById('authPass').value;
+  const nickname = document.getElementById('authNickname').value.trim();
+  if(!email || pass.length < 6){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Inserisci un\'email valida e una password di almeno 6 caratteri.';
+    return;
+  }
+  if(authMode === 'signup' && !nickname){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Scegli un nome pubblico per la classifica.';
+    return;
+  }
+  fb.className='auth-feedback'; fb.textContent = 'Un momento...';
+  try{
+    if(authMode === 'login'){
+      await window.cloudAPI.login(email, pass);
+    } else {
+      pendingSignupNickname = nickname;
+      await window.cloudAPI.signup(email, pass);
+      window.cloudAPI.registerDirectory(nickname).catch(()=>{});
+    }
+    fb.textContent = '';
+  }catch(e){
+    fb.className='auth-feedback err';
+    fb.textContent = translateAuthError(e);
+  }
+};
+document.getElementById('authLogout').onclick = async ()=>{
+  if(window.cloudAPI) await window.cloudAPI.logout();
+  closeAuthModal();
+};
+
+/* ---------- PANNELLO AMMINISTRATORE ---------- */
+document.getElementById('authAdminBtn').onclick = ()=>{
+  closeAuthModal();
+  document.getElementById('adminModal').classList.remove('hidden');
+  renderAdminPanel();
+};
+document.getElementById('adminModalClose').onclick = ()=>{
+  document.getElementById('adminModal').classList.add('hidden');
+};
+async function renderAdminPanel(){
+  const listEl = document.getElementById('adminList');
+  const countEl = document.getElementById('adminCount');
+  listEl.innerHTML = '<div class="empty">Carico elenco iscritti...</div>';
+  countEl.textContent = 'Carico...';
+  try{
+    const [directory, leaderboard] = await Promise.all([
+      window.cloudAPI.getDirectory(),
+      window.cloudAPI.getLeaderboard(1000)
+    ]);
+    const scoreByUid = {};
+    leaderboard.forEach(r => scoreByUid[r.uid] = r.totalScore || 0);
+    countEl.textContent = `${directory.length} iscritti totali`;
+    if(directory.length === 0){
+      listEl.innerHTML = '<div class="empty">Nessun iscritto ancora.</div>';
+      return;
+    }
+    listEl.innerHTML = directory.map(u=>{
+      const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString('it-IT') : '&mdash;';
+      return `<div class="lb-row">
+        <span class="lb-name" style="flex:2;">${u.email || '&mdash;'}<br><span style="font-size:11px;color:var(--ink-dim);">${u.nickname || 'senza nickname'} &middot; dal ${date}</span></span>
+        <span class="lb-score">${scoreByUid[u.uid] ?? 0}</span>
+      </div>`;
+    }).join('');
+  }catch(e){
+    console.warn('admin panel error', e);
+    listEl.innerHTML = '<div class="empty">Non riesco a caricare l\'elenco. Verifica di aver impostato correttamente il tuo UID sia nel codice (ADMIN_UID) sia nelle regole Firestore.</div>';
+    countEl.textContent = '';
+  }
+}
+
+function translateAuthError(e){
+  const code = (e && e.code) || '';
+  const map = {
+    'auth/email-already-in-use': 'Questa email ha già un account: prova ad accedere invece di registrarti.',
+    'auth/invalid-email': 'Email non valida.',
+    'auth/weak-password': 'Password troppo debole (minimo 6 caratteri).',
+    'auth/user-not-found': 'Nessun account con questa email: prova a registrarti.',
+    'auth/wrong-password': 'Password errata.',
+    'auth/invalid-credential': 'Email o password errate.',
+    'auth/too-many-requests': 'Troppi tentativi, riprova tra qualche minuto.',
+  };
+  return map[code] || 'Qualcosa è andato storto, riprova.';
+}
+
+let pendingSignupNickname = null;
+
+function sumBeginnerScore(stateObj){
+  if(!stateObj || !stateObj.beginner) return 0;
+  const b = stateObj.beginner;
+  const a = (b.to_target && b.to_target.score) || 0;
+  const c = (b.to_it && b.to_it.score) || 0;
+  return a + c;
+}
+
+async function syncAllLanguagesFromCloud(){
+  let backfillTotal = 0;
+  for(const lang of Object.keys(LANGS)){
+    let cloudData = null;
+    try{ cloudData = await window.cloudAPI.pullState(lang); }catch(e){ console.warn('pull error', lang, e); }
+    if(cloudData){
+      try{ localStorage.setItem('state:'+lang, JSON.stringify(cloudData)); }catch(e){}
+    } else {
+      try{
+        const localRaw = localStorage.getItem('state:'+lang);
+        if(localRaw){
+          const parsed = JSON.parse(localRaw);
+          await window.cloudAPI.pushState(lang, parsed);
+          backfillTotal += sumBeginnerScore(parsed);
+        }
+      }catch(e){ console.warn('push error', lang, e); }
+    }
+  }
+  try{
+    await window.cloudAPI.initLeaderboardIfEmpty(backfillTotal, pendingSignupNickname);
+  }catch(e){ console.warn('leaderboard init error', e); }
+  pendingSignupNickname = null;
+  await switchLang(currentLang);
+  renderLeaderboard();
+}
+
+/* ---------- CLASSIFICA ---------- */
+async function renderLeaderboard(){
+  const loggedOutEl = document.getElementById('leaderboardLoggedOut');
+  const listEl = document.getElementById('leaderboardList');
+  const loggedIn = window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser;
+  loggedOutEl.classList.toggle('hidden', !!loggedIn);
+  listEl.classList.toggle('hidden', !loggedIn);
+  if(!loggedIn) return;
+  listEl.innerHTML = '<div class="empty">Carico la classifica...</div>';
+  listEl.classList.remove('hidden');
+  try{
+    const rows = await window.cloudAPI.getLeaderboard(15);
+    if(rows.length === 0){
+      listEl.innerHTML = '<div class="empty">Ancora nessun punteggio in classifica. Fai qualche frase nel percorso per essere il primo!</div>';
+      return;
+    }
+    const myUid = window.cloudAPI.currentUser.uid;
+    listEl.innerHTML = rows.map((r, i)=>{
+      const isMe = r.uid === myUid;
+      return `<div class="lb-row${isMe ? ' me':''}">
+        <span class="lb-rank">#${i+1}</span>
+        <span class="lb-name">${(r.nickname||'Anonimo')}${isMe ? ' (tu)':''}</span>
+        <span class="lb-score">${r.totalScore||0}</span>
+      </div>`;
+    }).join('');
+  }catch(e){
+    console.warn('leaderboard load error', e);
+    listEl.innerHTML = '<div class="empty">Non sono riuscito a caricare la classifica. Riprova con "Aggiorna".</div>';
+  }
+}
+document.getElementById('lbRefresh').onclick = renderLeaderboard;
+
+/* ---------- TUTORIAL DI BENVENUTO ---------- */
+const ONBOARD_SLIDES = [
+  {
+    title: "Benvenuto in Quattro Voci",
+    body: "Un ecosistema di immersione in cinque lingue — Inglese, Français, العربية, Español e Deutsch — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
+  },
+  {
+    title: "Un'app, sette strumenti",
+    body: "Sfida del giorno, percorso Base da zero, timer di shadowing, suoni critici di pronuncia, dialoghi di role-play, quaderno di correzione e cronologia dei progressi. Tutto in un unico posto, per ogni lingua."
+  },
+  {
+    title: "Comunicazione prima, grammatica dopo",
+    body: "L'obiettivo non è la frase perfetta al primo colpo: è farti parlare, sbagliare, e correggerti dopo con calma. Non aspettare di sentirti pronto per iniziare."
+  },
+  {
+    title: "Facoltativo: account e classifica",
+    body: "Puoi usare l'app così com'è, con i progressi salvati solo su questo dispositivo. Oppure creare un account gratuito (icona in alto a destra) per sincronizzare tutto e competere in classifica nel percorso Base."
+  }
+];
+let obIndex = 0;
+function renderOnboard(){
+  const s = ONBOARD_SLIDES[obIndex];
+  document.getElementById('onboardTitle').textContent = s.title;
+  document.getElementById('onboardSlides').innerHTML = `<p class="sub" style="font-size:14.5px; line-height:1.6;">${s.body}</p>`;
+  document.getElementById('obDots').innerHTML = ONBOARD_SLIDES.map((_,i)=>`<span class="ob-dot${i===obIndex?' active':''}"></span>`).join('');
+  document.getElementById('obPrev').classList.toggle('hidden', obIndex===0);
+  document.getElementById('obNext').textContent = obIndex === ONBOARD_SLIDES.length-1 ? 'Inizia' : 'Avanti';
+}
+function openOnboard(){
+  obIndex = 0;
+  renderOnboard();
+  document.getElementById('onboardModal').classList.remove('hidden');
+}
+function closeOnboard(){
+  document.getElementById('onboardModal').classList.add('hidden');
+  try{ localStorage.setItem('qv_onboarding_done', '1'); }catch(e){}
+}
+document.getElementById('obNext').onclick = ()=>{
+  if(obIndex < ONBOARD_SLIDES.length - 1){ obIndex++; renderOnboard(); }
+  else { closeOnboard(); }
+};
+document.getElementById('obPrev').onclick = ()=>{
+  if(obIndex > 0){ obIndex--; renderOnboard(); }
+};
+document.getElementById('onboardSkip').onclick = closeOnboard;
+
+(function maybeShowOnboarding(){
+  try{
+    if(!localStorage.getItem('qv_onboarding_done')){ openOnboard(); }
+  }catch(e){}
+})();
+
+window.addEventListener('cloud-ready', ()=>{
+  if(!window.cloudAPI || !window.cloudAPI.enabled) return;
+  window.cloudAPI.onAuthChange(async (user)=>{
+    window.cloudAPI.currentUser = user;
+    const btn = document.getElementById('accountBtn');
+    btn.classList.toggle('logged-in', !!user);
+    if(!document.getElementById('authModal').classList.contains('hidden')){
+      openAuthModal();
+    }
+    if(user){
+      await syncAllLanguagesFromCloud();
+    } else {
+      renderLeaderboard();
+    }
+  });
+});
+
+</script>
+
+<!-- ============================================================
+     CONFIGURAZIONE FIREBASE (account + sincronizzazione cloud)
+     Sostituisci i valori qui sotto con quelli del TUO progetto
+     Firebase — li trovi in: Console Firebase → ⚙️ Impostazioni
+     progetto → sezione "Le tue app" → oggetto firebaseConfig.
+     Finché sono lasciati com'è, l'app funziona comunque, solo
+     senza account: tutto resta salvato in locale come prima.
+     ============================================================ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc, increment,
+    collection, query, orderBy, limit, getDocs
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC8SbgtSVjD1GmLIleWnGpmceS6dbaz6hI",
+    authDomain: "quattro-voci.firebaseapp.com",
+    projectId: "quattro-voci",
+    storageBucket: "quattro-voci.firebasestorage.app",
+    messagingSenderId: "621886572166",
+    appId: "1:621886572166:web:eea48f5ef7b3e7cee97307"
+  };
+
+  // ⚠️ Dopo aver creato il TUO account (quello che userai come amministratore),
+  // sostituisci questa stringa con il tuo UID, che trovi in:
+  // Console Firebase → Authentication → tab "Utenti" → colonna "UID" della tua riga.
+  const ADMIN_UID = "Xyx8cvHdpnUbyqgSCJZTg8780UM2";
+
+  let app = null, auth = null, db = null;
+  const isConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('INCOLLA');
+
+  if(isConfigured){
+    try{
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+    }catch(e){ console.warn('Firebase init error', e); }
+  }
+
+  window.cloudAPI = {
+    enabled: !!app,
+    currentUser: null,
+    async signup(email, pass){ return createUserWithEmailAndPassword(auth, email, pass); },
+    async login(email, pass){ return signInWithEmailAndPassword(auth, email, pass); },
+    async logout(){ return signOut(auth); },
+    onAuthChange(cb){ if(auth) onAuthStateChanged(auth, cb); },
+    async pushState(lang, stateObj){
+      if(!auth || !auth.currentUser) return;
+      await setDoc(doc(db, 'users', auth.currentUser.uid, 'progress', lang), stateObj);
+    },
+    async pullState(lang){
+      if(!auth || !auth.currentUser) return null;
+      const snap = await getDoc(doc(db, 'users', auth.currentUser.uid, 'progress', lang));
+      return snap.exists() ? snap.data() : null;
+    },
+    async setNickname(nickname){
+      if(!auth || !auth.currentUser) return;
+      await setDoc(doc(db, 'leaderboard', auth.currentUser.uid), { nickname }, { merge:true });
+    },
+    async addPoints(amount){
+      if(!auth || !auth.currentUser || !amount) return;
+      await setDoc(doc(db, 'leaderboard', auth.currentUser.uid), {
+        totalScore: increment(amount),
+        updatedAt: Date.now()
+      }, { merge:true });
+    },
+    async initLeaderboardIfEmpty(startScore, nickname){
+      if(!auth || !auth.currentUser) return;
+      const ref = doc(db, 'leaderboard', auth.currentUser.uid);
+      const snap = await getDoc(ref);
+      if(!snap.exists()){
+        await setDoc(ref, { nickname: nickname || 'Anonimo', totalScore: startScore || 0, updatedAt: Date.now() });
+      }
+    },
+    async getLeaderboard(topN){
+      if(!db) return [];
+      const q = query(collection(db, 'leaderboard'), orderBy('totalScore', 'desc'), limit(topN || 15));
+      const snap = await getDocs(q);
+      const out = [];
+      snap.forEach(d => out.push({ uid: d.id, ...d.data() }));
+      return out;
+    },
+    adminUid: ADMIN_UID,
+    async registerDirectory(nickname){
+      if(!auth || !auth.currentUser) return;
+      await setDoc(doc(db, 'directory', auth.currentUser.uid), {
+        email: auth.currentUser.email || '',
+        nickname: nickname || '',
+        createdAt: Date.now()
+      });
+    },
+    async getDirectory(){
+      if(!db) return [];
+      const q = query(collection(db, 'directory'), orderBy('createdAt', 'desc'));
+      const snap = await getDocs(q);
+      const out = [];
+      snap.forEach(d => out.push({ uid: d.id, ...d.data() }));
+      return out;
+    }
+  };
+
+  window.dispatchEvent(new Event('cloud-ready'));
+</script>
+</body>
+</html>
