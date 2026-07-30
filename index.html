@@ -177,6 +177,7 @@
   .rec-status.recording{ color:#D96C6C; font-weight:600; }
   .rec-status.recording::before{ content:'● '; }
   #recToggle.recording{ background:#D96C6C; }
+  #sfidaMicToggle.recording, #trMicToggle.recording{ background:#D96C6C; }
 
   /* roleplay */
   .level-tabs{ display:flex; gap:6px; margin-bottom: 12px; }
@@ -462,6 +463,24 @@
     <button class="ghost" id="imReset" style="width:100%; margin-top:8px;">Ricomincia questo livello</button>
   </section>
 
+  <!-- TRADUCI: frase libera in italiano -> lingua selezionata -->
+  <section class="card hidden" id="tab-traduci">
+    <span class="tag">Traduci al volo</span>
+    <h2>Frase libera, in tempo reale</h2>
+    <p class="sub">Registra o scrivi una frase in italiano: te la traduco in <b id="trLangLabel">English</b>, con audio. Servizio di traduzione gratuito di terze parti: per frasi lunghe o uso intenso potrebbe essere lento o limitato.</p>
+    <div class="row">
+      <button class="primary" id="trMicToggle">&#127908; Registra in italiano</button>
+    </div>
+    <div class="rec-status" id="trMicStatus" style="margin-top:10px;">Pronto a registrare</div>
+    <input type="text" id="trItInput" placeholder="...oppure scrivi qui la frase in italiano" style="margin-top:12px;">
+    <button class="primary" id="trTranslateBtn" style="width:100%; margin-top:4px;">Traduci</button>
+    <div id="trResultBox" class="hidden" style="margin-top:16px;">
+      <div class="challenge-text" id="trResultText">&mdash;</div>
+      <div id="trResultPhon" class="sound-tip hidden" style="margin-top:-6px;"></div>
+      <button class="ghost" id="trSpeakBtn" style="width:100%; margin-top:10px;">&#128266; Ascolta pronuncia</button>
+    </div>
+  </section>
+
   <!-- SFIDA -->
   <section class="card" id="tab-sfida">
     <span class="tag">Sfida del giorno</span>
@@ -486,6 +505,15 @@
       <button class="primary" id="btnDone">Segna come fatta</button>
       <button class="ghost" id="btnAnother">Un'altra</button>
     </div>
+
+    <div class="rec-divider"></div>
+    <span class="tag">Riscontro &middot; trascrivi quello che hai detto</span>
+    <p class="sub" style="margin-top:-2px;">Registra la tua risposta a voce: te la trascrivo così puoi rileggerla e confrontarla con quello che intendevi dire.</p>
+    <div class="row">
+      <button class="primary" id="sfidaMicToggle">&#127908; Registra e trascrivi</button>
+    </div>
+    <div class="rec-status" id="sfidaMicStatus" style="margin-top:10px;">Pronto a registrare</div>
+    <div id="sfidaTranscriptBox" class="hidden" style="margin-top:12px;"></div>
   </section>
 
   <!-- PERCORSO INIZIALE -->
@@ -621,6 +649,10 @@
   <button data-tab="impara">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4L3 8l9 4 9-4-9-4z"/><path d="M6 10v6c0 1.5 3 2.5 6 2.5s6-1 6-2.5v-6"/></svg>
     Impara
+  </button>
+  <button data-tab="traduci">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 8c0 3 3 5 7 5s7-2 7-5"/><path d="M3 3l3 2-3 2M21 17l-3 2 3 2"/></svg>
+    Traduci
   </button>
   <button data-tab="mappa">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 16.5L10.5 9M13.5 9L16 16.5"/></svg>
@@ -2515,6 +2547,7 @@ async function switchLang(key){
   renderBeginner();
   renderMap();
   renderImpara();
+  renderTraduci();
 }
 
 function renderStreak(){
@@ -2562,6 +2595,12 @@ function renderChallenge(){
   const isDone = state.done.includes(key);
   document.getElementById('btnDone').textContent = isDone ? 'Fatta oggi ✓' : 'Segna come fatta';
   document.getElementById('btnDone').disabled = isDone;
+
+  // Reset del riscontro vocale ogni volta che cambia la frase
+  document.getElementById('sfidaTranscriptBox').classList.add('hidden');
+  document.getElementById('sfidaTranscriptBox').innerHTML = '';
+  if(sfidaListening && sfidaRecognition){ sfidaRecognition.stop(); }
+  sfidaSetMicStatus('Pronto a registrare', false);
 }
 document.querySelectorAll('#sfidaLevelTabs button').forEach(btn=>{
   btn.onclick = async ()=>{
@@ -2592,6 +2631,84 @@ document.getElementById('btnAnother').onclick = ()=>{
   const list = currentSfidaList();
   currentSlot = Math.floor(Math.random()*list.length);
   renderChallenge();
+};
+
+/* ---------- SFIDA: riscontro vocale (trascrizione di quello che hai detto) ---------- */
+let sfidaRecognition = null;
+let sfidaListening = false;
+
+function sfidaSetMicStatus(text, recording){
+  const el = document.getElementById('sfidaMicStatus');
+  if(!el) return;
+  el.textContent = text;
+  el.classList.toggle('recording', !!recording);
+}
+
+function sfidaRecogLang(){
+  if(state.sfida.level === 'principiante' && state.sfida.direction === 'to_it') return 'it-IT';
+  return TTS_LANG[currentLang] || 'en-US';
+}
+
+function showSfidaTranscript(transcript){
+  const list = currentSfidaList();
+  const item = list[currentSlot];
+  const level = state.sfida.level;
+  const dir = state.sfida.direction;
+  let refHtml = '';
+  if(level === 'principiante'){
+    const ref = (dir === 'to_target') ? item[currentLang] : item.it;
+    if(ref) refHtml = `<div class="sound-tip" style="margin-top:8px; font-style:normal;">Frase modello: <b>${ref}</b></div>`;
+  } else {
+    refHtml = `<div class="sound-tip" style="margin-top:8px;">Qui non c'è una risposta "giusta" fissa: rileggi e confronta con quello che intendevi dire.</div>`;
+  }
+  const box = document.getElementById('sfidaTranscriptBox');
+  box.classList.remove('hidden');
+  box.innerHTML = `<div class="bp-feedback ok">Hai detto: "${transcript}"</div>${refHtml}`;
+}
+
+document.getElementById('sfidaMicToggle').onclick = ()=>{
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const btn = document.getElementById('sfidaMicToggle');
+  if(!SpeechRec){
+    sfidaSetMicStatus('Trascrizione non disponibile in questo browser. Prova con Chrome su desktop o Android.', false);
+    return;
+  }
+  if(sfidaListening){
+    sfidaRecognition.stop();
+    return;
+  }
+  try{
+    sfidaRecognition = new SpeechRec();
+    sfidaRecognition.lang = sfidaRecogLang();
+    sfidaRecognition.interimResults = false;
+    sfidaRecognition.maxAlternatives = 1;
+    sfidaRecognition.onstart = ()=>{
+      sfidaListening = true;
+      btn.classList.add('recording');
+      btn.innerHTML = '&#9632; Ferma';
+      sfidaSetMicStatus('In ascolto...', true);
+    };
+    sfidaRecognition.onerror = (e)=>{
+      sfidaSetMicStatus('Non sono riuscito a capire (' + (e.error || 'errore') + '). Riprova.', false);
+    };
+    sfidaRecognition.onend = ()=>{
+      sfidaListening = false;
+      btn.classList.remove('recording');
+      btn.innerHTML = '&#127908; Registra e trascrivi';
+      if(document.getElementById('sfidaMicStatus').textContent === 'In ascolto...'){
+        sfidaSetMicStatus('Pronto a registrare', false);
+      }
+    };
+    sfidaRecognition.onresult = (e)=>{
+      const transcript = e.results[0][0].transcript;
+      showSfidaTranscript(transcript);
+      sfidaSetMicStatus('Trascritto ✓', false);
+    };
+    sfidaRecognition.start();
+  }catch(e){
+    console.warn('speech recognition error', e);
+    sfidaSetMicStatus('Non riesco ad avviare la trascrizione. Verifica i permessi del microfono.', false);
+  }
 };
 
 /* ---------- SHADOWING TIMER ---------- */
@@ -3127,6 +3244,129 @@ document.querySelectorAll('#imDirTabs button').forEach(btn=>{
     renderImpara();
   };
 });
+
+/* ---------- TRADUCI: frase libera italiano -> lingua selezionata ---------- */
+const TRANSLATE_LANG_CODE = { en:'en', fr:'fr', es:'es', de:'de', ar:'ar', zh:'zh-CN', ja:'ja' };
+let trRecognition = null;
+let trListening = false;
+
+function renderTraduci(){
+  document.getElementById('trLangLabel').textContent = LANGS[currentLang].label;
+  document.getElementById('trResultBox').classList.add('hidden');
+  document.getElementById('trResultText').textContent = '—';
+  document.getElementById('trResultPhon').classList.add('hidden');
+  document.getElementById('trResultPhon').innerHTML = '';
+  document.getElementById('trItInput').value = '';
+  if(trListening && trRecognition){ trRecognition.stop(); }
+  trSetMicStatus('Pronto a registrare', false);
+}
+
+function trSetMicStatus(text, recording){
+  const el = document.getElementById('trMicStatus');
+  if(!el) return;
+  el.textContent = text;
+  el.classList.toggle('recording', !!recording);
+}
+
+document.getElementById('trMicToggle').onclick = ()=>{
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const btn = document.getElementById('trMicToggle');
+  if(!SpeechRec){
+    trSetMicStatus('Trascrizione non disponibile in questo browser. Prova con Chrome su desktop o Android.', false);
+    return;
+  }
+  if(trListening){
+    trRecognition.stop();
+    return;
+  }
+  try{
+    trRecognition = new SpeechRec();
+    trRecognition.lang = 'it-IT';
+    trRecognition.interimResults = false;
+    trRecognition.maxAlternatives = 1;
+    trRecognition.onstart = ()=>{
+      trListening = true;
+      btn.classList.add('recording');
+      btn.innerHTML = '&#9632; Ferma';
+      trSetMicStatus('In ascolto...', true);
+    };
+    trRecognition.onerror = (e)=>{
+      trSetMicStatus('Non sono riuscito a capire (' + (e.error || 'errore') + '). Riprova o scrivi il testo.', false);
+    };
+    trRecognition.onend = ()=>{
+      trListening = false;
+      btn.classList.remove('recording');
+      btn.innerHTML = '&#127908; Registra in italiano';
+      if(document.getElementById('trMicStatus').textContent === 'In ascolto...'){
+        trSetMicStatus('Pronto a registrare', false);
+      }
+    };
+    trRecognition.onresult = (e)=>{
+      const transcript = e.results[0][0].transcript;
+      document.getElementById('trItInput').value = transcript;
+      trSetMicStatus('Trascritto ✓ — puoi correggere il testo prima di tradurre', false);
+    };
+    trRecognition.start();
+  }catch(e){
+    console.warn('speech recognition error', e);
+    trSetMicStatus('Non riesco ad avviare la trascrizione. Verifica i permessi del microfono.', false);
+  }
+};
+
+async function getChinesePinyin(text){
+  try{
+    const mod = await import('https://cdn.jsdelivr.net/npm/pinyin-pro/dist/index.mjs');
+    return mod.pinyin(text, { toneType:'symbol' });
+  }catch(e){
+    console.warn('pinyin load error', e);
+    return null;
+  }
+}
+
+document.getElementById('trTranslateBtn').onclick = async ()=>{
+  const text = document.getElementById('trItInput').value.trim();
+  if(!text) return;
+  const btn = document.getElementById('trTranslateBtn');
+  const targetCode = TRANSLATE_LANG_CODE[currentLang] || 'en';
+  btn.disabled = true;
+  btn.textContent = 'Traduco...';
+  try{
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=it|${targetCode}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const translated = data && data.responseData && data.responseData.translatedText;
+    if(!translated){ throw new Error('empty translation'); }
+
+    document.getElementById('trResultText').textContent = translated;
+    document.getElementById('trResultText').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+    document.getElementById('trResultText').classList.toggle('rtl-text', currentLang === 'ar');
+
+    const phonEl = document.getElementById('trResultPhon');
+    if(currentLang === 'zh'){
+      const py = await getChinesePinyin(translated);
+      if(py){
+        phonEl.classList.remove('hidden');
+        phonEl.innerHTML = `Pinyin: <b>${py}</b>`;
+      } else {
+        phonEl.classList.add('hidden');
+      }
+    } else {
+      phonEl.classList.add('hidden');
+      phonEl.innerHTML = '';
+    }
+
+    document.getElementById('trResultBox').classList.remove('hidden');
+    document.getElementById('trSpeakBtn').onclick = ()=> speak(translated, currentLang);
+  }catch(e){
+    console.warn('translate error', e);
+    document.getElementById('trResultBox').classList.remove('hidden');
+    document.getElementById('trResultText').textContent = 'Non sono riuscito a tradurre. Riprova tra poco.';
+    document.getElementById('trResultPhon').classList.add('hidden');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Traduci';
+  }
+};
 
 /* ---------- MAPPA A TAPPE ---------- */
 const MAP_NODES = [
