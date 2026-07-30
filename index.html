@@ -455,10 +455,11 @@
     <div id="imPromptHint" class="sound-tip hidden" style="margin-top:-6px; margin-bottom:12px;"></div>
     <input type="text" id="imInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
     <div class="bp-feedback" id="imFeedback"></div>
-    <div class="row">
+    <div class="row" id="imCheckRow">
       <button class="primary" id="imCheck">Verifica</button>
       <button class="ghost" id="imHint">&#128161; Suggerimento</button>
     </div>
+    <button class="primary hidden" id="imNext" style="width:100%; margin-top:8px;">Avanti &rarr;</button>
     <button class="ghost" id="imSkip" style="width:100%; margin-top:8px;">Salta</button>
     <button class="ghost" id="imReset" style="width:100%; margin-top:8px;">Ricomincia questo livello</button>
   </section>
@@ -3099,6 +3100,9 @@ function renderImpara(){
   document.getElementById('imFeedback').textContent='';
   document.getElementById('imFeedback').className='bp-feedback';
   document.getElementById('imInput').value='';
+  document.getElementById('imInput').disabled = false;
+  document.getElementById('imCheckRow').classList.remove('hidden');
+  document.getElementById('imNext').classList.add('hidden');
   const inputIsNative = (dir === 'to_target' && currentLang === 'ar');
   document.getElementById('imInput').dir = inputIsNative ? 'rtl' : 'ltr';
   document.getElementById('imInput').placeholder = (dir === 'to_target')
@@ -3127,14 +3131,13 @@ function renderImpara(){
     }
     document.getElementById('imPrompt').innerHTML = `<div class="bp-done"><div class="n">Livello ${level} completato ✓</div>${msg}</div>`;
     document.getElementById('imInput').classList.add('hidden');
-    document.getElementById('imCheck').classList.add('hidden');
-    document.getElementById('imHint').classList.add('hidden');
+    document.getElementById('imCheckRow').classList.add('hidden');
+    document.getElementById('imNext').classList.add('hidden');
     document.getElementById('imSkip').classList.add('hidden');
     return;
   }
   document.getElementById('imInput').classList.remove('hidden');
-  document.getElementById('imCheck').classList.remove('hidden');
-  document.getElementById('imHint').classList.remove('hidden');
+  document.getElementById('imCheckRow').classList.remove('hidden');
   document.getElementById('imSkip').classList.remove('hidden');
   document.getElementById('imProgressFill').style.width = (idx/list.length*100)+'%';
   document.getElementById('imProgressLabel').textContent = `Frase ${idx+1} di ${list.length}`;
@@ -3192,7 +3195,9 @@ document.getElementById('imCheck').onclick = async ()=>{
       fb.textContent = 'Corretto ✓';
     }
     await saveState(currentLang);
-    setTimeout(imAdvance, 1600);
+    document.getElementById('imCheckRow').classList.add('hidden');
+    document.getElementById('imNext').classList.remove('hidden');
+    document.getElementById('imInput').disabled = true;
   } else {
     imAttempts++;
     fb.className='bp-feedback ko';
@@ -3205,6 +3210,8 @@ document.getElementById('imCheck').onclick = async ()=>{
     }
   }
 };
+
+document.getElementById('imNext').onclick = imAdvance;
 
 document.getElementById('imHint').onclick = ()=>{
   const list = currentImparaList();
