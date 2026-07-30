@@ -187,6 +187,9 @@
   #bpLevelTabs{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; flex-wrap:nowrap; }
   #bpLevelTabs::-webkit-scrollbar{ display:none; }
   #bpLevelTabs button{ flex: 0 0 auto; min-width: 76px; }
+  #imLevelTabs{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; flex-wrap:nowrap; }
+  #imLevelTabs::-webkit-scrollbar{ display:none; }
+  #imLevelTabs button{ flex: 0 0 auto; min-width: 92px; }
   .scenario-box{
     font-size:14.5px; line-height:1.55; padding:14px; background:var(--panel-2);
     border-radius:10px; margin-bottom:12px; min-height: 60px;
@@ -426,22 +429,28 @@
 
   <div class="scroll-area">
 
-  <!-- IMPARA LA LINGUA (da zero assoluto) -->
+  <!-- IMPARA LA LINGUA (da zero assoluto, zona istruzione) -->
   <section class="card hidden" id="tab-impara">
-    <span class="tag">Impara la lingua &middot; da zero assoluto</span>
+    <span class="tag">Impara la lingua &middot; zona istruzione</span>
     <h2>Scrivi e pronuncia</h2>
-    <p class="sub">Il punto di partenza se non conosci ancora questa lingua: leggi la frase in italiano, scrivila nella lingua che stai imparando, poi guarda (e ascolta) come si pronuncia.</p>
+    <p class="sub">Il punto di partenza se non conosci ancora questa lingua: leggi la frase, scrivi la traduzione, poi guarda (e ascolta) come si pronuncia. Niente punteggio qui: quando ti senti pronto, vai al <b>Percorso Base</b> per mettere alla prova quello che hai imparato.</p>
     <div class="level-tabs" id="imLevelTabs">
       <button data-level="1" class="active">1 &middot; Parole</button>
       <button data-level="2">2 &middot; Frasi brevi</button>
-      <button data-level="3">3 &middot; Frasi complesse</button>
+      <button data-level="3">3 &middot; Vita quotidiana</button>
+      <button data-level="4">4 &middot; In viaggio</button>
+      <button data-level="5">5 &middot; Lavoro e clienti</button>
     </div>
-    <div class="stats-row" id="imStatsRow"></div>
+    <div class="level-tabs" id="imDirTabs">
+      <button data-dir="to_target" id="imDirToTarget" class="active">Italiano &rarr; Lingua</button>
+      <button data-dir="to_it" id="imDirToIt">Lingua &rarr; Italiano</button>
+    </div>
     <div class="bp-progress-wrap">
       <div class="bp-progress-bar"><div class="bp-progress-fill" id="imProgressFill"></div></div>
-      <div class="bp-progress-label" id="imProgressLabel">Frase 1 di 8</div>
+      <div class="bp-progress-label" id="imProgressLabel">Frase 1 di 15</div>
     </div>
     <div class="challenge-text" id="imPrompt">&mdash;</div>
+    <div id="imPromptHint" class="sound-tip hidden" style="margin-top:-6px; margin-bottom:12px;"></div>
     <input type="text" id="imInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
     <div class="bp-feedback" id="imFeedback"></div>
     <div class="row">
@@ -1570,7 +1579,7 @@ const BEGINNER = {
   ],
 };
 
-/* ---------- IMPARA LA LINGUA: dataset con fonetica "all'italiana" ---------- */
+/* ---------- IMPARA LA LINGUA: dataset con fonetica "all'italiana", 7 lingue, 5 livelli, doppia direzione ---------- */
 const LEARN = {
   en: [
     [ // Livello 1 · parole e saluti
@@ -1582,6 +1591,13 @@ const LEARN = {
       {it:"Sì", ans:["yes"], phon:"ies"},
       {it:"No", ans:["no"], phon:"nou"},
       {it:"Scusa", ans:["sorry"], phon:"SO-ri"},
+      {it:"Arrivederci", ans:["goodbye","bye"], phon:"gud-BAI"},
+      {it:"Buonanotte", ans:["good night"], phon:"gud NAIT"},
+      {it:"Piacere", ans:["nice to meet you"], phon:"nais tu MIT iu"},
+      {it:"Salute!", ans:["cheers"], phon:"CHIRZ"},
+      {it:"Forse", ans:["maybe"], phon:"MEI-bi"},
+      {it:"Sempre", ans:["always"], phon:"OL-ueis"},
+      {it:"Mai", ans:["never"], phon:"NE-ver"},
     ],
     [ // Livello 2 · frasi brevi
       {it:"Come stai?", ans:["how are you"], phon:"hau ar iu"},
@@ -1590,14 +1606,54 @@ const LEARN = {
       {it:"Non capisco", ans:["i dont understand","i don't understand","i do not understand"], phon:"ai dont anderSTEND"},
       {it:"Quanto costa?", ans:["how much is it","how much does it cost"], phon:"hau mac iz it"},
       {it:"Che ore sono?", ans:["what time is it"], phon:"uot taim iz it"},
+      {it:"Quanti anni hai?", ans:["how old are you"], phon:"hau old ar iu"},
+      {it:"Puoi ripetere, per favore?", ans:["can you repeat please"], phon:"ken iu ri-PIT pliz"},
+      {it:"Mi piace questo posto.", ans:["i like this place"], phon:"ai laik dis pleis"},
+      {it:"Sono stanco/a oggi.", ans:["im tired today","i'm tired today","i am tired today"], phon:"aim TAI-erd tu-DEI"},
+      {it:"Che lavoro fai?", ans:["whats your job","what's your job","what do you do"], phon:"uots ior job"},
+      {it:"A più tardi!", ans:["see you later"], phon:"si iu LEI-ter"},
     ],
-    [ // Livello 3 · frasi complesse
+    [ // Livello 3 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["did you sleep well last night"], phon:"did iu slip uel last nait"},
       {it:"Sei passato dal supermercato?", ans:["did you go to the supermarket"], phon:"did iu gou tu de SU-per-mar-ket"},
       {it:"Hai fatto il biglietto del treno?", ans:["did you buy the train ticket"], phon:"did iu bai de trein TI-ket"},
       {it:"A che ora ci vediamo domani?", ans:["what time are we meeting tomorrow"], phon:"uot taim ar ui MI-ting tu-MO-rou"},
       {it:"Puoi chiudere la finestra, per favore?", ans:["can you close the window please"], phon:"ken iu clouz de UIN-dou pliz"},
       {it:"Che cosa hai fatto questo weekend?", ans:["what did you do this weekend"], phon:"uot did iu du dis UIK-end"},
+      {it:"Hai portato fuori il cane?", ans:["did you take the dog out"], phon:"did iu teik de dog aut"},
+      {it:"Ricordati di comprare il pane.", ans:["remember to buy bread"], phon:"ri-MEM-ber tu bai bred"},
+      {it:"Oggi ho cucinato la pasta.", ans:["today i cooked pasta"], phon:"tu-DEI ai cukt PAS-ta"},
+      {it:"Domani devo andare dal dottore.", ans:["tomorrow i have to go to the doctor"], phon:"tu-MO-rou ai hev tu gou tu de DOK-ter"},
+      {it:"Hai già fatto la spesa?", ans:["have you already done the shopping"], phon:"hev iu ol-RE-di dan de SHO-ping"},
+      {it:"Stasera guardiamo un film insieme?", ans:["shall we watch a movie together tonight"], phon:"shel ui uotch e MU-vi tu-GHE-der tu-NAIT"},
+    ],
+    [ // Livello 4 · in viaggio
+      {it:"Dove si trova l'hotel più vicino?", ans:["where is the nearest hotel"], phon:"uer iz de NIR-est ho-TEL"},
+      {it:"Ho perso il volo.", ans:["i missed my flight"], phon:"ai mist mai flait"},
+      {it:"Può chiamarmi un taxi, per favore?", ans:["can you call me a taxi please"], phon:"ken iu col mi e TAK-si pliz"},
+      {it:"A che binario parte il treno?", ans:["which platform does the train leave from"], phon:"uich PLAT-form daz de trein liv from"},
+      {it:"Ho una prenotazione a nome Rossi.", ans:["i have a reservation under the name rossi"], phon:"ai hev e re-zer-VEI-shon AN-der de neim RO-si"},
+      {it:"Dov'è il bagno più vicino?", ans:["where is the nearest bathroom"], phon:"uer iz de NIR-est BATH-rum"},
+      {it:"Quanto tempo dura il viaggio?", ans:["how long does the trip take"], phon:"hau long daz de trip teik"},
+      {it:"Dove posso comprare un biglietto?", ans:["where can i buy a ticket"], phon:"uer ken ai bai e TI-ket"},
+      {it:"Il volo è in ritardo.", ans:["the flight is delayed"], phon:"de flait iz di-LEID"},
+      {it:"Ho bisogno di cambiare valuta.", ans:["i need to exchange currency"], phon:"ai nid tu iks-CHEINJ CA-ren-si"},
+      {it:"Può consigliarmi un buon ristorante?", ans:["can you recommend a good restaurant"], phon:"ken iu re-co-MEND e gud RES-to-rant"},
+      {it:"Dove si trova la fermata dell'autobus?", ans:["where is the bus stop"], phon:"uer iz de bas stop"},
+    ],
+    [ // Livello 5 · lavoro e clienti
+      {it:"Posso aiutarla?", ans:["can i help you"], phon:"ken ai help iu"},
+      {it:"Vorrei fissare una riunione per domani.", ans:["id like to schedule a meeting for tomorrow","i would like to schedule a meeting for tomorrow"], phon:"aid laik tu SKE-diul e MI-ting for tu-MO-rou"},
+      {it:"Le invio il documento via email.", ans:["ill send you the document by email","i will send you the document by email"], phon:"ail send iu de DO-kiu-ment bai I-meil"},
+      {it:"Mi scusi per il ritardo nella risposta.", ans:["sorry for the delay in responding"], phon:"SO-ri for de di-LEI in ri-SPON-ding"},
+      {it:"Il suo ordine sarà pronto tra un'ora.", ans:["your order will be ready in an hour"], phon:"ior OR-der uil bi RE-di in an AUR"},
+      {it:"Può ripetere la sua richiesta, per favore?", ans:["could you repeat your request please"], phon:"cud iu ri-PIT ior ri-KUEST pliz"},
+      {it:"Come posso esserle utile?", ans:["how can i be of help"], phon:"hau ken ai bi ov help"},
+      {it:"Il pagamento è andato a buon fine.", ans:["the payment was successful"], phon:"de PEI-ment uoz sak-SES-ful"},
+      {it:"Le mando la fattura entro oggi.", ans:["ill send you the invoice by today","i will send you the invoice by today"], phon:"ail send iu de IN-vois bai tu-DEI"},
+      {it:"Abbiamo ricevuto il suo reclamo.", ans:["we have received your complaint"], phon:"ui hev ri-SIVD ior kom-PLEINT"},
+      {it:"La ringrazio per la pazienza.", ans:["thank you for your patience"], phon:"THENK-iu for ior PEI-shens"},
+      {it:"Può firmare qui, per favore?", ans:["could you sign here please"], phon:"cud iu sain hir pliz"},
     ],
   ],
   fr: [
@@ -1610,6 +1666,13 @@ const LEARN = {
       {it:"Sì", ans:["oui"], phon:"UI"},
       {it:"No", ans:["non"], phon:"NON"},
       {it:"Scusa", ans:["pardon"], phon:"par-DON"},
+      {it:"Arrivederci", ans:["au revoir"], phon:"o ru-VUAR"},
+      {it:"Buonanotte", ans:["bonne nuit"], phon:"bon NUI"},
+      {it:"Piacere", ans:["enchante","enchanté"], phon:"an-shan-TE"},
+      {it:"Salute!", ans:["sante","santé"], phon:"san-TE"},
+      {it:"Forse", ans:["peut-etre","peut etre","peut-être"], phon:"peu-TETR"},
+      {it:"Sempre", ans:["toujours"], phon:"tu-JUR"},
+      {it:"Mai", ans:["jamais"], phon:"ja-ME"},
     ],
     [ // Livello 2
       {it:"Come stai?", ans:["comment ca va","comment vas-tu","comment vas tu"], phon:"co-MAN sa VA"},
@@ -1618,42 +1681,54 @@ const LEARN = {
       {it:"Non capisco", ans:["je ne comprends pas"], phon:"jeu neu com-PRAN pa"},
       {it:"Quanto costa?", ans:["combien ca coute"], phon:"kom-BIEN sa KUT"},
       {it:"Che ore sono?", ans:["quelle heure est-il","quelle heure est il","quelle heure il est"], phon:"kel EUR e-TIL"},
+      {it:"Quanti anni hai?", ans:["quel age as-tu","quel age as tu"], phon:"kel AJ a-TU"},
+      {it:"Puoi ripetere, per favore?", ans:["peux-tu repeter s'il te plait","peux tu repeter sil te plait"], phon:"peu-tu re-pe-TE sil teu PLE"},
+      {it:"Mi piace questo posto.", ans:["j'aime cet endroit","jaime cet endroit"], phon:"jem set an-DRUA"},
+      {it:"Sono stanco/a oggi.", ans:["je suis fatigue aujourd'hui","je suis fatigue aujourdhui"], phon:"jeu sui fa-ti-GHE o-jur-DUI"},
+      {it:"Che lavoro fai?", ans:["qu'est-ce que tu fais dans la vie","quest ce que tu fais dans la vie"], phon:"kes-keu tu fe dan la VI"},
+      {it:"A più tardi!", ans:["a plus tard"], phon:"a plu TAR"},
     ],
-    [ // Livello 3
+    [ // Livello 3 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["as-tu bien dormi cette nuit","as tu bien dormi cette nuit"], phon:"a-tu bien dor-MI set NUI"},
       {it:"Sei passato dal supermercato?", ans:["es-tu passe au supermarche","es tu passe au supermarche"], phon:"e-tu pa-SE o su-per-mar-SHE"},
       {it:"Hai fatto il biglietto del treno?", ans:["as-tu achete le billet de train","as tu achete le billet de train"], phon:"a-tu ash-TE leu bi-YE deu TRIN"},
       {it:"A che ora ci vediamo domani?", ans:["a quelle heure on se voit demain"], phon:"a kel EUR on seu VUA deu-MIN"},
       {it:"Puoi chiudere la finestra, per favore?", ans:["peux-tu fermer la fenetre s'il te plait","peux tu fermer la fenetre sil te plait"], phon:"peu-tu fer-ME la feu-NE-tr sil teu PLE"},
       {it:"Che cosa hai fatto questo weekend?", ans:["qu'est-ce que tu as fait ce week-end","quest ce que tu as fait ce week-end","quest ce que tu as fait ce weekend"], phon:"kes-keu tu a FE seu ui-KEND"},
+      {it:"Hai portato fuori il cane?", ans:["as-tu sorti le chien","as tu sorti le chien"], phon:"a-tu sor-TI leu SHIEN"},
+      {it:"Ricordati di comprare il pane.", ans:["souviens-toi d'acheter du pain","souviens toi dacheter du pain"], phon:"su-VIEN-tua dash-TE du PIN"},
+      {it:"Oggi ho cucinato la pasta.", ans:["aujourd'hui j'ai cuisine des pates","aujourdhui jai cuisine des pates"], phon:"o-jur-DUI je kui-zi-NE de PAT"},
+      {it:"Domani devo andare dal dottore.", ans:["demain je dois aller chez le medecin"], phon:"deu-MIN jeu dua a-LE she leu med-SIN"},
+      {it:"Hai già fatto la spesa?", ans:["as-tu deja fait les courses","as tu deja fait les courses"], phon:"a-tu de-JA fe le KURS"},
+      {it:"Stasera guardiamo un film insieme?", ans:["on regarde un film ensemble ce soir"], phon:"on reu-GARD an film an-SANBL seu SUAR"},
     ],
-  ],
-  ar: [
-    [ // Livello 1
-      {it:"Ciao", ans:["مرحبا","marhaban"], phon:"mar-ha-BAN"},
-      {it:"Buongiorno", ans:["صباح الخير","sabah al khayr","sabah el kheir"], phon:"sa-BAH el KHEIR"},
-      {it:"Buonasera", ans:["مساء الخير","masa al khayr","masa el kheir"], phon:"ma-SA el KHEIR"},
-      {it:"Grazie", ans:["شكرا","shukran"], phon:"SHU-kran"},
-      {it:"Per favore", ans:["من فضلك","min fadlik","min fadlak"], phon:"min FAD-lik"},
-      {it:"Sì", ans:["نعم","naam"], phon:"NA-am"},
-      {it:"No", ans:["لا","la"], phon:"LA"},
-      {it:"Scusa", ans:["آسف","asif"], phon:"A-sif"},
+    [ // Livello 4 · in viaggio
+      {it:"Dove si trova l'hotel più vicino?", ans:["ou se trouve l'hotel le plus proche","ou se trouve lhotel le plus proche"], phon:"u seu truv lo-TEL leu plu PROSH"},
+      {it:"Ho perso il volo.", ans:["j'ai rate mon vol","jai rate mon vol"], phon:"je ra-TE mon VOL"},
+      {it:"Può chiamarmi un taxi, per favore?", ans:["pouvez-vous m'appeler un taxi s'il vous plait","pouvez vous mappeler un taxi sil vous plait"], phon:"pu-VE vu ma-pe-LE an tak-SI sil vu PLE"},
+      {it:"A che binario parte il treno?", ans:["de quel quai part le train"], phon:"deu kel KE par leu TRIN"},
+      {it:"Ho una prenotazione a nome Rossi.", ans:["j'ai une reservation au nom de rossi","jai une reservation au nom de rossi"], phon:"je un re-zer-va-SION o nom deu RO-si"},
+      {it:"Dov'è il bagno più vicino?", ans:["ou sont les toilettes les plus proches"], phon:"u son le tua-LET le plu PROSH"},
+      {it:"Quanto tempo dura il viaggio?", ans:["combien de temps dure le trajet"], phon:"kom-BIEN deu tan dur leu tra-JE"},
+      {it:"Dove posso comprare un biglietto?", ans:["ou puis-je acheter un billet","ou puis je acheter un billet"], phon:"u pui-jeu ash-TE an bi-YE"},
+      {it:"Il volo è in ritardo.", ans:["le vol est en retard"], phon:"leu VOL et an reu-TAR"},
+      {it:"Ho bisogno di cambiare valuta.", ans:["j'ai besoin de changer de devises","jai besoin de changer de devises"], phon:"je beu-ZUEN deu shan-JE deu deu-VIZ"},
+      {it:"Può consigliarmi un buon ristorante?", ans:["pouvez-vous me recommander un bon restaurant","pouvez vous me recommander un bon restaurant"], phon:"pu-VE vu meu reu-co-man-DE an bon res-to-RAN"},
+      {it:"Dove si trova la fermata dell'autobus?", ans:["ou se trouve l'arret de bus","ou se trouve larret de bus"], phon:"u seu truv la-RE deu BUS"},
     ],
-    [ // Livello 2
-      {it:"Come stai?", ans:["كيف حالك","kayfa haluk","kayf halak"], phon:"kaif HA-lak"},
-      {it:"Mi chiamo Marco", ans:["اسمي ماركو","ismi marco"], phon:"IS-mi MAR-co"},
-      {it:"Dove abiti?", ans:["أين تسكن","ayna taskun"], phon:"AI-na TAS-kun"},
-      {it:"Non capisco", ans:["لا أفهم","la afham"], phon:"la AF-ham"},
-      {it:"Quanto costa?", ans:["كم السعر","kam al-si'r","kam alsir"], phon:"kam a-SI-er"},
-      {it:"Che ore sono?", ans:["كم الساعة","kam al-sa'a","kam alsaa"], phon:"kam a-SA-a"},
-    ],
-    [ // Livello 3
-      {it:"Hai dormito bene stanotte?", ans:["هل نمت جيدا الليلة الماضية","hal nimta jayyidan al-layla al-madiya"], phon:"hal NIM-ta JAY-yi-dan al-LAY-la al-ma-DI-ya"},
-      {it:"Sei passato dal supermercato?", ans:["هل مررت بالسوبر ماركت","hal mararta bis-supermarket"], phon:"hal ma-RAR-ta bis-SU-per-MAR-ket"},
-      {it:"Hai fatto il biglietto del treno?", ans:["هل اشتريت تذكرة القطار","hal ishtarayta tadhkirat al-qitar"], phon:"hal ish-ta-RAY-ta tadh-KI-rat al-qi-TAR"},
-      {it:"A che ora ci vediamo domani?", ans:["في أي ساعة سنلتقي غدا","fi ayyi saa sanaltaqi ghadan"], phon:"fi AY-yi SA-a sa-nal-TA-qi gha-DAN"},
-      {it:"Puoi chiudere la finestra, per favore?", ans:["هل يمكنك إغلاق النافذة من فضلك","hal yumkinuka ighlaq al-nafidha min fadlik"], phon:"hal yum-KI-nu-ka igh-LAQ an-NA-fi-dha min FAD-lik"},
-      {it:"Che cosa hai fatto questo weekend?", ans:["ماذا فعلت في نهاية هذا الأسبوع","madha faalta fi nihayat hadha al-usbu"], phon:"MA-dha fa-AL-ta fi ni-HA-yat HA-dha al-us-BU"},
+    [ // Livello 5 · lavoro e clienti
+      {it:"Posso aiutarla?", ans:["puis-je vous aider","puis je vous aider"], phon:"pui-jeu vu ai-DE"},
+      {it:"Vorrei fissare una riunione per domani.", ans:["j'aimerais fixer une reunion pour demain","jaimerais fixer une reunion pour demain"], phon:"je-me-RE fik-SE un re-u-NION pur deu-MIN"},
+      {it:"Le invio il documento via email.", ans:["je vous envoie le document par email","je vous envoie le document par e-mail"], phon:"jeu vuz an-VUA leu do-ku-MAN par i-MEL"},
+      {it:"Mi scusi per il ritardo nella risposta.", ans:["je suis desole pour le retard de ma reponse"], phon:"jeu sui de-zo-LE pur leu re-TAR deu ma re-PONS"},
+      {it:"Il suo ordine sarà pronto tra un'ora.", ans:["votre commande sera prete dans une heure"], phon:"VO-tr co-MAND seu-RA PRET danz un EUR"},
+      {it:"Può ripetere la sua richiesta, per favore?", ans:["pouvez-vous repeter votre demande s'il vous plait","pouvez vous repeter votre demande sil vous plait"], phon:"pu-VE vu re-pe-TE VO-tr deu-MAND sil vu PLE"},
+      {it:"Come posso esserle utile?", ans:["comment puis-je vous etre utile","comment puis je vous etre utile"], phon:"co-MAN pui-jeu vuz etr u-TIL"},
+      {it:"Il pagamento è andato a buon fine.", ans:["le paiement a bien ete effectue"], phon:"leu pe-MAN a bien e-TE e-fek-tu-E"},
+      {it:"Le mando la fattura entro oggi.", ans:["je vous envoie la facture aujourd'hui","je vous envoie la facture aujourdhui"], phon:"jeu vuz an-VUA la fak-TUR o-jur-DUI"},
+      {it:"Abbiamo ricevuto il suo reclamo.", ans:["nous avons bien recu votre reclamation"], phon:"nuz a-VON bien reu-SU VO-tr re-kla-ma-SION"},
+      {it:"La ringrazio per la pazienza.", ans:["je vous remercie pour votre patience"], phon:"jeu vu reu-mer-SI pur VO-tr pa-SIANS"},
+      {it:"Può firmare qui, per favore?", ans:["pouvez-vous signer ici s'il vous plait","pouvez vous signer ici sil vous plait"], phon:"pu-VE vu si-NIE i-SI sil vu PLE"},
     ],
   ],
   es: [
@@ -1666,6 +1741,13 @@ const LEARN = {
       {it:"Sì", ans:["si","sí"], phon:"SI"},
       {it:"No", ans:["no"], phon:"NO"},
       {it:"Scusa", ans:["perdon","perdón"], phon:"per-DON"},
+      {it:"Arrivederci", ans:["adios","adiós"], phon:"a-DIOS"},
+      {it:"Buonanotte", ans:["buenas noches"], phon:"BUE-nas NO-ches"},
+      {it:"Piacere", ans:["mucho gusto"], phon:"MU-cho GUS-to"},
+      {it:"Salute!", ans:["salud"], phon:"sa-LUD"},
+      {it:"Forse", ans:["quizas","quizás"], phon:"ki-SAS"},
+      {it:"Sempre", ans:["siempre"], phon:"SIEM-pre"},
+      {it:"Mai", ans:["nunca"], phon:"NUN-ca"},
     ],
     [ // Livello 2
       {it:"Come stai?", ans:["como estas","cómo estás"], phon:"CO-mo es-TAS"},
@@ -1674,14 +1756,54 @@ const LEARN = {
       {it:"Non capisco", ans:["no entiendo"], phon:"no en-TIEN-do"},
       {it:"Quanto costa?", ans:["cuanto cuesta","cuánto cuesta"], phon:"CUAN-to CUES-ta"},
       {it:"Che ore sono?", ans:["que hora es","qué hora es"], phon:"ke O-ra es"},
+      {it:"Quanti anni hai?", ans:["cuantos anos tienes","cuántos años tienes"], phon:"CUAN-tos A-nyos TIE-nes"},
+      {it:"Puoi ripetere, per favore?", ans:["puedes repetir por favor"], phon:"PUE-des re-pe-TIR por fa-VOR"},
+      {it:"Mi piace questo posto.", ans:["me gusta este lugar"], phon:"me GUS-ta ES-te lu-GAR"},
+      {it:"Sono stanco/a oggi.", ans:["estoy cansado hoy","estoy cansada hoy"], phon:"es-TOI can-SA-do OI"},
+      {it:"Che lavoro fai?", ans:["a que te dedicas","a qué te dedicas"], phon:"a ke te de-DI-cas"},
+      {it:"A più tardi!", ans:["hasta luego"], phon:"AS-ta LUE-go"},
     ],
-    [ // Livello 3
+    [ // Livello 3 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["dormiste bien anoche"], phon:"dor-MIS-te bien a-NO-che"},
       {it:"Sei passato dal supermercato?", ans:["pasaste por el supermercado"], phon:"pa-SAS-te por el su-per-mer-CA-do"},
       {it:"Hai fatto il biglietto del treno?", ans:["compraste el billete de tren"], phon:"com-PRAS-te el bi-YE-te de TREN"},
       {it:"A che ora ci vediamo domani?", ans:["a que hora nos vemos manana","a qué hora nos vemos mañana"], phon:"a ke O-ra nos VE-mos ma-NYA-na"},
       {it:"Puoi chiudere la finestra, per favore?", ans:["puedes cerrar la ventana por favor"], phon:"PUE-des ce-RRAR la ven-TA-na por fa-VOR"},
       {it:"Che cosa hai fatto questo weekend?", ans:["que hiciste este fin de semana","qué hiciste este fin de semana"], phon:"ke i-CIS-te ES-te fin de se-MA-na"},
+      {it:"Hai portato fuori il cane?", ans:["sacaste al perro"], phon:"sa-CAS-te al PE-rro"},
+      {it:"Ricordati di comprare il pane.", ans:["acuerdate de comprar pan","acuérdate de comprar pan"], phon:"a-CUER-da-te de com-PRAR PAN"},
+      {it:"Oggi ho cucinato la pasta.", ans:["hoy cocine pasta","hoy cociné pasta"], phon:"oi co-ci-NE PAS-ta"},
+      {it:"Domani devo andare dal dottore.", ans:["manana tengo que ir al medico","mañana tengo que ir al médico"], phon:"ma-NYA-na TEN-go ke ir al ME-di-co"},
+      {it:"Hai già fatto la spesa?", ans:["ya hiciste la compra"], phon:"ya i-CIS-te la COM-pra"},
+      {it:"Stasera guardiamo un film insieme?", ans:["vemos una pelicula juntos esta noche","vemos una película juntos esta noche"], phon:"VE-mos u-na pe-LI-cu-la JUN-tos ES-ta NO-che"},
+    ],
+    [ // Livello 4 · in viaggio
+      {it:"Dove si trova l'hotel più vicino?", ans:["donde esta el hotel mas cercano","dónde está el hotel más cercano"], phon:"DON-de es-TA el o-TEL mas cer-CA-no"},
+      {it:"Ho perso il volo.", ans:["perdi mi vuelo","perdí mi vuelo"], phon:"per-DI mi VUE-lo"},
+      {it:"Può chiamarmi un taxi, per favore?", ans:["puede llamarme un taxi por favor"], phon:"PUE-de ya-MAR-me un TA-xi por fa-VOR"},
+      {it:"A che binario parte il treno?", ans:["de que anden sale el tren","de qué andén sale el tren"], phon:"de ke an-DEN SA-le el TREN"},
+      {it:"Ho una prenotazione a nome Rossi.", ans:["tengo una reserva a nombre de rossi"], phon:"TEN-go u-na re-SER-va a NOM-bre de RO-si"},
+      {it:"Dov'è il bagno più vicino?", ans:["donde esta el bano mas cercano","dónde está el baño más cercano"], phon:"DON-de es-TA el BA-nyo mas cer-CA-no"},
+      {it:"Quanto tempo dura il viaggio?", ans:["cuanto dura el viaje","cuánto dura el viaje"], phon:"CUAN-to DU-ra el VIA-he"},
+      {it:"Dove posso comprare un biglietto?", ans:["donde puedo comprar un billete","dónde puedo comprar un billete"], phon:"DON-de PUE-do com-PRAR un bi-YE-te"},
+      {it:"Il volo è in ritardo.", ans:["el vuelo esta retrasado","el vuelo está retrasado"], phon:"el VUE-lo es-TA re-tra-SA-do"},
+      {it:"Ho bisogno di cambiare valuta.", ans:["necesito cambiar moneda"], phon:"ne-ce-SI-to cam-BIAR mo-NE-da"},
+      {it:"Può consigliarmi un buon ristorante?", ans:["puede recomendarme un buen restaurante"], phon:"PUE-de re-co-men-DAR-me un buen res-tau-RAN-te"},
+      {it:"Dove si trova la fermata dell'autobus?", ans:["donde esta la parada de autobus","dónde está la parada de autobús"], phon:"DON-de es-TA la pa-RA-da de au-to-BUS"},
+    ],
+    [ // Livello 5 · lavoro e clienti
+      {it:"Posso aiutarla?", ans:["puedo ayudarle","puedo ayudarte"], phon:"PUE-do a-yu-DAR-le"},
+      {it:"Vorrei fissare una riunione per domani.", ans:["me gustaria fijar una reunion para manana","me gustaría fijar una reunión para mañana"], phon:"me gus-ta-RI-a fi-HAR u-na re-u-NION pa-ra ma-NYA-na"},
+      {it:"Le invio il documento via email.", ans:["le envio el documento por correo","le envío el documento por correo"], phon:"le en-VI-o el do-cu-MEN-to por co-RRE-o"},
+      {it:"Mi scusi per il ritardo nella risposta.", ans:["disculpe la demora en responder"], phon:"dis-CUL-pe la de-MO-ra en res-pon-DER"},
+      {it:"Il suo ordine sarà pronto tra un'ora.", ans:["su pedido estara listo en una hora","su pedido estará listo en una hora"], phon:"su pe-DI-do es-ta-RA LIS-to en u-na O-ra"},
+      {it:"Può ripetere la sua richiesta, per favore?", ans:["puede repetir su solicitud por favor"], phon:"PUE-de re-pe-TIR su so-li-ci-TUD por fa-VOR"},
+      {it:"Come posso esserle utile?", ans:["como puedo ayudarle","cómo puedo ayudarle"], phon:"CO-mo PUE-do a-yu-DAR-le"},
+      {it:"Il pagamento è andato a buon fine.", ans:["el pago se realizo correctamente","el pago se realizó correctamente"], phon:"el PA-go se rea-li-ZO co-rrec-ta-MEN-te"},
+      {it:"Le mando la fattura entro oggi.", ans:["le envio la factura hoy","le envío la factura hoy"], phon:"le en-VI-o la fac-TU-ra OI"},
+      {it:"Abbiamo ricevuto il suo reclamo.", ans:["hemos recibido su reclamacion","hemos recibido su reclamación"], phon:"E-mos re-ci-BI-do su re-cla-ma-SION"},
+      {it:"La ringrazio per la pazienza.", ans:["le agradezco su paciencia"], phon:"le a-gra-DEZ-co su pa-SIEN-sia"},
+      {it:"Può firmare qui, per favore?", ans:["puede firmar aqui por favor","puede firmar aquí por favor"], phon:"PUE-de fir-MAR a-KI por fa-VOR"},
     ],
   ],
   de: [
@@ -1694,6 +1816,13 @@ const LEARN = {
       {it:"Sì", ans:["ja"], phon:"IA"},
       {it:"No", ans:["nein"], phon:"NAIN"},
       {it:"Scusa", ans:["entschuldigung"], phon:"ent-SHUL-di-gung"},
+      {it:"Arrivederci", ans:["auf wiedersehen"], phon:"auf VI-der-ze-en"},
+      {it:"Buonanotte", ans:["gute nacht"], phon:"GU-te NAKHT"},
+      {it:"Piacere", ans:["freut mich"], phon:"FROIT mish"},
+      {it:"Salute!", ans:["prost"], phon:"PROST"},
+      {it:"Forse", ans:["vielleicht"], phon:"fi-LAIHT"},
+      {it:"Sempre", ans:["immer"], phon:"I-mer"},
+      {it:"Mai", ans:["nie"], phon:"NI"},
     ],
     [ // Livello 2
       {it:"Come stai?", ans:["wie geht es dir","wie gehts","wie geht's dir"], phon:"vi GHETS dir"},
@@ -1702,20 +1831,285 @@ const LEARN = {
       {it:"Non capisco", ans:["ich verstehe nicht"], phon:"ish fer-SHTE-e nisht"},
       {it:"Quanto costa?", ans:["wie viel kostet das","wieviel kostet das"], phon:"vi fil KOS-tet das"},
       {it:"Che ore sono?", ans:["wie spat ist es","wie spät ist es","wieviel uhr ist es"], phon:"vi SHPET ist es"},
+      {it:"Quanti anni hai?", ans:["wie alt bist du"], phon:"vi ALT bist du"},
+      {it:"Puoi ripetere, per favore?", ans:["kannst du bitte wiederholen"], phon:"kanst du BI-te vi-der-HO-len"},
+      {it:"Mi piace questo posto.", ans:["mir gefallt dieser ort","mir gefällt dieser ort"], phon:"mir ge-FELT DI-zer ORT"},
+      {it:"Sono stanco/a oggi.", ans:["ich bin heute mude","ich bin heute müde"], phon:"ish bin HOI-te MU-de"},
+      {it:"Che lavoro fai?", ans:["was arbeitest du","was machst du beruflich"], phon:"vas AR-bai-test du"},
+      {it:"A più tardi!", ans:["bis spater","bis später"], phon:"bis SHPE-ter"},
     ],
-    [ // Livello 3
+    [ // Livello 3 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["hast du letzte nacht gut geschlafen"], phon:"hast du LETS-te nakht gut ge-SHLA-fen"},
       {it:"Sei passato dal supermercato?", ans:["warst du im supermarkt"], phon:"varst du im SU-per-markt"},
       {it:"Hai fatto il biglietto del treno?", ans:["hast du die zugfahrkarte gekauft"], phon:"hast du di TSUK-far-kar-te ge-KAUFT"},
       {it:"A che ora ci vediamo domani?", ans:["um wie viel uhr treffen wir uns morgen"], phon:"um vi fil UR TRE-fen vir uns MOR-ghen"},
       {it:"Puoi chiudere la finestra, per favore?", ans:["kannst du bitte das fenster schliessen","kannst du bitte das fenster schließen"], phon:"kanst du BI-te das FENS-ter SHLI-sen"},
       {it:"Che cosa hai fatto questo weekend?", ans:["was hast du dieses wochenende gemacht"], phon:"vas hast du DI-zes vo-khen-EN-de ge-MAKHT"},
+      {it:"Hai portato fuori il cane?", ans:["hast du den hund ausgefuhrt","hast du den hund ausgeführt"], phon:"hast du den HUNT AUS-ge-furt"},
+      {it:"Ricordati di comprare il pane.", ans:["denk daran brot zu kaufen"], phon:"denk da-RAN BROT tsu KAU-fen"},
+      {it:"Oggi ho cucinato la pasta.", ans:["heute habe ich pasta gekocht"], phon:"HOI-te HA-be ish PAS-ta ge-KOKHT"},
+      {it:"Domani devo andare dal dottore.", ans:["morgen muss ich zum arzt gehen"], phon:"MOR-ghen mus ish tsum ARTST GE-en"},
+      {it:"Hai già fatto la spesa?", ans:["hast du schon eingekauft"], phon:"hast du shon AIN-ge-kauft"},
+      {it:"Stasera guardiamo un film insieme?", ans:["schauen wir heute abend zusammen einen film"], phon:"SHAU-en vir HOI-te A-bent tsu-ZA-men AI-nen FILM"},
+    ],
+    [ // Livello 4 · in viaggio
+      {it:"Dove si trova l'hotel più vicino?", ans:["wo ist das nachste hotel","wo ist das nächste hotel"], phon:"vo ist das NEHS-te ho-TEL"},
+      {it:"Ho perso il volo.", ans:["ich habe meinen flug verpasst"], phon:"ish HA-be MAI-nen FLUK fer-PASST"},
+      {it:"Può chiamarmi un taxi, per favore?", ans:["konnen sie mir bitte ein taxi rufen","können sie mir bitte ein taxi rufen"], phon:"KOE-nen zi mir BI-te ain TA-xi RU-fen"},
+      {it:"A che binario parte il treno?", ans:["von welchem gleis fahrt der zug ab","von welchem gleis fährt der zug ab"], phon:"fon VEL-shem GLAIS fert der TSUK ap"},
+      {it:"Ho una prenotazione a nome Rossi.", ans:["ich habe eine reservierung auf den namen rossi"], phon:"ish HA-be AI-ne re-zer-VI-rung auf den NA-men RO-si"},
+      {it:"Dov'è il bagno più vicino?", ans:["wo ist die nachste toilette","wo ist die nächste toilette"], phon:"vo ist di NEHS-te toa-LET-te"},
+      {it:"Quanto tempo dura il viaggio?", ans:["wie lange dauert die reise"], phon:"vi LAN-ge DAU-ert di RAI-ze"},
+      {it:"Dove posso comprare un biglietto?", ans:["wo kann ich ein ticket kaufen"], phon:"vo kan ish ain TI-ket KAU-fen"},
+      {it:"Il volo è in ritardo.", ans:["der flug hat verspatung","der flug hat verspätung"], phon:"der FLUK hat fer-SHPE-tung"},
+      {it:"Ho bisogno di cambiare valuta.", ans:["ich muss geld wechseln"], phon:"ish mus GELT VEK-seln"},
+      {it:"Può consigliarmi un buon ristorante?", ans:["konnen sie mir ein gutes restaurant empfehlen","können sie mir ein gutes restaurant empfehlen"], phon:"KOE-nen zi mir ain GU-tes res-to-RAN emp-FE-len"},
+      {it:"Dove si trova la fermata dell'autobus?", ans:["wo ist die bushaltestelle"], phon:"vo ist di BUS-hal-te-shte-le"},
+    ],
+    [ // Livello 5 · lavoro e clienti
+      {it:"Posso aiutarla?", ans:["kann ich ihnen helfen"], phon:"kan ish I-nen HEL-fen"},
+      {it:"Vorrei fissare una riunione per domani.", ans:["ich mochte ein meeting fur morgen ansetzen","ich möchte ein meeting für morgen ansetzen"], phon:"ish MOESH-te ain MI-ting fur MOR-ghen AN-zet-sen"},
+      {it:"Le invio il documento via email.", ans:["ich schicke ihnen das dokument per email","ich schicke ihnen das dokument per e-mail"], phon:"ish SHI-ke I-nen das do-ku-MENT per I-mail"},
+      {it:"Mi scusi per il ritardo nella risposta.", ans:["entschuldigung fur die verspatete antwort","entschuldigung für die verspätete antwort"], phon:"ent-SHUL-di-gung fur di fer-SHPE-te-te ANT-vort"},
+      {it:"Il suo ordine sarà pronto tra un'ora.", ans:["ihre bestellung ist in einer stunde fertig"], phon:"I-re be-SHTEL-lung ist in AI-ner SHTUN-de FER-tish"},
+      {it:"Può ripetere la sua richiesta, per favore?", ans:["konnen sie ihre anfrage bitte wiederholen","können sie ihre anfrage bitte wiederholen"], phon:"KOE-nen zi I-re AN-fra-ge BI-te vi-der-HO-len"},
+      {it:"Come posso esserle utile?", ans:["wie kann ich ihnen behilflich sein"], phon:"vi kan ish I-nen be-HILF-lish zain"},
+      {it:"Il pagamento è andato a buon fine.", ans:["die zahlung war erfolgreich"], phon:"di TSA-lung var er-FOLG-raish"},
+      {it:"Le mando la fattura entro oggi.", ans:["ich schicke ihnen die rechnung noch heute"], phon:"ish SHI-ke I-nen di REKH-nung nokh HOI-te"},
+      {it:"Abbiamo ricevuto il suo reclamo.", ans:["wir haben ihre reklamation erhalten"], phon:"vir HA-ben I-re re-kla-ma-TSION er-HAL-ten"},
+      {it:"La ringrazio per la pazienza.", ans:["ich danke ihnen fur ihre geduld","ich danke ihnen für ihre geduld"], phon:"ish DAN-ke I-nen fur I-re ge-DULT"},
+      {it:"Può firmare qui, per favore?", ans:["konnen sie bitte hier unterschreiben","können sie bitte hier unterschreiben"], phon:"KOE-nen zi BI-te hir un-ter-SHRAI-ben"},
+    ],
+  ],
+  ar: [
+    [ // Livello 1
+      {it:"Ciao", ans:["مرحبا","marhaban"], phon:"mar-ha-BAN"},
+      {it:"Buongiorno", ans:["صباح الخير","sabah al khayr","sabah el kheir"], phon:"sa-BAH el KHEIR"},
+      {it:"Buonasera", ans:["مساء الخير","masa al khayr","masa el kheir"], phon:"ma-SA el KHEIR"},
+      {it:"Grazie", ans:["شكرا","shukran"], phon:"SHU-kran"},
+      {it:"Per favore", ans:["من فضلك","min fadlik","min fadlak"], phon:"min FAD-lik"},
+      {it:"Sì", ans:["نعم","naam"], phon:"NA-am"},
+      {it:"No", ans:["لا","la"], phon:"LA"},
+      {it:"Scusa", ans:["آسف","asif"], phon:"A-sif"},
+      {it:"Arrivederci", ans:["مع السلامة","maa as-salama"], phon:"ma-a as-sa-LA-ma"},
+      {it:"Buonanotte", ans:["تصبح على خير","tusbihu ala khayr"], phon:"TUS-bih a-la KHEIR"},
+      {it:"Piacere", ans:["تشرفنا","tasharrafna"], phon:"ta-shar-RAF-na"},
+      {it:"Salute!", ans:["صحة","sahha"], phon:"SAH-ha"},
+      {it:"Forse", ans:["ربما","rubbama"], phon:"RUB-ba-ma"},
+      {it:"Sempre", ans:["دائما","daiman"], phon:"da-I-man"},
+      {it:"Mai", ans:["أبدا","abadan"], phon:"A-ba-dan"},
+    ],
+    [ // Livello 2
+      {it:"Come stai?", ans:["كيف حالك","kayfa haluk","kayf halak"], phon:"kaif HA-lak"},
+      {it:"Mi chiamo Marco", ans:["اسمي ماركو","ismi marco"], phon:"IS-mi MAR-co"},
+      {it:"Dove abiti?", ans:["أين تسكن","ayna taskun"], phon:"AI-na TAS-kun"},
+      {it:"Non capisco", ans:["لا أفهم","la afham"], phon:"la AF-ham"},
+      {it:"Quanto costa?", ans:["كم السعر","kam al-si'r","kam alsir"], phon:"kam a-SI-er"},
+      {it:"Che ore sono?", ans:["كم الساعة","kam al-sa'a","kam alsaa"], phon:"kam a-SA-a"},
+      {it:"Quanti anni hai?", ans:["كم عمرك","kam umruk"], phon:"kam UM-ruk"},
+      {it:"Puoi ripetere, per favore?", ans:["هل يمكنك أن تكرر من فضلك","hal yumkinuka an tukarrira min fadlik"], phon:"hal yum-KI-nu-ka an tu-KAR-ri-ra min FAD-lik"},
+      {it:"Mi piace questo posto.", ans:["يعجبني هذا المكان","yujibuni hadha al-makan"], phon:"yu-JI-bu-ni HA-dha al-ma-KAN"},
+      {it:"Sono stanco/a oggi.", ans:["أنا متعب اليوم","ana mutaab al-yawm"], phon:"A-na mu-TA-ab al-YAWM"},
+      {it:"Che lavoro fai?", ans:["ما هي مهنتك","ma hiya mihnatuka"], phon:"ma HI-ya mih-na-TU-ka"},
+      {it:"A più tardi!", ans:["أراك لاحقا","araka lahiqan"], phon:"a-RA-ka LA-hi-qan"},
+    ],
+    [ // Livello 3 · vita quotidiana
+      {it:"Hai dormito bene stanotte?", ans:["هل نمت جيدا الليلة الماضية","hal nimta jayyidan al-layla al-madiya"], phon:"hal NIM-ta JAY-yi-dan al-LAY-la al-ma-DI-ya"},
+      {it:"Sei passato dal supermercato?", ans:["هل مررت بالسوبر ماركت","hal mararta bis-supermarket"], phon:"hal ma-RAR-ta bis-SU-per-MAR-ket"},
+      {it:"Hai fatto il biglietto del treno?", ans:["هل اشتريت تذكرة القطار","hal ishtarayta tadhkirat al-qitar"], phon:"hal ish-ta-RAY-ta tadh-KI-rat al-qi-TAR"},
+      {it:"A che ora ci vediamo domani?", ans:["في أي ساعة سنلتقي غدا","fi ayyi saa sanaltaqi ghadan"], phon:"fi AY-yi SA-a sa-nal-TA-qi gha-DAN"},
+      {it:"Puoi chiudere la finestra, per favore?", ans:["هل يمكنك إغلاق النافذة من فضلك","hal yumkinuka ighlaq al-nafidha min fadlik"], phon:"hal yum-KI-nu-ka igh-LAQ an-NA-fi-dha min FAD-lik"},
+      {it:"Che cosa hai fatto questo weekend?", ans:["ماذا فعلت في نهاية هذا الأسبوع","madha faalta fi nihayat hadha al-usbu"], phon:"MA-dha fa-AL-ta fi ni-HA-yat HA-dha al-us-BU"},
+      {it:"Hai portato fuori il cane?", ans:["هل أخرجت الكلب","hal akhrajta al-kalb"], phon:"hal AKH-raj-ta al-KALB"},
+      {it:"Ricordati di comprare il pane.", ans:["تذكر أن تشتري الخبز","tadhakkar an tashtariya al-khubz"], phon:"ta-DHAK-kar an tash-ta-RI-ya al-KHUBZ"},
+      {it:"Oggi ho cucinato la pasta.", ans:["طبخت المعكرونة اليوم","tabakhtu al-maakarona al-yawm"], phon:"ta-BAKH-tu al-ma-a-ka-RO-na al-YAWM"},
+      {it:"Domani devo andare dal dottore.", ans:["غدا يجب أن أذهب إلى الطبيب","ghadan yajibu an adhhaba ila at-tabib"], phon:"GHA-dan ya-JI-bu an ADH-ha-ba i-LA at-ta-BIB"},
+      {it:"Hai già fatto la spesa?", ans:["هل تسوقت بالفعل","hal tasawwaqta bilfil"], phon:"hal ta-SAW-waq-ta bil-FIL"},
+      {it:"Stasera guardiamo un film insieme?", ans:["هل نشاهد فيلما معا الليلة","hal nushahidu filman maan al-layla"], phon:"hal nu-SHA-hi-du FIL-man ma-AN al-LAY-la"},
+    ],
+    [ // Livello 4 · in viaggio
+      {it:"Dove si trova l'hotel più vicino?", ans:["أين يقع أقرب فندق","ayna yaqau aqrab funduq"], phon:"AY-na ya-QA-u AQ-rab FUN-duq"},
+      {it:"Ho perso il volo.", ans:["فاتتني رحلتي","fatatni rihlati"], phon:"fa-TAT-ni rih-LA-ti"},
+      {it:"Può chiamarmi un taxi, per favore?", ans:["هل يمكنك أن تطلب لي تاكسي من فضلك","hal yumkinuka an tatluba li taksi min fadlik"], phon:"hal yum-KI-nu-ka an TAT-lu-ba li TAK-si min FAD-lik"},
+      {it:"A che binario parte il treno?", ans:["من أي رصيف يغادر القطار","min ayyi rasif yughadir al-qitar"], phon:"min AY-yi ra-SIF yu-GHA-dir al-qi-TAR"},
+      {it:"Ho una prenotazione a nome Rossi.", ans:["لدي حجز باسم روسي","ladayya hajz bismi rossi"], phon:"la-DAY-ya HAJZ bis-mi RO-si"},
+      {it:"Dov'è il bagno più vicino?", ans:["أين أقرب حمام","ayna aqrab hammam"], phon:"AY-na AQ-rab ham-MAM"},
+      {it:"Quanto tempo dura il viaggio?", ans:["كم تستغرق الرحلة","kam tastaghriqu ar-rihla"], phon:"kam tas-TAGH-ri-qu ar-RIH-la"},
+      {it:"Dove posso comprare un biglietto?", ans:["أين يمكنني شراء تذكرة","ayna yumkinuni shiraa tadhkira"], phon:"AY-na yum-KI-nu-ni shi-RA tadh-KI-ra"},
+      {it:"Il volo è in ritardo.", ans:["الرحلة متأخرة","ar-rihla mutaakhira"], phon:"ar-RIH-la mu-ta-AKH-khi-ra"},
+      {it:"Ho bisogno di cambiare valuta.", ans:["أحتاج إلى تبديل العملة","ahtaju ila tabdil al-umla"], phon:"ah-TA-ju i-LA tab-DIL al-UM-la"},
+      {it:"Può consigliarmi un buon ristorante?", ans:["هل يمكنك أن توصي لي بمطعم جيد","hal yumkinuka an tusiya li bimatam jayyid"], phon:"hal yum-KI-nu-ka an TU-si-ya li bi-MAT-am JAY-yid"},
+      {it:"Dove si trova la fermata dell'autobus?", ans:["أين تقع محطة الحافلة","ayna taqau mahattat al-hafila"], phon:"AY-na TA-qa-u ma-HAT-tat al-HA-fi-la"},
+    ],
+    [ // Livello 5 · lavoro e clienti
+      {it:"Posso aiutarla?", ans:["هل يمكنني مساعدتك","hal yumkinuni musaadatuka"], phon:"hal yum-KI-nu-ni mu-sa-a-da-TU-ka"},
+      {it:"Vorrei fissare una riunione per domani.", ans:["أود تحديد اجتماع ليوم غد","awaddu tahdid ijtimaa liyawmi ghad"], phon:"a-WAD-du tah-DID ij-ti-MA-a li-YAW-mi GHAD"},
+      {it:"Le invio il documento via email.", ans:["سأرسل لك المستند عبر البريد الإلكتروني","saursilu laka al-mustanad abra al-barid al-iliktruni"], phon:"sa-UR-si-lu la-ka al-mus-ta-NAD AB-ra al-ba-RID al-ilik-TRU-ni"},
+      {it:"Mi scusi per il ritardo nella risposta.", ans:["أعتذر عن التأخر في الرد","atadhiru an attaakhkhur fi arradd"], phon:"a-TA-dhi-ru an at-ta-AKH-khur fi ar-RADD"},
+      {it:"Il suo ordine sarà pronto tra un'ora.", ans:["سيكون طلبك جاهزا خلال ساعة","sayakoun talabuka jahizan khilala saa"], phon:"sa-ya-KOUN ta-LA-bu-ka JA-hi-zan khi-LA-la SA-a"},
+      {it:"Può ripetere la sua richiesta, per favore?", ans:["هل يمكنك تكرار طلبك من فضلك","hal yumkinuka takrar talabika min fadlik"], phon:"hal yum-KI-nu-ka tak-RAR ta-LA-bi-ka min FAD-lik"},
+      {it:"Come posso esserle utile?", ans:["كيف يمكنني مساعدتك","kayfa yumkinuni musaadatuka"], phon:"KAI-fa yum-KI-nu-ni mu-sa-a-da-TU-ka"},
+      {it:"Il pagamento è andato a buon fine.", ans:["تمت عملية الدفع بنجاح","tammat amaliyatu ad-dafi binajah"], phon:"TAM-mat a-ma-li-YA-tu ad-DAF-i bi-na-JAH"},
+      {it:"Le mando la fattura entro oggi.", ans:["سأرسل لك الفاتورة اليوم","saursilu laka al-fatura al-yawm"], phon:"sa-UR-si-lu la-ka al-fa-TU-ra al-YAWM"},
+      {it:"Abbiamo ricevuto il suo reclamo.", ans:["لقد استلمنا شكواك","laqad istalamna shakwaka"], phon:"LA-qad is-ta-LAM-na SHAK-wa-ka"},
+      {it:"La ringrazio per la pazienza.", ans:["أشكرك على صبرك","ashkuruka ala sabrika"], phon:"ash-KU-ru-ka a-LA SAB-ri-ka"},
+      {it:"Può firmare qui, per favore?", ans:["هل يمكنك التوقيع هنا من فضلك","hal yumkinuka at-tawqi huna min fadlik"], phon:"hal yum-KI-nu-ka at-taw-QI HU-na min FAD-lik"},
+    ],
+  ],
+  zh: [
+    [ // Livello 1
+      {it:"Ciao", ans:["你好","ni hao"], phon:"ni hao"},
+      {it:"Buongiorno", ans:["早上好","zao shang hao"], phon:"zao sciang hao"},
+      {it:"Buonasera", ans:["晚上好","wan shang hao"], phon:"uan sciang hao"},
+      {it:"Grazie", ans:["谢谢","xie xie"], phon:"sie sie"},
+      {it:"Per favore", ans:["请","qing"], phon:"cing"},
+      {it:"Sì", ans:["是","shi"], phon:"sci"},
+      {it:"No", ans:["不","bu"], phon:"bu"},
+      {it:"Scusa", ans:["对不起","dui bu qi"], phon:"duei bu ci"},
+      {it:"Arrivederci", ans:["再见","zai jian"], phon:"dzai gien"},
+      {it:"Buonanotte", ans:["晚安","wan an"], phon:"uan an"},
+      {it:"Piacere", ans:["很高兴认识你","hen gao xing ren shi ni"], phon:"hen gao sing ren-sci ni"},
+      {it:"Salute!", ans:["干杯","gan bei"], phon:"gan bei"},
+      {it:"Forse", ans:["也许","ye xu"], phon:"ie sciu"},
+      {it:"Sempre", ans:["总是","zong shi"], phon:"dzong sci"},
+      {it:"Mai", ans:["从不","cong bu"], phon:"tsong bu"},
+    ],
+    [ // Livello 2
+      {it:"Come stai?", ans:["你好吗","ni hao ma"], phon:"ni hao ma"},
+      {it:"Mi chiamo Marco", ans:["我叫马可","wo jiao ma ke"], phon:"uo giao ma ke"},
+      {it:"Dove abiti?", ans:["你住在哪里","ni zhu zai na li"], phon:"ni giu dzai na li"},
+      {it:"Non capisco", ans:["我不明白","wo bu ming bai"], phon:"uo bu ming bai"},
+      {it:"Quanto costa?", ans:["多少钱","duo shao qian"], phon:"duo sciao cien"},
+      {it:"Che ore sono?", ans:["现在几点","xian zai ji dian"], phon:"sien dzai gi dien"},
+      {it:"Quanti anni hai?", ans:["你多大了","ni duo da le"], phon:"ni duo da le"},
+      {it:"Puoi ripetere, per favore?", ans:["你能再说一遍吗","ni neng zai shuo yi bian ma"], phon:"ni neng dzai sciuo i bien ma"},
+      {it:"Mi piace questo posto.", ans:["我喜欢这个地方","wo xi huan zhe ge di fang"], phon:"uo si huan ge ge di fang"},
+      {it:"Sono stanco/a oggi.", ans:["我今天很累","wo jin tian hen lei"], phon:"uo gin tien hen lei"},
+      {it:"Che lavoro fai?", ans:["你做什么工作","ni zuo shen me gong zuo"], phon:"ni dzuo scen me gong dzuo"},
+      {it:"A più tardi!", ans:["待会儿见","dai huir jian"], phon:"dai huer gien"},
+    ],
+    [ // Livello 3 · vita quotidiana
+      {it:"Hai dormito bene stanotte?", ans:["你昨晚睡得好吗","ni zuo wan shui de hao ma"], phon:"ni dzuo uan sciuei de hao ma"},
+      {it:"Sei passato dal supermercato?", ans:["你去超市了吗","ni qu chao shi le ma"], phon:"ni ciu ciao sci le ma"},
+      {it:"Hai fatto il biglietto del treno?", ans:["你买火车票了吗","ni mai huo che piao le ma"], phon:"ni mai huo ce piao le ma"},
+      {it:"A che ora ci vediamo domani?", ans:["我们明天几点见","wo men ming tian ji dian jian"], phon:"uo men ming tien gi dien gien"},
+      {it:"Puoi chiudere la finestra, per favore?", ans:["你能关一下窗户吗","ni neng guan yi xia chuang hu ma"], phon:"ni neng guan i sia ciuang hu ma"},
+      {it:"Che cosa hai fatto questo weekend?", ans:["你这个周末做了什么","ni zhe ge zhou mo zuo le shen me"], phon:"ni ge ge giou mo dzuo le scen me"},
+      {it:"Hai portato fuori il cane?", ans:["你带狗出去了吗","ni dai gou chu qu le ma"], phon:"ni dai gou ciu ciu le ma"},
+      {it:"Ricordati di comprare il pane.", ans:["记得买面包","ji de mai mian bao"], phon:"gi de mai mien bao"},
+      {it:"Oggi ho cucinato la pasta.", ans:["我今天做了意大利面","wo jin tian zuo le yi da li mian"], phon:"uo gin tien dzuo le i da li mien"},
+      {it:"Domani devo andare dal dottore.", ans:["明天我得去看医生","ming tian wo dei qu kan yi sheng"], phon:"ming tien uo dei ciu kan i sceng"},
+      {it:"Hai già fatto la spesa?", ans:["你已经买东西了吗","ni yi jing mai dong xi le ma"], phon:"ni i gin mai dong si le ma"},
+      {it:"Stasera guardiamo un film insieme?", ans:["今晚我们一起看电影吗","jin wan wo men yi qi kan dian ying ma"], phon:"gin uan uo men i ci kan dien ing ma"},
+    ],
+    [ // Livello 4 · in viaggio
+      {it:"Dove si trova l'hotel più vicino?", ans:["最近的酒店在哪里","zui jin de jiu dian zai na li"], phon:"dzuei gin de giou dien dzai na li"},
+      {it:"Ho perso il volo.", ans:["我错过了航班","wo cuo guo le hang ban"], phon:"uo tsuo guo le hang ban"},
+      {it:"Può chiamarmi un taxi, per favore?", ans:["你能帮我叫一辆出租车吗","ni neng bang wo jiao yi liang chu zu che ma"], phon:"ni neng bang uo giao i liang ciu dzu ce ma"},
+      {it:"A che binario parte il treno?", ans:["火车从哪个站台出发","huo che cong na ge zhan tai chu fa"], phon:"huo ce tsong na ge gian tai ciu fa"},
+      {it:"Ho una prenotazione a nome Rossi.", ans:["我有一个以罗西的名字预订的房间","wo you yi ge yi luo xi de ming zi yu ding de fang jian"], phon:"uo iou i ge i luo si de ming dzi iu ding de fang gien"},
+      {it:"Dov'è il bagno più vicino?", ans:["最近的洗手间在哪里","zui jin de xi shou jian zai na li"], phon:"dzuei gin de si sciou gien dzai na li"},
+      {it:"Quanto tempo dura il viaggio?", ans:["这段旅程要多长时间","zhe duan lv cheng yao duo chang shi jian"], phon:"ge duan liu cceng iao duo ciang sci gien"},
+      {it:"Dove posso comprare un biglietto?", ans:["我在哪里可以买票","wo zai na li ke yi mai piao"], phon:"uo dzai na li ke i mai piao"},
+      {it:"Il volo è in ritardo.", ans:["航班延误了","hang ban yan wu le"], phon:"hang ban ien u le"},
+      {it:"Ho bisogno di cambiare valuta.", ans:["我需要换外币","wo xu yao huan wai bi"], phon:"uo siu iao huan uai bi"},
+      {it:"Può consigliarmi un buon ristorante?", ans:["你能推荐一家好餐厅吗","ni neng tui jian yi jia hao can ting ma"], phon:"ni neng tuei gien i gia hao tsan ting ma"},
+      {it:"Dove si trova la fermata dell'autobus?", ans:["公交车站在哪里","gong jiao che zhan zai na li"], phon:"gong giao ce gian dzai na li"},
+    ],
+    [ // Livello 5 · lavoro e clienti
+      {it:"Posso aiutarla?", ans:["我能帮您吗","wo neng bang nin ma"], phon:"uo neng bang nin ma"},
+      {it:"Vorrei fissare una riunione per domani.", ans:["我想安排明天开会","wo xiang an pai ming tian kai hui"], phon:"uo siang an pai ming tien kai huei"},
+      {it:"Le invio il documento via email.", ans:["我通过电子邮件把文件发给您","wo tong guo dian zi you jian ba wen jian fa gei nin"], phon:"uo tong guo dien dzi iou gien ba uen gien fa gei nin"},
+      {it:"Mi scusi per il ritardo nella risposta.", ans:["抱歉回复晚了","bao qian hui fu wan le"], phon:"bao cien huei fu uan le"},
+      {it:"Il suo ordine sarà pronto tra un'ora.", ans:["您的订单一小时内就好","nin de ding dan yi xiao shi nei jiu hao"], phon:"nin de ding dan i sciao sci nei giu hao"},
+      {it:"Può ripetere la sua richiesta, per favore?", ans:["您能再说一遍您的要求吗","nin neng zai shuo yi bian nin de yao qiu ma"], phon:"nin neng dzai sciuo i bien nin de iao ciu ma"},
+      {it:"Come posso esserle utile?", ans:["我能为您做些什么","wo neng wei nin zuo xie shen me"], phon:"uo neng uei nin dzuo sie scen me"},
+      {it:"Il pagamento è andato a buon fine.", ans:["付款已成功","fu kuan yi cheng gong"], phon:"fu kuan i cceng gong"},
+      {it:"Le mando la fattura entro oggi.", ans:["我今天会把发票发给您","wo jin tian hui ba fa piao fa gei nin"], phon:"uo gin tien huei ba fa piao fa gei nin"},
+      {it:"Abbiamo ricevuto il suo reclamo.", ans:["我们已经收到您的投诉","wo men yi jing shou dao nin de tou su"], phon:"uo men i gin sciou dao nin de tou su"},
+      {it:"La ringrazio per la pazienza.", ans:["感谢您的耐心","gan xie nin de nai xin"], phon:"gan sie nin de nai sin"},
+      {it:"Può firmare qui, per favore?", ans:["请您在这里签字","qing nin zai zhe li qian zi"], phon:"cing nin dzai ge li cien dzi"},
+    ],
+  ],
+  ja: [
+    [ // Livello 1
+      {it:"Ciao", ans:["こんにちは","konnichiwa"], phon:"kon-ni-ci-ua"},
+      {it:"Buongiorno", ans:["おはようございます","ohayou gozaimasu"], phon:"o-ha-yo go-dza-i-mas"},
+      {it:"Buonasera", ans:["こんばんは","konbanwa"], phon:"kon-ban-ua"},
+      {it:"Grazie", ans:["ありがとうございます","arigatou gozaimasu"], phon:"a-ri-ga-to go-dza-i-mas"},
+      {it:"Per favore", ans:["お願いします","onegaishimasu"], phon:"o-ne-gai-sci-mas"},
+      {it:"Sì", ans:["はい","hai"], phon:"hai"},
+      {it:"No", ans:["いいえ","iie"], phon:"i-ie"},
+      {it:"Scusa", ans:["すみません","sumimasen"], phon:"su-mi-ma-sen"},
+      {it:"Arrivederci", ans:["さようなら","sayounara"], phon:"sa-yo-na-ra"},
+      {it:"Buonanotte", ans:["おやすみなさい","oyasuminasai"], phon:"o-ya-su-mi-na-sai"},
+      {it:"Piacere", ans:["はじめまして","hajimemashite"], phon:"ha-gi-me-ma-sci-te"},
+      {it:"Salute!", ans:["乾杯","kanpai"], phon:"kan-pai"},
+      {it:"Forse", ans:["たぶん","tabun"], phon:"ta-bun"},
+      {it:"Sempre", ans:["いつも","itsumo"], phon:"it-su-mo"},
+      {it:"Mai", ans:["決して","kesshite"], phon:"kes-sci-te"},
+    ],
+    [ // Livello 2
+      {it:"Come stai?", ans:["元気ですか","genki desu ka"], phon:"ghen-ki des-ka"},
+      {it:"Mi chiamo Marco", ans:["私はマルコです","watashi wa maruko desu"], phon:"ua-ta-sci ua ma-ru-ko des"},
+      {it:"Dove abiti?", ans:["どこに住んでいますか","doko ni sunde imasu ka"], phon:"do-ko ni sun-de i-mas-ka"},
+      {it:"Non capisco", ans:["わかりません","wakarimasen"], phon:"ua-ka-ri-ma-sen"},
+      {it:"Quanto costa?", ans:["いくらですか","ikura desu ka"], phon:"i-ku-ra des-ka"},
+      {it:"Che ore sono?", ans:["今何時ですか","ima nanji desu ka"], phon:"i-ma nan-gi des-ka"},
+      {it:"Quanti anni hai?", ans:["何歳ですか","nansai desu ka"], phon:"nan-sai des-ka"},
+      {it:"Puoi ripetere, per favore?", ans:["もう一度言ってください","mou ichido itte kudasai"], phon:"mo i-ci-do it-te ku-da-sai"},
+      {it:"Mi piace questo posto.", ans:["この場所が好きです","kono basho ga suki desu"], phon:"ko-no ba-scio ga su-ki des"},
+      {it:"Sono stanco/a oggi.", ans:["今日は疲れています","kyou wa tsukarete imasu"], phon:"cio ua tsu-ka-re-te i-mas"},
+      {it:"Che lavoro fai?", ans:["お仕事は何ですか","oshigoto wa nan desu ka"], phon:"o-sci-go-to ua nan des-ka"},
+      {it:"A più tardi!", ans:["またあとで","mata atode"], phon:"ma-ta a-to-de"},
+    ],
+    [ // Livello 3 · vita quotidiana
+      {it:"Hai dormito bene stanotte?", ans:["昨夜よく眠れましたか","sakuya yoku nemuremashita ka"], phon:"sa-ku-ya yo-ku ne-mu-re-ma-sci-ta ka"},
+      {it:"Sei passato dal supermercato?", ans:["スーパーに行きましたか","suupaa ni ikimashita ka"], phon:"su-pa ni i-ki-ma-sci-ta ka"},
+      {it:"Hai fatto il biglietto del treno?", ans:["電車のチケットを買いましたか","densha no chiketto wo kaimashita ka"], phon:"den-scia no ci-ket-to uo kai-ma-sci-ta ka"},
+      {it:"A che ora ci vediamo domani?", ans:["明日何時に会いますか","ashita nanji ni aimasu ka"], phon:"a-scita nan-gi ni ai-mas-ka"},
+      {it:"Puoi chiudere la finestra, per favore?", ans:["窓を閉めてもらえますか","mado wo shimete moraemasu ka"], phon:"ma-do uo sci-me-te mo-ra-e-mas-ka"},
+      {it:"Che cosa hai fatto questo weekend?", ans:["週末は何をしましたか","shuumatsu wa nani wo shimashita ka"], phon:"sciu-ma-tsu ua na-ni uo sci-ma-sci-ta ka"},
+      {it:"Hai portato fuori il cane?", ans:["犬を散歩させましたか","inu wo sanpo sasemashita ka"], phon:"i-nu uo san-po sa-se-ma-sci-ta ka"},
+      {it:"Ricordati di comprare il pane.", ans:["パンを買うのを忘れないでください","pan wo kau no wo wasurenaide kudasai"], phon:"pan uo kau no uo ua-su-re-nai-de ku-da-sai"},
+      {it:"Oggi ho cucinato la pasta.", ans:["今日パスタを作りました","kyou pasuta wo tsukurimashita"], phon:"cio pa-su-ta uo tsu-ku-ri-ma-sci-ta"},
+      {it:"Domani devo andare dal dottore.", ans:["明日病院に行かなければなりません","ashita byouin ni ikanakereba narimasen"], phon:"a-scita bio-in ni i-ka-na-ke-re-ba na-ri-ma-sen"},
+      {it:"Hai già fatto la spesa?", ans:["もう買い物をしましたか","mou kaimono wo shimashita ka"], phon:"mo kai-mo-no uo sci-ma-sci-ta ka"},
+      {it:"Stasera guardiamo un film insieme?", ans:["今夜一緒に映画を見ますか","konya issho ni eiga wo mimasu ka"], phon:"kon-ya is-scio ni ei-ga uo mi-mas-ka"},
+    ],
+    [ // Livello 4 · in viaggio
+      {it:"Dove si trova l'hotel più vicino?", ans:["一番近いホテルはどこですか","ichiban chikai hoteru wa doko desu ka"], phon:"i-ci-ban ci-kai ho-te-ru ua do-ko des-ka"},
+      {it:"Ho perso il volo.", ans:["飛行機に乗り遅れました","hikouki ni noriokuremashita"], phon:"hi-ko-ki ni no-ri-o-ku-re-ma-sci-ta"},
+      {it:"Può chiamarmi un taxi, per favore?", ans:["タクシーを呼んでもらえますか","takushii wo yonde moraemasu ka"], phon:"ta-ku-scì uo yon-de mo-ra-e-mas-ka"},
+      {it:"A che binario parte il treno?", ans:["電車は何番線から出ますか","densha wa nanbansen kara demasu ka"], phon:"den-scia ua nan-ban-sen ka-ra de-mas-ka"},
+      {it:"Ho una prenotazione a nome Rossi.", ans:["ロッシの名前で予約があります","rosshi no namae de yoyaku ga arimasu"], phon:"ros-scì no na-ma-e de yo-ya-ku ga a-ri-mas"},
+      {it:"Dov'è il bagno più vicino?", ans:["一番近いトイレはどこですか","ichiban chikai toire wa doko desu ka"], phon:"i-ci-ban ci-kai to-i-re ua do-ko des-ka"},
+      {it:"Quanto tempo dura il viaggio?", ans:["旅行はどれくらいかかりますか","ryokou wa dore kurai kakarimasu ka"], phon:"rio-ko ua do-re ku-rai ka-ka-ri-mas-ka"},
+      {it:"Dove posso comprare un biglietto?", ans:["どこでチケットが買えますか","doko de chiketto ga kaemasu ka"], phon:"do-ko de ci-ket-to ga ka-e-mas-ka"},
+      {it:"Il volo è in ritardo.", ans:["飛行機が遅れています","hikouki ga okurete imasu"], phon:"hi-ko-ki ga o-ku-re-te i-mas"},
+      {it:"Ho bisogno di cambiare valuta.", ans:["両替が必要です","ryougae ga hitsuyou desu"], phon:"rio-ga-e ga hi-tsu-yo des"},
+      {it:"Può consigliarmi un buon ristorante?", ans:["いいレストランを教えてもらえますか","ii resutoran wo oshiete moraemasu ka"], phon:"i re-su-to-ran uo o-scì-e-te mo-ra-e-mas-ka"},
+      {it:"Dove si trova la fermata dell'autobus?", ans:["バス停はどこですか","basutei wa doko desu ka"], phon:"ba-su-tei ua do-ko des-ka"},
+    ],
+    [ // Livello 5 · lavoro e clienti
+      {it:"Posso aiutarla?", ans:["お手伝いしましょうか","otetsudai shimashou ka"], phon:"o-te-tsu-dai sci-ma-scio ka"},
+      {it:"Vorrei fissare una riunione per domani.", ans:["明日の会議を設定したいです","ashita no kaigi wo settei shitai desu"], phon:"a-scita no kai-gi uo set-tei sci-tai des"},
+      {it:"Le invio il documento via email.", ans:["メールで書類をお送りします","meeru de shorui wo o-okuri shimasu"], phon:"me-ru de scio-rui uo o-o-ku-ri sci-mas"},
+      {it:"Mi scusi per il ritardo nella risposta.", ans:["返信が遅れて申し訳ございません","henshin ga okurete moushiwake gozaimasen"], phon:"hen-scin ga o-ku-re-te mo-scì-ua-ke go-dza-i-ma-sen"},
+      {it:"Il suo ordine sarà pronto tra un'ora.", ans:["ご注文は一時間で準備できます","gochuumon wa ichijikan de junbi dekimasu"], phon:"go-ciu-mon ua i-ci-gi-kan de gyun-bi de-ki-mas"},
+      {it:"Può ripetere la sua richiesta, per favore?", ans:["ご要望をもう一度お伺いできますか","goyoubou wo mou ichido oukagai dekimasu ka"], phon:"go-yo-bo uo mo i-ci-do o-u-ka-gai de-ki-mas-ka"},
+      {it:"Come posso esserle utile?", ans:["どのようにお手伝いできますか","dono you ni otetsudai dekimasu ka"], phon:"do-no yo ni o-te-tsu-dai de-ki-mas-ka"},
+      {it:"Il pagamento è andato a buon fine.", ans:["お支払いは正常に完了しました","oshiharai wa seijou ni kanryou shimashita"], phon:"o-sci-ha-rai ua sei-gio ni kan-rio sci-ma-sci-ta"},
+      {it:"Le mando la fattura entro oggi.", ans:["今日中に請求書をお送りします","kyoujuu ni seikyuusho wo o-okuri shimasu"], phon:"cio-giu ni sei-kiu-scio uo o-o-ku-ri sci-mas"},
+      {it:"Abbiamo ricevuto il suo reclamo.", ans:["お客様のクレームを受け取りました","okyakusama no kureemu wo uketorimashita"], phon:"o-kya-ku-sa-ma no ku-re-mu uo u-ke-to-ri-ma-sci-ta"},
+      {it:"La ringrazio per la pazienza.", ans:["ご辛抱いただきありがとうございます","goshinbou itadaki arigatou gozaimasu"], phon:"go-scin-bo i-ta-da-ki a-ri-ga-to go-dza-i-mas"},
+      {it:"Può firmare qui, per favore?", ans:["ここにサインしていただけますか","koko ni sain shite itadakemasu ka"], phon:"ko-ko ni sa-in sci-te i-ta-da-ke-mas-ka"},
     ],
   ],
 };
 
 /* Sintesi vocale del browser: legge ad alta voce la frase nella lingua target */
-const TTS_LANG = { en:'en-US', fr:'fr-FR', ar:'ar-SA', es:'es-ES', de:'de-DE' };
+const TTS_LANG = { en:'en-US', fr:'fr-FR', ar:'ar-SA', es:'es-ES', de:'de-DE', zh:'zh-CN', ja:'ja-JP' };
 function speak(text, langKey){
   try{
     if(!('speechSynthesis' in window)) return;
@@ -1726,6 +2120,7 @@ function speak(text, langKey){
     window.speechSynthesis.speak(u);
   }catch(e){ console.warn('tts error', e); }
 }
+
 
 /* ---------- STORAGE ADAPTER ----------
    Dentro Claude usa window.storage. Fuori (GitHub Pages, file locale) non esiste:
@@ -1802,9 +2197,23 @@ async function loadState(lang){
   }
 
   if(!state.impara){
-    state.impara = { level:1, progress:{1:freshDirState(), 2:freshDirState(), 3:freshDirState()} };
+    state.impara = {
+      level:1, direction:'to_target',
+      progress:{
+        1:{to_target:{index:0}, to_it:{index:0}}, 2:{to_target:{index:0}, to_it:{index:0}},
+        3:{to_target:{index:0}, to_it:{index:0}}, 4:{to_target:{index:0}, to_it:{index:0}},
+        5:{to_target:{index:0}, to_it:{index:0}}
+      }
+    };
   } else {
-    [1,2,3].forEach(lvl=>{ if(!state.impara.progress[lvl]) state.impara.progress[lvl] = freshDirState(); });
+    if(!state.impara.direction) state.impara.direction = 'to_target';
+    [1,2,3,4,5].forEach(lvl=>{
+      if(!state.impara.progress[lvl]) state.impara.progress[lvl] = { to_target:{index:0}, to_it:{index:0} };
+      else {
+        if(!state.impara.progress[lvl].to_target) state.impara.progress[lvl].to_target = {index:0};
+        if(!state.impara.progress[lvl].to_it) state.impara.progress[lvl].to_it = {index:0};
+      }
+    });
     if(!state.impara.level) state.impara.level = 1;
   }
 }
@@ -2281,42 +2690,68 @@ document.querySelectorAll('#bpDirTabs button').forEach(btn=>{
   };
 });
 
-/* ---------- IMPARA LA LINGUA (da zero assoluto) ---------- */
+/* ---------- IMPARA LA LINGUA (da zero assoluto, zona istruzione senza punteggio) ---------- */
+let imAttempts = 0;
+
 function currentImparaList(){ return LEARN[currentLang][state.impara.level - 1]; }
-function currentImparaState(){ return state.impara.progress[state.impara.level]; }
+function currentImparaState(){ return state.impara.progress[state.impara.level][state.impara.direction]; }
+
+function imMakeSpeakBtn(text){
+  const speakBtn = document.createElement('button');
+  speakBtn.className = 'ghost';
+  speakBtn.type = 'button';
+  speakBtn.style.marginTop = '8px';
+  speakBtn.innerHTML = '&#128266; Ascolta pronuncia';
+  speakBtn.onclick = ()=> speak(text, currentLang);
+  return speakBtn;
+}
 
 function renderImpara(){
   const list = currentImparaList();
   const level = state.impara.level;
+  const dir = state.impara.direction;
   const ds = currentImparaState();
   const idx = ds.index;
-  ds.wrong = 0;
-  ds.hintUsed = false;
+  imAttempts = 0;
 
   document.querySelectorAll('#imLevelTabs button').forEach(b=>{
     b.classList.toggle('active', Number(b.dataset.level) === level);
   });
-
-  const precisione = ds.completed>0 ? Math.round(ds.correctFirstTry/ds.completed*100) : null;
-  document.getElementById('imStatsRow').innerHTML = `
-    <div class="stat-box"><div class="n">${ds.score}</div><div class="l">PUNTI</div></div>
-    <div class="stat-box"><div class="n">${precisione===null?'&mdash;':precisione+'%'}</div><div class="l">PRECISIONE</div></div>
-    <div class="stat-box"><div class="n">${ds.completed}</div><div class="l">COMPLETATE</div></div>
-  `;
+  document.querySelectorAll('#imDirTabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.dir === dir);
+  });
+  document.getElementById('imDirToTarget').textContent = `Italiano \u2192 ${LANGS[currentLang].label}`;
+  document.getElementById('imDirToIt').textContent = `${LANGS[currentLang].label} \u2192 Italiano`;
 
   document.getElementById('imFeedback').textContent='';
   document.getElementById('imFeedback').className='bp-feedback';
   document.getElementById('imInput').value='';
-  document.getElementById('imInput').dir = (currentLang==='ar') ? 'rtl' : 'ltr';
-  document.getElementById('imInput').placeholder = `Scrivi in ${LANGS[currentLang].label}...`;
+  const inputIsNative = (dir === 'to_target' && currentLang === 'ar');
+  document.getElementById('imInput').dir = inputIsNative ? 'rtl' : 'ltr';
+  document.getElementById('imInput').placeholder = (dir === 'to_target')
+    ? `Scrivi in ${LANGS[currentLang].label}...`
+    : 'Scrivi in italiano...';
+
+  const promptHint = document.getElementById('imPromptHint');
 
   if(idx >= list.length){
     document.getElementById('imProgressFill').style.width='100%';
     document.getElementById('imProgressLabel').textContent = `Completato · ${list.length}/${list.length}`;
-    const nextLevel = level < 3 ? level+1 : null;
-    const msg = nextLevel
-      ? `Ottimo lavoro! Passa al <b>Livello ${nextLevel}</b> qui sopra per continuare.`
-      : `Hai completato "Impara la lingua" per ${LANGS[currentLang].label}. Ora prova il <b>Percorso Base</b> per consolidare quello che hai imparato.`;
+    document.getElementById('imPrompt').removeAttribute('dir');
+    document.getElementById('imPrompt').classList.remove('rtl-text');
+    promptHint.classList.add('hidden');
+    const nextLevel = level < 5 ? level+1 : null;
+    const otherDirDone = state.impara.progress[level][dir === 'to_target' ? 'to_it' : 'to_target'].index >= list.length;
+    let msg;
+    if(nextLevel && otherDirDone){
+      msg = `Ottimo lavoro! Passa al <b>Livello ${nextLevel}</b> qui sopra per continuare.`;
+    } else if(nextLevel){
+      msg = `Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}", oppure passa direttamente al <b>Livello ${nextLevel}</b>.`;
+    } else if(!otherDirDone){
+      msg = `Prova "${dir==='to_target' ? LANGS[currentLang].label+' \u2192 Italiano' : 'Italiano \u2192 '+LANGS[currentLang].label}" per completare anche questa direzione.`;
+    } else {
+      msg = `Hai completato "Impara la lingua" per ${LANGS[currentLang].label} in entrambe le direzioni. Ora vai al <b>Percorso Base</b> per mettere alla prova quello che hai imparato, in modalità competitiva.`;
+    }
     document.getElementById('imPrompt').innerHTML = `<div class="bp-done"><div class="n">Livello ${level} completato ✓</div>${msg}</div>`;
     document.getElementById('imInput').classList.add('hidden');
     document.getElementById('imCheck').classList.add('hidden');
@@ -2332,79 +2767,88 @@ function renderImpara(){
   document.getElementById('imProgressLabel').textContent = `Frase ${idx+1} di ${list.length}`;
 
   const item = list[idx];
+  const showingNative = (dir === 'to_it' && currentLang === 'ar');
   const promptEl = document.getElementById('imPrompt');
-  promptEl.textContent = item.it;
-  promptEl.setAttribute('dir','ltr');
-  promptEl.classList.remove('rtl-text');
+  promptEl.textContent = (dir === 'to_target') ? item.it : item.ans[0];
+  promptEl.setAttribute('dir', showingNative ? 'rtl' : 'ltr');
+  promptEl.classList.toggle('rtl-text', showingNative);
+
+  // Quando il prompt è già nella lingua target (direzione Lingua→Italiano),
+  // mostriamo subito la pronuncia: leggerlo ad alta voce fa parte dell'esercizio.
+  if(dir === 'to_it'){
+    promptHint.classList.remove('hidden');
+    promptHint.innerHTML = `Pronuncia: <b>${item.phon}</b>`;
+    promptHint.appendChild(document.createElement('br'));
+    promptHint.appendChild(imMakeSpeakBtn(item.ans[0]));
+  } else {
+    promptHint.classList.add('hidden');
+    promptHint.innerHTML = '';
+  }
 }
 
 async function imAdvance(){
   const ds = currentImparaState();
   ds.index++;
-  ds.wrong = 0;
-  ds.hintUsed = false;
   await saveState(currentLang);
   renderImpara();
 }
 
 document.getElementById('imCheck').onclick = async ()=>{
   const list = currentImparaList();
+  const dir = state.impara.direction;
   const ds = currentImparaState();
   const idx = ds.index;
   if(idx >= list.length) return;
   const item = list[idx];
-  const isArInput = (currentLang === 'ar');
-  const given = normalizeAnswer(document.getElementById('imInput').value, isArInput);
+  const isNativeInput = (dir === 'to_target' && currentLang === 'ar');
+  const given = normalizeAnswer(document.getElementById('imInput').value, isNativeInput);
   if(!given) return;
-  const ok = item.ans.some(a => normalizeAnswer(a, isArInput) === given);
+
+  const ok = (dir === 'to_target')
+    ? item.ans.some(a => normalizeAnswer(a, isNativeInput) === given)
+    : normalizeAnswer(item.it, false) === given;
+
   const fb = document.getElementById('imFeedback');
   if(ok){
-    const gained = (ds.wrong === 0 && !ds.hintUsed) ? 10 : 5;
-    ds.score += gained;
-    if(ds.wrong === 0 && !ds.hintUsed) ds.correctFirstTry++;
-    ds.completed++;
     fb.className='bp-feedback ok';
-    fb.innerHTML = `Corretto ✓  +${gained} punti
-      <div class="sound-tip" style="margin-top:8px; font-style:normal;">Si dice così: <b>${item.ans[0]}</b><br>Si pronuncia circa: <b>${item.phon}</b></div>`;
-    const speakBtn = document.createElement('button');
-    speakBtn.className = 'ghost';
-    speakBtn.type = 'button';
-    speakBtn.style.marginTop = '8px';
-    speakBtn.innerHTML = '&#128266; Ascolta pronuncia';
-    speakBtn.onclick = ()=> speak(item.ans[0], currentLang);
-    fb.appendChild(speakBtn);
+    if(dir === 'to_target'){
+      fb.innerHTML = `Corretto ✓
+        <div class="sound-tip" style="margin-top:8px; font-style:normal;">Si dice così: <b>${item.ans[0]}</b><br>Si pronuncia circa: <b>${item.phon}</b></div>`;
+      fb.appendChild(imMakeSpeakBtn(item.ans[0]));
+    } else {
+      fb.textContent = 'Corretto ✓';
+    }
     await saveState(currentLang);
     setTimeout(imAdvance, 1600);
   } else {
-    ds.wrong = (ds.wrong||0)+1;
+    imAttempts++;
     fb.className='bp-feedback ko';
-    if(ds.wrong >= 2){
-      fb.innerHTML = `Non ancora corretto.<span class="hint">Risposta corretta: <b>${item.ans[0]}</b> &middot; pronuncia: ${item.phon}</span>`;
+    if(imAttempts >= 2){
+      const correctAnswer = (dir === 'to_target') ? item.ans[0] : item.it;
+      fb.innerHTML = `Non ancora corretto.<span class="hint">Risposta corretta: <b>${correctAnswer}</b></span>`;
+      if(dir === 'to_target') fb.appendChild(imMakeSpeakBtn(item.ans[0]));
     } else {
       fb.textContent = 'Non ancora corretto, riprova.';
     }
-    await saveState(currentLang);
   }
 };
 
 document.getElementById('imHint').onclick = ()=>{
   const list = currentImparaList();
+  const dir = state.impara.direction;
   const ds = currentImparaState();
   const idx = ds.index;
   if(idx >= list.length) return;
   const item = list[idx];
-  ds.hintUsed = true;
   const fb = document.getElementById('imFeedback');
   fb.className = 'bp-feedback';
-  fb.innerHTML = `<div class="sound-tip" style="font-style:normal;">Si dice: <b>${item.ans[0]}</b><br>Pronuncia: <b>${item.phon}</b></div>`;
-  const speakBtn = document.createElement('button');
-  speakBtn.className = 'ghost';
-  speakBtn.type = 'button';
-  speakBtn.style.marginTop = '8px';
-  speakBtn.innerHTML = '&#128266; Ascolta pronuncia';
-  speakBtn.onclick = ()=> speak(item.ans[0], currentLang);
-  fb.appendChild(speakBtn);
-  speak(item.ans[0], currentLang);
+  if(dir === 'to_target'){
+    fb.innerHTML = `<div class="sound-tip" style="font-style:normal;">Si dice: <b>${item.ans[0]}</b><br>Pronuncia: <b>${item.phon}</b></div>`;
+    fb.appendChild(imMakeSpeakBtn(item.ans[0]));
+    speak(item.ans[0], currentLang);
+  } else {
+    fb.innerHTML = `<div class="sound-tip" style="font-style:normal;">Si dice: <b>${item.it}</b></div>`;
+  }
 };
 
 document.getElementById('imInput').addEventListener('keydown', (e)=>{
@@ -2412,13 +2856,20 @@ document.getElementById('imInput').addEventListener('keydown', (e)=>{
 });
 document.getElementById('imSkip').onclick = imAdvance;
 document.getElementById('imReset').onclick = async ()=>{
-  state.impara.progress[state.impara.level] = freshDirState();
+  state.impara.progress[state.impara.level][state.impara.direction] = {index:0};
   await saveState(currentLang);
   renderImpara();
 };
 document.querySelectorAll('#imLevelTabs button').forEach(btn=>{
   btn.onclick = async ()=>{
     state.impara.level = Number(btn.dataset.level);
+    await saveState(currentLang);
+    renderImpara();
+  };
+});
+document.querySelectorAll('#imDirTabs button').forEach(btn=>{
+  btn.onclick = async ()=>{
+    state.impara.direction = btn.dataset.dir;
     await saveState(currentLang);
     renderImpara();
   };
