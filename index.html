@@ -3503,6 +3503,40 @@ async function getChinesePinyin(text){
   }
 }
 
+// Traduzione diretta (vera macchina di traduzione, non basata su "memoria" di frasi salvate da altri).
+// Usiamo l'endpoint pubblico di Google Translate: nessuna chiave richiesta, ed è machine translation
+// vera, non un database di corrispondenze che a volte restituisce frasi scorrelate.
+async function translateViaGoogle(text, targetCode){
+  try{
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=it&tl=${targetCode}&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    if(!res.ok) return null;
+    const data = await res.json();
+    if(!data || !Array.isArray(data[0])) return null;
+    const translated = data[0].map(chunk => chunk[0]).join('');
+    return translated && translated.trim() ? translated.trim() : null;
+  }catch(e){
+    console.warn('google translate error', e);
+    return null;
+  }
+}
+
+// Riserva: MyMemory. Usato solo se il motore diretto non risponde (rete, blocco, ecc.).
+// Nota: MyMemory può occasionalmente restituire corrispondenze di memoria condivisa scorrelate
+// dalla frase — per questo non è più la scelta primaria.
+async function translateViaMyMemory(text, targetCode){
+  try{
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=it|${targetCode}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const translated = data && data.responseData && data.responseData.translatedText;
+    return translated ? translated : null;
+  }catch(e){
+    console.warn('mymemory translate error', e);
+    return null;
+  }
+}
+
 document.getElementById('trTranslateBtn').onclick = async ()=>{
   const text = document.getElementById('trItInput').value.trim();
   if(!text) return;
@@ -3511,10 +3545,8 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
   btn.disabled = true;
   btn.textContent = 'Traduco...';
   try{
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=it|${targetCode}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const translated = data && data.responseData && data.responseData.translatedText;
+    let translated = await translateViaGoogle(text, targetCode);
+    if(!translated){ translated = await translateViaMyMemory(text, targetCode); }
     if(!translated){ throw new Error('empty translation'); }
 
     document.getElementById('trResultText').textContent = translated;
