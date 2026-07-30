@@ -438,10 +438,11 @@
     <p class="sub">Il punto di partenza se non conosci ancora questa lingua: leggi la frase, scrivi la traduzione, poi guarda (e ascolta) come si pronuncia. Niente punteggio qui: quando ti senti pronto, vai al <b>Percorso Base</b> per mettere alla prova quello che hai imparato.</p>
     <div class="level-tabs" id="imLevelTabs">
       <button data-level="1" class="active">1 &middot; Parole</button>
-      <button data-level="2">2 &middot; Frasi brevi</button>
-      <button data-level="3">3 &middot; Vita quotidiana</button>
-      <button data-level="4">4 &middot; In viaggio</button>
-      <button data-level="5">5 &middot; Lavoro e clienti</button>
+      <button data-level="2">2 &middot; Frasi semplici</button>
+      <button data-level="3">3 &middot; Frasi brevi</button>
+      <button data-level="4">4 &middot; Vita quotidiana</button>
+      <button data-level="5">5 &middot; In viaggio</button>
+      <button data-level="6">6 &middot; Lavoro e clienti</button>
     </div>
     <div class="level-tabs" id="imDirTabs">
       <button data-dir="to_target" id="imDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -1884,8 +1885,30 @@ const LEARN = {
       {it:"Forse", ans:["maybe"], phon:"MEI-bi"},
       {it:"Sempre", ans:["always"], phon:"OL-ueis"},
       {it:"Mai", ans:["never"], phon:"NE-ver"},
+      {it:"Oggi", ans:["today"], phon:"tu-DEI"},
+      {it:"Domani", ans:["tomorrow"], phon:"tu-MO-rou"},
+      {it:"Ieri", ans:["yesterday"], phon:"IES-ter-dei"},
+      {it:"Adesso", ans:["now"], phon:"nau"},
+      {it:"Dopo", ans:["later"], phon:"LEI-ter"},
     ],
-    [ // Livello 2 · frasi brevi
+    [ // Livello 2 · frasi quotidiane semplici (NUOVO)
+      {it:"Domani piove.", ans:["it will rain tomorrow", "it's going to rain tomorrow"], phon:"it uil rein tu-MO-rou"},
+      {it:"Prendo l'ascensore.", ans:["i take the elevator"], phon:"ai teik di E-le-vei-tor"},
+      {it:"Oggi vado al mare.", ans:["today im going to the beach", "today i'm going to the beach", "today i am going to the beach"], phon:"tu-DEI aim GOU-ing tu de BICH"},
+      {it:"Ho fame.", ans:["im hungry", "i'm hungry", "i am hungry"], phon:"aim HAN-gri"},
+      {it:"Ho sete.", ans:["im thirsty", "i'm thirsty", "i am thirsty"], phon:"aim THIR-sti"},
+      {it:"Fa caldo oggi.", ans:["its hot today", "it's hot today"], phon:"its hot tu-DEI"},
+      {it:"Fa freddo stasera.", ans:["its cold tonight", "it's cold tonight"], phon:"its could tu-NAIT"},
+      {it:"Vado a fare la spesa.", ans:["im going grocery shopping", "i'm going grocery shopping", "i am going grocery shopping"], phon:"aim GOU-ing GROU-se-ri SHO-ping"},
+      {it:"Prendo l'autobus ogni giorno.", ans:["i take the bus every day"], phon:"ai teik de bas E-vri dei"},
+      {it:"Oggi lavoro da casa.", ans:["today im working from home", "today i'm working from home", "today i am working from home"], phon:"tu-DEI aim UOR-king from houm"},
+      {it:"Sto guardando la televisione.", ans:["im watching television", "i'm watching television", "i am watching television"], phon:"aim UOT-cing TE-le-vi-jon"},
+      {it:"Vado a dormire presto.", ans:["im going to bed early", "i'm going to bed early", "i am going to bed early"], phon:"aim GOU-ing tu bed ER-li"},
+      {it:"Mi piace passeggiare al parco.", ans:["i like walking in the park"], phon:"ai laik UO-king in de PARK"},
+      {it:"Bevo un caffè ogni mattina.", ans:["i drink a coffee every morning"], phon:"ai drink e CO-fi E-vri MOR-ning"},
+      {it:"Domani è il mio compleanno.", ans:["tomorrow is my birthday"], phon:"tu-MO-rou iz mai BERTH-dei"},
+    ],
+    [ // Livello 3 · frasi brevi
       {it:"Come stai?", ans:["how are you"], phon:"hau ar iu"},
       {it:"Mi chiamo Marco", ans:["my name is marco","i am marco","im marco","i'm marco"], phon:"mai neim iz MAR-co"},
       {it:"Dove abiti?", ans:["where do you live"], phon:"uer du iu liv"},
@@ -1899,7 +1922,7 @@ const LEARN = {
       {it:"Che lavoro fai?", ans:["whats your job","what's your job","what do you do"], phon:"uots ior job"},
       {it:"A più tardi!", ans:["see you later"], phon:"si iu LEI-ter"},
     ],
-    [ // Livello 3 · vita quotidiana
+    [ // Livello 4 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["did you sleep well last night"], phon:"did iu slip uel last nait"},
       {it:"Sei passato dal supermercato?", ans:["did you go to the supermarket"], phon:"did iu gou tu de SU-per-mar-ket"},
       {it:"Hai fatto il biglietto del treno?", ans:["did you buy the train ticket"], phon:"did iu bai de trein TI-ket"},
@@ -1913,7 +1936,7 @@ const LEARN = {
       {it:"Hai già fatto la spesa?", ans:["have you already done the shopping"], phon:"hev iu ol-RE-di dan de SHO-ping"},
       {it:"Stasera guardiamo un film insieme?", ans:["shall we watch a movie together tonight"], phon:"shel ui uotch e MU-vi tu-GHE-der tu-NAIT"},
     ],
-    [ // Livello 4 · in viaggio
+    [ // Livello 5 · in viaggio
       {it:"Dove si trova l'hotel più vicino?", ans:["where is the nearest hotel"], phon:"uer iz de NIR-est ho-TEL"},
       {it:"Ho perso il volo.", ans:["i missed my flight"], phon:"ai mist mai flait"},
       {it:"Può chiamarmi un taxi, per favore?", ans:["can you call me a taxi please"], phon:"ken iu col mi e TAK-si pliz"},
@@ -1927,7 +1950,7 @@ const LEARN = {
       {it:"Può consigliarmi un buon ristorante?", ans:["can you recommend a good restaurant"], phon:"ken iu re-co-MEND e gud RES-to-rant"},
       {it:"Dove si trova la fermata dell'autobus?", ans:["where is the bus stop"], phon:"uer iz de bas stop"},
     ],
-    [ // Livello 5 · lavoro e clienti
+    [ // Livello 6 · lavoro e clienti
       {it:"Posso aiutarla?", ans:["can i help you"], phon:"ken ai help iu"},
       {it:"Vorrei fissare una riunione per domani.", ans:["id like to schedule a meeting for tomorrow","i would like to schedule a meeting for tomorrow"], phon:"aid laik tu SKE-diul e MI-ting for tu-MO-rou"},
       {it:"Le invio il documento via email.", ans:["ill send you the document by email","i will send you the document by email"], phon:"ail send iu de DO-kiu-ment bai I-meil"},
@@ -1959,8 +1982,30 @@ const LEARN = {
       {it:"Forse", ans:["peut-etre","peut etre","peut-être"], phon:"peu-TETR"},
       {it:"Sempre", ans:["toujours"], phon:"tu-JUR"},
       {it:"Mai", ans:["jamais"], phon:"ja-ME"},
+      {it:"Oggi", ans:["aujourd'hui", "aujourdhui"], phon:"o-jur-DUI"},
+      {it:"Domani", ans:["demain"], phon:"deu-MIN"},
+      {it:"Ieri", ans:["hier"], phon:"I-er"},
+      {it:"Adesso", ans:["maintenant"], phon:"min-teu-NAN"},
+      {it:"Dopo", ans:["plus tard"], phon:"plu TAR"},
     ],
-    [ // Livello 2
+    [ // Livello 2 · frasi quotidiane semplici (NUOVO)
+      {it:"Domani piove.", ans:["il va pleuvoir demain"], phon:"il va pleu-VUAR deu-MIN"},
+      {it:"Prendo l'ascensore.", ans:["je prends l'ascenseur", "je prends lascenseur"], phon:"jeu pran la-san-SEUR"},
+      {it:"Oggi vado al mare.", ans:["aujourd'hui je vais a la mer", "aujourdhui je vais a la mer"], phon:"o-jur-DUI jeu ve a la MER"},
+      {it:"Ho fame.", ans:["j'ai faim", "jai faim"], phon:"je FIN"},
+      {it:"Ho sete.", ans:["j'ai soif", "jai soif"], phon:"je SUAF"},
+      {it:"Fa caldo oggi.", ans:["il fait chaud aujourd'hui", "il fait chaud aujourdhui"], phon:"il fe SHO o-jur-DUI"},
+      {it:"Fa freddo stasera.", ans:["il fait froid ce soir"], phon:"il fe FRUA seu SUAR"},
+      {it:"Vado a fare la spesa.", ans:["je vais faire les courses"], phon:"jeu ve fer le KURS"},
+      {it:"Prendo l'autobus ogni giorno.", ans:["je prends le bus tous les jours"], phon:"jeu pran leu BUS tu le JUR"},
+      {it:"Oggi lavoro da casa.", ans:["aujourd'hui je travaille de chez moi", "aujourdhui je travaille de chez moi"], phon:"o-jur-DUI jeu tra-VAI deu she MUA"},
+      {it:"Sto guardando la televisione.", ans:["je regarde la television", "je regarde la télévision"], phon:"jeu reu-GARD la te-le-vi-ZION"},
+      {it:"Vado a dormire presto.", ans:["je vais me coucher tot", "je vais me coucher tôt"], phon:"jeu ve meu cu-SHE TO"},
+      {it:"Mi piace passeggiare al parco.", ans:["j'aime me promener au parc", "jaime me promener au parc"], phon:"jem meu pro-meu-NE o PARK"},
+      {it:"Bevo un caffè ogni mattina.", ans:["je bois un cafe chaque matin", "je bois un café chaque matin"], phon:"jeu bua an ka-FE shak ma-TIN"},
+      {it:"Domani è il mio compleanno.", ans:["demain c'est mon anniversaire", "demain cest mon anniversaire"], phon:"deu-MIN se mon a-ni-ver-SER"},
+    ],
+    [ // Livello 3 · frasi brevi
       {it:"Come stai?", ans:["comment ca va","comment vas-tu","comment vas tu"], phon:"co-MAN sa VA"},
       {it:"Mi chiamo Marco", ans:["je m'appelle marco","je mappelle marco"], phon:"jeu ma-PEL MAR-co"},
       {it:"Dove abiti?", ans:["ou habites-tu","ou habites tu","tu habites ou"], phon:"u a-BIT tu"},
@@ -1974,7 +2019,7 @@ const LEARN = {
       {it:"Che lavoro fai?", ans:["qu'est-ce que tu fais dans la vie","quest ce que tu fais dans la vie"], phon:"kes-keu tu fe dan la VI"},
       {it:"A più tardi!", ans:["a plus tard"], phon:"a plu TAR"},
     ],
-    [ // Livello 3 · vita quotidiana
+    [ // Livello 4 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["as-tu bien dormi cette nuit","as tu bien dormi cette nuit"], phon:"a-tu bien dor-MI set NUI"},
       {it:"Sei passato dal supermercato?", ans:["es-tu passe au supermarche","es tu passe au supermarche"], phon:"e-tu pa-SE o su-per-mar-SHE"},
       {it:"Hai fatto il biglietto del treno?", ans:["as-tu achete le billet de train","as tu achete le billet de train"], phon:"a-tu ash-TE leu bi-YE deu TRIN"},
@@ -1988,7 +2033,7 @@ const LEARN = {
       {it:"Hai già fatto la spesa?", ans:["as-tu deja fait les courses","as tu deja fait les courses"], phon:"a-tu de-JA fe le KURS"},
       {it:"Stasera guardiamo un film insieme?", ans:["on regarde un film ensemble ce soir"], phon:"on reu-GARD an film an-SANBL seu SUAR"},
     ],
-    [ // Livello 4 · in viaggio
+    [ // Livello 5 · in viaggio
       {it:"Dove si trova l'hotel più vicino?", ans:["ou se trouve l'hotel le plus proche","ou se trouve lhotel le plus proche"], phon:"u seu truv lo-TEL leu plu PROSH"},
       {it:"Ho perso il volo.", ans:["j'ai rate mon vol","jai rate mon vol"], phon:"je ra-TE mon VOL"},
       {it:"Può chiamarmi un taxi, per favore?", ans:["pouvez-vous m'appeler un taxi s'il vous plait","pouvez vous mappeler un taxi sil vous plait"], phon:"pu-VE vu ma-pe-LE an tak-SI sil vu PLE"},
@@ -2002,7 +2047,7 @@ const LEARN = {
       {it:"Può consigliarmi un buon ristorante?", ans:["pouvez-vous me recommander un bon restaurant","pouvez vous me recommander un bon restaurant"], phon:"pu-VE vu meu reu-co-man-DE an bon res-to-RAN"},
       {it:"Dove si trova la fermata dell'autobus?", ans:["ou se trouve l'arret de bus","ou se trouve larret de bus"], phon:"u seu truv la-RE deu BUS"},
     ],
-    [ // Livello 5 · lavoro e clienti
+    [ // Livello 6 · lavoro e clienti
       {it:"Posso aiutarla?", ans:["puis-je vous aider","puis je vous aider"], phon:"pui-jeu vu ai-DE"},
       {it:"Vorrei fissare una riunione per domani.", ans:["j'aimerais fixer une reunion pour demain","jaimerais fixer une reunion pour demain"], phon:"je-me-RE fik-SE un re-u-NION pur deu-MIN"},
       {it:"Le invio il documento via email.", ans:["je vous envoie le document par email","je vous envoie le document par e-mail"], phon:"jeu vuz an-VUA leu do-ku-MAN par i-MEL"},
@@ -2034,8 +2079,30 @@ const LEARN = {
       {it:"Forse", ans:["quizas","quizás"], phon:"ki-SAS"},
       {it:"Sempre", ans:["siempre"], phon:"SIEM-pre"},
       {it:"Mai", ans:["nunca"], phon:"NUN-ca"},
+      {it:"Oggi", ans:["hoy"], phon:"OI"},
+      {it:"Domani", ans:["manana", "mañana"], phon:"ma-NYA-na"},
+      {it:"Ieri", ans:["ayer"], phon:"a-IER"},
+      {it:"Adesso", ans:["ahora"], phon:"a-O-ra"},
+      {it:"Dopo", ans:["despues", "después"], phon:"des-PUES"},
     ],
-    [ // Livello 2
+    [ // Livello 2 · frasi quotidiane semplici (NUOVO)
+      {it:"Domani piove.", ans:["manana llovera", "mañana lloverá"], phon:"ma-NYA-na yo-ve-RA"},
+      {it:"Prendo l'ascensore.", ans:["tomo el ascensor"], phon:"TO-mo el as-sen-SOR"},
+      {it:"Oggi vado al mare.", ans:["hoy voy a la playa"], phon:"OI voi a la PLA-ya"},
+      {it:"Ho fame.", ans:["tengo hambre"], phon:"TEN-go AM-bre"},
+      {it:"Ho sete.", ans:["tengo sed"], phon:"TEN-go SED"},
+      {it:"Fa caldo oggi.", ans:["hace calor hoy"], phon:"A-se ca-LOR OI"},
+      {it:"Fa freddo stasera.", ans:["hace frio esta noche", "hace frío esta noche"], phon:"A-se FRI-o ES-ta NO-che"},
+      {it:"Vado a fare la spesa.", ans:["voy a hacer la compra"], phon:"voi a a-SER la COM-pra"},
+      {it:"Prendo l'autobus ogni giorno.", ans:["tomo el autobus todos los dias", "tomo el autobús todos los días"], phon:"TO-mo el au-to-BUS TO-dos los DI-as"},
+      {it:"Oggi lavoro da casa.", ans:["hoy trabajo desde casa"], phon:"OI tra-BA-ho DES-de CA-sa"},
+      {it:"Sto guardando la televisione.", ans:["estoy viendo la television", "estoy viendo la televisión"], phon:"es-TOI VIEN-do la te-le-vi-SION"},
+      {it:"Vado a dormire presto.", ans:["me voy a dormir temprano"], phon:"me voi a dor-MIR tem-PRA-no"},
+      {it:"Mi piace passeggiare al parco.", ans:["me gusta pasear por el parque"], phon:"me GUS-ta pa-se-AR por el PAR-ke"},
+      {it:"Bevo un caffè ogni mattina.", ans:["bebo un cafe cada manana", "bebo un café cada mañana"], phon:"BE-bo un ca-FE CA-da ma-NYA-na"},
+      {it:"Domani è il mio compleanno.", ans:["manana es mi cumpleanos", "mañana es mi cumpleaños"], phon:"ma-NYA-na es mi cum-ple-A-nyos"},
+    ],
+    [ // Livello 3 · frasi brevi
       {it:"Come stai?", ans:["como estas","cómo estás"], phon:"CO-mo es-TAS"},
       {it:"Mi chiamo Marco", ans:["me llamo marco"], phon:"me YA-mo MAR-co"},
       {it:"Dove abiti?", ans:["donde vives","dónde vives"], phon:"DON-de VI-ves"},
@@ -2049,7 +2116,7 @@ const LEARN = {
       {it:"Che lavoro fai?", ans:["a que te dedicas","a qué te dedicas"], phon:"a ke te de-DI-cas"},
       {it:"A più tardi!", ans:["hasta luego"], phon:"AS-ta LUE-go"},
     ],
-    [ // Livello 3 · vita quotidiana
+    [ // Livello 4 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["dormiste bien anoche"], phon:"dor-MIS-te bien a-NO-che"},
       {it:"Sei passato dal supermercato?", ans:["pasaste por el supermercado"], phon:"pa-SAS-te por el su-per-mer-CA-do"},
       {it:"Hai fatto il biglietto del treno?", ans:["compraste el billete de tren"], phon:"com-PRAS-te el bi-YE-te de TREN"},
@@ -2063,7 +2130,7 @@ const LEARN = {
       {it:"Hai già fatto la spesa?", ans:["ya hiciste la compra"], phon:"ya i-CIS-te la COM-pra"},
       {it:"Stasera guardiamo un film insieme?", ans:["vemos una pelicula juntos esta noche","vemos una película juntos esta noche"], phon:"VE-mos u-na pe-LI-cu-la JUN-tos ES-ta NO-che"},
     ],
-    [ // Livello 4 · in viaggio
+    [ // Livello 5 · in viaggio
       {it:"Dove si trova l'hotel più vicino?", ans:["donde esta el hotel mas cercano","dónde está el hotel más cercano"], phon:"DON-de es-TA el o-TEL mas cer-CA-no"},
       {it:"Ho perso il volo.", ans:["perdi mi vuelo","perdí mi vuelo"], phon:"per-DI mi VUE-lo"},
       {it:"Può chiamarmi un taxi, per favore?", ans:["puede llamarme un taxi por favor"], phon:"PUE-de ya-MAR-me un TA-xi por fa-VOR"},
@@ -2077,7 +2144,7 @@ const LEARN = {
       {it:"Può consigliarmi un buon ristorante?", ans:["puede recomendarme un buen restaurante"], phon:"PUE-de re-co-men-DAR-me un buen res-tau-RAN-te"},
       {it:"Dove si trova la fermata dell'autobus?", ans:["donde esta la parada de autobus","dónde está la parada de autobús"], phon:"DON-de es-TA la pa-RA-da de au-to-BUS"},
     ],
-    [ // Livello 5 · lavoro e clienti
+    [ // Livello 6 · lavoro e clienti
       {it:"Posso aiutarla?", ans:["puedo ayudarle","puedo ayudarte"], phon:"PUE-do a-yu-DAR-le"},
       {it:"Vorrei fissare una riunione per domani.", ans:["me gustaria fijar una reunion para manana","me gustaría fijar una reunión para mañana"], phon:"me gus-ta-RI-a fi-HAR u-na re-u-NION pa-ra ma-NYA-na"},
       {it:"Le invio il documento via email.", ans:["le envio el documento por correo","le envío el documento por correo"], phon:"le en-VI-o el do-cu-MEN-to por co-RRE-o"},
@@ -2109,8 +2176,30 @@ const LEARN = {
       {it:"Forse", ans:["vielleicht"], phon:"fi-LAIHT"},
       {it:"Sempre", ans:["immer"], phon:"I-mer"},
       {it:"Mai", ans:["nie"], phon:"NI"},
+      {it:"Oggi", ans:["heute"], phon:"HOI-te"},
+      {it:"Domani", ans:["morgen"], phon:"MOR-ghen"},
+      {it:"Ieri", ans:["gestern"], phon:"GHES-tern"},
+      {it:"Adesso", ans:["jetzt"], phon:"IETST"},
+      {it:"Dopo", ans:["spater", "später"], phon:"SHPE-ter"},
     ],
-    [ // Livello 2
+    [ // Livello 2 · frasi quotidiane semplici (NUOVO)
+      {it:"Domani piove.", ans:["morgen regnet es"], phon:"MOR-ghen REG-net es"},
+      {it:"Prendo l'ascensore.", ans:["ich nehme den aufzug"], phon:"ish NE-me den AUF-tsuk"},
+      {it:"Oggi vado al mare.", ans:["heute gehe ich ans meer"], phon:"HOI-te GE-e ish ans MER"},
+      {it:"Ho fame.", ans:["ich habe hunger"], phon:"ish HA-be HUN-ger"},
+      {it:"Ho sete.", ans:["ich habe durst"], phon:"ish HA-be DURST"},
+      {it:"Fa caldo oggi.", ans:["heute ist es heiss", "heute ist es heiß"], phon:"HOI-te ist es HAIS"},
+      {it:"Fa freddo stasera.", ans:["heute abend ist es kalt"], phon:"HOI-te A-bent ist es KALT"},
+      {it:"Vado a fare la spesa.", ans:["ich gehe einkaufen"], phon:"ish GE-e AIN-kau-fen"},
+      {it:"Prendo l'autobus ogni giorno.", ans:["ich nehme jeden tag den bus"], phon:"ish NE-me IE-den TAK den BUS"},
+      {it:"Oggi lavoro da casa.", ans:["heute arbeite ich von zu hause"], phon:"HOI-te AR-bai-te ish fon tsu HAU-ze"},
+      {it:"Sto guardando la televisione.", ans:["ich schaue fern"], phon:"ish SHAU-e FERN"},
+      {it:"Vado a dormire presto.", ans:["ich gehe fruh ins bett", "ich gehe früh ins bett"], phon:"ish GE-e FRU ins BET"},
+      {it:"Mi piace passeggiare al parco.", ans:["ich gehe gerne im park spazieren"], phon:"ish GE-e GER-ne im PARK shpa-TSI-ren"},
+      {it:"Bevo un caffè ogni mattina.", ans:["ich trinke jeden morgen einen kaffee"], phon:"ish TRIN-ke IE-den MOR-ghen AI-nen ka-FE"},
+      {it:"Domani è il mio compleanno.", ans:["morgen ist mein geburtstag"], phon:"MOR-ghen ist main ge-BURTS-tak"},
+    ],
+    [ // Livello 3 · frasi brevi
       {it:"Come stai?", ans:["wie geht es dir","wie gehts","wie geht's dir"], phon:"vi GHETS dir"},
       {it:"Mi chiamo Marco", ans:["ich heisse marco","ich heiße marco"], phon:"ish HAI-se MAR-co"},
       {it:"Dove abiti?", ans:["wo wohnst du"], phon:"vo VONST du"},
@@ -2124,7 +2213,7 @@ const LEARN = {
       {it:"Che lavoro fai?", ans:["was arbeitest du","was machst du beruflich"], phon:"vas AR-bai-test du"},
       {it:"A più tardi!", ans:["bis spater","bis später"], phon:"bis SHPE-ter"},
     ],
-    [ // Livello 3 · vita quotidiana
+    [ // Livello 4 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["hast du letzte nacht gut geschlafen"], phon:"hast du LETS-te nakht gut ge-SHLA-fen"},
       {it:"Sei passato dal supermercato?", ans:["warst du im supermarkt"], phon:"varst du im SU-per-markt"},
       {it:"Hai fatto il biglietto del treno?", ans:["hast du die zugfahrkarte gekauft"], phon:"hast du di TSUK-far-kar-te ge-KAUFT"},
@@ -2138,7 +2227,7 @@ const LEARN = {
       {it:"Hai già fatto la spesa?", ans:["hast du schon eingekauft"], phon:"hast du shon AIN-ge-kauft"},
       {it:"Stasera guardiamo un film insieme?", ans:["schauen wir heute abend zusammen einen film"], phon:"SHAU-en vir HOI-te A-bent tsu-ZA-men AI-nen FILM"},
     ],
-    [ // Livello 4 · in viaggio
+    [ // Livello 5 · in viaggio
       {it:"Dove si trova l'hotel più vicino?", ans:["wo ist das nachste hotel","wo ist das nächste hotel"], phon:"vo ist das NEHS-te ho-TEL"},
       {it:"Ho perso il volo.", ans:["ich habe meinen flug verpasst"], phon:"ish HA-be MAI-nen FLUK fer-PASST"},
       {it:"Può chiamarmi un taxi, per favore?", ans:["konnen sie mir bitte ein taxi rufen","können sie mir bitte ein taxi rufen"], phon:"KOE-nen zi mir BI-te ain TA-xi RU-fen"},
@@ -2152,7 +2241,7 @@ const LEARN = {
       {it:"Può consigliarmi un buon ristorante?", ans:["konnen sie mir ein gutes restaurant empfehlen","können sie mir ein gutes restaurant empfehlen"], phon:"KOE-nen zi mir ain GU-tes res-to-RAN emp-FE-len"},
       {it:"Dove si trova la fermata dell'autobus?", ans:["wo ist die bushaltestelle"], phon:"vo ist di BUS-hal-te-shte-le"},
     ],
-    [ // Livello 5 · lavoro e clienti
+    [ // Livello 6 · lavoro e clienti
       {it:"Posso aiutarla?", ans:["kann ich ihnen helfen"], phon:"kan ish I-nen HEL-fen"},
       {it:"Vorrei fissare una riunione per domani.", ans:["ich mochte ein meeting fur morgen ansetzen","ich möchte ein meeting für morgen ansetzen"], phon:"ish MOESH-te ain MI-ting fur MOR-ghen AN-zet-sen"},
       {it:"Le invio il documento via email.", ans:["ich schicke ihnen das dokument per email","ich schicke ihnen das dokument per e-mail"], phon:"ish SHI-ke I-nen das do-ku-MENT per I-mail"},
@@ -2184,8 +2273,30 @@ const LEARN = {
       {it:"Forse", ans:["ربما","rubbama"], phon:"RUB-ba-ma"},
       {it:"Sempre", ans:["دائما","daiman"], phon:"da-I-man"},
       {it:"Mai", ans:["أبدا","abadan"], phon:"A-ba-dan"},
+      {it:"Oggi", ans:["اليوم", "al-yawm"], phon:"al-YAWM"},
+      {it:"Domani", ans:["غدا", "ghadan"], phon:"GHA-dan"},
+      {it:"Ieri", ans:["أمس", "ams"], phon:"AMS"},
+      {it:"Adesso", ans:["الآن", "al-aan"], phon:"al-AAN"},
+      {it:"Dopo", ans:["بعد ذلك", "baada dhalik"], phon:"BA-da DHA-lik"},
     ],
-    [ // Livello 2
+    [ // Livello 2 · frasi quotidiane semplici (NUOVO)
+      {it:"Domani piove.", ans:["غدا ستمطر", "ghadan satumtir"], phon:"GHA-dan sa-TUM-tir"},
+      {it:"Prendo l'ascensore.", ans:["آخذ المصعد", "aakhudhu al-misad"], phon:"A-khu-dhu al-MIS-ad"},
+      {it:"Oggi vado al mare.", ans:["اليوم سأذهب إلى البحر", "al-yawm saadhhabu ila al-bahr"], phon:"al-YAWM sa-ADH-ha-bu i-LA al-BAHR"},
+      {it:"Ho fame.", ans:["أنا جائع", "ana jaai"], phon:"A-na JA-i"},
+      {it:"Ho sete.", ans:["أنا عطشان", "ana atshan"], phon:"A-na at-SHAN"},
+      {it:"Fa caldo oggi.", ans:["الجو حار اليوم", "al-jaww harr al-yawm"], phon:"al-JAWW harr al-YAWM"},
+      {it:"Fa freddo stasera.", ans:["الجو بارد الليلة", "al-jaww barid al-layla"], phon:"al-JAWW BA-rid al-LAY-la"},
+      {it:"Vado a fare la spesa.", ans:["سأذهب للتسوق", "saadhhabu littasawwuq"], phon:"sa-ADH-ha-bu lit-ta-SAW-wuq"},
+      {it:"Prendo l'autobus ogni giorno.", ans:["آخذ الحافلة كل يوم", "aakhudhu al-hafila kulla yawm"], phon:"A-khu-dhu al-HA-fi-la KUL-la YAWM"},
+      {it:"Oggi lavoro da casa.", ans:["اليوم أعمل من المنزل", "al-yawm amalu min al-manzil"], phon:"al-YAWM AM-a-lu min al-MAN-zil"},
+      {it:"Sto guardando la televisione.", ans:["أشاهد التلفاز", "ushahidu at-tilfaz"], phon:"u-SHA-hi-du at-til-FAZ"},
+      {it:"Vado a dormire presto.", ans:["سأنام مبكرا", "saanamu mubakkiran"], phon:"sa-A-na-mu mu-BAK-ki-ran"},
+      {it:"Mi piace passeggiare al parco.", ans:["أحب المشي في الحديقة", "uhibbu al-mashy fi al-hadiqa"], phon:"u-HIB-bu al-MASH-y fi al-ha-DI-qa"},
+      {it:"Bevo un caffè ogni mattina.", ans:["أشرب قهوة كل صباح", "ashrabu qahwa kulla sabah"], phon:"ASH-ra-bu QAH-wa KUL-la SA-bah"},
+      {it:"Domani è il mio compleanno.", ans:["غدا عيد ميلادي", "ghadan eid miladi"], phon:"GHA-dan eid mi-LA-di"},
+    ],
+    [ // Livello 3 · frasi brevi
       {it:"Come stai?", ans:["كيف حالك","kayfa haluk","kayf halak"], phon:"kaif HA-lak"},
       {it:"Mi chiamo Marco", ans:["اسمي ماركو","ismi marco"], phon:"IS-mi MAR-co"},
       {it:"Dove abiti?", ans:["أين تسكن","ayna taskun"], phon:"AI-na TAS-kun"},
@@ -2199,7 +2310,7 @@ const LEARN = {
       {it:"Che lavoro fai?", ans:["ما هي مهنتك","ma hiya mihnatuka"], phon:"ma HI-ya mih-na-TU-ka"},
       {it:"A più tardi!", ans:["أراك لاحقا","araka lahiqan"], phon:"a-RA-ka LA-hi-qan"},
     ],
-    [ // Livello 3 · vita quotidiana
+    [ // Livello 4 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["هل نمت جيدا الليلة الماضية","hal nimta jayyidan al-layla al-madiya"], phon:"hal NIM-ta JAY-yi-dan al-LAY-la al-ma-DI-ya"},
       {it:"Sei passato dal supermercato?", ans:["هل مررت بالسوبر ماركت","hal mararta bis-supermarket"], phon:"hal ma-RAR-ta bis-SU-per-MAR-ket"},
       {it:"Hai fatto il biglietto del treno?", ans:["هل اشتريت تذكرة القطار","hal ishtarayta tadhkirat al-qitar"], phon:"hal ish-ta-RAY-ta tadh-KI-rat al-qi-TAR"},
@@ -2213,7 +2324,7 @@ const LEARN = {
       {it:"Hai già fatto la spesa?", ans:["هل تسوقت بالفعل","hal tasawwaqta bilfil"], phon:"hal ta-SAW-waq-ta bil-FIL"},
       {it:"Stasera guardiamo un film insieme?", ans:["هل نشاهد فيلما معا الليلة","hal nushahidu filman maan al-layla"], phon:"hal nu-SHA-hi-du FIL-man ma-AN al-LAY-la"},
     ],
-    [ // Livello 4 · in viaggio
+    [ // Livello 5 · in viaggio
       {it:"Dove si trova l'hotel più vicino?", ans:["أين يقع أقرب فندق","ayna yaqau aqrab funduq"], phon:"AY-na ya-QA-u AQ-rab FUN-duq"},
       {it:"Ho perso il volo.", ans:["فاتتني رحلتي","fatatni rihlati"], phon:"fa-TAT-ni rih-LA-ti"},
       {it:"Può chiamarmi un taxi, per favore?", ans:["هل يمكنك أن تطلب لي تاكسي من فضلك","hal yumkinuka an tatluba li taksi min fadlik"], phon:"hal yum-KI-nu-ka an TAT-lu-ba li TAK-si min FAD-lik"},
@@ -2227,7 +2338,7 @@ const LEARN = {
       {it:"Può consigliarmi un buon ristorante?", ans:["هل يمكنك أن توصي لي بمطعم جيد","hal yumkinuka an tusiya li bimatam jayyid"], phon:"hal yum-KI-nu-ka an TU-si-ya li bi-MAT-am JAY-yid"},
       {it:"Dove si trova la fermata dell'autobus?", ans:["أين تقع محطة الحافلة","ayna taqau mahattat al-hafila"], phon:"AY-na TA-qa-u ma-HAT-tat al-HA-fi-la"},
     ],
-    [ // Livello 5 · lavoro e clienti
+    [ // Livello 6 · lavoro e clienti
       {it:"Posso aiutarla?", ans:["هل يمكنني مساعدتك","hal yumkinuni musaadatuka"], phon:"hal yum-KI-nu-ni mu-sa-a-da-TU-ka"},
       {it:"Vorrei fissare una riunione per domani.", ans:["أود تحديد اجتماع ليوم غد","awaddu tahdid ijtimaa liyawmi ghad"], phon:"a-WAD-du tah-DID ij-ti-MA-a li-YAW-mi GHAD"},
       {it:"Le invio il documento via email.", ans:["سأرسل لك المستند عبر البريد الإلكتروني","saursilu laka al-mustanad abra al-barid al-iliktruni"], phon:"sa-UR-si-lu la-ka al-mus-ta-NAD AB-ra al-ba-RID al-ilik-TRU-ni"},
@@ -2259,8 +2370,30 @@ const LEARN = {
       {it:"Forse", ans:["也许","ye xu"], phon:"ie sciu"},
       {it:"Sempre", ans:["总是","zong shi"], phon:"dzong sci"},
       {it:"Mai", ans:["从不","cong bu"], phon:"tsong bu"},
+      {it:"Oggi", ans:["今天", "jin tian"], phon:"gin tien"},
+      {it:"Domani", ans:["明天", "ming tian"], phon:"ming tien"},
+      {it:"Ieri", ans:["昨天", "zuo tian"], phon:"dzuo tien"},
+      {it:"Adesso", ans:["现在", "xian zai"], phon:"sien dzai"},
+      {it:"Dopo", ans:["之后", "zhi hou"], phon:"gi hou"},
     ],
-    [ // Livello 2
+    [ // Livello 2 · frasi quotidiane semplici (NUOVO)
+      {it:"Domani piove.", ans:["明天会下雨。", "ming tian hui xia yu"], phon:"ming tien huei sia iu"},
+      {it:"Prendo l'ascensore.", ans:["我坐电梯。", "wo zuo dian ti"], phon:"uo dzuo dien ti"},
+      {it:"Oggi vado al mare.", ans:["我今天要去海边。", "wo jin tian yao qu hai bian"], phon:"uo gin tien iao ciu hai bien"},
+      {it:"Ho fame.", ans:["我饿了。", "wo e le"], phon:"uo e le"},
+      {it:"Ho sete.", ans:["我渴了。", "wo ke le"], phon:"uo ke le"},
+      {it:"Fa caldo oggi.", ans:["今天很热。", "jin tian hen re"], phon:"gin tien hen re"},
+      {it:"Fa freddo stasera.", ans:["今晚很冷。", "jin wan hen leng"], phon:"gin uan hen leng"},
+      {it:"Vado a fare la spesa.", ans:["我要去买东西。", "wo yao qu mai dong xi"], phon:"uo iao ciu mai dong si"},
+      {it:"Prendo l'autobus ogni giorno.", ans:["我每天坐公交车。", "wo mei tian zuo gong jiao che"], phon:"uo mei tien dzuo gong giao ce"},
+      {it:"Oggi lavoro da casa.", ans:["我今天在家工作。", "wo jin tian zai jia gong zuo"], phon:"uo gin tien dzai gia gong dzuo"},
+      {it:"Sto guardando la televisione.", ans:["我在看电视。", "wo zai kan dian shi"], phon:"uo dzai kan dien sci"},
+      {it:"Vado a dormire presto.", ans:["我要早点睡觉。", "wo yao zao dian shui jiao"], phon:"uo iao dzao dien sciuei giao"},
+      {it:"Mi piace passeggiare al parco.", ans:["我喜欢在公园散步。", "wo xi huan zai gong yuan san bu"], phon:"uo si huan dzai gong iuan san bu"},
+      {it:"Bevo un caffè ogni mattina.", ans:["我每天早上喝咖啡。", "wo mei tian zao shang he ka fei"], phon:"uo mei tien dzao sciang he ka fei"},
+      {it:"Domani è il mio compleanno.", ans:["明天是我的生日。", "ming tian shi wo de sheng ri"], phon:"ming tien sci uo de sceng ri"},
+    ],
+    [ // Livello 3 · frasi brevi
       {it:"Come stai?", ans:["你好吗","ni hao ma"], phon:"ni hao ma"},
       {it:"Mi chiamo Marco", ans:["我叫马可","wo jiao ma ke"], phon:"uo giao ma ke"},
       {it:"Dove abiti?", ans:["你住在哪里","ni zhu zai na li"], phon:"ni giu dzai na li"},
@@ -2274,7 +2407,7 @@ const LEARN = {
       {it:"Che lavoro fai?", ans:["你做什么工作","ni zuo shen me gong zuo"], phon:"ni dzuo scen me gong dzuo"},
       {it:"A più tardi!", ans:["待会儿见","dai huir jian"], phon:"dai huer gien"},
     ],
-    [ // Livello 3 · vita quotidiana
+    [ // Livello 4 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["你昨晚睡得好吗","ni zuo wan shui de hao ma"], phon:"ni dzuo uan sciuei de hao ma"},
       {it:"Sei passato dal supermercato?", ans:["你去超市了吗","ni qu chao shi le ma"], phon:"ni ciu ciao sci le ma"},
       {it:"Hai fatto il biglietto del treno?", ans:["你买火车票了吗","ni mai huo che piao le ma"], phon:"ni mai huo ce piao le ma"},
@@ -2288,7 +2421,7 @@ const LEARN = {
       {it:"Hai già fatto la spesa?", ans:["你已经买东西了吗","ni yi jing mai dong xi le ma"], phon:"ni i gin mai dong si le ma"},
       {it:"Stasera guardiamo un film insieme?", ans:["今晚我们一起看电影吗","jin wan wo men yi qi kan dian ying ma"], phon:"gin uan uo men i ci kan dien ing ma"},
     ],
-    [ // Livello 4 · in viaggio
+    [ // Livello 5 · in viaggio
       {it:"Dove si trova l'hotel più vicino?", ans:["最近的酒店在哪里","zui jin de jiu dian zai na li"], phon:"dzuei gin de giou dien dzai na li"},
       {it:"Ho perso il volo.", ans:["我错过了航班","wo cuo guo le hang ban"], phon:"uo tsuo guo le hang ban"},
       {it:"Può chiamarmi un taxi, per favore?", ans:["你能帮我叫一辆出租车吗","ni neng bang wo jiao yi liang chu zu che ma"], phon:"ni neng bang uo giao i liang ciu dzu ce ma"},
@@ -2302,7 +2435,7 @@ const LEARN = {
       {it:"Può consigliarmi un buon ristorante?", ans:["你能推荐一家好餐厅吗","ni neng tui jian yi jia hao can ting ma"], phon:"ni neng tuei gien i gia hao tsan ting ma"},
       {it:"Dove si trova la fermata dell'autobus?", ans:["公交车站在哪里","gong jiao che zhan zai na li"], phon:"gong giao ce gian dzai na li"},
     ],
-    [ // Livello 5 · lavoro e clienti
+    [ // Livello 6 · lavoro e clienti
       {it:"Posso aiutarla?", ans:["我能帮您吗","wo neng bang nin ma"], phon:"uo neng bang nin ma"},
       {it:"Vorrei fissare una riunione per domani.", ans:["我想安排明天开会","wo xiang an pai ming tian kai hui"], phon:"uo siang an pai ming tien kai huei"},
       {it:"Le invio il documento via email.", ans:["我通过电子邮件把文件发给您","wo tong guo dian zi you jian ba wen jian fa gei nin"], phon:"uo tong guo dien dzi iou gien ba uen gien fa gei nin"},
@@ -2334,8 +2467,30 @@ const LEARN = {
       {it:"Forse", ans:["たぶん","tabun"], phon:"ta-bun"},
       {it:"Sempre", ans:["いつも","itsumo"], phon:"it-su-mo"},
       {it:"Mai", ans:["決して","kesshite"], phon:"kes-sci-te"},
+      {it:"Oggi", ans:["今日", "kyou"], phon:"cio"},
+      {it:"Domani", ans:["明日", "ashita"], phon:"a-scita"},
+      {it:"Ieri", ans:["昨日", "kinou"], phon:"ki-no"},
+      {it:"Adesso", ans:["今", "ima"], phon:"i-ma"},
+      {it:"Dopo", ans:["後で", "atode"], phon:"a-to-de"},
     ],
-    [ // Livello 2
+    [ // Livello 2 · frasi quotidiane semplici (NUOVO)
+      {it:"Domani piove.", ans:["明日は雨が降ります。", "ashita wa ame ga furimasu"], phon:"a-scita ua a-me ga fu-ri-mas"},
+      {it:"Prendo l'ascensore.", ans:["エレベーターに乗ります。", "erebeetaa ni norimasu"], phon:"e-re-be-ta ni no-ri-mas"},
+      {it:"Oggi vado al mare.", ans:["今日は海に行きます。", "kyou wa umi ni ikimasu"], phon:"cio ua u-mi ni i-ki-mas"},
+      {it:"Ho fame.", ans:["お腹が空きました。", "onaka ga sukimashita"], phon:"o-na-ka ga su-ki-ma-scita"},
+      {it:"Ho sete.", ans:["喉が渇きました。", "nodo ga kawakimashita"], phon:"no-do ga ka-ua-ki-ma-scita"},
+      {it:"Fa caldo oggi.", ans:["今日は暑いです。", "kyou wa atsui desu"], phon:"cio ua a-tsu-i des"},
+      {it:"Fa freddo stasera.", ans:["今夜は寒いです。", "konya wa samui desu"], phon:"kon-ya ua sa-mu-i des"},
+      {it:"Vado a fare la spesa.", ans:["買い物に行きます。", "kaimono ni ikimasu"], phon:"kai-mo-no ni i-ki-mas"},
+      {it:"Prendo l'autobus ogni giorno.", ans:["毎日バスに乗ります。", "mainichi basu ni norimasu"], phon:"mai-ni-ci ba-su ni no-ri-mas"},
+      {it:"Oggi lavoro da casa.", ans:["今日は家で仕事をします。", "kyou wa ie de shigoto wo shimasu"], phon:"cio ua i-e de sci-go-to uo sci-mas"},
+      {it:"Sto guardando la televisione.", ans:["テレビを見ています。", "terebi wo mite imasu"], phon:"te-re-bi uo mi-te i-mas"},
+      {it:"Vado a dormire presto.", ans:["早く寝ます。", "hayaku nemasu"], phon:"ha-ya-ku ne-mas"},
+      {it:"Mi piace passeggiare al parco.", ans:["公園を散歩するのが好きです。", "kouen wo sanpo suru no ga suki desu"], phon:"ko-en uo san-po su-ru no ga su-ki des"},
+      {it:"Bevo un caffè ogni mattina.", ans:["毎朝コーヒーを飲みます。", "maiasa koohii wo nomimasu"], phon:"mai-a-sa ko-hi uo no-mi-mas"},
+      {it:"Domani è il mio compleanno.", ans:["明日は私の誕生日です。", "ashita wa watashi no tanjoubi desu"], phon:"a-scita ua ua-ta-sci no tan-gio-bi des"},
+    ],
+    [ // Livello 3 · frasi brevi
       {it:"Come stai?", ans:["元気ですか","genki desu ka"], phon:"ghen-ki des-ka"},
       {it:"Mi chiamo Marco", ans:["私はマルコです","watashi wa maruko desu"], phon:"ua-ta-sci ua ma-ru-ko des"},
       {it:"Dove abiti?", ans:["どこに住んでいますか","doko ni sunde imasu ka"], phon:"do-ko ni sun-de i-mas-ka"},
@@ -2349,7 +2504,7 @@ const LEARN = {
       {it:"Che lavoro fai?", ans:["お仕事は何ですか","oshigoto wa nan desu ka"], phon:"o-sci-go-to ua nan des-ka"},
       {it:"A più tardi!", ans:["またあとで","mata atode"], phon:"ma-ta a-to-de"},
     ],
-    [ // Livello 3 · vita quotidiana
+    [ // Livello 4 · vita quotidiana
       {it:"Hai dormito bene stanotte?", ans:["昨夜よく眠れましたか","sakuya yoku nemuremashita ka"], phon:"sa-ku-ya yo-ku ne-mu-re-ma-sci-ta ka"},
       {it:"Sei passato dal supermercato?", ans:["スーパーに行きましたか","suupaa ni ikimashita ka"], phon:"su-pa ni i-ki-ma-sci-ta ka"},
       {it:"Hai fatto il biglietto del treno?", ans:["電車のチケットを買いましたか","densha no chiketto wo kaimashita ka"], phon:"den-scia no ci-ket-to uo kai-ma-sci-ta ka"},
@@ -2363,7 +2518,7 @@ const LEARN = {
       {it:"Hai già fatto la spesa?", ans:["もう買い物をしましたか","mou kaimono wo shimashita ka"], phon:"mo kai-mo-no uo sci-ma-sci-ta ka"},
       {it:"Stasera guardiamo un film insieme?", ans:["今夜一緒に映画を見ますか","konya issho ni eiga wo mimasu ka"], phon:"kon-ya is-scio ni ei-ga uo mi-mas-ka"},
     ],
-    [ // Livello 4 · in viaggio
+    [ // Livello 5 · in viaggio
       {it:"Dove si trova l'hotel più vicino?", ans:["一番近いホテルはどこですか","ichiban chikai hoteru wa doko desu ka"], phon:"i-ci-ban ci-kai ho-te-ru ua do-ko des-ka"},
       {it:"Ho perso il volo.", ans:["飛行機に乗り遅れました","hikouki ni noriokuremashita"], phon:"hi-ko-ki ni no-ri-o-ku-re-ma-sci-ta"},
       {it:"Può chiamarmi un taxi, per favore?", ans:["タクシーを呼んでもらえますか","takushii wo yonde moraemasu ka"], phon:"ta-ku-scì uo yon-de mo-ra-e-mas-ka"},
@@ -2377,7 +2532,7 @@ const LEARN = {
       {it:"Può consigliarmi un buon ristorante?", ans:["いいレストランを教えてもらえますか","ii resutoran wo oshiete moraemasu ka"], phon:"i re-su-to-ran uo o-scì-e-te mo-ra-e-mas-ka"},
       {it:"Dove si trova la fermata dell'autobus?", ans:["バス停はどこですか","basutei wa doko desu ka"], phon:"ba-su-tei ua do-ko des-ka"},
     ],
-    [ // Livello 5 · lavoro e clienti
+    [ // Livello 6 · lavoro e clienti
       {it:"Posso aiutarla?", ans:["お手伝いしましょうか","otetsudai shimashou ka"], phon:"o-te-tsu-dai sci-ma-scio ka"},
       {it:"Vorrei fissare una riunione per domani.", ans:["明日の会議を設定したいです","ashita no kaigi wo settei shitai desu"], phon:"a-scita no kai-gi uo set-tei sci-tai des"},
       {it:"Le invio il documento via email.", ans:["メールで書類をお送りします","meeru de shorui wo o-okuri shimasu"], phon:"me-ru de scio-rui uo o-o-ku-ri sci-mas"},
@@ -2484,16 +2639,31 @@ async function loadState(lang){
 
   if(!state.impara){
     state.impara = {
-      level:1, direction:'to_target',
+      level:1, direction:'to_target', _migratedLevels2026:true,
       progress:{
         1:{to_target:{index:0}, to_it:{index:0}}, 2:{to_target:{index:0}, to_it:{index:0}},
         3:{to_target:{index:0}, to_it:{index:0}}, 4:{to_target:{index:0}, to_it:{index:0}},
-        5:{to_target:{index:0}, to_it:{index:0}}
+        5:{to_target:{index:0}, to_it:{index:0}}, 6:{to_target:{index:0}, to_it:{index:0}}
       }
     };
   } else {
     if(!state.impara.direction) state.impara.direction = 'to_target';
-    [1,2,3,4,5].forEach(lvl=>{
+    // Migrazione una tantum: abbiamo inserito un nuovo Livello 2, quindi i vecchi
+    // progressi ai Livelli 2-5 devono traslocare a 3-6 (il nuovo Livello 2 parte da zero).
+    if(!state.impara._migratedLevels2026){
+      const old2 = state.impara.progress[2];
+      const old3 = state.impara.progress[3];
+      const old4 = state.impara.progress[4];
+      const old5 = state.impara.progress[5];
+      if(old5) state.impara.progress[6] = old5;
+      if(old4) state.impara.progress[5] = old4;
+      if(old3) state.impara.progress[4] = old3;
+      if(old2) state.impara.progress[3] = old2;
+      state.impara.progress[2] = { to_target:{index:0}, to_it:{index:0} };
+      if(state.impara.level >= 2) state.impara.level = Math.min(state.impara.level + 1, 6);
+      state.impara._migratedLevels2026 = true;
+    }
+    [1,2,3,4,5,6].forEach(lvl=>{
       if(!state.impara.progress[lvl]) state.impara.progress[lvl] = { to_target:{index:0}, to_it:{index:0} };
       else {
         if(!state.impara.progress[lvl].to_target) state.impara.progress[lvl].to_target = {index:0};
@@ -3117,7 +3287,7 @@ function renderImpara(){
     document.getElementById('imPrompt').removeAttribute('dir');
     document.getElementById('imPrompt').classList.remove('rtl-text');
     promptHint.classList.add('hidden');
-    const nextLevel = level < 5 ? level+1 : null;
+    const nextLevel = level < 6 ? level+1 : null;
     const otherDirDone = state.impara.progress[level][dir === 'to_target' ? 'to_it' : 'to_target'].index >= list.length;
     let msg;
     if(nextLevel && otherDirDone){
