@@ -3503,18 +3503,78 @@ async function getChinesePinyin(text){
   }
 }
 
+// Guida di pronuncia approssimativa "all'italiana" per lingue a scrittura latina con
+// ortografia abbastanza regolare (francese, spagnolo, tedesco). Non è perfetta — è una
+// stima automatica su testo libero — ma dà un'indicazione utile a chi parte da zero.
+// L'inglese è escluso di proposito: la sua ortografia è troppo irregolare per regole semplici
+// e rischierebbe di essere fuorviante.
+function approxPhonLatin(text, lang){
+  let s = text.toLowerCase();
+  if(lang === 'es'){
+    s = s.replace(/h/g, '');
+    s = s.replace(/ge/g, 'he').replace(/gi/g, 'hi');
+    s = s.replace(/j/g, 'h');
+    s = s.replace(/ll/g, 'y');
+    s = s.replace(/ñ/g, 'ny');
+    s = s.replace(/ce/g, 'se').replace(/ci/g, 'si');
+    s = s.replace(/z/g, 's');
+    s = s.replace(/v/g, 'b');
+    s = s.replace(/[áàä]/g, 'a').replace(/[éèë]/g, 'e').replace(/[íìï]/g, 'i').replace(/[óòö]/g, 'o').replace(/[úùü]/g, 'u');
+  } else if(lang === 'fr'){
+    s = s.replace(/eau/g, 'o').replace(/au/g, 'o');
+    s = s.replace(/oi/g, 'ua');
+    s = s.replace(/ou/g, 'u');
+    s = s.replace(/ai|ei/g, 'e');
+    s = s.replace(/ch/g, 'sh');
+    s = s.replace(/gn/g, 'ny');
+    s = s.replace(/qu/g, 'k');
+    s = s.replace(/ph/g, 'f');
+    s = s.replace(/th/g, 't');
+    s = s.replace(/ç/g, 's');
+    s = s.replace(/[éèêë]/g, 'e').replace(/[àâ]/g, 'a').replace(/ô/g, 'o').replace(/[îï]/g, 'i').replace(/[ùû]/g, 'u');
+    s = s.replace(/\bh/g, '');
+    s = s.replace(/([a-z])[stdxz]\b/g, '$1');
+    s = s.replace(/([bcdfgjklmnpqrstvwxz])e\b/g, '$1');
+  } else if(lang === 'de'){
+    s = s.replace(/sch/g, 'sh');
+    s = s.replace(/ch/g, 'kh');
+    s = s.replace(/ei/g, 'ai');
+    s = s.replace(/ie/g, 'i');
+    s = s.replace(/äu|eu/g, 'oi');
+    s = s.replace(/ä/g, 'e');
+    s = s.replace(/ö/g, 'eu');
+    s = s.replace(/ü/g, 'iu');
+    s = s.replace(/ß/g, 'ss');
+    s = s.replace(/v/g, 'f');
+    s = s.replace(/w/g, 'v');
+    s = s.replace(/z/g, 'ts');
+    s = s.replace(/j/g, 'y');
+  }
+  return s;
+}
+
 // Traduzione diretta (vera macchina di traduzione, non basata su "memoria" di frasi salvate da altri).
 // Usiamo l'endpoint pubblico di Google Translate: nessuna chiave richiesta, ed è machine translation
 // vera, non un database di corrispondenze che a volte restituisce frasi scorrelate.
+// Include anche un tentativo di traslitterazione (dt=rm): funziona a intermittenza a seconda della
+// lingua e non è documentato ufficialmente, quindi lo trattiamo come bonus, mai come garanzia.
 async function translateViaGoogle(text, targetCode){
   try{
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=it&tl=${targetCode}&dt=t&q=${encodeURIComponent(text)}`;
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=it&tl=${targetCode}&dt=t&dt=rm&q=${encodeURIComponent(text)}`;
     const res = await fetch(url);
     if(!res.ok) return null;
     const data = await res.json();
     if(!data || !Array.isArray(data[0])) return null;
     const translated = data[0].map(chunk => chunk[0]).join('');
-    return translated && translated.trim() ? translated.trim() : null;
+    if(!translated || !translated.trim()) return null;
+    let translit = null;
+    try{
+      const last = data[0][data[0].length - 1];
+      if(Array.isArray(last) && typeof last[2] === 'string' && last[2].trim()){
+        translit = last[2].trim();
+      }
+    }catch(e){ /* nessuna traslitterazione disponibile, va bene così */ }
+    return { text: translated.trim(), translit };
   }catch(e){
     console.warn('google translate error', e);
     return null;
@@ -3530,7 +3590,7 @@ async function translateViaMyMemory(text, targetCode){
     const res = await fetch(url);
     const data = await res.json();
     const translated = data && data.responseData && data.responseData.translatedText;
-    return translated ? translated : null;
+    return translated ? { text: translated, translit: null } : null;
   }catch(e){
     console.warn('mymemory translate error', e);
     return null;
@@ -3545,9 +3605,10 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
   btn.disabled = true;
   btn.textContent = 'Traduco...';
   try{
-    let translated = await translateViaGoogle(text, targetCode);
-    if(!translated){ translated = await translateViaMyMemory(text, targetCode); }
-    if(!translated){ throw new Error('empty translation'); }
+    let result = await translateViaGoogle(text, targetCode);
+    if(!result){ result = await translateViaMyMemory(text, targetCode); }
+    if(!result){ throw new Error('empty translation'); }
+    const translated = result.text;
 
     document.getElementById('trResultText').textContent = translated;
     document.getElementById('trResultText').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
@@ -3562,6 +3623,13 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
       } else {
         phonEl.classList.add('hidden');
       }
+    } else if(currentLang === 'fr' || currentLang === 'es' || currentLang === 'de'){
+      const approx = approxPhonLatin(translated, currentLang);
+      phonEl.classList.remove('hidden');
+      phonEl.innerHTML = `Pronuncia (approssimativa): <b>${approx}</b>`;
+    } else if((currentLang === 'ar' || currentLang === 'ja') && result.translit){
+      phonEl.classList.remove('hidden');
+      phonEl.innerHTML = `Traslitterazione: <b>${result.translit}</b>`;
     } else {
       phonEl.classList.add('hidden');
       phonEl.innerHTML = '';
