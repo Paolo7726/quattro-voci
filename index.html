@@ -273,6 +273,18 @@
     transform: translateX(-50%); z-index:0;
   }
   .map-node-row{ position:relative; z-index:1; margin-bottom: 8px; display:flex; }
+  .map-chapter-divider{
+    position:relative; z-index:2; display:flex; align-items:center; justify-content:center;
+    margin: 6px 0 24px; background: var(--panel);
+  }
+  .map-chapter-divider::before, .map-chapter-divider::after{
+    content:''; flex:1; height:0; border-top:2px dashed var(--hair);
+  }
+  .map-chapter-divider span{
+    flex:0 0 auto; margin:0 12px; padding:6px 16px; white-space:nowrap;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
+    color: var(--accent); background: var(--panel); border:1px solid var(--accent); border-radius:999px;
+  }
   .map-node-col{ display:flex; flex-direction:column; align-items:center; width:100%; }
   .map-node{
     width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -4558,6 +4570,12 @@ function renderMap(){
   wrap.innerHTML = '';
   let prevGateComplete = true;
   MAP_NODES.forEach((node, i)=>{
+    if(node.id === 'base-11'){
+      const divider = document.createElement('div');
+      divider.className = 'map-chapter-divider';
+      divider.innerHTML = '<span>&#9992;&#65039; In Aeroporto</span>';
+      wrap.appendChild(divider);
+    }
     const complete = isMapNodeComplete(node);
     const unlocked = prevGateComplete;
     const status = complete ? 'done' : (unlocked ? 'current' : 'locked');
