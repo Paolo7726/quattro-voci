@@ -481,7 +481,7 @@
   <section class="card hidden" id="tab-traduci">
     <span class="tag">Traduci al volo</span>
     <h2>Frase libera, in tempo reale</h2>
-    <p class="sub" id="trSub">Registra o scrivi una frase in italiano: te la traduco in <b id="trLangLabel">English</b>, con audio. Servizio di traduzione gratuito di terze parti: per frasi lunghe o uso intenso potrebbe essere lento o limitato.</p>
+    <p class="sub" id="trSub">Registra o scrivi una frase in italiano: te la traduco in <b>English</b>, con audio. Servizio di traduzione gratuito di terze parti: per frasi lunghe o uso intenso potrebbe essere lento o limitato.</p>
     <div class="level-tabs" id="trDirTabs">
       <button data-dir="to_target" id="trDirToTarget" class="active">Italiano &rarr; Lingua</button>
       <button data-dir="to_it" id="trDirToIt">Lingua &rarr; Italiano</button>
@@ -4305,7 +4305,6 @@ function trMicLabel(){
 }
 
 function renderTraduci(){
-  document.getElementById('trLangLabel').textContent = LANGS[currentLang].label;
   document.getElementById('trDirToTarget').textContent = `Italiano \u2192 ${LANGS[currentLang].label}`;
   document.getElementById('trDirToIt').textContent = `${LANGS[currentLang].label} \u2192 Italiano`;
   document.querySelectorAll('#trDirTabs button').forEach(b=>{
