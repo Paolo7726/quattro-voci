@@ -481,7 +481,11 @@
   <section class="card hidden" id="tab-traduci">
     <span class="tag">Traduci al volo</span>
     <h2>Frase libera, in tempo reale</h2>
-    <p class="sub">Registra o scrivi una frase in italiano: te la traduco in <b id="trLangLabel">English</b>, con audio. Servizio di traduzione gratuito di terze parti: per frasi lunghe o uso intenso potrebbe essere lento o limitato.</p>
+    <p class="sub" id="trSub">Registra o scrivi una frase in italiano: te la traduco in <b id="trLangLabel">English</b>, con audio. Servizio di traduzione gratuito di terze parti: per frasi lunghe o uso intenso potrebbe essere lento o limitato.</p>
+    <div class="level-tabs" id="trDirTabs">
+      <button data-dir="to_target" id="trDirToTarget" class="active">Italiano &rarr; Lingua</button>
+      <button data-dir="to_it" id="trDirToIt">Lingua &rarr; Italiano</button>
+    </div>
     <div class="row">
       <button class="primary" id="trMicToggle">&#127908; Registra in italiano</button>
     </div>
@@ -3412,7 +3416,7 @@ const LEARN = {
 };
 
 /* Sintesi vocale del browser: legge ad alta voce la frase nella lingua target */
-const TTS_LANG = { en:'en-US', fr:'fr-FR', ar:'ar-SA', es:'es-ES', de:'de-DE', zh:'zh-CN', ja:'ja-JP' };
+const TTS_LANG = { it:'it-IT', en:'en-US', fr:'fr-FR', ar:'ar-SA', es:'es-ES', de:'de-DE', zh:'zh-CN', ja:'ja-JP' };
 function speak(text, langKey){
   try{
     if(!('speechSynthesis' in window)) return;
@@ -4290,18 +4294,37 @@ document.querySelectorAll('#imDirTabs button').forEach(btn=>{
   };
 });
 
-/* ---------- TRADUCI: frase libera italiano -> lingua selezionata ---------- */
+/* ---------- TRADUCI: frase libera, bidirezionale italiano <-> lingua selezionata ---------- */
 const TRANSLATE_LANG_CODE = { en:'en', fr:'fr', es:'es', de:'de', ar:'ar', zh:'zh-CN', ja:'ja' };
 let trRecognition = null;
 let trListening = false;
+let trDirection = 'to_target';
+
+function trMicLabel(){
+  return trDirection === 'to_target' ? 'Registra in italiano' : `Registra in ${LANGS[currentLang].label}`;
+}
 
 function renderTraduci(){
   document.getElementById('trLangLabel').textContent = LANGS[currentLang].label;
+  document.getElementById('trDirToTarget').textContent = `Italiano \u2192 ${LANGS[currentLang].label}`;
+  document.getElementById('trDirToIt').textContent = `${LANGS[currentLang].label} \u2192 Italiano`;
+  document.querySelectorAll('#trDirTabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.dir === trDirection);
+  });
+  document.getElementById('trSub').innerHTML = (trDirection === 'to_target')
+    ? `Registra o scrivi una frase in italiano: te la traduco in <b>${LANGS[currentLang].label}</b>, con audio. Servizio di traduzione gratuito di terze parti: per frasi lunghe o uso intenso potrebbe essere lento o limitato.`
+    : `Registra o scrivi una frase in <b>${LANGS[currentLang].label}</b>: te la traduco in italiano, con audio. Servizio di traduzione gratuito di terze parti: per frasi lunghe o uso intenso potrebbe essere lento o limitato.`;
+  document.getElementById('trMicToggle').innerHTML = '&#127908; ' + trMicLabel();
+  const input = document.getElementById('trItInput');
+  input.placeholder = (trDirection === 'to_target')
+    ? '...oppure scrivi qui la frase in italiano'
+    : `...oppure scrivi qui la frase in ${LANGS[currentLang].label}`;
+  input.dir = (trDirection === 'to_it' && currentLang === 'ar') ? 'rtl' : 'ltr';
   document.getElementById('trResultBox').classList.add('hidden');
   document.getElementById('trResultText').textContent = '—';
   document.getElementById('trResultPhon').classList.add('hidden');
   document.getElementById('trResultPhon').innerHTML = '';
-  document.getElementById('trItInput').value = '';
+  input.value = '';
   if(trListening && trRecognition){ trRecognition.stop(); }
   trSetMicStatus('Pronto a registrare', false);
 }
@@ -4312,6 +4335,13 @@ function trSetMicStatus(text, recording){
   el.textContent = text;
   el.classList.toggle('recording', !!recording);
 }
+
+document.querySelectorAll('#trDirTabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    trDirection = btn.dataset.dir;
+    renderTraduci();
+  };
+});
 
 document.getElementById('trMicToggle').onclick = ()=>{
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -4326,7 +4356,7 @@ document.getElementById('trMicToggle').onclick = ()=>{
   }
   try{
     trRecognition = new SpeechRec();
-    trRecognition.lang = 'it-IT';
+    trRecognition.lang = (trDirection === 'to_target') ? 'it-IT' : (TTS_LANG[currentLang] || 'en-US');
     trRecognition.interimResults = false;
     trRecognition.maxAlternatives = 1;
     trRecognition.onstart = ()=>{
@@ -4341,7 +4371,7 @@ document.getElementById('trMicToggle').onclick = ()=>{
     trRecognition.onend = ()=>{
       trListening = false;
       btn.classList.remove('recording');
-      btn.innerHTML = '&#127908; Registra in italiano';
+      btn.innerHTML = '&#127908; ' + trMicLabel();
       if(document.getElementById('trMicStatus').textContent === 'In ascolto...'){
         trSetMicStatus('Pronto a registrare', false);
       }
@@ -4423,9 +4453,9 @@ function approxPhonLatin(text, lang){
 // vera, non un database di corrispondenze che a volte restituisce frasi scorrelate.
 // Include anche un tentativo di traslitterazione (dt=rm): funziona a intermittenza a seconda della
 // lingua e non è documentato ufficialmente, quindi lo trattiamo come bonus, mai come garanzia.
-async function translateViaGoogle(text, targetCode){
+async function translateViaGoogle(text, sourceCode, targetCode){
   try{
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=it&tl=${targetCode}&dt=t&dt=rm&q=${encodeURIComponent(text)}`;
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceCode}&tl=${targetCode}&dt=t&dt=rm&q=${encodeURIComponent(text)}`;
     const res = await fetch(url);
     if(!res.ok) return null;
     const data = await res.json();
@@ -4449,9 +4479,9 @@ async function translateViaGoogle(text, targetCode){
 // Riserva: MyMemory. Usato solo se il motore diretto non risponde (rete, blocco, ecc.).
 // Nota: MyMemory può occasionalmente restituire corrispondenze di memoria condivisa scorrelate
 // dalla frase — per questo non è più la scelta primaria.
-async function translateViaMyMemory(text, targetCode){
+async function translateViaMyMemory(text, sourceCode, targetCode){
   try{
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=it|${targetCode}`;
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${sourceCode}|${targetCode}`;
     const res = await fetch(url);
     const data = await res.json();
     const translated = data && data.responseData && data.responseData.translatedText;
@@ -4466,21 +4496,29 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
   const text = document.getElementById('trItInput').value.trim();
   if(!text) return;
   const btn = document.getElementById('trTranslateBtn');
-  const targetCode = TRANSLATE_LANG_CODE[currentLang] || 'en';
+  const targetLangCode = TRANSLATE_LANG_CODE[currentLang] || 'en';
+  const sourceCode = (trDirection === 'to_target') ? 'it' : targetLangCode;
+  const destCode = (trDirection === 'to_target') ? targetLangCode : 'it';
+  const outputLang = (trDirection === 'to_target') ? currentLang : 'it';
   btn.disabled = true;
   btn.textContent = 'Traduco...';
   try{
-    let result = await translateViaGoogle(text, targetCode);
-    if(!result){ result = await translateViaMyMemory(text, targetCode); }
+    let result = await translateViaGoogle(text, sourceCode, destCode);
+    if(!result){ result = await translateViaMyMemory(text, sourceCode, destCode); }
     if(!result){ throw new Error('empty translation'); }
     const translated = result.text;
 
+    const isResultArabic = (outputLang === 'ar');
     document.getElementById('trResultText').textContent = translated;
-    document.getElementById('trResultText').setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-    document.getElementById('trResultText').classList.toggle('rtl-text', currentLang === 'ar');
+    document.getElementById('trResultText').setAttribute('dir', isResultArabic ? 'rtl' : 'ltr');
+    document.getElementById('trResultText').classList.toggle('rtl-text', isResultArabic);
 
     const phonEl = document.getElementById('trResultPhon');
-    if(currentLang === 'zh'){
+    if(outputLang === 'it'){
+      // Il risultato è in italiano: nessuna guida di pronuncia necessaria.
+      phonEl.classList.add('hidden');
+      phonEl.innerHTML = '';
+    } else if(outputLang === 'zh'){
       const py = await getChinesePinyin(translated);
       if(py){
         phonEl.classList.remove('hidden');
@@ -4488,11 +4526,11 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
       } else {
         phonEl.classList.add('hidden');
       }
-    } else if(currentLang === 'fr' || currentLang === 'es' || currentLang === 'de'){
-      const approx = approxPhonLatin(translated, currentLang);
+    } else if(outputLang === 'fr' || outputLang === 'es' || outputLang === 'de'){
+      const approx = approxPhonLatin(translated, outputLang);
       phonEl.classList.remove('hidden');
       phonEl.innerHTML = `Pronuncia (approssimativa): <b>${approx}</b>`;
-    } else if((currentLang === 'ar' || currentLang === 'ja') && result.translit){
+    } else if((outputLang === 'ar' || outputLang === 'ja') && result.translit){
       phonEl.classList.remove('hidden');
       phonEl.innerHTML = `Traslitterazione: <b>${result.translit}</b>`;
     } else {
@@ -4501,7 +4539,7 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
     }
 
     document.getElementById('trResultBox').classList.remove('hidden');
-    document.getElementById('trSpeakBtn').onclick = ()=> speak(translated, currentLang);
+    document.getElementById('trSpeakBtn').onclick = ()=> speak(translated, outputLang);
   }catch(e){
     console.warn('translate error', e);
     document.getElementById('trResultBox').classList.remove('hidden');
