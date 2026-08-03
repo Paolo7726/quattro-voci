@@ -285,6 +285,28 @@
     font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;
     color: var(--accent); background: var(--panel); border:1px solid var(--accent); border-radius:999px;
   }
+  .mascot-box{
+    display:flex; gap:14px; align-items:flex-start; background: var(--panel-2);
+    border:1px solid var(--hair); border-radius:14px; padding:14px; margin-bottom:16px;
+  }
+  .mascot-avatar{ flex-shrink:0; }
+  .mascot-bubble{ font-size:14px; line-height:1.5; color: var(--ink); padding-top:6px; }
+  .badge-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(92px,1fr)); gap:10px; margin-top:12px; }
+  .badge-card{
+    background: var(--panel-2); border:1px solid var(--hair); border-radius:12px;
+    padding:14px 8px 10px; text-align:center; transition: border-color .2s ease, background-color .2s ease;
+  }
+  .badge-card.earned{ border-color: var(--accent); background: var(--accent-soft); }
+  .badge-card .icon{ font-size:26px; margin-bottom:6px; opacity:.35; filter: grayscale(1); }
+  .badge-card.earned .icon{ opacity:1; filter:none; }
+  .badge-card .name{ font-size:11px; color: var(--ink-dim); line-height:1.3; }
+  .badge-card.earned .name{ color: var(--ink); font-weight:600; }
+  .ripasso-item{
+    background: var(--panel-2); border-left:3px solid var(--accent); border-radius:10px;
+    padding:12px 14px; margin-bottom:10px; font-size:13.5px;
+  }
+  .ripasso-item .rit{ color: var(--ink-dim); margin-bottom:4px; }
+  .ripasso-item .rcorr{ color: var(--ink); font-weight:600; }
   .map-node-col{ display:flex; flex-direction:column; align-items:center; width:100%; }
   .map-node{
     width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -412,6 +434,15 @@
         <button class="ghost hidden" id="authAdminBtn" style="width:100%; margin-top:10px;">Pannello amministratore &rarr;</button>
         <button class="ghost" id="authLogout" style="width:100%; margin-top:10px;">Esci</button>
       </div>
+
+      <div class="rec-divider"></div>
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+        <div>
+          <p style="font-weight:600; margin:0 0 4px; font-size:14px;">&#128276; Promemoria di pratica</p>
+          <p class="sub" style="margin:0;">Facoltativo: un avviso del browser se non ti eserciti in giornata. Funziona solo con l'app aperta o installata; su iPhone il supporto è limitato.</p>
+        </div>
+        <button class="ghost" id="reminderToggle" style="flex-shrink:0; padding:8px 14px; font-size:12.5px; white-space:nowrap;">Attiva</button>
+      </div>
     </div>
   </div>
 
@@ -532,6 +563,21 @@
     </div>
     <div class="rec-status" id="sfidaMicStatus" style="margin-top:10px;">Pronto a registrare</div>
     <div id="sfidaTranscriptBox" class="hidden" style="margin-top:12px;"></div>
+
+    <div class="rec-divider"></div>
+    <span class="tag">&#9876;&#65039; Duello tra amici</span>
+    <p class="sub" style="margin-top:-2px;">Stesse 5 frasi del livello scelto sopra, cronometrate: chi finisce prima vince. Serve un account (icona in alto a destra).</p>
+    <div class="empty" id="duelLoggedOut">Accedi o registrati per sfidare un amico.</div>
+    <div id="duelArea" class="hidden">
+      <div class="row">
+        <button class="primary" id="duelCreateBtn" style="width:100%;">&#9876;&#65039; Crea un duello</button>
+      </div>
+      <div class="row" style="margin-top:8px;">
+        <input type="text" id="duelCodeInput" placeholder="Codice duello (es. AB3XZ9)" style="flex:1; text-transform:uppercase;">
+        <button class="ghost" id="duelJoinBtn">Partecipa</button>
+      </div>
+      <div id="duelStatusBox" style="margin-top:12px;"></div>
+    </div>
   </section>
 
   <!-- PERCORSO INIZIALE -->
@@ -646,6 +692,9 @@
     <h2>Quaderno di correzione</h2>
     <p class="sub">Entro 24h: annota una frase che non suonava bene e la sua forma corretta. Poi ripetila 3 volte in un contesto nuovo.</p>
     <input type="text" id="inputOrig" placeholder="Frase detta (non suonava bene)...">
+    <input type="text" id="inputMeaning" placeholder="...cosa intendevi dire, in italiano (facoltativo)">
+    <button class="ghost" id="btnSuggestCorr" style="width:100%; margin-bottom:10px;">&#128161; Suggerisci correzione</button>
+    <div class="sub" id="suggestCorrStatus" style="margin-top:-6px; margin-bottom:8px; min-height:14px;"></div>
     <input type="text" id="inputCorr" placeholder="Forma corretta...">
     <button class="primary" id="btnAddEntry" style="width:100%; margin-bottom:10px;">Aggiungi al quaderno</button>
     <button class="ghost" id="btnExport" style="width:100%; margin-bottom:14px;">Esporta quaderno (.txt)</button>
@@ -668,6 +717,34 @@
     <p class="sub">Sfide completate e serie di pratica per <span id="cronoLangLabel">English</span>.</p>
     <div class="stats-row" id="statsRow"></div>
     <div id="historyList"></div>
+
+    <div class="rec-divider"></div>
+    <span class="tag">Ripasso mirato</span>
+    <p class="sub" style="margin-top:-2px;">Le frasi del Percorso Base e di Impara che hai sbagliato in passato, per <span id="ripassoLangLabel">English</span>. Rivedile finché non le sbagli più.</p>
+    <div id="ripassoBox"></div>
+  </section>
+
+  <section class="card hidden" id="tab-traguardi">
+    <span class="tag">Traguardi</span>
+    <h2>I tuoi progressi</h2>
+    <div class="mascot-box">
+      <div class="mascot-avatar">
+        <svg viewBox="0 0 64 64" width="52" height="52">
+          <ellipse cx="32" cy="36" rx="22" ry="20" fill="var(--panel-2)" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M18 20 L26 26" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M46 20 L38 26" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="23" cy="33" r="7.5" fill="var(--ink)"/>
+          <circle cx="41" cy="33" r="7.5" fill="var(--ink)"/>
+          <circle cx="23" cy="33" r="3" fill="var(--bg)"/>
+          <circle cx="41" cy="33" r="3" fill="var(--bg)"/>
+          <path d="M30 40 L32 44 L34 40" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="mascot-bubble" id="mascotMsg">Un momento, sto controllando i tuoi progressi...</div>
+    </div>
+    <div class="stats-row" id="achStatsRow"></div>
+    <p class="sub" style="margin-top:4px;">I traguardi qui sotto contano i progressi in <b>tutte</b> le lingue, non solo quella selezionata in alto.</p>
+    <div id="badgeGrid" class="badge-grid"></div>
   </section>
 
   </div><!-- fine scroll-area -->
@@ -714,17 +791,34 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
     Storia
   </button>
+  <button data-tab="traguardi">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.6 5.6L21 8.5l-4.4 4.1L17.8 19 12 15.9 6.2 19l1.2-6.4L3 8.5l6.4-.9L12 2z"/></svg>
+    Traguardi
+  </button>
   </nav>
   <div class="scroll-fade nav-fade left"></div>
   <div class="scroll-fade nav-fade right"></div>
   </div>
+  <div class="modal-overlay hidden" id="duelPlayModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="duelPlayTitle">Duello</h3>
+        <button class="modal-close" id="duelPlayClose">&times;</button>
+      </div>
+      <div class="timer-display" id="duelTimer">0.0s</div>
+      <div class="phase-label" id="duelSlotTag">Frase 1/5</div>
+      <div class="challenge-text" id="duelPrompt">&mdash;</div>
+      <button class="primary" id="duelNextBtn" style="width:100%; margin-top:14px;">Fatta, avanti &rarr;</button>
+    </div>
+  </div>
+
 </div><!-- fine .app -->
 
 <script>
 /* ---------- DATA ---------- */
 const LANGS = {
   en: {
-    label:'English', script:'Aa', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
+    label:'English', script:'En', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
     audioSource:{ name:'BBC 6 Minute English', where:'YouTube', tip:'Episodi brevi, parlato chiaro e naturale — cerca esattamente questo nome del programma.' },
     sounds:[
       {sym:'θ/ð', name:'Th sordo e sonoro (think / this)', desc:'Lingua tra i denti, non dietro. L\'errore tipico è dire "sink" invece di "think".', pairs:'think / sink &middot; this / dis', tip:'Metti la lingua tra i denti davanti a uno specchio e soffia leggermente: se non vedi la punta della lingua, non è un vero th.'},
@@ -3462,6 +3556,18 @@ function todayStr(){ return new Date().toISOString().slice(0,10); }
 function dayOfMonthIndex(len){ return (new Date().getDate() - 1) % len; }
 
 function freshDirState(){ return { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 }; }
+
+function logMistake(it, correct){
+  if(!state.mistakes) state.mistakes = [];
+  const existing = state.mistakes.find(m => m.it === it && m.correct === correct);
+  if(existing){
+    existing.date = todayStr();
+    existing.count = (existing.count||1) + 1;
+  } else {
+    state.mistakes.push({ it, correct, date: todayStr(), count:1 });
+    if(state.mistakes.length > 200) state.mistakes.shift();
+  }
+}
 function freshProgressAllLevels(){
   const p = {};
   for(let lvl=1; lvl<=20; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
@@ -3538,6 +3644,8 @@ async function loadState(lang){
     });
     if(!state.impara.level) state.impara.level = 1;
   }
+
+  if(!state.mistakes) state.mistakes = [];
 }
 async function saveState(lang){
   try{ await storageAdapter.set('state:'+lang, JSON.stringify(state)); }catch(e){ console.warn('storage error', e); }
@@ -3581,6 +3689,7 @@ async function switchLang(key){
   renderScenario();
   renderNotebook();
   renderHistory();
+  renderRipasso();
   renderBeginner();
   renderMap();
   renderImpara();
@@ -3909,6 +4018,31 @@ function renderNotebook(){
     box.appendChild(div);
   });
 }
+document.getElementById('btnSuggestCorr').onclick = async ()=>{
+  const meaning = document.getElementById('inputMeaning').value.trim();
+  const statusEl = document.getElementById('suggestCorrStatus');
+  if(!meaning){
+    statusEl.textContent = 'Scrivi prima, nel campo sopra, cosa intendevi dire in italiano.';
+    return;
+  }
+  const btn = document.getElementById('btnSuggestCorr');
+  btn.disabled = true;
+  statusEl.textContent = 'Cerco un suggerimento...';
+  try{
+    const targetCode = TRANSLATE_LANG_CODE[currentLang] || 'en';
+    let result = await translateViaGoogle(meaning, 'it', targetCode);
+    if(!result){ result = await translateViaMyMemory(meaning, 'it', targetCode); }
+    if(!result){ throw new Error('no result'); }
+    document.getElementById('inputCorr').value = result.text;
+    statusEl.textContent = 'Suggerimento inserito — controllalo prima di salvare, è una traduzione automatica.';
+  }catch(e){
+    console.warn('suggest correction error', e);
+    statusEl.textContent = 'Non sono riuscito a generare un suggerimento. Scrivi pure la correzione a mano.';
+  } finally {
+    btn.disabled = false;
+  }
+};
+
 document.getElementById('btnAddEntry').onclick = async ()=>{
   const orig = document.getElementById('inputOrig').value.trim();
   const corr = document.getElementById('inputCorr').value.trim();
@@ -3916,7 +4050,9 @@ document.getElementById('btnAddEntry').onclick = async ()=>{
   state.notebook.push({orig, corr, date: todayStr()});
   await saveState(currentLang);
   document.getElementById('inputOrig').value='';
+  document.getElementById('inputMeaning').value='';
   document.getElementById('inputCorr').value='';
+  document.getElementById('suggestCorrStatus').textContent='';
   renderNotebook();
 };
 
@@ -4073,6 +4209,7 @@ document.getElementById('bpCheck').onclick = async ()=>{
     if(ds.wrong >= 3){
       const correctAnswer = (dir === 'to_target') ? item.ans[0] : item.it;
       fb.innerHTML = 'Non ancora corretto.<span class="hint">Suggerimento: ' + correctAnswer + '</span>';
+      logMistake(item.it, item.ans[0]);
     } else {
       fb.textContent = 'Non ancora corretto, riprova.';
     }
@@ -4244,6 +4381,8 @@ document.getElementById('imCheck').onclick = async ()=>{
       const correctAnswer = (dir === 'to_target') ? item.ans[0] : item.it;
       fb.innerHTML = `Non ancora corretto.<span class="hint">Risposta corretta: <b>${correctAnswer}</b></span>`;
       if(dir === 'to_target') fb.appendChild(imMakeSpeakBtn(item.ans[0]));
+      logMistake(item.it, item.ans[0]);
+      saveState(currentLang);
     } else {
       fb.textContent = 'Non ancora corretto, riprova.';
     }
@@ -4293,6 +4432,142 @@ document.querySelectorAll('#imDirTabs button').forEach(btn=>{
     renderImpara();
   };
 });
+
+/* ---------- DUELLO TRA AMICI (basato su Sfida del giorno) ---------- */
+function genDuelCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // niente 0/O/1/I per evitare ambiguità
+  let code = '';
+  for(let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
+  return code;
+}
+function pick5Distinct(max){
+  const n = Math.min(5, max);
+  const arr = Array.from({length:max}, (_,i)=>i);
+  for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr.slice(0, n);
+}
+let duelActive = null;
+
+function renderDuelArea(){
+  const loggedIn = !!(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser);
+  document.getElementById('duelLoggedOut').classList.toggle('hidden', loggedIn);
+  document.getElementById('duelArea').classList.toggle('hidden', !loggedIn);
+}
+
+function fmtDuelTime(ms){ return (ms/1000).toFixed(1) + 's'; }
+
+function showDuelStatus(code, duel){
+  const box = document.getElementById('duelStatusBox');
+  if(!duel){ box.innerHTML = '<div class="empty">Nessun duello trovato con questo codice.</div>'; return; }
+  if(duel.creatorTimeMs != null && duel.opponentTimeMs != null){
+    const winner = duel.creatorTimeMs <= duel.opponentTimeMs ? duel.creatorNickname : duel.opponentNickname;
+    box.innerHTML = `<div class="sound-tip" style="font-style:normal;">
+      <b>${duel.creatorNickname}</b>: ${fmtDuelTime(duel.creatorTimeMs)} &middot; <b>${duel.opponentNickname||'—'}</b>: ${fmtDuelTime(duel.opponentTimeMs)}<br>
+      🏆 Vince <b>${winner}</b>!</div>`;
+  } else {
+    box.innerHTML = `<div class="empty">Duello "${code}" &middot; in attesa che entrambi completino le 5 frasi. Ricontrolla più tardi inserendo di nuovo il codice.</div>`;
+  }
+}
+
+document.getElementById('duelCreateBtn').onclick = async ()=>{
+  if(!(window.cloudAPI && window.cloudAPI.currentUser)) return;
+  const btn = document.getElementById('duelCreateBtn');
+  btn.disabled = true; btn.textContent = 'Creo...';
+  try{
+    const level = state.sfida.level;
+    const list = CHALLENGES[level];
+    const indices = pick5Distinct(list.length);
+    const code = genDuelCode();
+    const nickname = await window.cloudAPI.getMyNickname();
+    await window.cloudAPI.createDuel(code, {
+      creatorUid: window.cloudAPI.currentUser.uid,
+      creatorNickname: nickname,
+      lang: currentLang, level, indices, createdAt: Date.now(),
+      creatorTimeMs: null, opponentUid: null, opponentNickname: null, opponentTimeMs: null
+    });
+    document.getElementById('duelStatusBox').innerHTML = `<div class="sound-tip" style="font-style:normal;">Duello creato! Codice: <b style="font-size:17px; letter-spacing:2px;">${code}</b><br>Condividilo con un amico (WhatsApp, messaggio, come preferisci). Ora gioca la tua parte.</div>`;
+    startDuelPlay({ code, indices, level, lang: currentLang, role:'creator' });
+  }catch(e){
+    console.warn('create duel error', e);
+    document.getElementById('duelStatusBox').innerHTML = '<div class="empty">Non sono riuscito a creare il duello. Riprova.</div>';
+  } finally {
+    btn.disabled = false; btn.textContent = '⚔️ Crea un duello';
+  }
+};
+
+document.getElementById('duelJoinBtn').onclick = async ()=>{
+  if(!(window.cloudAPI && window.cloudAPI.currentUser)) return;
+  const code = document.getElementById('duelCodeInput').value.trim().toUpperCase();
+  if(!code) return;
+  const statusBox = document.getElementById('duelStatusBox');
+  statusBox.innerHTML = '<div class="empty">Cerco il duello...</div>';
+  try{
+    const duel = await window.cloudAPI.getDuel(code);
+    if(!duel){ statusBox.innerHTML = '<div class="empty">Nessun duello trovato con questo codice.</div>'; return; }
+    const myUid = window.cloudAPI.currentUser.uid;
+    if(duel.creatorUid === myUid || (duel.opponentUid && duel.opponentUid !== myUid) || duel.opponentTimeMs != null){
+      showDuelStatus(code, duel);
+      return;
+    }
+    startDuelPlay({ code, indices: duel.indices, level: duel.level, lang: duel.lang, role:'opponent', creatorNickname: duel.creatorNickname });
+  }catch(e){
+    console.warn('join duel error', e);
+    statusBox.innerHTML = '<div class="empty">Errore nel recuperare il duello. Riprova.</div>';
+  }
+};
+
+function renderDuelSlot(){
+  const list = CHALLENGES[duelActive.level];
+  const idx = duelActive.indices[duelActive.slot];
+  document.getElementById('duelSlotTag').textContent = `Frase ${duelActive.slot+1}/${duelActive.indices.length}`;
+  document.getElementById('duelPrompt').textContent = list[idx].it;
+}
+
+function startDuelPlay(ctx){
+  duelActive = Object.assign({ slot:0, startTime: Date.now() }, ctx);
+  document.getElementById('duelPlayModal').classList.remove('hidden');
+  document.getElementById('duelPlayTitle').textContent = ctx.role === 'creator'
+    ? `Il tuo duello (${LANGS[ctx.lang].label})`
+    : `Duello di ${ctx.creatorNickname || 'un amico'} (${LANGS[ctx.lang].label})`;
+  renderDuelSlot();
+  if(duelActive.timerInterval) clearInterval(duelActive.timerInterval);
+  duelActive.timerInterval = setInterval(()=>{
+    document.getElementById('duelTimer').textContent = fmtDuelTime(Date.now() - duelActive.startTime);
+  }, 100);
+}
+
+document.getElementById('duelNextBtn').onclick = async ()=>{
+  if(!duelActive) return;
+  duelActive.slot++;
+  if(duelActive.slot >= duelActive.indices.length){
+    clearInterval(duelActive.timerInterval);
+    const elapsed = Date.now() - duelActive.startTime;
+    document.getElementById('duelPlayModal').classList.add('hidden');
+    const finishedCtx = duelActive;
+    duelActive = null;
+    try{
+      if(finishedCtx.role === 'creator'){
+        await window.cloudAPI.updateDuel(finishedCtx.code, { creatorTimeMs: elapsed });
+      } else {
+        const nickname = await window.cloudAPI.getMyNickname();
+        await window.cloudAPI.updateDuel(finishedCtx.code, {
+          opponentUid: window.cloudAPI.currentUser.uid,
+          opponentNickname: nickname,
+          opponentTimeMs: elapsed
+        });
+      }
+      const duel = await window.cloudAPI.getDuel(finishedCtx.code);
+      showDuelStatus(finishedCtx.code, duel);
+    }catch(e){ console.warn('save duel result error', e); }
+    return;
+  }
+  renderDuelSlot();
+};
+document.getElementById('duelPlayClose').onclick = ()=>{
+  if(duelActive && duelActive.timerInterval) clearInterval(duelActive.timerInterval);
+  duelActive = null;
+  document.getElementById('duelPlayModal').classList.add('hidden');
+};
 
 /* ---------- TRADUCI: frase libera, bidirezionale italiano <-> lingua selezionata ---------- */
 const TRANSLATE_LANG_CODE = { en:'en', fr:'fr', es:'es', de:'de', ar:'ar', zh:'zh-CN', ja:'ja' };
@@ -4550,6 +4825,93 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
   }
 };
 
+/* ---------- TRAGUARDI (badge cross-lingua + mascotte) ---------- */
+const ACHIEVEMENTS = [
+  { id:'first', icon:'🎤', name:'Prima Voce', check: s => s.totalDone >= 1 },
+  { id:'streak3', icon:'🔥', name:'Serie di 3 giorni', check: s => s.maxStreak >= 3 },
+  { id:'streak7', icon:'🔥', name:'Serie di 7 giorni', check: s => s.maxStreak >= 7 },
+  { id:'streak30', icon:'🔥', name:'Serie di 30 giorni', check: s => s.maxStreak >= 30 },
+  { id:'poly3', icon:'🌍', name:'Poliglotta (3 lingue)', check: s => s.languagesWithProgress >= 3 },
+  { id:'poly7', icon:'🗺️', name:'Iperpoliglotta (7 lingue)', check: s => s.languagesWithProgress >= 7 },
+  { id:'base10', icon:'🎓', name:'Diplomato Base', check: s => s.maxBaseLevelDone >= 10 },
+  { id:'airport', icon:'✈️', name:"Pronto per l'aeroporto", check: s => s.maxBaseLevelDone >= 20 },
+  { id:'impara', icon:'🧠', name:'Impara Superstar', check: s => s.imparaFullyDone },
+  { id:'notebook10', icon:'📓', name:'Studente diligente', check: s => s.notebookEntries >= 10 },
+  { id:'hundred', icon:'💯', name:'Cento frasi', check: s => s.totalDone >= 100 },
+];
+
+async function computeGlobalStats(){
+  const stats = { totalDone:0, maxStreak:0, languagesWithProgress:0, maxBaseLevelDone:0, imparaFullyDone:false, notebookEntries:0 };
+  for(const lang of Object.keys(LANGS)){
+    let raw;
+    try{ raw = await storageAdapter.get('state:'+lang); }catch(e){ raw = null; }
+    if(!raw) continue;
+    let s;
+    try{ s = JSON.parse(raw.value); }catch(e){ continue; }
+    let hasProgress = false;
+    if(s.done && s.done.length){ stats.totalDone += s.done.length; hasProgress = true; }
+    if(s.streak && s.streak > stats.maxStreak) stats.maxStreak = s.streak;
+    if(s.notebook && s.notebook.length){ stats.notebookEntries += s.notebook.length; hasProgress = true; }
+    if(s.beginner && s.beginner.progress){
+      for(let lvl=1; lvl<=20; lvl++){
+        const p = s.beginner.progress[lvl];
+        if(!p || !p.to_target) continue;
+        const listLen = (BEGINNER[lang] && BEGINNER[lang][lvl-1]) ? BEGINNER[lang][lvl-1].length : null;
+        if(listLen && p.to_target.index >= listLen){
+          if(lvl > stats.maxBaseLevelDone) stats.maxBaseLevelDone = lvl;
+          hasProgress = true;
+        } else if(p.to_target.index > 0){
+          hasProgress = true;
+        }
+      }
+    }
+    if(s.impara && s.impara.progress){
+      let allDone = true;
+      for(let lvl=1; lvl<=6; lvl++){
+        const p = s.impara.progress[lvl];
+        const listLen = (LEARN[lang] && LEARN[lang][lvl-1]) ? LEARN[lang][lvl-1].length : null;
+        if(!p || !listLen || !p.to_target || !p.to_it || p.to_target.index < listLen || p.to_it.index < listLen){
+          allDone = false;
+        }
+        if(p && p.to_target && p.to_target.index > 0) hasProgress = true;
+      }
+      if(allDone) stats.imparaFullyDone = true;
+    }
+    if(hasProgress) stats.languagesWithProgress++;
+  }
+  return stats;
+}
+
+async function renderTraguardi(){
+  const grid = document.getElementById('badgeGrid');
+  const msgEl = document.getElementById('mascotMsg');
+  if(!grid || !msgEl) return;
+  msgEl.textContent = 'Un momento, sto controllando i tuoi progressi in tutte le lingue...';
+  const stats = await computeGlobalStats();
+  const earned = ACHIEVEMENTS.filter(a => a.check(stats));
+
+  document.getElementById('achStatsRow').innerHTML = `
+    <div class="stat-box"><div class="n">${earned.length}/${ACHIEVEMENTS.length}</div><div class="l">TRAGUARDI</div></div>
+    <div class="stat-box"><div class="n">${stats.languagesWithProgress}</div><div class="l">LINGUE PRATICATE</div></div>
+    <div class="stat-box"><div class="n">${stats.totalDone}</div><div class="l">SFIDE TOTALI</div></div>
+  `;
+
+  let msg;
+  if(earned.length === 0){
+    msg = 'Ciao, sono Nottola! Completa la tua prima sfida in una lingua qualsiasi per sbloccare il primo traguardo.';
+  } else if(earned.length === ACHIEVEMENTS.length){
+    msg = 'Incredibile: hai sbloccato tutti i traguardi disponibili. Sei una vera voce poliglotta!';
+  } else {
+    msg = `Ottimo lavoro! Hai sbloccato ${earned.length} traguardi su ${ACHIEVEMENTS.length}. Continua così, ${LANGS[currentLang].label} ti aspetta.`;
+  }
+  msgEl.textContent = msg;
+
+  grid.innerHTML = ACHIEVEMENTS.map(a=>{
+    const isEarned = earned.includes(a);
+    return `<div class="badge-card ${isEarned?'earned':''}"><div class="icon">${a.icon}</div><div class="name">${a.name}</div></div>`;
+  }).join('');
+}
+
 /* ---------- MAPPA A TAPPE ---------- */
 const MAP_NODES = [
   { id:'base-1', label:'Percorso Base · Livello 1', kind:'percorso', level:1, gating:true },
@@ -4691,6 +5053,33 @@ function renderHistory(){
   }).join('');
 }
 
+function renderRipasso(){
+  document.getElementById('ripassoLangLabel').textContent = LANGS[currentLang].label;
+  const box = document.getElementById('ripassoBox');
+  const mistakes = state.mistakes || [];
+  if(mistakes.length === 0){
+    box.innerHTML = '<div class="empty">Nessun errore registrato per questa lingua — ottimo segno! Gli errori del Percorso Base e di Impara finiranno qui automaticamente.</div>';
+    return;
+  }
+  const sorted = [...mistakes].sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+  box.innerHTML = sorted.map((m, i)=>{
+    const isNative = currentLang === 'ar';
+    return `<div class="ripasso-item" data-idx="${mistakes.indexOf(m)}">
+      <div class="rit">${m.it}</div>
+      <div class="rcorr"${isNative ? ' dir="rtl"' : ''}>${m.correct}</div>
+      <button class="ghost ripasso-done-btn" style="margin-top:8px; padding:6px 12px; font-size:12px;">✓ Ripassata, rimuovi</button>
+    </div>`;
+  }).join('');
+  box.querySelectorAll('.ripasso-done-btn').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const idx = Number(btn.closest('.ripasso-item').dataset.idx);
+      state.mistakes.splice(idx, 1);
+      await saveState(currentLang);
+      renderRipasso();
+    };
+  });
+}
+
 /* ---------- EXPORT QUADERNO ---------- */
 function exportNotebook(){
   if(state.notebook.length===0) return;
@@ -4720,14 +5109,69 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     if(btn.dataset.tab === 'percorso' && typeof renderLeaderboard === 'function'){
       renderLeaderboard();
     }
+    if(btn.dataset.tab === 'traguardi' && typeof renderTraguardi === 'function'){
+      renderTraguardi();
+    }
   };
 });
 
 /* ---------- INIT ---------- */
+/* ---------- PROMEMORIA DI PRATICA (facoltativo, disattivato di default) ---------- */
+function reminderIsEnabled(){
+  try{ return localStorage.getItem('qv_reminder_enabled') === '1'; }catch(e){ return false; }
+}
+function setReminderEnabled(val){
+  try{ localStorage.setItem('qv_reminder_enabled', val ? '1' : '0'); }catch(e){}
+}
+function updateReminderBtn(){
+  const btn = document.getElementById('reminderToggle');
+  if(!btn) return;
+  const supported = (typeof Notification !== 'undefined');
+  if(!supported){
+    btn.textContent = 'Non disponibile';
+    btn.disabled = true;
+    return;
+  }
+  const on = reminderIsEnabled() && Notification.permission === 'granted';
+  btn.textContent = on ? 'Disattiva' : 'Attiva';
+}
+document.getElementById('reminderToggle').onclick = async ()=>{
+  if(typeof Notification === 'undefined') return;
+  const currentlyOn = reminderIsEnabled() && Notification.permission === 'granted';
+  if(currentlyOn){
+    setReminderEnabled(false);
+    updateReminderBtn();
+    return;
+  }
+  try{
+    const perm = await Notification.requestPermission();
+    if(perm === 'granted'){
+      setReminderEnabled(true);
+      new Notification('Quattro Voci', { body: 'Promemoria attivato: ti avviserò se salti un giorno di pratica.' });
+    } else {
+      setReminderEnabled(false);
+    }
+  }catch(e){ console.warn('notification permission error', e); }
+  updateReminderBtn();
+};
+function maybeShowPracticeReminder(){
+  if(!reminderIsEnabled()) return;
+  if(typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+  try{
+    const today = todayStr();
+    if(localStorage.getItem('qv_reminder_last_shown') === today) return;
+    if(state.lastDate === today) return;
+    new Notification('Quattro Voci', { body: `Non ti sei ancora esercitato oggi con ${LANGS[currentLang].label}. Anche solo 5 minuti fanno la differenza!` });
+    localStorage.setItem('qv_reminder_last_shown', today);
+  }catch(e){ console.warn('reminder notification error', e); }
+}
+
 (async function init(){
   renderRing();
   await switchLang('en');
   resetTimer();
+  updateReminderBtn();
+  maybeShowPracticeReminder();
 })();
 
 /* Indicatori "si può scorrere" per l'anello lingue e la barra di navigazione */
@@ -4764,6 +5208,7 @@ let authMode = 'login';
 function openAuthModal(){
   document.getElementById('authModal').classList.remove('hidden');
   document.getElementById('authFeedback').textContent = '';
+  updateReminderBtn();
   const loggedIn = window.cloudAPI && window.cloudAPI.currentUser;
   document.getElementById('authLoggedOut').classList.toggle('hidden', !!loggedIn);
   document.getElementById('authLoggedIn').classList.toggle('hidden', !loggedIn);
@@ -5030,6 +5475,7 @@ window.addEventListener('cloud-ready', ()=>{
     } else {
       renderLeaderboard();
     }
+    renderDuelArea();
   });
 });
 
@@ -5138,6 +5584,26 @@ window.addEventListener('cloud-ready', ()=>{
       const out = [];
       snap.forEach(d => out.push({ uid: d.id, ...d.data() }));
       return out;
+    },
+    async getMyNickname(){
+      if(!auth || !auth.currentUser) return 'Anonimo';
+      try{
+        const snap = await getDoc(doc(db, 'leaderboard', auth.currentUser.uid));
+        return (snap.exists() && snap.data().nickname) ? snap.data().nickname : 'Anonimo';
+      }catch(e){ return 'Anonimo'; }
+    },
+    async createDuel(code, data){
+      if(!db) return;
+      await setDoc(doc(db, 'duels', code), data);
+    },
+    async getDuel(code){
+      if(!db) return null;
+      const snap = await getDoc(doc(db, 'duels', code));
+      return snap.exists() ? snap.data() : null;
+    },
+    async updateDuel(code, patch){
+      if(!db) return;
+      await setDoc(doc(db, 'duels', code), patch, { merge:true });
     }
   };
 
