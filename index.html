@@ -608,6 +608,8 @@
       <button data-level="20">Livello 20</button>
       <button data-level="21">Livello 21</button>
       <button data-level="22">Livello 22</button>
+      <button data-level="23">Livello 23</button>
+      <button data-level="24">Livello 24</button>
     </div>
     <div class="level-tabs" id="bpDirTabs">
       <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -1097,7 +1099,7 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["you never really stop learning after all"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["in the long run honesty always pays off"]},
     ],
-    [ // Livello 11 · di dove sei?
+    [ // Livello 11 · di dove sei (parte 1)
       {it:"Di dove sei?", ans:["where are you from"]},
       {it:"Sono italiano/a, di Roma.", ans:["im italian from rome", "i'm italian from rome", "i am italian from rome"]},
       {it:"Dove sei nato/a?", ans:["where were you born"]},
@@ -1107,7 +1109,17 @@ const BEGINNER = {
       {it:"Qual è la tua lingua madre?", ans:["what is your native language", "whats your native language"]},
       {it:"La mia lingua madre è l'italiano.", ans:["my native language is italian"]},
     ],
-    [ // Livello 12 · presentazione
+    [ // Livello 12 · di dove sei (parte 2)
+      {it:"In quale quartiere abiti?", ans:["which neighborhood do you live in"]},
+      {it:"Abito in centro città.", ans:["i live downtown"]},
+      {it:"Hai sempre vissuto qui?", ans:["have you always lived here"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["i moved here two years ago"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["where do your parents come from"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["my parents come from southern italy"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["do you miss your home country"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["yes i miss it a lot especially the food"]},
+    ],
+    [ // Livello 13 · presentazione (parte 1)
       {it:"Come ti chiami?", ans:["whats your name", "what's your name", "what is your name"]},
       {it:"Mi chiamo Marco, piacere.", ans:["my name is marco nice to meet you"]},
       {it:"Che lavoro fai?", ans:["what do you do for work", "what do you do"]},
@@ -1117,7 +1129,17 @@ const BEGINNER = {
       {it:"Quali sono i tuoi hobby?", ans:["what are your hobbies"]},
       {it:"Mi piace leggere e viaggiare.", ans:["i like reading and traveling", "i like reading and travelling"]},
     ],
-    [ // Livello 13 · check-in e biglietti (ex 11)
+    [ // Livello 14 · presentazione (parte 2)
+      {it:"Sei sposato o single?", ans:["are you married or single"]},
+      {it:"Sono sposato con due figli.", ans:["im married with two children", "i'm married with two children", "i am married with two children"]},
+      {it:"Con chi vivi?", ans:["who do you live with"]},
+      {it:"Vivo da solo in un appartamento.", ans:["i live alone in an apartment"]},
+      {it:"Che cosa studi all'università?", ans:["what do you study at university"]},
+      {it:"Studio economia al secondo anno.", ans:["i study economics second year"]},
+      {it:"Hai fratelli o sorelle?", ans:["do you have any brothers or sisters"]},
+      {it:"Ho una sorella più piccola.", ans:["i have a younger sister"]},
+    ],
+    [ // Livello 15 · check-in e biglietti
       {it:"Dov'è il banco del check-in?", ans:["where is the check-in desk","where is the checkin desk"]},
       {it:"Posso fare il check-in online?", ans:["can i check in online"]},
       {it:"Ho prenotato un volo per Roma.", ans:["i have booked a flight to rome","i booked a flight to rome"]},
@@ -1385,7 +1407,7 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["on n'arrete jamais vraiment d'apprendre au fond","on narrête jamais vraiment dapprendre au fond"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["a la longue la sincerite paie toujours","à la longue la sincérité paie toujours"]},
     ],
-    [ // Livello 11 · di dove sei?
+    [ // Livello 11 · di dove sei (parte 1)
       {it:"Di dove sei?", ans:["d'ou viens-tu", "dou viens tu"]},
       {it:"Sono italiano/a, di Roma.", ans:["je suis italien de rome", "je suis italienne de rome"]},
       {it:"Dove sei nato/a?", ans:["ou es-tu ne", "ou es tu ne", "ou es-tu nee", "ou es tu nee"]},
@@ -1395,7 +1417,17 @@ const BEGINNER = {
       {it:"Qual è la tua lingua madre?", ans:["quelle est ta langue maternelle"]},
       {it:"La mia lingua madre è l'italiano.", ans:["ma langue maternelle est l'italien", "ma langue maternelle est litalien"]},
     ],
-    [ // Livello 12 · presentazione
+    [ // Livello 12 · di dove sei (parte 2)
+      {it:"In quale quartiere abiti?", ans:["dans quel quartier habites-tu", "dans quel quartier habites tu"]},
+      {it:"Abito in centro città.", ans:["j'habite dans le centre-ville", "jhabite dans le centre ville"]},
+      {it:"Hai sempre vissuto qui?", ans:["as-tu toujours vecu ici", "as tu toujours vecu ici"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["je me suis installe ici il y a deux ans"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["d'ou viennent tes parents", "dou viennent tes parents"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["mes parents viennent du sud de l'italie", "mes parents viennent du sud de litalie"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["ton pays d'origine te manque-t-il", "ton pays dorigine te manque t il"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["oui il me manque beaucoup surtout la nourriture"]},
+    ],
+    [ // Livello 13 · presentazione (parte 1)
       {it:"Come ti chiami?", ans:["comment tu t'appelles", "comment tu tappelles"]},
       {it:"Mi chiamo Marco, piacere.", ans:["je m'appelle marco enchante", "je mappelle marco enchante"]},
       {it:"Che lavoro fai?", ans:["qu'est-ce que tu fais dans la vie", "quest ce que tu fais dans la vie"]},
@@ -1404,6 +1436,16 @@ const BEGINNER = {
       {it:"Ho ventotto anni.", ans:["j'ai vingt-huit ans", "jai vingt huit ans"]},
       {it:"Quali sono i tuoi hobby?", ans:["quels sont tes loisirs"]},
       {it:"Mi piace leggere e viaggiare.", ans:["j'aime lire et voyager", "jaime lire et voyager"]},
+    ],
+    [ // Livello 14 · presentazione (parte 2)
+      {it:"Sei sposato o single?", ans:["es-tu marie ou celibataire", "es tu marie ou celibataire"]},
+      {it:"Sono sposato con due figli.", ans:["je suis marie avec deux enfants"]},
+      {it:"Con chi vivi?", ans:["avec qui habites-tu", "avec qui habites tu"]},
+      {it:"Vivo da solo in un appartamento.", ans:["j'habite seul dans un appartement", "jhabite seul dans un appartement"]},
+      {it:"Che cosa studi all'università?", ans:["qu'est-ce que tu etudies a l'universite", "quest ce que tu etudies a luniversite"]},
+      {it:"Studio economia al secondo anno.", ans:["j'etudie l'economie en deuxieme annee", "jetudie leconomie en deuxieme annee"]},
+      {it:"Hai fratelli o sorelle?", ans:["as-tu des freres ou soeurs", "as tu des freres ou soeurs"]},
+      {it:"Ho una sorella più piccola.", ans:["j'ai une petite soeur", "jai une petite soeur"]},
     ],
     [ // Livello 13 (ex 11)
       {it:"Dov'è il banco del check-in?", ans:["ou est le comptoir d'enregistrement","ou est le comptoir denregistrement"]},
@@ -1673,7 +1715,7 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["لا نتوقف أبدا عن التعلم في النهاية","la natawaqqaf abadan 'an at-ta'allum fi an-nihaya"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["على المدى الطويل الصدق يثمر دائما","'ala al-mada at-tawil as-sidq yuthmir da'iman"]},
     ],
-    [ // Livello 11 · di dove sei?
+    [ // Livello 11 · di dove sei (parte 1)
       {it:"Di dove sei?", ans:["من أين أنت", "min ayna anta"]},
       {it:"Sono italiano/a, di Roma.", ans:["أنا إيطالي من روما", "ana itali min roma"]},
       {it:"Dove sei nato/a?", ans:["أين ولدت", "ayna wulidta"]},
@@ -1683,7 +1725,17 @@ const BEGINNER = {
       {it:"Qual è la tua lingua madre?", ans:["ما هي لغتك الأم", "ma hiya lughatuka al-umm"]},
       {it:"La mia lingua madre è l'italiano.", ans:["لغتي الأم هي الإيطالية", "lughati al-umm hiya al-italiyya"]},
     ],
-    [ // Livello 12 · presentazione
+    [ // Livello 12 · di dove sei (parte 2)
+      {it:"In quale quartiere abiti?", ans:["في أي حي تسكن؟", "fi ayyi hayy taskun"]},
+      {it:"Abito in centro città.", ans:["أسكن في وسط المدينة.", "askunu fi wasat al-madina"]},
+      {it:"Hai sempre vissuto qui?", ans:["هل عشت هنا دائما؟", "hal ishta huna daiman"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["انتقلت إلى هنا منذ سنتين.", "intaqaltu ila huna mundhu sanatayn"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["من أين يأتي والداك؟", "min ayna yati waledak"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["والداي من جنوب إيطاليا.", "waleday min janub italya"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["هل تشتاق إلى وطنك؟", "hal tashtaqu ila wataneka"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["نعم، أشتاق إليه كثيرا، خاصة الطعام.", "naam ashtaqu ilayhi kathiran khassatan at-taam"]},
+    ],
+    [ // Livello 13 · presentazione (parte 1)
       {it:"Come ti chiami?", ans:["ما اسمك", "ma ismuka"]},
       {it:"Mi chiamo Marco, piacere.", ans:["اسمي ماركو تشرفنا", "ismi marco tasharrafna"]},
       {it:"Che lavoro fai?", ans:["ما هي مهنتك", "ma hiya mihnatuka"]},
@@ -1692,6 +1744,16 @@ const BEGINNER = {
       {it:"Ho ventotto anni.", ans:["عمري ثمانية وعشرون عاما", "umri thamaniya wa ishruna aman"]},
       {it:"Quali sono i tuoi hobby?", ans:["ما هي هواياتك", "ma hiya hiwayatuka"]},
       {it:"Mi piace leggere e viaggiare.", ans:["أحب القراءة والسفر", "uhibbu al-qiraa wa as-safar"]},
+    ],
+    [ // Livello 14 · presentazione (parte 2)
+      {it:"Sei sposato o single?", ans:["هل أنت متزوج أم أعزب؟", "hal anta mutazawwij am azab"]},
+      {it:"Sono sposato con due figli.", ans:["أنا متزوج ولدي طفلان.", "ana mutazawwij wa ladayya tiflan"]},
+      {it:"Con chi vivi?", ans:["مع من تعيش؟", "maa man taish"]},
+      {it:"Vivo da solo in un appartamento.", ans:["أعيش وحدي في شقة.", "aishu wahdi fi shaqqa"]},
+      {it:"Che cosa studi all'università?", ans:["ماذا تدرس في الجامعة؟", "madha tadrusu fi al-jamia"]},
+      {it:"Studio economia al secondo anno.", ans:["أدرس الاقتصاد، السنة الثانية.", "adrusu al-iqtisad as-sana ath-thaniya"]},
+      {it:"Hai fratelli o sorelle?", ans:["هل لديك إخوة أو أخوات؟", "hal ladayka ikhwa aw akhawat"]},
+      {it:"Ho una sorella più piccola.", ans:["لدي أخت صغرى.", "ladayya ukht sughra"]},
     ],
     [ // Livello 13 (ex 11)
       {it:"Dov'è il banco del check-in?", ans:["أين مكتب تسجيل الوصول؟","ayna maktab tasjil al-wusul"]},
@@ -1961,7 +2023,7 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["en el fondo nunca se deja de aprender"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["a la larga la sinceridad siempre da sus frutos"]},
     ],
-    [ // Livello 11 · di dove sei?
+    [ // Livello 11 · di dove sei (parte 1)
       {it:"Di dove sei?", ans:["de donde eres"]},
       {it:"Sono italiano/a, di Roma.", ans:["soy italiano de roma", "soy italiana de roma"]},
       {it:"Dove sei nato/a?", ans:["donde naciste"]},
@@ -1971,7 +2033,17 @@ const BEGINNER = {
       {it:"Qual è la tua lingua madre?", ans:["cual es tu lengua materna"]},
       {it:"La mia lingua madre è l'italiano.", ans:["mi lengua materna es el italiano"]},
     ],
-    [ // Livello 12 · presentazione
+    [ // Livello 12 · di dove sei (parte 2)
+      {it:"In quale quartiere abiti?", ans:["en que barrio vives"]},
+      {it:"Abito in centro città.", ans:["vivo en el centro de la ciudad"]},
+      {it:"Hai sempre vissuto qui?", ans:["siempre has vivido aqui"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["me mude aqui hace dos anos", "me mudé aquí hace dos años"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["de donde son tus padres"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["mis padres son del sur de italia"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["extranas tu pais de origen"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["si lo extrano mucho sobre todo la comida"]},
+    ],
+    [ // Livello 13 · presentazione (parte 1)
       {it:"Come ti chiami?", ans:["como te llamas"]},
       {it:"Mi chiamo Marco, piacere.", ans:["me llamo marco mucho gusto"]},
       {it:"Che lavoro fai?", ans:["a que te dedicas"]},
@@ -1980,6 +2052,16 @@ const BEGINNER = {
       {it:"Ho ventotto anni.", ans:["tengo veintiocho anos", "tengo veintiocho años"]},
       {it:"Quali sono i tuoi hobby?", ans:["cuales son tus aficiones"]},
       {it:"Mi piace leggere e viaggiare.", ans:["me gusta leer y viajar"]},
+    ],
+    [ // Livello 14 · presentazione (parte 2)
+      {it:"Sei sposato o single?", ans:["estas casado o soltero", "estas casada o soltera"]},
+      {it:"Sono sposato con due figli.", ans:["estoy casado y tengo dos hijos", "estoy casada y tengo dos hijos"]},
+      {it:"Con chi vivi?", ans:["con quien vives"]},
+      {it:"Vivo da solo in un appartamento.", ans:["vivo solo en un apartamento", "vivo sola en un apartamento"]},
+      {it:"Che cosa studi all'università?", ans:["que estudias en la universidad"]},
+      {it:"Studio economia al secondo anno.", ans:["estudio economia segundo ano", "estudio economía segundo año"]},
+      {it:"Hai fratelli o sorelle?", ans:["tienes hermanos o hermanas"]},
+      {it:"Ho una sorella più piccola.", ans:["tengo una hermana menor"]},
     ],
     [ // Livello 13 (ex 11)
       {it:"Dov'è il banco del check-in?", ans:["donde esta el mostrador de facturacion"]},
@@ -2249,7 +2331,7 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["man hort im grunde nie auf zu lernen","man hört im grunde nie auf zu lernen"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["auf dauer zahlt sich ehrlichkeit immer aus"]},
     ],
-    [ // Livello 11 · di dove sei?
+    [ // Livello 11 · di dove sei (parte 1)
       {it:"Di dove sei?", ans:["woher kommst du"]},
       {it:"Sono italiano/a, di Roma.", ans:["ich bin italiener aus rom", "ich bin italienerin aus rom"]},
       {it:"Dove sei nato/a?", ans:["wo bist du geboren"]},
@@ -2259,7 +2341,17 @@ const BEGINNER = {
       {it:"Qual è la tua lingua madre?", ans:["was ist deine muttersprache"]},
       {it:"La mia lingua madre è l'italiano.", ans:["meine muttersprache ist italienisch"]},
     ],
-    [ // Livello 12 · presentazione
+    [ // Livello 12 · di dove sei (parte 2)
+      {it:"In quale quartiere abiti?", ans:["in welchem viertel wohnst du"]},
+      {it:"Abito in centro città.", ans:["ich wohne in der innenstadt"]},
+      {it:"Hai sempre vissuto qui?", ans:["hast du schon immer hier gewohnt"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["ich bin vor zwei jahren hierher gezogen"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["woher kommen deine eltern"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["meine eltern kommen aus suditalien", "meine eltern kommen aus süditalien"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["vermisst du dein heimatland"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["ja ich vermisse es sehr besonders das essen"]},
+    ],
+    [ // Livello 13 · presentazione (parte 1)
       {it:"Come ti chiami?", ans:["wie heisst du", "wie heißt du"]},
       {it:"Mi chiamo Marco, piacere.", ans:["ich heisse marco freut mich", "ich heiße marco freut mich"]},
       {it:"Che lavoro fai?", ans:["was arbeitest du", "was machst du beruflich"]},
@@ -2268,6 +2360,16 @@ const BEGINNER = {
       {it:"Ho ventotto anni.", ans:["ich bin achtundzwanzig jahre alt"]},
       {it:"Quali sono i tuoi hobby?", ans:["was sind deine hobbys"]},
       {it:"Mi piace leggere e viaggiare.", ans:["ich lese und reise gerne"]},
+    ],
+    [ // Livello 14 · presentazione (parte 2)
+      {it:"Sei sposato o single?", ans:["bist du verheiratet oder single"]},
+      {it:"Sono sposato con due figli.", ans:["ich bin verheiratet und habe zwei kinder"]},
+      {it:"Con chi vivi?", ans:["mit wem wohnst du"]},
+      {it:"Vivo da solo in un appartamento.", ans:["ich wohne allein in einer wohnung"]},
+      {it:"Che cosa studi all'università?", ans:["was studierst du an der universitat", "was studierst du an der universität"]},
+      {it:"Studio economia al secondo anno.", ans:["ich studiere wirtschaft im zweiten jahr"]},
+      {it:"Hai fratelli o sorelle?", ans:["hast du geschwister"]},
+      {it:"Ho una sorella più piccola.", ans:["ich habe eine jungere schwester", "ich habe eine jüngere schwester"]},
     ],
     [ // Livello 13 (ex 11)
       {it:"Dov'è il banco del check-in?", ans:["wo ist der check-in-schalter","wo ist der checkin schalter"]},
@@ -2537,7 +2639,7 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["说到底，人永远不会停止学习。","shuo dao di ren yong yuan bu hui ting zhi xue xi"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["从长远看，真诚总是有回报的。","cong chang yuan kan zhen cheng zong shi you hui bao de"]},
     ],
-    [ // Livello 11 · di dove sei?
+    [ // Livello 11 · di dove sei (parte 1)
       {it:"Di dove sei?", ans:["你从哪里来？", "ni cong na li lai"]},
       {it:"Sono italiano/a, di Roma.", ans:["我是意大利人，来自罗马。", "wo shi yi da li ren lai zi luo ma"]},
       {it:"Dove sei nato/a?", ans:["你在哪里出生？", "ni zai na li chu sheng"]},
@@ -2547,7 +2649,17 @@ const BEGINNER = {
       {it:"Qual è la tua lingua madre?", ans:["你的母语是什么？", "ni de mu yu shi shen me"]},
       {it:"La mia lingua madre è l'italiano.", ans:["我的母语是意大利语。", "wo de mu yu shi yi da li yu"]},
     ],
-    [ // Livello 12 · presentazione
+    [ // Livello 12 · di dove sei (parte 2)
+      {it:"In quale quartiere abiti?", ans:["你住在哪个街区？", "ni zhu zai na ge jie qu"]},
+      {it:"Abito in centro città.", ans:["我住在市中心。", "wo zhu zai shi zhong xin"]},
+      {it:"Hai sempre vissuto qui?", ans:["你一直住在这里吗？", "ni yi zhi zhu zai zhe li ma"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["我两年前搬到这里。", "wo liang nian qian ban dao zhe li"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["你父母来自哪里？", "ni fu mu lai zi na li"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["我父母来自意大利南部。", "wo fu mu lai zi yi da li nan bu"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["你想念你的祖国吗？", "ni xiang nian ni de zu guo ma"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["是的，我很想念，尤其是食物。", "shi de wo hen xiang nian you qi shi shi wu"]},
+    ],
+    [ // Livello 13 · presentazione (parte 1)
       {it:"Come ti chiami?", ans:["你叫什么名字？", "ni jiao shen me ming zi"]},
       {it:"Mi chiamo Marco, piacere.", ans:["我叫马可，很高兴认识你。", "wo jiao ma ke hen gao xing ren shi ni"]},
       {it:"Che lavoro fai?", ans:["你是做什么工作的？", "ni shi zuo shen me gong zuo de"]},
@@ -2556,6 +2668,16 @@ const BEGINNER = {
       {it:"Ho ventotto anni.", ans:["我二十八岁。", "wo er shi ba sui"]},
       {it:"Quali sono i tuoi hobby?", ans:["你有什么爱好？", "ni you shen me ai hao"]},
       {it:"Mi piace leggere e viaggiare.", ans:["我喜欢读书和旅行。", "wo xi huan du shu he lv xing"]},
+    ],
+    [ // Livello 14 · presentazione (parte 2)
+      {it:"Sei sposato o single?", ans:["你结婚了还是单身？", "ni jie hun le hai shi dan shen"]},
+      {it:"Sono sposato con due figli.", ans:["我结婚了，有两个孩子。", "wo jie hun le you liang ge hai zi"]},
+      {it:"Con chi vivi?", ans:["你和谁住在一起？", "ni he shei zhu zai yi qi"]},
+      {it:"Vivo da solo in un appartamento.", ans:["我一个人住在公寓里。", "wo yi ge ren zhu zai gong yu li"]},
+      {it:"Che cosa studi all'università?", ans:["你在大学学什么专业？", "ni zai da xue xue shen me zhuan ye"]},
+      {it:"Studio economia al secondo anno.", ans:["我读经济学，二年级。", "wo du jing ji xue er nian ji"]},
+      {it:"Hai fratelli o sorelle?", ans:["你有兄弟姐妹吗？", "ni you xiong di jie mei ma"]},
+      {it:"Ho una sorella più piccola.", ans:["我有一个妹妹。", "wo you yi ge mei mei"]},
     ],
     [ // Livello 13 (ex 11)
       {it:"Dov'è il banco del check-in?", ans:["值机柜台在哪里？","zhi ji gui tai zai na li"]},
@@ -2825,7 +2947,7 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["結局、人は学ぶことを決してやめません。","kekkyoku hito wa manabu koto wo kesshite yamemasen"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["長い目で見れば、誠実さは常に報われます。","nagai me de mireba seijitsusa wa tsuneni mukuwaremasu"]},
     ],
-    [ // Livello 11 · di dove sei?
+    [ // Livello 11 · di dove sei (parte 1)
       {it:"Di dove sei?", ans:["どこの出身ですか", "doko no shusshin desu ka"]},
       {it:"Sono italiano/a, di Roma.", ans:["私はイタリア人で、ローマ出身です", "watashi wa itariajin de rooma shusshin desu"]},
       {it:"Dove sei nato/a?", ans:["どこで生まれましたか", "doko de umaremashita ka"]},
@@ -2835,7 +2957,17 @@ const BEGINNER = {
       {it:"Qual è la tua lingua madre?", ans:["あなたの母語は何ですか", "anata no bogo wa nan desu ka"]},
       {it:"La mia lingua madre è l'italiano.", ans:["私の母語はイタリア語です", "watashi no bogo wa itariago desu"]},
     ],
-    [ // Livello 12 · presentazione
+    [ // Livello 12 · di dove sei (parte 2)
+      {it:"In quale quartiere abiti?", ans:["どの地区に住んでいますか？", "dono chiku ni sunde imasu ka"]},
+      {it:"Abito in centro città.", ans:["街の中心部に住んでいます。", "machi no chuushinbu ni sunde imasu"]},
+      {it:"Hai sempre vissuto qui?", ans:["ずっとここに住んでいますか？", "zutto koko ni sunde imasu ka"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["2年前にここに引っ越してきました。", "ninen mae ni koko ni hikkoshite kimashita"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["ご両親はどちらの出身ですか？", "goryoushin wa dochira no shusshin desu ka"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["両親はイタリア南部の出身です。", "ryoushin wa itaria nanbu no shusshin desu"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["故郷が恋しいですか？", "furusato ga koishii desu ka"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["はい、特に食べ物がとても恋しいです。", "hai tokuni tabemono ga totemo koishii desu"]},
+    ],
+    [ // Livello 13 · presentazione (parte 1)
       {it:"Come ti chiami?", ans:["お名前は何ですか", "onamae wa nan desu ka"]},
       {it:"Mi chiamo Marco, piacere.", ans:["マルコと申します、よろしくお願いします", "maruko to moushimasu yoroshiku onegaishimasu"]},
       {it:"Che lavoro fai?", ans:["お仕事は何ですか", "oshigoto wa nan desu ka"]},
@@ -2844,6 +2976,16 @@ const BEGINNER = {
       {it:"Ho ventotto anni.", ans:["28歳です", "nijuuhassai desu"]},
       {it:"Quali sono i tuoi hobby?", ans:["趣味は何ですか", "shumi wa nan desu ka"]},
       {it:"Mi piace leggere e viaggiare.", ans:["読書と旅行が好きです", "dokusho to ryokou ga suki desu"]},
+    ],
+    [ // Livello 14 · presentazione (parte 2)
+      {it:"Sei sposato o single?", ans:["結婚していますか、それとも独身ですか？", "kekkon shite imasu ka soretomo dokushin desu ka"]},
+      {it:"Sono sposato con due figli.", ans:["結婚していて、子供が二人います。", "kekkon shite ite kodomo ga futari imasu"]},
+      {it:"Con chi vivi?", ans:["誰と住んでいますか？", "dare to sunde imasu ka"]},
+      {it:"Vivo da solo in un appartamento.", ans:["アパートに一人で住んでいます。", "apaato ni hitori de sunde imasu"]},
+      {it:"Che cosa studi all'università?", ans:["大学で何を勉強していますか？", "daigaku de nani wo benkyou shite imasu ka"]},
+      {it:"Studio economia al secondo anno.", ans:["経済学を勉強していて、2年生です。", "keizaigaku wo benkyou shite ite ninensei desu"]},
+      {it:"Hai fratelli o sorelle?", ans:["兄弟姉妹はいますか？", "kyoudai shimai wa imasu ka"]},
+      {it:"Ho una sorella più piccola.", ans:["妹が一人います。", "imouto ga hitori imasu"]},
     ],
     [ // Livello 13 (ex 11)
       {it:"Dov'è il banco del check-in?", ans:["チェックインカウンターはどこですか？","chekkuin kauntaa wa doko desu ka"]},
@@ -3712,7 +3854,7 @@ function logMistake(it, correct){
 }
 function freshProgressAllLevels(){
   const p = {};
-  for(let lvl=1; lvl<=22; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
+  for(let lvl=1; lvl<=24; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
   return p;
 }
 
@@ -3723,7 +3865,7 @@ async function loadState(lang){
   }catch(e){ state = { streak:0, lastDate:null, done:[], notebook:[] }; }
 
   if(!state.beginner){
-    state.beginner = { direction:'to_target', level:1, progress: freshProgressAllLevels(), _migratedAirportLevels2026:true };
+    state.beginner = { direction:'to_target', level:1, progress: freshProgressAllLevels(), _migratedAirportLevels2026:true, _migratedSplitLevels2026:true };
   } else if(!state.beginner.progress){
     let oldToTarget, oldToIt;
     if(state.beginner.to_target){
@@ -3738,7 +3880,8 @@ async function loadState(lang){
       direction: state.beginner.direction || 'to_target',
       level: 1,
       progress: freshProgressAllLevels(),
-      _migratedAirportLevels2026: true
+      _migratedAirportLevels2026: true,
+      _migratedSplitLevels2026: true
     };
     state.beginner.progress[1] = { to_target: oldToTarget, to_it: oldToIt };
   } else {
@@ -3755,7 +3898,25 @@ async function loadState(lang){
       if(state.beginner.level >= 11) state.beginner.level = Math.min(state.beginner.level + 2, 22);
       state.beginner._migratedAirportLevels2026 = true;
     }
-    for(let lvl=1; lvl<=22; lvl++){
+    if(!state.beginner._migratedSplitLevels2026){
+      // Migrazione una tantum: "Di dove sei?" e "Presentazione" sono stati sdoppiati in due parti
+      // ciascuno (8+8 frasi). Il vecchio Livello 11 resta 11 (stesso contenuto). Il vecchio Livello 12
+      // ("Presentazione") diventa 13. I vecchi 13-22 ("In Aeroporto") traslocano a 15-24.
+      for(let lvl=22; lvl>=13; lvl--){
+        if(state.beginner.progress[lvl]){
+          state.beginner.progress[lvl+2] = state.beginner.progress[lvl];
+        }
+      }
+      if(state.beginner.progress[12]){
+        state.beginner.progress[13] = state.beginner.progress[12];
+      }
+      state.beginner.progress[12] = { to_target: freshDirState(), to_it: freshDirState() };
+      state.beginner.progress[14] = { to_target: freshDirState(), to_it: freshDirState() };
+      if(state.beginner.level === 12) state.beginner.level = 13;
+      else if(state.beginner.level >= 13) state.beginner.level = Math.min(state.beginner.level + 2, 24);
+      state.beginner._migratedSplitLevels2026 = true;
+    }
+    for(let lvl=1; lvl<=24; lvl++){
       if(!state.beginner.progress[lvl]) state.beginner.progress[lvl] = { to_target: freshDirState(), to_it: freshDirState() };
     }
     if(!state.beginner.level) state.beginner.level = 1;
@@ -4292,7 +4453,7 @@ function renderBeginner(){
     document.getElementById('bpPrompt').removeAttribute('dir');
     document.getElementById('bpPrompt').classList.remove('rtl-text');
 
-    const nextLevel = level < 22 ? level + 1 : null;
+    const nextLevel = level < 24 ? level + 1 : null;
     const otherDirDone = state.beginner.progress[level][dir === 'to_target' ? 'to_it' : 'to_target'].index >= list.length;
     let nextStepMsg;
     if(nextLevel && otherDirDone){
@@ -4990,7 +5151,7 @@ const ACHIEVEMENTS = [
   { id:'poly3', icon:'🌍', name:'Poliglotta (3 lingue)', check: s => s.languagesWithProgress >= 3 },
   { id:'poly7', icon:'🗺️', name:'Iperpoliglotta (7 lingue)', check: s => s.languagesWithProgress >= 7 },
   { id:'base10', icon:'🎓', name:'Diplomato Base', check: s => s.maxBaseLevelDone >= 10 },
-  { id:'airport', icon:'✈️', name:"Pronto per l'aeroporto", check: s => s.maxBaseLevelDone >= 22 },
+  { id:'airport', icon:'✈️', name:"Pronto per l'aeroporto", check: s => s.maxBaseLevelDone >= 24 },
   { id:'impara', icon:'🧠', name:'Impara Superstar', check: s => s.imparaFullyDone },
   { id:'notebook10', icon:'📓', name:'Studente diligente', check: s => s.notebookEntries >= 10 },
   { id:'hundred', icon:'💯', name:'Cento frasi', check: s => s.totalDone >= 100 },
@@ -5009,7 +5170,7 @@ async function computeGlobalStats(){
     if(s.streak && s.streak > stats.maxStreak) stats.maxStreak = s.streak;
     if(s.notebook && s.notebook.length){ stats.notebookEntries += s.notebook.length; hasProgress = true; }
     if(s.beginner && s.beginner.progress){
-      for(let lvl=1; lvl<=22; lvl++){
+      for(let lvl=1; lvl<=24; lvl++){
         const p = s.beginner.progress[lvl];
         if(!p || !p.to_target) continue;
         const listLen = (BEGINNER[lang] && BEGINNER[lang][lvl-1]) ? BEGINNER[lang][lvl-1].length : null;
@@ -5085,23 +5246,25 @@ const MAP_NODES = [
   { id:'base-9', label:'Percorso Base · Livello 9', kind:'percorso', level:9, gating:true },
   { id:'base-10', label:'Percorso Base · Livello 10', kind:'percorso', level:10, gating:true },
   { id:'sfida-5', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
-  { id:'base-11', label:'Percorso Base · Livello 11 (Di dove sei?)', kind:'percorso', level:11, gating:true },
-  { id:'base-12', label:'Percorso Base · Livello 12 (Presentazione)', kind:'percorso', level:12, gating:true },
+  { id:'base-11', label:'Percorso Base · Livello 11 (Di dove sei &middot; parte 1)', kind:'percorso', level:11, gating:true },
+  { id:'base-12', label:'Percorso Base · Livello 12 (Di dove sei &middot; parte 2)', kind:'percorso', level:12, gating:true },
+  { id:'base-13', label:'Percorso Base · Livello 13 (Presentazione &middot; parte 1)', kind:'percorso', level:13, gating:true },
+  { id:'base-14', label:'Percorso Base · Livello 14 (Presentazione &middot; parte 2)', kind:'percorso', level:14, gating:true },
   { id:'sfida-5b', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
-  { id:'base-13', label:'Percorso Base · Livello 13 (In Aeroporto)', kind:'percorso', level:13, gating:true },
-  { id:'base-14', label:'Percorso Base · Livello 14 (In Aeroporto)', kind:'percorso', level:14, gating:true },
-  { id:'sfida-6', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
   { id:'base-15', label:'Percorso Base · Livello 15 (In Aeroporto)', kind:'percorso', level:15, gating:true },
   { id:'base-16', label:'Percorso Base · Livello 16 (In Aeroporto)', kind:'percorso', level:16, gating:true },
-  { id:'sfida-7', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
+  { id:'sfida-6', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
   { id:'base-17', label:'Percorso Base · Livello 17 (In Aeroporto)', kind:'percorso', level:17, gating:true },
   { id:'base-18', label:'Percorso Base · Livello 18 (In Aeroporto)', kind:'percorso', level:18, gating:true },
-  { id:'sfida-8', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
+  { id:'sfida-7', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
   { id:'base-19', label:'Percorso Base · Livello 19 (In Aeroporto)', kind:'percorso', level:19, gating:true },
   { id:'base-20', label:'Percorso Base · Livello 20 (In Aeroporto)', kind:'percorso', level:20, gating:true },
-  { id:'sfida-9', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
+  { id:'sfida-8', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
   { id:'base-21', label:'Percorso Base · Livello 21 (In Aeroporto)', kind:'percorso', level:21, gating:true },
   { id:'base-22', label:'Percorso Base · Livello 22 (In Aeroporto)', kind:'percorso', level:22, gating:true },
+  { id:'sfida-9', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
+  { id:'base-23', label:'Percorso Base · Livello 23 (In Aeroporto)', kind:'percorso', level:23, gating:true },
+  { id:'base-24', label:'Percorso Base · Livello 24 (In Aeroporto)', kind:'percorso', level:24, gating:true },
   { id:'sfida-10', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
 ];
 
@@ -5128,7 +5291,19 @@ function renderMap(){
   wrap.innerHTML = '';
   let prevGateComplete = true;
   MAP_NODES.forEach((node, i)=>{
+    if(node.id === 'base-11'){
+      const divider = document.createElement('div');
+      divider.className = 'map-chapter-divider';
+      divider.innerHTML = '<span>&#128205; Di dove sei</span>';
+      wrap.appendChild(divider);
+    }
     if(node.id === 'base-13'){
+      const divider = document.createElement('div');
+      divider.className = 'map-chapter-divider';
+      divider.innerHTML = '<span>&#128075; Presentazione</span>';
+      wrap.appendChild(divider);
+    }
+    if(node.id === 'base-15'){
       const divider = document.createElement('div');
       divider.className = 'map-chapter-divider';
       divider.innerHTML = '<span>&#9992;&#65039; In Aeroporto</span>';
