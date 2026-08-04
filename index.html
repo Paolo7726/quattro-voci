@@ -4410,8 +4410,8 @@ function renderBeginner(){
   document.querySelectorAll('#bpDirTabs button').forEach(b=>{
     b.classList.toggle('active', b.dataset.dir === dir);
   });
-  document.getElementById('bpChapterTag').textContent = (level >= 13)
-    ? '\u2708\uFE0F Capitolo \u00b7 In Aeroporto'
+  document.getElementById('bpChapterTag').textContent = LEVEL_CHAPTER_LABEL[level]
+    ? LEVEL_CHAPTER_LABEL[level]
     : 'Percorso iniziale \u00b7 da zero';
 
   if(!list){
@@ -5230,6 +5230,24 @@ async function renderTraguardi(){
 }
 
 /* ---------- MAPPA A TAPPE ---------- */
+// Etichette dei sotto-capitoli del Percorso Base, livelli 11-24 (i livelli 1-10 restano "Percorso Base").
+const LEVEL_CHAPTER_LABEL = {
+  11: 'Di dove sei · parte 1',
+  12: 'Di dove sei · parte 2',
+  13: 'Presentazione · parte 1',
+  14: 'Presentazione · parte 2',
+  15: 'In Aeroporto · parte 1',
+  16: 'In Aeroporto · parte 2',
+  17: 'In Aeroporto · parte 3',
+  18: 'In Aeroporto · parte 4',
+  19: 'In Aeroporto · parte 5',
+  20: 'In Aeroporto · parte 6',
+  21: 'In Aeroporto · parte 7',
+  22: 'In Aeroporto · parte 8',
+  23: 'In Aeroporto · parte 9',
+  24: 'In Aeroporto · parte 10',
+};
+
 const MAP_NODES = [
   { id:'base-1', label:'Percorso Base · Livello 1', kind:'percorso', level:1, gating:true },
   { id:'base-2', label:'Percorso Base · Livello 2', kind:'percorso', level:2, gating:true },
@@ -5251,20 +5269,20 @@ const MAP_NODES = [
   { id:'base-13', label:'Percorso Base · Livello 13 (Presentazione &middot; parte 1)', kind:'percorso', level:13, gating:true },
   { id:'base-14', label:'Percorso Base · Livello 14 (Presentazione &middot; parte 2)', kind:'percorso', level:14, gating:true },
   { id:'sfida-5b', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
-  { id:'base-15', label:'Percorso Base · Livello 15 (In Aeroporto)', kind:'percorso', level:15, gating:true },
-  { id:'base-16', label:'Percorso Base · Livello 16 (In Aeroporto)', kind:'percorso', level:16, gating:true },
+  { id:'base-15', label:'Percorso Base · Livello 15 (In Aeroporto · parte 1)', kind:'percorso', level:15, gating:true },
+  { id:'base-16', label:'Percorso Base · Livello 16 (In Aeroporto · parte 2)', kind:'percorso', level:16, gating:true },
   { id:'sfida-6', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
-  { id:'base-17', label:'Percorso Base · Livello 17 (In Aeroporto)', kind:'percorso', level:17, gating:true },
-  { id:'base-18', label:'Percorso Base · Livello 18 (In Aeroporto)', kind:'percorso', level:18, gating:true },
+  { id:'base-17', label:'Percorso Base · Livello 17 (In Aeroporto · parte 3)', kind:'percorso', level:17, gating:true },
+  { id:'base-18', label:'Percorso Base · Livello 18 (In Aeroporto · parte 4)', kind:'percorso', level:18, gating:true },
   { id:'sfida-7', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
-  { id:'base-19', label:'Percorso Base · Livello 19 (In Aeroporto)', kind:'percorso', level:19, gating:true },
-  { id:'base-20', label:'Percorso Base · Livello 20 (In Aeroporto)', kind:'percorso', level:20, gating:true },
+  { id:'base-19', label:'Percorso Base · Livello 19 (In Aeroporto · parte 5)', kind:'percorso', level:19, gating:true },
+  { id:'base-20', label:'Percorso Base · Livello 20 (In Aeroporto · parte 6)', kind:'percorso', level:20, gating:true },
   { id:'sfida-8', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
-  { id:'base-21', label:'Percorso Base · Livello 21 (In Aeroporto)', kind:'percorso', level:21, gating:true },
-  { id:'base-22', label:'Percorso Base · Livello 22 (In Aeroporto)', kind:'percorso', level:22, gating:true },
+  { id:'base-21', label:'Percorso Base · Livello 21 (In Aeroporto · parte 7)', kind:'percorso', level:21, gating:true },
+  { id:'base-22', label:'Percorso Base · Livello 22 (In Aeroporto · parte 8)', kind:'percorso', level:22, gating:true },
   { id:'sfida-9', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
-  { id:'base-23', label:'Percorso Base · Livello 23 (In Aeroporto)', kind:'percorso', level:23, gating:true },
-  { id:'base-24', label:'Percorso Base · Livello 24 (In Aeroporto)', kind:'percorso', level:24, gating:true },
+  { id:'base-23', label:'Percorso Base · Livello 23 (In Aeroporto · parte 9)', kind:'percorso', level:23, gating:true },
+  { id:'base-24', label:'Percorso Base · Livello 24 (In Aeroporto · parte 10)', kind:'percorso', level:24, gating:true },
   { id:'sfida-10', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
 ];
 
