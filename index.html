@@ -628,7 +628,7 @@
 
     <div class="rec-divider"></div>
     <span class="tag">&#9876;&#65039; Duello tra amici</span>
-    <p class="sub" style="margin-top:-2px;">Stesse 5 frasi del livello scelto sopra, cronometrate: chi finisce prima vince. Serve un account (icona in alto a destra).</p>
+    <p class="sub" style="margin-top:-2px;">5 frasi da tradurre correttamente, cronometrate: chi le finisce tutte e 5 nel minor tempo vince. Usa la direzione scelta sopra (Italiano&nbsp;&rarr;&nbsp;Lingua o il contrario). Serve un account (icona in alto a destra).</p>
     <div class="empty" id="duelLoggedOut">Accedi o registrati per sfidare un amico.</div>
     <div id="duelArea" class="hidden">
       <div class="row">
@@ -877,7 +877,9 @@
       <div class="timer-display" id="duelTimer">0.0s</div>
       <div class="phase-label" id="duelSlotTag">Frase 1/5</div>
       <div class="challenge-text" id="duelPrompt">&mdash;</div>
-      <button class="primary" id="duelNextBtn" style="width:100%; margin-top:14px;">Fatta, avanti &rarr;</button>
+      <input type="text" id="duelInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="bp-feedback" id="duelFeedback"></div>
+      <button class="primary" id="duelCheckBtn" style="width:100%; margin-top:4px;">Verifica</button>
     </div>
   </div>
 
@@ -5160,20 +5162,26 @@ document.querySelectorAll('#imDirTabs button').forEach(btn=>{
   };
 });
 
-/* ---------- DUELLO TRA AMICI (basato su Sfida del giorno) ---------- */
+/* ---------- DUELLO TRA AMICI (traduzione a tempo, su un ampio ventaglio di frasi) ---------- */
 function genDuelCode(){
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // niente 0/O/1/I per evitare ambiguità
   let code = '';
   for(let i=0;i<6;i++) code += chars[Math.floor(Math.random()*chars.length)];
   return code;
 }
-function pick5Distinct(max){
-  const n = Math.min(5, max);
+function pickNDistinct(max, n){
+  const count = Math.min(n, max);
   const arr = Array.from({length:max}, (_,i)=>i);
   for(let i=arr.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
-  return arr.slice(0, n);
+  return arr.slice(0, count);
+}
+// Ventaglio ampio: tutte le frasi di tutti i livelli del Percorso Base per la lingua corrente,
+// così ogni duello può pescare tra centinaia di frasi diverse invece di ripetersi sempre uguale.
+function duelPhrasePool(lang){
+  return BEGINNER[lang].flat();
 }
 let duelActive = null;
+let duelAttempts = 0;
 
 function renderDuelArea(){
   const loggedIn = !!(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser);
@@ -5201,19 +5209,20 @@ document.getElementById('duelCreateBtn').onclick = async ()=>{
   const btn = document.getElementById('duelCreateBtn');
   btn.disabled = true; btn.textContent = 'Creo...';
   try{
-    const level = state.sfida.level;
-    const list = CHALLENGES[level];
-    const indices = pick5Distinct(list.length);
+    const pool = duelPhrasePool(currentLang);
+    const idxs = pickNDistinct(pool.length, 5);
+    const phrases = idxs.map(i => ({ it: pool[i].it, ans: pool[i].ans }));
+    const dir = state.sfida.direction === 'to_it' ? 'to_it' : 'to_target';
     const code = genDuelCode();
     const nickname = await window.cloudAPI.getMyNickname();
     await window.cloudAPI.createDuel(code, {
       creatorUid: window.cloudAPI.currentUser.uid,
       creatorNickname: nickname,
-      lang: currentLang, level, indices, createdAt: Date.now(),
+      lang: currentLang, dir, phrases, createdAt: Date.now(),
       creatorTimeMs: null, opponentUid: null, opponentNickname: null, opponentTimeMs: null
     });
     document.getElementById('duelStatusBox').innerHTML = `<div class="sound-tip" style="font-style:normal;">Duello creato! Codice: <b style="font-size:17px; letter-spacing:2px;">${code}</b><br>Condividilo con un amico (WhatsApp, messaggio, come preferisci). Ora gioca la tua parte.</div>`;
-    startDuelPlay({ code, indices, level, lang: currentLang, role:'creator' });
+    startDuelPlay({ code, phrases, dir, lang: currentLang, role:'creator' });
   }catch(e){
     console.warn('create duel error', e);
     document.getElementById('duelStatusBox').innerHTML = '<div class="empty">Non sono riuscito a creare il duello. Riprova.</div>';
@@ -5236,7 +5245,7 @@ document.getElementById('duelJoinBtn').onclick = async ()=>{
       showDuelStatus(code, duel);
       return;
     }
-    startDuelPlay({ code, indices: duel.indices, level: duel.level, lang: duel.lang, role:'opponent', creatorNickname: duel.creatorNickname });
+    startDuelPlay({ code, phrases: duel.phrases, dir: duel.dir || 'to_target', lang: duel.lang, role:'opponent', creatorNickname: duel.creatorNickname });
   }catch(e){
     console.warn('join duel error', e);
     statusBox.innerHTML = '<div class="empty">Errore nel recuperare il duello. Riprova.</div>';
@@ -5244,10 +5253,22 @@ document.getElementById('duelJoinBtn').onclick = async ()=>{
 };
 
 function renderDuelSlot(){
-  const list = CHALLENGES[duelActive.level];
-  const idx = duelActive.indices[duelActive.slot];
-  document.getElementById('duelSlotTag').textContent = `Frase ${duelActive.slot+1}/${duelActive.indices.length}`;
-  document.getElementById('duelPrompt').textContent = list[idx].it;
+  const item = duelActive.phrases[duelActive.slot];
+  document.getElementById('duelSlotTag').textContent = `Frase ${duelActive.slot+1}/${duelActive.phrases.length}`;
+  const isNative = (duelActive.dir === 'to_target' && duelActive.lang === 'ar');
+  const showingNative = (duelActive.dir === 'to_it' && duelActive.lang === 'ar');
+  const promptEl = document.getElementById('duelPrompt');
+  promptEl.textContent = (duelActive.dir === 'to_target') ? item.it : item.ans[0];
+  promptEl.setAttribute('dir', showingNative ? 'rtl' : 'ltr');
+  promptEl.classList.toggle('rtl-text', showingNative);
+  const input = document.getElementById('duelInput');
+  input.value = '';
+  input.dir = isNative ? 'rtl' : 'ltr';
+  input.placeholder = (duelActive.dir === 'to_target') ? `Scrivi in ${LANGS[duelActive.lang].label}...` : 'Scrivi in italiano...';
+  document.getElementById('duelFeedback').textContent = '';
+  document.getElementById('duelFeedback').className = 'bp-feedback';
+  duelAttempts = 0;
+  input.focus();
 }
 
 function startDuelPlay(ctx){
@@ -5263,33 +5284,56 @@ function startDuelPlay(ctx){
   }, 100);
 }
 
-document.getElementById('duelNextBtn').onclick = async ()=>{
+async function finishDuel(){
+  clearInterval(duelActive.timerInterval);
+  const elapsed = Date.now() - duelActive.startTime;
+  document.getElementById('duelPlayModal').classList.add('hidden');
+  const finishedCtx = duelActive;
+  duelActive = null;
+  try{
+    if(finishedCtx.role === 'creator'){
+      await window.cloudAPI.updateDuel(finishedCtx.code, { creatorTimeMs: elapsed });
+    } else {
+      const nickname = await window.cloudAPI.getMyNickname();
+      await window.cloudAPI.updateDuel(finishedCtx.code, {
+        opponentUid: window.cloudAPI.currentUser.uid,
+        opponentNickname: nickname,
+        opponentTimeMs: elapsed
+      });
+    }
+    const duel = await window.cloudAPI.getDuel(finishedCtx.code);
+    showDuelStatus(finishedCtx.code, duel);
+  }catch(e){ console.warn('save duel result error', e); }
+}
+
+document.getElementById('duelCheckBtn').onclick = ()=>{
   if(!duelActive) return;
-  duelActive.slot++;
-  if(duelActive.slot >= duelActive.indices.length){
-    clearInterval(duelActive.timerInterval);
-    const elapsed = Date.now() - duelActive.startTime;
-    document.getElementById('duelPlayModal').classList.add('hidden');
-    const finishedCtx = duelActive;
-    duelActive = null;
-    try{
-      if(finishedCtx.role === 'creator'){
-        await window.cloudAPI.updateDuel(finishedCtx.code, { creatorTimeMs: elapsed });
-      } else {
-        const nickname = await window.cloudAPI.getMyNickname();
-        await window.cloudAPI.updateDuel(finishedCtx.code, {
-          opponentUid: window.cloudAPI.currentUser.uid,
-          opponentNickname: nickname,
-          opponentTimeMs: elapsed
-        });
-      }
-      const duel = await window.cloudAPI.getDuel(finishedCtx.code);
-      showDuelStatus(finishedCtx.code, duel);
-    }catch(e){ console.warn('save duel result error', e); }
-    return;
+  const item = duelActive.phrases[duelActive.slot];
+  const isNativeInput = (duelActive.dir === 'to_target' && duelActive.lang === 'ar');
+  const given = normalizeAnswer(document.getElementById('duelInput').value, isNativeInput);
+  if(!given) return;
+  const ok = (duelActive.dir === 'to_target')
+    ? item.ans.some(a => normalizeAnswer(a, isNativeInput) === given)
+    : normalizeAnswer(item.it, false) === given;
+  const fb = document.getElementById('duelFeedback');
+  if(ok){
+    fb.className = 'bp-feedback ok';
+    fb.textContent = 'Corretto ✓';
+    duelActive.slot++;
+    if(duelActive.slot >= duelActive.phrases.length){
+      setTimeout(finishDuel, 400);
+    } else {
+      setTimeout(renderDuelSlot, 400);
+    }
+  } else {
+    duelAttempts++;
+    fb.className = 'bp-feedback ko';
+    fb.textContent = duelAttempts >= 2 ? `Non corretto. Risposta: ${(duelActive.dir === 'to_target') ? item.ans[0] : item.it}` : 'Non corretto, riprova.';
   }
-  renderDuelSlot();
 };
+document.getElementById('duelInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ document.getElementById('duelCheckBtn').click(); }
+});
 document.getElementById('duelPlayClose').onclick = ()=>{
   if(duelActive && duelActive.timerInterval) clearInterval(duelActive.timerInterval);
   duelActive = null;
