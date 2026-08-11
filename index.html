@@ -486,6 +486,7 @@
         </div>
         <div class="auth-feedback" id="authFeedback"></div>
         <button class="primary" id="authSubmit" style="width:100%">Accedi</button>
+        <button type="button" id="forgotPasswordBtn" style="background:none; border:none; color:var(--ink-dim); font-size:12.5px; text-decoration:underline; cursor:pointer; padding:10px 2px 0; display:block;">Password dimenticata?</button>
         <p class="sub" style="margin-top:12px;">Facoltativo: puoi continuare a usare l'app senza account. In quel caso i progressi restano salvati solo su questo dispositivo.</p>
       </div>
 
@@ -6076,6 +6077,7 @@ document.querySelectorAll('#authTabs button').forEach(btn=>{
     document.getElementById('authModalTitle').textContent = authMode === 'login' ? 'Accedi' : 'Registrati';
     document.getElementById('authFeedback').textContent = '';
     document.getElementById('authNickname').classList.toggle('hidden', authMode !== 'signup');
+    document.getElementById('forgotPasswordBtn').classList.toggle('hidden', authMode !== 'login');
   };
 });
 
@@ -6116,6 +6118,29 @@ document.getElementById('authSubmit').onclick = async ()=>{
       window.cloudAPI.registerDirectory(nickname).catch(()=>{});
     }
     fb.textContent = '';
+  }catch(e){
+    fb.className='auth-feedback err';
+    fb.textContent = translateAuthError(e);
+  }
+};
+document.getElementById('forgotPasswordBtn').onclick = async ()=>{
+  const fb = document.getElementById('authFeedback');
+  if(!window.cloudAPI || !window.cloudAPI.enabled){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Sincronizzazione non ancora configurata su questa copia dell\'app.';
+    return;
+  }
+  const email = document.getElementById('authEmail').value.trim();
+  if(!email){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Scrivi la tua email qui sopra, poi tocca di nuovo "Password dimenticata?".';
+    return;
+  }
+  fb.className='auth-feedback'; fb.textContent = 'Invio l\'email...';
+  try{
+    await window.cloudAPI.resetPassword(email);
+    fb.className='auth-feedback ok';
+    fb.textContent = `Ti abbiamo inviato un'email a ${email} con le istruzioni per reimpostare la password. Controlla anche nello spam.`;
   }catch(e){
     fb.className='auth-feedback err';
     fb.textContent = translateAuthError(e);
@@ -6332,7 +6357,7 @@ window.addEventListener('cloud-ready', ()=>{
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-    onAuthStateChanged, signOut
+    onAuthStateChanged, signOut, sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc, increment,
@@ -6370,6 +6395,7 @@ window.addEventListener('cloud-ready', ()=>{
     async signup(email, pass){ return createUserWithEmailAndPassword(auth, email, pass); },
     async login(email, pass){ return signInWithEmailAndPassword(auth, email, pass); },
     async logout(){ return signOut(auth); },
+    async resetPassword(email){ return sendPasswordResetEmail(auth, email); },
     onAuthChange(cb){ if(auth) onAuthStateChanged(auth, cb); },
     async pushState(lang, stateObj){
       if(!auth || !auth.currentUser) return;
