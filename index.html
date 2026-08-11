@@ -672,6 +672,9 @@
       <button data-level="22">Livello 22</button>
       <button data-level="23">Livello 23</button>
       <button data-level="24">Livello 24</button>
+      <button data-level="25">Livello 25</button>
+      <button data-level="26">Livello 26</button>
+      <button data-level="27">Livello 27</button>
     </div>
     <div class="level-tabs" id="bpDirTabs">
       <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -1036,26 +1039,46 @@ const BEGINNER = {
       {it:"A che ora parte il treno?", ans:["what time does the train leave","what time does the train depart"]},
     ],
     [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["can i pay by card", "can i pay with card"]},
+      {it:"Posso pagare con la carta?", ans:["can i pay by card","can i pay with card"]},
       {it:"Dov'è la stazione più vicina?", ans:["where is the nearest station"]},
       {it:"Ho bisogno di aiuto, per favore.", ans:["i need help please"]},
-      {it:"A che ora apre il negozio?", ans:["what time does the shop open", "what time does the store open"]},
+      {it:"A che ora apre il negozio?", ans:["what time does the shop open","what time does the store open"]},
       {it:"Questo è troppo caro.", ans:["this is too expensive"]},
-      {it:"Posso avere il conto, per favore?", ans:["can i have the bill please", "can i have the check please"]},
-      {it:"Sto imparando questa lingua.", ans:["im learning this language", "i'm learning this language", "i am learning this language"]},
+      {it:"Posso avere il conto, per favore?", ans:["can i have the bill please","can i have the check please"]},
+      {it:"Sto imparando questa lingua.", ans:["im learning this language","i'm learning this language","i am learning this language"]},
       {it:"Cosa fai questo weekend?", ans:["what are you doing this weekend"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["im lost can you help me", "i'm lost can you help me", "i am lost can you help me"]},
-      {it:"Vado al mercato oggi.", ans:["im going to the market today", "i'm going to the market today", "i am going to the market today"]},
-      {it:"Che tempo fa oggi?", ans:["whats the weather like today", "what's the weather like today"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["im lost can you help me","i'm lost can you help me","i am lost can you help me"]},
+      {it:"Vado al mercato oggi.", ans:["im going to the market today","i'm going to the market today","i am going to the market today"]},
+      {it:"Che tempo fa oggi?", ans:["whats the weather like today","what's the weather like today"]},
       {it:"Dov'è il bagno, per favore?", ans:["where is the bathroom please"]},
-      {it:"Quanto costa questo?", ans:["how much does this cost", "how much is this"]},
+      {it:"Quanto costa questo?", ans:["how much does this cost","how much is this"]},
       {it:"Hai un minuto per parlare?", ans:["do you have a minute to talk"]},
       {it:"Mi piace molto questo posto.", ans:["i really like this place"]},
-      {it:"Sono stanco/a oggi.", ans:["im tired today", "i'm tired today", "i am tired today"]},
+      {it:"Sono stanco/a oggi.", ans:["im tired today","i'm tired today","i am tired today"]},
       {it:"Puoi ripetere più lentamente?", ans:["can you repeat more slowly"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["thank you so much for your help", "thanks a lot for your help"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["thank you so much for your help","thanks a lot for your help"]},
     ],
-    [ // Livello 3
+    [ // Livello 3 (ponte per principianti assoluti)
+      {it:"Buon appetito!", ans:["enjoy your meal","bon appetit"]},
+      {it:"Salute!", ans:["bless you"]},
+      {it:"A domani!", ans:["see you tomorrow"]},
+      {it:"Ci vediamo dopo!", ans:["see you later"]},
+      {it:"Come si dice questo?", ans:["how do you say this"]},
+      {it:"Non lo so.", ans:["i dont know","i don't know"]},
+      {it:"Forse.", ans:["maybe"]},
+      {it:"Sono d'accordo.", ans:["i agree"]},
+      {it:"Non sono d'accordo.", ans:["i dont agree","i don't agree","i disagree"]},
+      {it:"Hai ragione.", ans:["youre right","you're right","you are right"]},
+      {it:"Mi dispiace.", ans:["im sorry","i'm sorry","i am sorry"]},
+      {it:"Non fa niente.", ans:["never mind","it doesnt matter","it doesn't matter"]},
+      {it:"Con piacere.", ans:["with pleasure"]},
+      {it:"Certo!", ans:["of course"]},
+      {it:"Aspetta un momento, per favore.", ans:["wait a moment please"]},
+      {it:"Ho fame.", ans:["im hungry","i'm hungry","i am hungry"]},
+      {it:"Ho sete.", ans:["im thirsty","i'm thirsty","i am thirsty"]},
+      {it:"Sono felice.", ans:["im happy","i'm happy","i am happy"]},
+    ],
+    [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["i think this city is very interesting"]},
       {it:"Se avessi più tempo, viaggerei di più.", ans:["if i had more time i would travel more"]},
       {it:"Preferisco il tè al caffè.", ans:["i prefer tea to coffee"]},
@@ -1069,7 +1092,7 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["it's hard to explain exactly how i feel","it is hard to explain exactly how i feel"]},
       {it:"Spero che tutto vada per il meglio.", ans:["i hope everything goes well"]},
     ],
-    [ // Livello 4
+    [ // Livello 5
       {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["last week i visited a city i didn't know","last week i visited a city i did not know"]},
       {it:"Di solito mi sveglio presto durante la settimana.", ans:["i usually wake up early during the week"]},
       {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["could you recommend a good restaurant nearby"]},
@@ -1083,7 +1106,7 @@ const BEGINNER = {
       {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["i'm trying to improve my pronunciation every day","i am trying to improve my pronunciation every day"]},
       {it:"Qual è la differenza tra queste due opzioni?", ans:["what's the difference between these two options","what is the difference between these two options"]},
     ],
-    [ // Livello 5
+    [ // Livello 6
       {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["if i could go back i would make different choices"]},
       {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["it's important to listen to viewpoints different from your own","it is important to listen to viewpoints different from your own"]},
       {it:"Mi sono reso conto che avevo torto.", ans:["i realized that i was wrong"]},
@@ -1097,7 +1120,7 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["whatever happens i'll try to stay calm","whatever happens i will try to stay calm"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["in hindsight i would have done things differently"]},
     ],
-    [ // Livello 6
+    [ // Livello 7
       {it:"Secondo me dovremmo provare un approccio diverso.", ans:["in my opinion we should try a different approach"]},
       {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["i don't completely agree with what you said","i do not completely agree with what you said"]},
       {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["i wonder if it's really the best choice","i wonder if it is really the best choice"]},
@@ -1111,7 +1134,7 @@ const BEGINNER = {
       {it:"Se fossi in te, ci penserei due volte.", ans:["if i were you i'd think twice","if i were you i would think twice"]},
       {it:"A conti fatti, ne è valsa la pena.", ans:["all things considered it was worth it"]},
     ],
-    [ // Livello 7
+    [ // Livello 8
       {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["last year i took a trip that changed the way i see things"]},
       {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["when i was younger i used to spend hours reading at the library"]},
       {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["i still remember the first time i tried this dish"]},
@@ -1125,7 +1148,7 @@ const BEGINNER = {
       {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["over time i've learned to accept my mistakes","over time i have learned to accept my mistakes"]},
       {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["looking back i'm happy with the path i've taken","looking back i am happy with the path i have taken"]},
     ],
-    [ // Livello 8
+    [ // Livello 9
       {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["we need to submit the project by friday"]},
       {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["could we organize a meeting to clarify the details"]},
       {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["my boss asked me to review the report"]},
@@ -1139,7 +1162,7 @@ const BEGINNER = {
       {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["the interview went better than i expected"]},
       {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["we need to find a compromise that works for everyone"]},
     ],
-    [ // Livello 9
+    [ // Livello 10
       {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["if everyone did their part the world would be a better place"]},
       {it:"È probabile che le cose cambino nei prossimi anni.", ans:["it's likely that things will change in the coming years","it is likely that things will change in the coming years"]},
       {it:"Non si può sempre prevedere come andranno le cose.", ans:["you can't always predict how things will turn out","you cannot always predict how things will turn out"]},
@@ -1153,7 +1176,7 @@ const BEGINNER = {
       {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["in an ideal world everyone would have the same opportunities"]},
       {it:"Le apparenze, a volte, ingannano.", ans:["appearances can sometimes be deceiving"]},
     ],
-    [ // Livello 10
+    [ // Livello 11
       {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["i don't want to beat around the bush we need to talk about it seriously","i do not want to beat around the bush we need to talk about it seriously"]},
       {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["let's call it like it is without too much beating around the bush","let us call it like it is without too much beating around the bush"]},
       {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["i realize it wasn't easy for anyone","i realize it was not easy for anyone"]},
@@ -1167,17 +1190,17 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["you never really stop learning after all"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["in the long run honesty always pays off"]},
     ],
-    [ // Livello 11 · di dove sei (parte 1)
+    [ // Livello 12 (Di dove sei - parte 1)
       {it:"Di dove sei?", ans:["where are you from"]},
-      {it:"Sono italiano/a, di Roma.", ans:["im italian from rome", "i'm italian from rome", "i am italian from rome"]},
+      {it:"Sono italiano/a, di Roma.", ans:["im italian from rome","i'm italian from rome","i am italian from rome"]},
       {it:"Dove sei nato/a?", ans:["where were you born"]},
       {it:"Sono nato/a in una piccola città.", ans:["i was born in a small town"]},
       {it:"Da quanto tempo vivi qui?", ans:["how long have you lived here"]},
-      {it:"Vivo qui da cinque anni.", ans:["ive lived here for five years", "i've lived here for five years", "i have lived here for five years"]},
-      {it:"Qual è la tua lingua madre?", ans:["what is your native language", "whats your native language"]},
+      {it:"Vivo qui da cinque anni.", ans:["ive lived here for five years","i've lived here for five years","i have lived here for five years"]},
+      {it:"Qual è la tua lingua madre?", ans:["what is your native language","whats your native language"]},
       {it:"La mia lingua madre è l'italiano.", ans:["my native language is italian"]},
     ],
-    [ // Livello 12 · di dove sei (parte 2)
+    [ // Livello 13 (Di dove sei - parte 2)
       {it:"In quale quartiere abiti?", ans:["which neighborhood do you live in"]},
       {it:"Abito in centro città.", ans:["i live downtown"]},
       {it:"Hai sempre vissuto qui?", ans:["have you always lived here"]},
@@ -1187,19 +1210,19 @@ const BEGINNER = {
       {it:"Ti manca il tuo paese d'origine?", ans:["do you miss your home country"]},
       {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["yes i miss it a lot especially the food"]},
     ],
-    [ // Livello 13 · presentazione (parte 1)
-      {it:"Come ti chiami?", ans:["whats your name", "what's your name", "what is your name"]},
+    [ // Livello 14 (Presentazione - parte 1)
+      {it:"Come ti chiami?", ans:["whats your name","what's your name","what is your name"]},
       {it:"Mi chiamo Marco, piacere.", ans:["my name is marco nice to meet you"]},
-      {it:"Che lavoro fai?", ans:["what do you do for work", "what do you do"]},
-      {it:"Sono uno studente universitario.", ans:["im a university student", "i'm a university student", "i am a university student"]},
+      {it:"Che lavoro fai?", ans:["what do you do for work","what do you do"]},
+      {it:"Sono uno studente universitario.", ans:["im a university student","i'm a university student","i am a university student"]},
       {it:"Quanti anni hai?", ans:["how old are you"]},
-      {it:"Ho ventotto anni.", ans:["im twenty-eight years old", "i'm twenty-eight years old", "i am twenty eight years old", "im 28 years old"]},
+      {it:"Ho ventotto anni.", ans:["im twenty-eight years old","i'm twenty-eight years old","i am twenty eight years old","im 28 years old"]},
       {it:"Quali sono i tuoi hobby?", ans:["what are your hobbies"]},
-      {it:"Mi piace leggere e viaggiare.", ans:["i like reading and traveling", "i like reading and travelling"]},
+      {it:"Mi piace leggere e viaggiare.", ans:["i like reading and traveling","i like reading and travelling"]},
     ],
-    [ // Livello 14 · presentazione (parte 2)
+    [ // Livello 15 (Presentazione - parte 2)
       {it:"Sei sposato o single?", ans:["are you married or single"]},
-      {it:"Sono sposato con due figli.", ans:["im married with two children", "i'm married with two children", "i am married with two children"]},
+      {it:"Sono sposato con due figli.", ans:["im married with two children","i'm married with two children","i am married with two children"]},
       {it:"Con chi vivi?", ans:["who do you live with"]},
       {it:"Vivo da solo in un appartamento.", ans:["i live alone in an apartment"]},
       {it:"Che cosa studi all'università?", ans:["what do you study at university"]},
@@ -1207,7 +1230,27 @@ const BEGINNER = {
       {it:"Hai fratelli o sorelle?", ans:["do you have any brothers or sisters"]},
       {it:"Ho una sorella più piccola.", ans:["i have a younger sister"]},
     ],
-    [ // Livello 15 · check-in e biglietti
+    [ // Livello 16 (Dal Ristorante - parte 1)
+      {it:"Un tavolo per due, per favore.", ans:["a table for two please"]},
+      {it:"Avete un tavolo libero?", ans:["do you have a free table","do you have a table available"]},
+      {it:"Possiamo vedere il menù, per favore?", ans:["can we see the menu please"]},
+      {it:"Cosa mi consiglia?", ans:["what do you recommend"]},
+      {it:"Vorrei ordinare, per favore.", ans:["id like to order please","i'd like to order please","i would like to order please"]},
+      {it:"Per me una pizza margherita.", ans:["ill have a margherita pizza","i'll have a margherita pizza","i will have a margherita pizza"]},
+      {it:"Cosa c'è nel piatto del giorno?", ans:["whats in the dish of the day","what's in the dish of the day"]},
+      {it:"Ha qualche piatto vegetariano?", ans:["do you have any vegetarian dishes"]},
+    ],
+    [ // Livello 17 (Dal Ristorante - parte 2)
+      {it:"Vorrei un bicchiere di vino rosso.", ans:["id like a glass of red wine","i'd like a glass of red wine","i would like a glass of red wine"]},
+      {it:"Un'acqua naturale, per favore.", ans:["still water please"]},
+      {it:"Il conto, per favore.", ans:["the bill please","the check please"]},
+      {it:"Il servizio è incluso?", ans:["is service included"]},
+      {it:"Il cibo era delizioso.", ans:["the food was delicious"]},
+      {it:"Sono allergico alle noci.", ans:["im allergic to nuts","i'm allergic to nuts","i am allergic to nuts"]},
+      {it:"Posso avere ancora un po' di pane?", ans:["can i have some more bread"]},
+      {it:"Possiamo pagare separatamente?", ans:["can we pay separately"]},
+    ],
+    [ // Livello 18 (In Aeroporto - parte 1)
       {it:"Dov'è il banco del check-in?", ans:["where is the check-in desk","where is the checkin desk"]},
       {it:"Posso fare il check-in online?", ans:["can i check in online"]},
       {it:"Ho prenotato un volo per Roma.", ans:["i have booked a flight to rome","i booked a flight to rome"]},
@@ -1219,7 +1262,7 @@ const BEGINNER = {
       {it:"A che ora inizia l'imbarco?", ans:["what time does boarding start"]},
       {it:"Ho perso la carta d'imbarco, cosa devo fare?", ans:["i lost my boarding pass what should i do"]},
     ],
-    [ // Livello 12 - Sicurezza e controlli
+    [ // Livello 19 (In Aeroporto - parte 2)
       {it:"Deve togliere le scarpe per il controllo di sicurezza.", ans:["you need to take off your shoes for the security check"]},
       {it:"Metta gli oggetti metallici nel vassoio.", ans:["put the metal objects in the tray"]},
       {it:"Ha liquidi nel bagaglio a mano?", ans:["do you have liquids in your carry-on bag","do you have liquids in your carry on bag"]},
@@ -1231,7 +1274,7 @@ const BEGINNER = {
       {it:"Non è consentito portare oggetti taglienti a bordo.", ans:["sharp objects are not allowed on board"]},
       {it:"Il controllo di sicurezza durerà pochi minuti.", ans:["the security check will take a few minutes"]},
     ],
-    [ // Livello 13 - Partenze
+    [ // Livello 20 (In Aeroporto - parte 3)
       {it:"Da quale porta parte il volo per Londra?", ans:["which gate does the flight to london leave from"]},
       {it:"Il tabellone delle partenze mostra un ritardo.", ans:["the departures board shows a delay"]},
       {it:"Il nostro volo è indicato come \"in orario\".", ans:["our flight is listed as on time"]},
@@ -1243,7 +1286,7 @@ const BEGINNER = {
       {it:"La partenza è stata posticipata di un'ora.", ans:["the departure has been delayed by an hour"]},
       {it:"Buon viaggio e buon volo!", ans:["have a nice trip and a good flight"]},
     ],
-    [ // Livello 14 - Arrivi
+    [ // Livello 21 (In Aeroporto - parte 4)
       {it:"Il volo da Parigi è appena atterrato.", ans:["the flight from paris has just landed"]},
       {it:"A che ora arriva il tuo volo?", ans:["what time does your flight arrive"]},
       {it:"Sono appena arrivato in aeroporto.", ans:["i just arrived at the airport"]},
@@ -1255,7 +1298,7 @@ const BEGINNER = {
       {it:"Siamo atterrati sani e salvi.", ans:["we landed safely"]},
       {it:"Dopo l'atterraggio, restate seduti finché l'aereo non si ferma.", ans:["after landing please remain seated until the plane comes to a stop"]},
     ],
-    [ // Livello 15 - Ritardi e cancellazioni
+    [ // Livello 22 (In Aeroporto - parte 5)
       {it:"Il volo è stato cancellato per maltempo.", ans:["the flight was cancelled due to bad weather","the flight was canceled due to bad weather"]},
       {it:"Mi dispiace informarla che il suo volo è in ritardo.", ans:["im sorry to inform you that your flight is delayed","i'm sorry to inform you that your flight is delayed"]},
       {it:"L'aereo è stato sospeso per un guasto tecnico.", ans:["the plane was grounded due to a technical fault"]},
@@ -1267,7 +1310,7 @@ const BEGINNER = {
       {it:"Il volo è stato riprogrammato per domani mattina.", ans:["the flight has been rescheduled for tomorrow morning"]},
       {it:"A causa dello sciopero, molti voli sono stati cancellati.", ans:["due to the strike many flights have been cancelled","due to the strike many flights have been canceled"]},
     ],
-    [ // Livello 16 - Bagagli
+    [ // Livello 23 (In Aeroporto - parte 6)
       {it:"Dove posso ritirare il mio bagaglio?", ans:["where can i collect my luggage"]},
       {it:"Il mio bagaglio non è arrivato.", ans:["my luggage hasnt arrived","my luggage hasn't arrived","my luggage has not arrived"]},
       {it:"Ho perso una valigia, a chi devo rivolgermi?", ans:["i lost a suitcase who should i talk to"]},
@@ -1279,7 +1322,7 @@ const BEGINNER = {
       {it:"Compili questo modulo per il bagaglio smarrito.", ans:["please fill out this form for lost luggage"]},
       {it:"La valigia le sarà consegnata a casa entro domani.", ans:["your suitcase will be delivered to your home by tomorrow"]},
     ],
-    [ // Livello 17 - Gate e imbarco
+    [ // Livello 24 (In Aeroporto - parte 7)
       {it:"Il gate è stato cambiato all'ultimo momento.", ans:["the gate was changed at the last minute"]},
       {it:"Dov'è il gate numero 15?", ans:["where is gate number 15","where is gate number fifteen"]},
       {it:"L'imbarco avviene per fila, a partire dai posti in fondo.", ans:["boarding happens by row starting from the back seats"]},
@@ -1291,7 +1334,7 @@ const BEGINNER = {
       {it:"L'imbarco terminerà tra cinque minuti.", ans:["boarding will end in five minutes"]},
       {it:"Mi scusi, questo è il gate giusto per il volo per Madrid?", ans:["excuse me is this the right gate for the flight to madrid"]},
     ],
-    [ // Livello 18 - Dogana e immigrazione
+    [ // Livello 25 (In Aeroporto - parte 8)
       {it:"Ha qualcosa da dichiarare alla dogana?", ans:["do you have anything to declare at customs"]},
       {it:"Qual è il motivo del suo viaggio?", ans:["what is the purpose of your trip"]},
       {it:"Quanto tempo rimarrà nel paese?", ans:["how long will you be staying in the country"]},
@@ -1303,7 +1346,7 @@ const BEGINNER = {
       {it:"Non ho nulla da dichiarare.", ans:["i have nothing to declare"]},
       {it:"Benvenuto, buona permanenza nel nostro paese.", ans:["welcome enjoy your stay in our country"]},
     ],
-    [ // Livello 19 - Servizi in aeroporto
+    [ // Livello 26 (In Aeroporto - parte 9)
       {it:"Dov'è la sala d'attesa più vicina?", ans:["where is the nearest waiting lounge"]},
       {it:"C'è un bancomat qui in aeroporto?", ans:["is there an atm here at the airport"]},
       {it:"Dove posso cambiare valuta?", ans:["where can i exchange currency"]},
@@ -1315,7 +1358,7 @@ const BEGINNER = {
       {it:"Avete un servizio di assistenza per persone con disabilità?", ans:["do you have an assistance service for people with disabilities"]},
       {it:"Dov'è la fermata del bus navetta per il parcheggio?", ans:["where is the shuttle bus stop for the parking lot"]},
     ],
-    [ // Livello 20 - Problemi e imprevisti
+    [ // Livello 27 (In Aeroporto - parte 10)
       {it:"Ho perso la coincidenza per colpa del ritardo.", ans:["i missed my connection because of the delay"]},
       {it:"Il mio volo è stato dirottato su un altro aeroporto.", ans:["my flight was diverted to another airport"]},
       {it:"Non riesco a trovare il mio bagaglio a mano.", ans:["i cant find my carry-on luggage","i can't find my carry-on luggage","i cannot find my carry on luggage"]},
@@ -1350,26 +1393,46 @@ const BEGINNER = {
       {it:"A che ora parte il treno?", ans:["a quelle heure part le train"]},
     ],
     [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["est-ce que je peux payer par carte", "je peux payer par carte"]},
+      {it:"Posso pagare con la carta?", ans:["est-ce que je peux payer par carte","je peux payer par carte"]},
       {it:"Dov'è la stazione più vicina?", ans:["ou est la gare la plus proche"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["j'ai besoin d'aide s'il vous plait", "jai besoin daide sil vous plait"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["j'ai besoin d'aide s'il vous plait","jai besoin daide sil vous plait"]},
       {it:"A che ora apre il negozio?", ans:["a quelle heure ouvre le magasin"]},
-      {it:"Questo è troppo caro.", ans:["c'est trop cher", "cest trop cher"]},
-      {it:"Posso avere il conto, per favore?", ans:["est-ce que je peux avoir l'addition s'il vous plait", "je peux avoir laddition sil vous plait"]},
-      {it:"Sto imparando questa lingua.", ans:["j'apprends cette langue", "japprends cette langue"]},
-      {it:"Cosa fai questo weekend?", ans:["qu'est-ce que tu fais ce week-end", "quest ce que tu fais ce week-end", "quest ce que tu fais ce weekend"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["je suis perdu tu peux m'aider", "je suis perdu tu peux maider"]},
-      {it:"Vado al mercato oggi.", ans:["je vais au marche aujourd'hui", "je vais au marche aujourdhui"]},
-      {it:"Che tempo fa oggi?", ans:["quel temps fait-il aujourd'hui", "quel temps fait il aujourdhui"]},
-      {it:"Dov'è il bagno, per favore?", ans:["ou sont les toilettes s'il vous plait", "ou sont les toilettes sil vous plait"]},
+      {it:"Questo è troppo caro.", ans:["c'est trop cher","cest trop cher"]},
+      {it:"Posso avere il conto, per favore?", ans:["est-ce que je peux avoir l'addition s'il vous plait","je peux avoir laddition sil vous plait"]},
+      {it:"Sto imparando questa lingua.", ans:["j'apprends cette langue","japprends cette langue"]},
+      {it:"Cosa fai questo weekend?", ans:["qu'est-ce que tu fais ce week-end","quest ce que tu fais ce week-end","quest ce que tu fais ce weekend"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["je suis perdu tu peux m'aider","je suis perdu tu peux maider"]},
+      {it:"Vado al mercato oggi.", ans:["je vais au marche aujourd'hui","je vais au marche aujourdhui"]},
+      {it:"Che tempo fa oggi?", ans:["quel temps fait-il aujourd'hui","quel temps fait il aujourdhui"]},
+      {it:"Dov'è il bagno, per favore?", ans:["ou sont les toilettes s'il vous plait","ou sont les toilettes sil vous plait"]},
       {it:"Quanto costa questo?", ans:["combien ca coute"]},
       {it:"Hai un minuto per parlare?", ans:["tu as une minute pour parler"]},
-      {it:"Mi piace molto questo posto.", ans:["j'aime beaucoup cet endroit", "jaime beaucoup cet endroit"]},
-      {it:"Sono stanco/a oggi.", ans:["je suis fatigue aujourd'hui", "je suis fatigue aujourdhui"]},
-      {it:"Puoi ripetere più lentamente?", ans:["peux-tu repeter plus lentement", "peux tu repeter plus lentement"]},
+      {it:"Mi piace molto questo posto.", ans:["j'aime beaucoup cet endroit","jaime beaucoup cet endroit"]},
+      {it:"Sono stanco/a oggi.", ans:["je suis fatigue aujourd'hui","je suis fatigue aujourdhui"]},
+      {it:"Puoi ripetere più lentamente?", ans:["peux-tu repeter plus lentement","peux tu repeter plus lentement"]},
       {it:"Grazie mille per il tuo aiuto.", ans:["merci beaucoup pour ton aide"]},
     ],
-    [ // Livello 3
+    [ // Livello 3 (ponte per principianti assoluti)
+      {it:"Buon appetito!", ans:["bon appetit"]},
+      {it:"Salute!", ans:["a tes souhaits","a vos souhaits"]},
+      {it:"A domani!", ans:["a demain"]},
+      {it:"Ci vediamo dopo!", ans:["a plus tard"]},
+      {it:"Come si dice questo?", ans:["comment dit-on ca","comment dit on ca"]},
+      {it:"Non lo so.", ans:["je ne sais pas"]},
+      {it:"Forse.", ans:["peut-etre","peut etre"]},
+      {it:"Sono d'accordo.", ans:["je suis d'accord","je suis daccord"]},
+      {it:"Non sono d'accordo.", ans:["je ne suis pas d'accord","je ne suis pas daccord"]},
+      {it:"Hai ragione.", ans:["tu as raison"]},
+      {it:"Mi dispiace.", ans:["je suis desole","je suis désolé"]},
+      {it:"Non fa niente.", ans:["ce n'est pas grave","ce nest pas grave"]},
+      {it:"Con piacere.", ans:["avec plaisir"]},
+      {it:"Certo!", ans:["bien sur"]},
+      {it:"Aspetta un momento, per favore.", ans:["attends un moment s'il te plait","attends un moment sil te plait"]},
+      {it:"Ho fame.", ans:["j'ai faim","jai faim"]},
+      {it:"Ho sete.", ans:["j'ai soif","jai soif"]},
+      {it:"Sono felice.", ans:["je suis content","je suis contente"]},
+    ],
+    [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["je pense que cette ville est tres interessante"]},
       {it:"Se avessi più tempo, viaggerei di più.", ans:["si j'avais plus de temps je voyagerais plus","si javais plus de temps je voyagerais plus"]},
       {it:"Preferisco il tè al caffè.", ans:["je prefere le the au cafe","je préfère le thé au café"]},
@@ -1383,7 +1446,7 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["c'est difficile d'expliquer exactement ce que je ressens","cest difficile dexpliquer exactement ce que je ressens"]},
       {it:"Spero che tutto vada per il meglio.", ans:["j'espere que tout se passera bien","jespere que tout se passera bien"]},
     ],
-    [ // Livello 4
+    [ // Livello 5
       {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["la semaine derniere j'ai visite une ville que je ne connaissais pas","la semaine dernière jai visité une ville que je ne connaissais pas"]},
       {it:"Di solito mi sveglio presto durante la settimana.", ans:["d'habitude je me reveille tot en semaine","dhabitude je me réveille tôt en semaine"]},
       {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["pourrais-tu me recommander un bon restaurant pres d'ici","pourrais tu me recommander un bon restaurant près dici"]},
@@ -1397,7 +1460,7 @@ const BEGINNER = {
       {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["j'essaie d'ameliorer ma prononciation chaque jour","jessaie daméliorer ma prononciation chaque jour"]},
       {it:"Qual è la differenza tra queste due opzioni?", ans:["quelle est la difference entre ces deux options"]},
     ],
-    [ // Livello 5
+    [ // Livello 6
       {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["si je pouvais revenir en arriere je ferais des choix differents"]},
       {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["il est important d'ecouter des points de vue differents du sien","il est important découter des points de vue différents du sien"]},
       {it:"Mi sono reso conto che avevo torto.", ans:["je me suis rendu compte que j'avais tort","je me suis rendu compte que javais tort"]},
@@ -1411,7 +1474,7 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["quoi qu'il arrive j'essaierai de rester calme","quoi quil arrive jessaierai de rester calme"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["avec le recul j'aurais fait les choses differemment","avec le recul jaurais fait les choses différemment"]},
     ],
-    [ // Livello 6
+    [ // Livello 7
       {it:"Secondo me dovremmo provare un approccio diverso.", ans:["a mon avis nous devrions essayer une approche differente"]},
       {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["je ne suis pas tout a fait d'accord avec ce que tu as dit","je ne suis pas tout à fait daccord avec ce que tu as dit"]},
       {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["je me demande si c'est vraiment le meilleur choix","je me demande si cest vraiment le meilleur choix"]},
@@ -1425,7 +1488,7 @@ const BEGINNER = {
       {it:"Se fossi in te, ci penserei due volte.", ans:["si j'etais toi j'y reflechirais a deux fois","si jétais toi jy réfléchirais à deux fois"]},
       {it:"A conti fatti, ne è valsa la pena.", ans:["tout compte fait ca en valait la peine","tout compte fait ça en valait la peine"]},
     ],
-    [ // Livello 7
+    [ // Livello 8
       {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["l'annee derniere j'ai fait un voyage qui a change ma facon de voir les choses","lannée dernière jai fait un voyage qui a changé ma façon de voir les choses"]},
       {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["quand j'etais plus jeune je passais des heures a lire a la bibliotheque","quand jétais plus jeune je passais des heures à lire à la bibliothèque"]},
       {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["je me souviens encore de la premiere fois que j'ai goute ce plat","je me souviens encore de la première fois que jai goûté ce plat"]},
@@ -1439,7 +1502,7 @@ const BEGINNER = {
       {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["avec le temps j'ai appris a accepter mes erreurs","avec le temps jai appris à accepter mes erreurs"]},
       {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["en regardant en arriere je suis content du chemin parcouru","en regardant en arrière je suis content du chemin parcouru"]},
     ],
-    [ // Livello 8
+    [ // Livello 9
       {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["nous devons rendre le projet avant vendredi"]},
       {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["pourrions-nous organiser une reunion pour clarifier les details","pourrions nous organiser une réunion pour clarifier les détails"]},
       {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mon patron m'a demande de revoir le rapport","mon patron ma demandé de revoir le rapport"]},
@@ -1453,7 +1516,7 @@ const BEGINNER = {
       {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["l'entretien s'est mieux passe que je ne le pensais","lentretien sest mieux passé que je ne le pensais"]},
       {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["nous devons trouver un compromis qui convienne a tout le monde"]},
     ],
-    [ // Livello 9
+    [ // Livello 10
       {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["si tout le monde faisait sa part le monde serait meilleur"]},
       {it:"È probabile che le cose cambino nei prossimi anni.", ans:["il est probable que les choses changent dans les prochaines annees","il est probable que les choses changent dans les prochaines années"]},
       {it:"Non si può sempre prevedere come andranno le cose.", ans:["on ne peut pas toujours prevoir comment les choses vont tourner","on ne peut pas toujours prévoir comment les choses vont tourner"]},
@@ -1467,7 +1530,7 @@ const BEGINNER = {
       {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["dans un monde ideal tout le monde aurait les memes chances","dans un monde idéal tout le monde aurait les mêmes chances"]},
       {it:"Le apparenze, a volte, ingannano.", ans:["les apparences sont parfois trompeuses"]},
     ],
-    [ // Livello 10
+    [ // Livello 11
       {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["je ne veux pas tourner autour du pot nous devons en parler serieusement","je ne veux pas tourner autour du pot nous devons en parler sérieusement"]},
       {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["disons les choses comme elles sont sans trop de detours","disons les choses comme elles sont sans trop de détours"]},
       {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["je me rends compte que ca n'a ete facile pour personne","je me rends compte que ça na été facile pour personne"]},
@@ -1481,47 +1544,67 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["on n'arrete jamais vraiment d'apprendre au fond","on narrête jamais vraiment dapprendre au fond"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["a la longue la sincerite paie toujours","à la longue la sincérité paie toujours"]},
     ],
-    [ // Livello 11 · di dove sei (parte 1)
-      {it:"Di dove sei?", ans:["d'ou viens-tu", "dou viens tu"]},
-      {it:"Sono italiano/a, di Roma.", ans:["je suis italien de rome", "je suis italienne de rome"]},
-      {it:"Dove sei nato/a?", ans:["ou es-tu ne", "ou es tu ne", "ou es-tu nee", "ou es tu nee"]},
-      {it:"Sono nato/a in una piccola città.", ans:["je suis ne dans une petite ville", "je suis nee dans une petite ville"]},
-      {it:"Da quanto tempo vivi qui?", ans:["depuis combien de temps vis-tu ici", "depuis combien de temps vis tu ici"]},
+    [ // Livello 12 (Di dove sei - parte 1)
+      {it:"Di dove sei?", ans:["d'ou viens-tu","dou viens tu"]},
+      {it:"Sono italiano/a, di Roma.", ans:["je suis italien de rome","je suis italienne de rome"]},
+      {it:"Dove sei nato/a?", ans:["ou es-tu ne","ou es tu ne","ou es-tu nee","ou es tu nee"]},
+      {it:"Sono nato/a in una piccola città.", ans:["je suis ne dans une petite ville","je suis nee dans une petite ville"]},
+      {it:"Da quanto tempo vivi qui?", ans:["depuis combien de temps vis-tu ici","depuis combien de temps vis tu ici"]},
       {it:"Vivo qui da cinque anni.", ans:["je vis ici depuis cinq ans"]},
       {it:"Qual è la tua lingua madre?", ans:["quelle est ta langue maternelle"]},
-      {it:"La mia lingua madre è l'italiano.", ans:["ma langue maternelle est l'italien", "ma langue maternelle est litalien"]},
+      {it:"La mia lingua madre è l'italiano.", ans:["ma langue maternelle est l'italien","ma langue maternelle est litalien"]},
     ],
-    [ // Livello 12 · di dove sei (parte 2)
-      {it:"In quale quartiere abiti?", ans:["dans quel quartier habites-tu", "dans quel quartier habites tu"]},
-      {it:"Abito in centro città.", ans:["j'habite dans le centre-ville", "jhabite dans le centre ville"]},
-      {it:"Hai sempre vissuto qui?", ans:["as-tu toujours vecu ici", "as tu toujours vecu ici"]},
+    [ // Livello 13 (Di dove sei - parte 2)
+      {it:"In quale quartiere abiti?", ans:["dans quel quartier habites-tu","dans quel quartier habites tu"]},
+      {it:"Abito in centro città.", ans:["j'habite dans le centre-ville","jhabite dans le centre ville"]},
+      {it:"Hai sempre vissuto qui?", ans:["as-tu toujours vecu ici","as tu toujours vecu ici"]},
       {it:"Mi sono trasferito qui due anni fa.", ans:["je me suis installe ici il y a deux ans"]},
-      {it:"Da dove vengono i tuoi genitori?", ans:["d'ou viennent tes parents", "dou viennent tes parents"]},
-      {it:"I miei genitori vengono dal sud Italia.", ans:["mes parents viennent du sud de l'italie", "mes parents viennent du sud de litalie"]},
-      {it:"Ti manca il tuo paese d'origine?", ans:["ton pays d'origine te manque-t-il", "ton pays dorigine te manque t il"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["d'ou viennent tes parents","dou viennent tes parents"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["mes parents viennent du sud de l'italie","mes parents viennent du sud de litalie"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["ton pays d'origine te manque-t-il","ton pays dorigine te manque t il"]},
       {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["oui il me manque beaucoup surtout la nourriture"]},
     ],
-    [ // Livello 13 · presentazione (parte 1)
-      {it:"Come ti chiami?", ans:["comment tu t'appelles", "comment tu tappelles"]},
-      {it:"Mi chiamo Marco, piacere.", ans:["je m'appelle marco enchante", "je mappelle marco enchante"]},
-      {it:"Che lavoro fai?", ans:["qu'est-ce que tu fais dans la vie", "quest ce que tu fais dans la vie"]},
-      {it:"Sono uno studente universitario.", ans:["je suis etudiant a l'universite", "je suis etudiant a luniversite", "je suis etudiante a luniversite"]},
-      {it:"Quanti anni hai?", ans:["quel age as-tu", "quel age as tu"]},
-      {it:"Ho ventotto anni.", ans:["j'ai vingt-huit ans", "jai vingt huit ans"]},
+    [ // Livello 14 (Presentazione - parte 1)
+      {it:"Come ti chiami?", ans:["comment tu t'appelles","comment tu tappelles"]},
+      {it:"Mi chiamo Marco, piacere.", ans:["je m'appelle marco enchante","je mappelle marco enchante"]},
+      {it:"Che lavoro fai?", ans:["qu'est-ce que tu fais dans la vie","quest ce que tu fais dans la vie"]},
+      {it:"Sono uno studente universitario.", ans:["je suis etudiant a l'universite","je suis etudiant a luniversite","je suis etudiante a luniversite"]},
+      {it:"Quanti anni hai?", ans:["quel age as-tu","quel age as tu"]},
+      {it:"Ho ventotto anni.", ans:["j'ai vingt-huit ans","jai vingt huit ans"]},
       {it:"Quali sono i tuoi hobby?", ans:["quels sont tes loisirs"]},
-      {it:"Mi piace leggere e viaggiare.", ans:["j'aime lire et voyager", "jaime lire et voyager"]},
+      {it:"Mi piace leggere e viaggiare.", ans:["j'aime lire et voyager","jaime lire et voyager"]},
     ],
-    [ // Livello 14 · presentazione (parte 2)
-      {it:"Sei sposato o single?", ans:["es-tu marie ou celibataire", "es tu marie ou celibataire"]},
+    [ // Livello 15 (Presentazione - parte 2)
+      {it:"Sei sposato o single?", ans:["es-tu marie ou celibataire","es tu marie ou celibataire"]},
       {it:"Sono sposato con due figli.", ans:["je suis marie avec deux enfants"]},
-      {it:"Con chi vivi?", ans:["avec qui habites-tu", "avec qui habites tu"]},
-      {it:"Vivo da solo in un appartamento.", ans:["j'habite seul dans un appartement", "jhabite seul dans un appartement"]},
-      {it:"Che cosa studi all'università?", ans:["qu'est-ce que tu etudies a l'universite", "quest ce que tu etudies a luniversite"]},
-      {it:"Studio economia al secondo anno.", ans:["j'etudie l'economie en deuxieme annee", "jetudie leconomie en deuxieme annee"]},
-      {it:"Hai fratelli o sorelle?", ans:["as-tu des freres ou soeurs", "as tu des freres ou soeurs"]},
-      {it:"Ho una sorella più piccola.", ans:["j'ai une petite soeur", "jai une petite soeur"]},
+      {it:"Con chi vivi?", ans:["avec qui habites-tu","avec qui habites tu"]},
+      {it:"Vivo da solo in un appartamento.", ans:["j'habite seul dans un appartement","jhabite seul dans un appartement"]},
+      {it:"Che cosa studi all'università?", ans:["qu'est-ce que tu etudies a l'universite","quest ce que tu etudies a luniversite"]},
+      {it:"Studio economia al secondo anno.", ans:["j'etudie l'economie en deuxieme annee","jetudie leconomie en deuxieme annee"]},
+      {it:"Hai fratelli o sorelle?", ans:["as-tu des freres ou soeurs","as tu des freres ou soeurs"]},
+      {it:"Ho una sorella più piccola.", ans:["j'ai une petite soeur","jai une petite soeur"]},
     ],
-    [ // Livello 13 (ex 11)
+    [ // Livello 16 (Dal Ristorante - parte 1)
+      {it:"Un tavolo per due, per favore.", ans:["une table pour deux s'il vous plait","une table pour deux sil vous plait"]},
+      {it:"Avete un tavolo libero?", ans:["avez-vous une table libre","avez vous une table libre"]},
+      {it:"Possiamo vedere il menù, per favore?", ans:["pouvons-nous voir le menu s'il vous plait","pouvons nous voir le menu sil vous plait"]},
+      {it:"Cosa mi consiglia?", ans:["que me conseillez-vous","que me conseillez vous"]},
+      {it:"Vorrei ordinare, per favore.", ans:["je voudrais commander s'il vous plait","je voudrais commander sil vous plait"]},
+      {it:"Per me una pizza margherita.", ans:["je prendrai une pizza margherita"]},
+      {it:"Cosa c'è nel piatto del giorno?", ans:["qu'y a-t-il dans le plat du jour","quy a t il dans le plat du jour"]},
+      {it:"Ha qualche piatto vegetariano?", ans:["avez-vous des plats vegetariens","avez vous des plats vegetariens"]},
+    ],
+    [ // Livello 17 (Dal Ristorante - parte 2)
+      {it:"Vorrei un bicchiere di vino rosso.", ans:["je voudrais un verre de vin rouge"]},
+      {it:"Un'acqua naturale, per favore.", ans:["une eau plate s'il vous plait","une eau plate sil vous plait"]},
+      {it:"Il conto, per favore.", ans:["l'addition s'il vous plait","laddition sil vous plait"]},
+      {it:"Il servizio è incluso?", ans:["le service est-il compris","le service est il compris"]},
+      {it:"Il cibo era delizioso.", ans:["le repas etait delicieux"]},
+      {it:"Sono allergico alle noci.", ans:["je suis allergique aux noix"]},
+      {it:"Posso avere ancora un po' di pane?", ans:["puis-je avoir encore un peu de pain","puis je avoir encore un peu de pain"]},
+      {it:"Possiamo pagare separatamente?", ans:["pouvons-nous payer separement","pouvons nous payer separement"]},
+    ],
+    [ // Livello 18 (In Aeroporto - parte 1)
       {it:"Dov'è il banco del check-in?", ans:["ou est le comptoir d'enregistrement","ou est le comptoir denregistrement"]},
       {it:"Posso fare il check-in online?", ans:["puis-je faire l'enregistrement en ligne","puis je faire lenregistrement en ligne"]},
       {it:"Ho prenotato un volo per Roma.", ans:["j'ai reserve un vol pour rome","jai reserve un vol pour rome"]},
@@ -1533,7 +1616,7 @@ const BEGINNER = {
       {it:"A che ora inizia l'imbarco?", ans:["a quelle heure commence l'embarquement","a quelle heure commence lembarquement"]},
       {it:"Ho perso la carta d'imbarco, cosa devo fare?", ans:["j'ai perdu ma carte d'embarquement que dois-je faire","jai perdu ma carte dembarquement que dois je faire"]},
     ],
-    [ // Livello 12
+    [ // Livello 19 (In Aeroporto - parte 2)
       {it:"Deve togliere le scarpe per il controllo di sicurezza.", ans:["vous devez enlever vos chaussures pour le controle de securite"]},
       {it:"Metta gli oggetti metallici nel vassoio.", ans:["mettez les objets metalliques dans le bac"]},
       {it:"Ha liquidi nel bagaglio a mano?", ans:["avez-vous des liquides dans votre bagage a main","avez vous des liquides dans votre bagage a main"]},
@@ -1545,7 +1628,7 @@ const BEGINNER = {
       {it:"Non è consentito portare oggetti taglienti a bordo.", ans:["il est interdit d'apporter des objets tranchants a bord","il est interdit dapporter des objets tranchants a bord"]},
       {it:"Il controllo di sicurezza durerà pochi minuti.", ans:["le controle de securite durera quelques minutes"]},
     ],
-    [ // Livello 13
+    [ // Livello 20 (In Aeroporto - parte 3)
       {it:"Da quale porta parte il volo per Londra?", ans:["de quelle porte part le vol pour londres"]},
       {it:"Il tabellone delle partenze mostra un ritardo.", ans:["le tableau des departs indique un retard"]},
       {it:"Il nostro volo è indicato come \"in orario\".", ans:["notre vol est indique comme a l'heure","notre vol est indique comme a lheure"]},
@@ -1557,7 +1640,7 @@ const BEGINNER = {
       {it:"La partenza è stata posticipata di un'ora.", ans:["le depart a ete retarde d'une heure","le depart a ete retarde dune heure"]},
       {it:"Buon viaggio e buon volo!", ans:["bon voyage et bon vol"]},
     ],
-    [ // Livello 14
+    [ // Livello 21 (In Aeroporto - parte 4)
       {it:"Il volo da Parigi è appena atterrato.", ans:["le vol en provenance de paris vient d'atterrir","le vol en provenance de paris vient datterrir"]},
       {it:"A che ora arriva il tuo volo?", ans:["a quelle heure arrive ton vol"]},
       {it:"Sono appena arrivato in aeroporto.", ans:["je viens d'arriver a l'aeroport","je viens darriver a laeroport"]},
@@ -1569,7 +1652,7 @@ const BEGINNER = {
       {it:"Siamo atterrati sani e salvi.", ans:["nous avons atterri sains et saufs"]},
       {it:"Dopo l'atterraggio, restate seduti finché l'aereo non si ferma.", ans:["apres l'atterrissage restez assis jusqu'a l'arret complet de l'avion","apres latterrissage restez assis jusqua larret complet de lavion"]},
     ],
-    [ // Livello 15
+    [ // Livello 22 (In Aeroporto - parte 5)
       {it:"Il volo è stato cancellato per maltempo.", ans:["le vol a ete annule a cause du mauvais temps"]},
       {it:"Mi dispiace informarla che il suo volo è in ritardo.", ans:["je suis desole de vous informer que votre vol est retarde"]},
       {it:"L'aereo è stato sospeso per un guasto tecnico.", ans:["l'avion a ete immobilise pour une panne technique","lavion a ete immobilise pour une panne technique"]},
@@ -1581,7 +1664,7 @@ const BEGINNER = {
       {it:"Il volo è stato riprogrammato per domani mattina.", ans:["le vol a ete reprogramme pour demain matin"]},
       {it:"A causa dello sciopero, molti voli sono stati cancellati.", ans:["a cause de la greve de nombreux vols ont ete annules"]},
     ],
-    [ // Livello 16
+    [ // Livello 23 (In Aeroporto - parte 6)
       {it:"Dove posso ritirare il mio bagaglio?", ans:["ou puis-je recuperer mes bagages","ou puis je recuperer mes bagages"]},
       {it:"Il mio bagaglio non è arrivato.", ans:["mes bagages ne sont pas arrives"]},
       {it:"Ho perso una valigia, a chi devo rivolgermi?", ans:["j'ai perdu une valise a qui dois-je m'adresser","jai perdu une valise a qui dois je madresser"]},
@@ -1593,7 +1676,7 @@ const BEGINNER = {
       {it:"Compili questo modulo per il bagaglio smarrito.", ans:["remplissez ce formulaire pour les bagages perdus"]},
       {it:"La valigia le sarà consegnata a casa entro domani.", ans:["votre valise vous sera livree a domicile d'ici demain","votre valise vous sera livree a domicile dici demain"]},
     ],
-    [ // Livello 17
+    [ // Livello 24 (In Aeroporto - parte 7)
       {it:"Il gate è stato cambiato all'ultimo momento.", ans:["la porte a ete changee a la derniere minute"]},
       {it:"Dov'è il gate numero 15?", ans:["ou est la porte numero 15","ou est la porte numero quinze"]},
       {it:"L'imbarco avviene per fila, a partire dai posti in fondo.", ans:["l'embarquement se fait par rangee en commencant par les places du fond","lembarquement se fait par rangee en commencant par les places du fond"]},
@@ -1605,7 +1688,7 @@ const BEGINNER = {
       {it:"L'imbarco terminerà tra cinque minuti.", ans:["l'embarquement se terminera dans cinq minutes","lembarquement se terminera dans cinq minutes"]},
       {it:"Mi scusi, questo è il gate giusto per il volo per Madrid?", ans:["excusez-moi est-ce la bonne porte pour le vol pour madrid","excusez moi est ce la bonne porte pour le vol pour madrid"]},
     ],
-    [ // Livello 18
+    [ // Livello 25 (In Aeroporto - parte 8)
       {it:"Ha qualcosa da dichiarare alla dogana?", ans:["avez-vous quelque chose a declarer a la douane","avez vous quelque chose a declarer a la douane"]},
       {it:"Qual è il motivo del suo viaggio?", ans:["quel est le motif de votre voyage"]},
       {it:"Quanto tempo rimarrà nel paese?", ans:["combien de temps allez-vous rester dans le pays","combien de temps allez vous rester dans le pays"]},
@@ -1617,7 +1700,7 @@ const BEGINNER = {
       {it:"Non ho nulla da dichiarare.", ans:["je n'ai rien a declarer","je nai rien a declarer"]},
       {it:"Benvenuto, buona permanenza nel nostro paese.", ans:["bienvenue bon sejour dans notre pays"]},
     ],
-    [ // Livello 19
+    [ // Livello 26 (In Aeroporto - parte 9)
       {it:"Dov'è la sala d'attesa più vicina?", ans:["ou est la salle d'attente la plus proche","ou est la salle dattente la plus proche"]},
       {it:"C'è un bancomat qui in aeroporto?", ans:["y a-t-il un distributeur automatique ici a l'aeroport","y a t il un distributeur automatique ici a laeroport"]},
       {it:"Dove posso cambiare valuta?", ans:["ou puis-je changer de la devise","ou puis je changer de la devise"]},
@@ -1629,7 +1712,7 @@ const BEGINNER = {
       {it:"Avete un servizio di assistenza per persone con disabilità?", ans:["avez-vous un service d'assistance pour les personnes handicapees","avez vous un service dassistance pour les personnes handicapees"]},
       {it:"Dov'è la fermata del bus navetta per il parcheggio?", ans:["ou est l'arret de la navette pour le parking","ou est larret de la navette pour le parking"]},
     ],
-    [ // Livello 20
+    [ // Livello 27 (In Aeroporto - parte 10)
       {it:"Ho perso la coincidenza per colpa del ritardo.", ans:["j'ai rate ma correspondance a cause du retard","jai rate ma correspondance a cause du retard"]},
       {it:"Il mio volo è stato dirottato su un altro aeroporto.", ans:["mon vol a ete deroute vers un autre aeroport"]},
       {it:"Non riesco a trovare il mio bagaglio a mano.", ans:["je ne trouve pas mon bagage a main"]},
@@ -1664,26 +1747,46 @@ const BEGINNER = {
       {it:"A che ora parte il treno?", ans:["متى يغادر القطار","mata yughadir al-qitar"]},
     ],
     [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["هل يمكنني الدفع بالبطاقة", "hal yumkinuni al-daf' bil-bitaqa"]},
-      {it:"Dov'è la stazione più vicina?", ans:["أين أقرب محطة", "ayna aqrab mahatta"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["أحتاج إلى مساعدة من فضلك", "ahtaju ila musa'ada min fadlik"]},
-      {it:"A che ora apre il negozio?", ans:["متى يفتح المتجر", "mata yaftah al-matjar"]},
-      {it:"Questo è troppo caro.", ans:["هذا غال جدا", "hadha ghalin jiddan"]},
-      {it:"Posso avere il conto, per favore?", ans:["هل يمكنني الحصول على الفاتورة من فضلك", "hal yumkinuni al-husul ala al-fatura min fadlik"]},
-      {it:"Sto imparando questa lingua.", ans:["أنا أتعلم هذه اللغة", "ana ataallamu hadhihi al-lugha"]},
-      {it:"Cosa fai questo weekend?", ans:["ماذا تفعل في نهاية هذا الأسبوع", "madha tafalu fi nihayat hadha al-usbu"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["أنا تائه هل يمكنك مساعدتي", "ana ta'ih hal yumkinuka musa'adati"]},
-      {it:"Vado al mercato oggi.", ans:["سأذهب إلى السوق اليوم", "saadhhabu ila as-suq al-yawm"]},
-      {it:"Che tempo fa oggi?", ans:["كيف الطقس اليوم", "kayfa at-taqs al-yawm"]},
-      {it:"Dov'è il bagno, per favore?", ans:["أين الحمام من فضلك", "ayna al-hammam min fadlik"]},
-      {it:"Quanto costa questo?", ans:["كم يكلف هذا", "kam yukallifu hadha"]},
-      {it:"Hai un minuto per parlare?", ans:["هل لديك دقيقة للحديث", "hal ladayka daqiqa lilhadith"]},
-      {it:"Mi piace molto questo posto.", ans:["يعجبني هذا المكان كثيرا", "yujibuni hadha al-makan kathiran"]},
-      {it:"Sono stanco/a oggi.", ans:["أنا متعب اليوم", "ana mutaab al-yawm"]},
-      {it:"Puoi ripetere più lentamente?", ans:["هل يمكنك أن تكرر ببطء أكثر", "hal yumkinuka an tukarrira bibut akthar"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["شكرا جزيلا على مساعدتك", "shukran jazilan ala musaadatik"]},
+      {it:"Posso pagare con la carta?", ans:["هل يمكنني الدفع بالبطاقة","hal yumkinuni al-daf' bil-bitaqa"]},
+      {it:"Dov'è la stazione più vicina?", ans:["أين أقرب محطة","ayna aqrab mahatta"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["أحتاج إلى مساعدة من فضلك","ahtaju ila musa'ada min fadlik"]},
+      {it:"A che ora apre il negozio?", ans:["متى يفتح المتجر","mata yaftah al-matjar"]},
+      {it:"Questo è troppo caro.", ans:["هذا غال جدا","hadha ghalin jiddan"]},
+      {it:"Posso avere il conto, per favore?", ans:["هل يمكنني الحصول على الفاتورة من فضلك","hal yumkinuni al-husul ala al-fatura min fadlik"]},
+      {it:"Sto imparando questa lingua.", ans:["أنا أتعلم هذه اللغة","ana ataallamu hadhihi al-lugha"]},
+      {it:"Cosa fai questo weekend?", ans:["ماذا تفعل في نهاية هذا الأسبوع","madha tafalu fi nihayat hadha al-usbu"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["أنا تائه هل يمكنك مساعدتي","ana ta'ih hal yumkinuka musa'adati"]},
+      {it:"Vado al mercato oggi.", ans:["سأذهب إلى السوق اليوم","saadhhabu ila as-suq al-yawm"]},
+      {it:"Che tempo fa oggi?", ans:["كيف الطقس اليوم","kayfa at-taqs al-yawm"]},
+      {it:"Dov'è il bagno, per favore?", ans:["أين الحمام من فضلك","ayna al-hammam min fadlik"]},
+      {it:"Quanto costa questo?", ans:["كم يكلف هذا","kam yukallifu hadha"]},
+      {it:"Hai un minuto per parlare?", ans:["هل لديك دقيقة للحديث","hal ladayka daqiqa lilhadith"]},
+      {it:"Mi piace molto questo posto.", ans:["يعجبني هذا المكان كثيرا","yujibuni hadha al-makan kathiran"]},
+      {it:"Sono stanco/a oggi.", ans:["أنا متعب اليوم","ana mutaab al-yawm"]},
+      {it:"Puoi ripetere più lentamente?", ans:["هل يمكنك أن تكرر ببطء أكثر","hal yumkinuka an tukarrira bibut akthar"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["شكرا جزيلا على مساعدتك","shukran jazilan ala musaadatik"]},
     ],
-    [ // Livello 3
+    [ // Livello 3 (ponte per principianti assoluti)
+      {it:"Buon appetito!", ans:["بالهناء والشفاء","bilhana wa ash-shifa"]},
+      {it:"Salute!", ans:["صحة","sahha"]},
+      {it:"A domani!", ans:["أراك غدا","araka ghadan"]},
+      {it:"Ci vediamo dopo!", ans:["أراك لاحقا","araka lahiqan"]},
+      {it:"Come si dice questo?", ans:["كيف تقول هذا","kayfa taqulu hadha"]},
+      {it:"Non lo so.", ans:["لا أعرف","la arif"]},
+      {it:"Forse.", ans:["ربما","rubbama"]},
+      {it:"Sono d'accordo.", ans:["أنا موافق","ana muwafiq"]},
+      {it:"Non sono d'accordo.", ans:["أنا غير موافق","ana ghayru muwafiq"]},
+      {it:"Hai ragione.", ans:["أنت على حق","anta ala haqq"]},
+      {it:"Mi dispiace.", ans:["أنا آسف","ana asif"]},
+      {it:"Non fa niente.", ans:["لا بأس","la bas"]},
+      {it:"Con piacere.", ans:["بكل سرور","bikulli surur"]},
+      {it:"Certo!", ans:["بالتأكيد","bittakid"]},
+      {it:"Aspetta un momento, per favore.", ans:["انتظر لحظة من فضلك","intazir lahza min fadlik"]},
+      {it:"Ho fame.", ans:["أنا جائع","ana jaie"]},
+      {it:"Ho sete.", ans:["أنا عطشان","ana atshan"]},
+      {it:"Sono felice.", ans:["أنا سعيد","ana saeed"]},
+    ],
+    [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["أعتقد أن هذه المدينة مثيرة للاهتمام جدا","a'taqidu anna hadhihi al-madina muthira lil-ihtimam jiddan"]},
       {it:"Se avessi più tempo, viaggerei di più.", ans:["لو كان لدي وقت أكثر لكنت سافرت أكثر","law kana ladayya waqt akthar lakuntu safartu akthar"]},
       {it:"Preferisco il tè al caffè.", ans:["أفضل الشاي على القهوة","ufaddilu ash-shay ala al-qahwa"]},
@@ -1697,7 +1800,7 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["من الصعب أن أشرح بالضبط كيف أشعر","min as-sa'b an ashraha bidh-dhabt kayfa ash'ur"]},
       {it:"Spero che tutto vada per il meglio.", ans:["أتمنى أن يسير كل شيء على ما يرام","atamanna an yasira kullu shay' ala ma yuram"]},
     ],
-    [ // Livello 4
+    [ // Livello 5
       {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["الأسبوع الماضي زرت مدينة لم أكن أعرفها","al-usbu al-madi zurtu madina lam akun a'rifuha"]},
       {it:"Di solito mi sveglio presto durante la settimana.", ans:["عادة أستيقظ مبكرا خلال الأسبوع","adatan astayqizu mubakkiran khilala al-usbu"]},
       {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["هل يمكنك أن تنصحني بمطعم جيد قريب من هنا","hal yumkinuka an tansahani bimat'am jayyid qarib min huna"]},
@@ -1711,7 +1814,7 @@ const BEGINNER = {
       {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["أحاول تحسين نطقي كل يوم","uhawilu tahsin nutqi kulla yawm"]},
       {it:"Qual è la differenza tra queste due opzioni?", ans:["ما الفرق بين هذين الخيارين","ma al-farq bayna hadhayni al-khiyarayn"]},
     ],
-    [ // Livello 5
+    [ // Livello 6
       {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["لو استطعت العودة إلى الوراء لاتخذت خيارات مختلفة","law istata'tu al-'awda ila al-wara' la'ittakhadhtu khiyarat mukhtalifa"]},
       {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["من المهم الاستماع إلى وجهات نظر مختلفة عن وجهة نظرك","min al-muhimm al-istima' ila wijhat nazar mukhtalifa 'an wijhat nazarik"]},
       {it:"Mi sono reso conto che avevo torto.", ans:["أدركت أنني كنت مخطئا","adraktu annani kuntu mukhti'an"]},
@@ -1725,7 +1828,7 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["مهما حدث سأحاول أن أبقى هادئا","mahma hadatha sa'uhawilu an abqa hadi'an"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["بعد التفكير كنت سأفعل الأشياء بشكل مختلف","ba'da at-tafkir kuntu sa'af'alu al-ashya' bishaklin mukhtalif"]},
     ],
-    [ // Livello 6
+    [ // Livello 7
       {it:"Secondo me dovremmo provare un approccio diverso.", ans:["في رأيي يجب أن نجرب نهجا مختلفا","fi ra'yi yajib an nujarrib nahjan mukhtalifan"]},
       {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["لست متفقا تماما مع ما قلته","lastu muttafiqan tamaman ma'a ma qultahu"]},
       {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["أتساءل إن كان هذا حقا الخيار الأفضل","atasa'alu in kana hadha haqqan al-khiyar al-afdal"]},
@@ -1739,7 +1842,7 @@ const BEGINNER = {
       {it:"Se fossi in te, ci penserei due volte.", ans:["لو كنت مكانك لفكرت مرتين","law kuntu makanaka lafakkartu marratayn"]},
       {it:"A conti fatti, ne è valsa la pena.", ans:["في النهاية كان الأمر يستحق العناء","fi an-nihaya kana al-amr yastahiqqu al-'ana"]},
     ],
-    [ // Livello 7
+    [ // Livello 8
       {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["في العام الماضي قمت برحلة غيرت طريقة رؤيتي للأشياء","fi al-'am al-madi qumtu birihla ghayyarat tariqat ru'yati lil-ashya"]},
       {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["عندما كنت أصغر سنا كنت أقضي ساعات في القراءة في المكتبة","'indama kuntu asghar sinnan kuntu aqdi sa'at fi al-qira'a fi al-maktaba"]},
       {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["ما زلت أتذكر أول مرة جربت فيها هذا الطبق","ma ziltu atadhakkaru awwal marra jarrabtu fiha hadha at-tabaq"]},
@@ -1753,7 +1856,7 @@ const BEGINNER = {
       {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["مع الوقت تعلمت أن أتقبل أخطائي","ma'a al-waqt ta'allamtu an ataqabbala akhta'i"]},
       {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["بالنظر إلى الوراء أنا سعيد بالطريق الذي سلكته","bin-nazar ila al-wara' ana sa'id bit-tariq alladhi salaktuhu"]},
     ],
-    [ // Livello 8
+    [ // Livello 9
       {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["يجب أن نسلم المشروع بحلول يوم الجمعة","yajib an nusallim al-mashru' bihulul yawm al-jum'a"]},
       {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["هل يمكننا تنظيم اجتماع لتوضيح التفاصيل","hal yumkinuna tanzim ijtima' litawdih at-tafasil"]},
       {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["طلب مني مديري مراجعة التقرير","talaba minni mudiri muraja'at at-taqrir"]},
@@ -1767,7 +1870,7 @@ const BEGINNER = {
       {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["سارت المقابلة بشكل أفضل مما توقعت","sarat al-muqabala bishaklin afdal mimma tawaqqa'tu"]},
       {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["يجب أن نجد حلا وسطا يناسب الجميع","yajib an najida hallan wasatan yunasibu al-jami"]},
     ],
-    [ // Livello 9
+    [ // Livello 10
       {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["لو قام الجميع بدورهم لكان العالم مكانا أفضل","law qama al-jami' bidawrihim lakana al-'alam makanan afdal"]},
       {it:"È probabile che le cose cambino nei prossimi anni.", ans:["من المرجح أن تتغير الأمور في السنوات القادمة","min al-murajjah an tataghayyar al-umur fi as-sanawat al-qadima"]},
       {it:"Non si può sempre prevedere come andranno le cose.", ans:["لا يمكن دائما التنبؤ بكيفية سير الأمور","la yumkin da'iman at-tanabbu' bikayfiyyat sayr al-umur"]},
@@ -1781,7 +1884,7 @@ const BEGINNER = {
       {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["في عالم مثالي سيكون لدى الجميع نفس الفرص","fi 'alam mithali sayakoun ladá al-jami' nafs al-furas"]},
       {it:"Le apparenze, a volte, ingannano.", ans:["المظاهر أحيانا تخدع","al-mazahir ahyanan takhda"]},
     ],
-    [ // Livello 10
+    [ // Livello 11
       {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["لا أريد المراوغة يجب أن نتحدث عن هذا بجدية","la uridu al-muraawagha yajib an natahaddath 'an hadha bijiddiyya"]},
       {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["لنقل الأمور كما هي دون لف ودوران كثير","linaqul al-umur kama hiya dun laff wadawaran kathir"]},
       {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["أدرك أن الأمر لم يكن سهلا على أحد","udriku anna al-amr lam yakun sahlan 'ala ahad"]},
@@ -1795,47 +1898,67 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["لا نتوقف أبدا عن التعلم في النهاية","la natawaqqaf abadan 'an at-ta'allum fi an-nihaya"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["على المدى الطويل الصدق يثمر دائما","'ala al-mada at-tawil as-sidq yuthmir da'iman"]},
     ],
-    [ // Livello 11 · di dove sei (parte 1)
-      {it:"Di dove sei?", ans:["من أين أنت", "min ayna anta"]},
-      {it:"Sono italiano/a, di Roma.", ans:["أنا إيطالي من روما", "ana itali min roma"]},
-      {it:"Dove sei nato/a?", ans:["أين ولدت", "ayna wulidta"]},
-      {it:"Sono nato/a in una piccola città.", ans:["ولدت في مدينة صغيرة", "wulidtu fi madina saghira"]},
-      {it:"Da quanto tempo vivi qui?", ans:["منذ متى تعيش هنا", "mundhu mata taishu huna"]},
-      {it:"Vivo qui da cinque anni.", ans:["أعيش هنا منذ خمس سنوات", "aishu huna mundhu khamsi sanawat"]},
-      {it:"Qual è la tua lingua madre?", ans:["ما هي لغتك الأم", "ma hiya lughatuka al-umm"]},
-      {it:"La mia lingua madre è l'italiano.", ans:["لغتي الأم هي الإيطالية", "lughati al-umm hiya al-italiyya"]},
+    [ // Livello 12 (Di dove sei - parte 1)
+      {it:"Di dove sei?", ans:["من أين أنت","min ayna anta"]},
+      {it:"Sono italiano/a, di Roma.", ans:["أنا إيطالي من روما","ana itali min roma"]},
+      {it:"Dove sei nato/a?", ans:["أين ولدت","ayna wulidta"]},
+      {it:"Sono nato/a in una piccola città.", ans:["ولدت في مدينة صغيرة","wulidtu fi madina saghira"]},
+      {it:"Da quanto tempo vivi qui?", ans:["منذ متى تعيش هنا","mundhu mata taishu huna"]},
+      {it:"Vivo qui da cinque anni.", ans:["أعيش هنا منذ خمس سنوات","aishu huna mundhu khamsi sanawat"]},
+      {it:"Qual è la tua lingua madre?", ans:["ما هي لغتك الأم","ma hiya lughatuka al-umm"]},
+      {it:"La mia lingua madre è l'italiano.", ans:["لغتي الأم هي الإيطالية","lughati al-umm hiya al-italiyya"]},
     ],
-    [ // Livello 12 · di dove sei (parte 2)
-      {it:"In quale quartiere abiti?", ans:["في أي حي تسكن؟", "fi ayyi hayy taskun"]},
-      {it:"Abito in centro città.", ans:["أسكن في وسط المدينة.", "askunu fi wasat al-madina"]},
-      {it:"Hai sempre vissuto qui?", ans:["هل عشت هنا دائما؟", "hal ishta huna daiman"]},
-      {it:"Mi sono trasferito qui due anni fa.", ans:["انتقلت إلى هنا منذ سنتين.", "intaqaltu ila huna mundhu sanatayn"]},
-      {it:"Da dove vengono i tuoi genitori?", ans:["من أين يأتي والداك؟", "min ayna yati waledak"]},
-      {it:"I miei genitori vengono dal sud Italia.", ans:["والداي من جنوب إيطاليا.", "waleday min janub italya"]},
-      {it:"Ti manca il tuo paese d'origine?", ans:["هل تشتاق إلى وطنك؟", "hal tashtaqu ila wataneka"]},
-      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["نعم، أشتاق إليه كثيرا، خاصة الطعام.", "naam ashtaqu ilayhi kathiran khassatan at-taam"]},
+    [ // Livello 13 (Di dove sei - parte 2)
+      {it:"In quale quartiere abiti?", ans:["في أي حي تسكن؟","fi ayyi hayy taskun"]},
+      {it:"Abito in centro città.", ans:["أسكن في وسط المدينة.","askunu fi wasat al-madina"]},
+      {it:"Hai sempre vissuto qui?", ans:["هل عشت هنا دائما؟","hal ishta huna daiman"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["انتقلت إلى هنا منذ سنتين.","intaqaltu ila huna mundhu sanatayn"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["من أين يأتي والداك؟","min ayna yati waledak"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["والداي من جنوب إيطاليا.","waleday min janub italya"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["هل تشتاق إلى وطنك؟","hal tashtaqu ila wataneka"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["نعم، أشتاق إليه كثيرا، خاصة الطعام.","naam ashtaqu ilayhi kathiran khassatan at-taam"]},
     ],
-    [ // Livello 13 · presentazione (parte 1)
-      {it:"Come ti chiami?", ans:["ما اسمك", "ma ismuka"]},
-      {it:"Mi chiamo Marco, piacere.", ans:["اسمي ماركو تشرفنا", "ismi marco tasharrafna"]},
-      {it:"Che lavoro fai?", ans:["ما هي مهنتك", "ma hiya mihnatuka"]},
-      {it:"Sono uno studente universitario.", ans:["أنا طالب جامعي", "ana talib jamii"]},
-      {it:"Quanti anni hai?", ans:["كم عمرك", "kam umruka"]},
-      {it:"Ho ventotto anni.", ans:["عمري ثمانية وعشرون عاما", "umri thamaniya wa ishruna aman"]},
-      {it:"Quali sono i tuoi hobby?", ans:["ما هي هواياتك", "ma hiya hiwayatuka"]},
-      {it:"Mi piace leggere e viaggiare.", ans:["أحب القراءة والسفر", "uhibbu al-qiraa wa as-safar"]},
+    [ // Livello 14 (Presentazione - parte 1)
+      {it:"Come ti chiami?", ans:["ما اسمك","ma ismuka"]},
+      {it:"Mi chiamo Marco, piacere.", ans:["اسمي ماركو تشرفنا","ismi marco tasharrafna"]},
+      {it:"Che lavoro fai?", ans:["ما هي مهنتك","ma hiya mihnatuka"]},
+      {it:"Sono uno studente universitario.", ans:["أنا طالب جامعي","ana talib jamii"]},
+      {it:"Quanti anni hai?", ans:["كم عمرك","kam umruka"]},
+      {it:"Ho ventotto anni.", ans:["عمري ثمانية وعشرون عاما","umri thamaniya wa ishruna aman"]},
+      {it:"Quali sono i tuoi hobby?", ans:["ما هي هواياتك","ma hiya hiwayatuka"]},
+      {it:"Mi piace leggere e viaggiare.", ans:["أحب القراءة والسفر","uhibbu al-qiraa wa as-safar"]},
     ],
-    [ // Livello 14 · presentazione (parte 2)
-      {it:"Sei sposato o single?", ans:["هل أنت متزوج أم أعزب؟", "hal anta mutazawwij am azab"]},
-      {it:"Sono sposato con due figli.", ans:["أنا متزوج ولدي طفلان.", "ana mutazawwij wa ladayya tiflan"]},
-      {it:"Con chi vivi?", ans:["مع من تعيش؟", "maa man taish"]},
-      {it:"Vivo da solo in un appartamento.", ans:["أعيش وحدي في شقة.", "aishu wahdi fi shaqqa"]},
-      {it:"Che cosa studi all'università?", ans:["ماذا تدرس في الجامعة؟", "madha tadrusu fi al-jamia"]},
-      {it:"Studio economia al secondo anno.", ans:["أدرس الاقتصاد، السنة الثانية.", "adrusu al-iqtisad as-sana ath-thaniya"]},
-      {it:"Hai fratelli o sorelle?", ans:["هل لديك إخوة أو أخوات؟", "hal ladayka ikhwa aw akhawat"]},
-      {it:"Ho una sorella più piccola.", ans:["لدي أخت صغرى.", "ladayya ukht sughra"]},
+    [ // Livello 15 (Presentazione - parte 2)
+      {it:"Sei sposato o single?", ans:["هل أنت متزوج أم أعزب؟","hal anta mutazawwij am azab"]},
+      {it:"Sono sposato con due figli.", ans:["أنا متزوج ولدي طفلان.","ana mutazawwij wa ladayya tiflan"]},
+      {it:"Con chi vivi?", ans:["مع من تعيش؟","maa man taish"]},
+      {it:"Vivo da solo in un appartamento.", ans:["أعيش وحدي في شقة.","aishu wahdi fi shaqqa"]},
+      {it:"Che cosa studi all'università?", ans:["ماذا تدرس في الجامعة؟","madha tadrusu fi al-jamia"]},
+      {it:"Studio economia al secondo anno.", ans:["أدرس الاقتصاد، السنة الثانية.","adrusu al-iqtisad as-sana ath-thaniya"]},
+      {it:"Hai fratelli o sorelle?", ans:["هل لديك إخوة أو أخوات؟","hal ladayka ikhwa aw akhawat"]},
+      {it:"Ho una sorella più piccola.", ans:["لدي أخت صغرى.","ladayya ukht sughra"]},
     ],
-    [ // Livello 13 (ex 11)
+    [ // Livello 16 (Dal Ristorante - parte 1)
+      {it:"Un tavolo per due, per favore.", ans:["طاولة لشخصين من فضلك","tawila lishakhsayn min fadlik"]},
+      {it:"Avete un tavolo libero?", ans:["هل لديكم طاولة فارغة","hal ladaykum tawila farigha"]},
+      {it:"Possiamo vedere il menù, per favore?", ans:["هل يمكننا رؤية قائمة الطعام من فضلك","hal yumkinuna ruyat qaimat at-taam min fadlik"]},
+      {it:"Cosa mi consiglia?", ans:["بماذا تنصحني","bimadha tansahuni"]},
+      {it:"Vorrei ordinare, per favore.", ans:["أود أن أطلب من فضلك","awaddu an atluba min fadlik"]},
+      {it:"Per me una pizza margherita.", ans:["سآخذ بيتزا مارغريتا","saakhudhu bitza margarita"]},
+      {it:"Cosa c'è nel piatto del giorno?", ans:["ماذا يحتوي طبق اليوم","madha yahtawi tabaq al-yawm"]},
+      {it:"Ha qualche piatto vegetariano?", ans:["هل لديكم أطباق نباتية","hal ladaykum atbaq nabatiyya"]},
+    ],
+    [ // Livello 17 (Dal Ristorante - parte 2)
+      {it:"Vorrei un bicchiere di vino rosso.", ans:["أود كأس نبيذ أحمر","awaddu kas nabidh ahmar"]},
+      {it:"Un'acqua naturale, per favore.", ans:["ماء عادي من فضلك","maa aadi min fadlik"]},
+      {it:"Il conto, per favore.", ans:["الفاتورة من فضلك","al-fatura min fadlik"]},
+      {it:"Il servizio è incluso?", ans:["هل الخدمة مشمولة","hal al-khidma mashmula"]},
+      {it:"Il cibo era delizioso.", ans:["كان الطعام لذيذا","kana at-taam ladhidhan"]},
+      {it:"Sono allergico alle noci.", ans:["أنا أعاني من حساسية المكسرات","ana uani min hasasiyyat al-mukassarat"]},
+      {it:"Posso avere ancora un po' di pane?", ans:["هل يمكنني الحصول على المزيد من الخبز","hal yumkinuni al-husul ala al-mazid min al-khubz"]},
+      {it:"Possiamo pagare separatamente?", ans:["هل يمكننا الدفع بشكل منفصل","hal yumkinuna ad-daf bishaklin munfasil"]},
+    ],
+    [ // Livello 18 (In Aeroporto - parte 1)
       {it:"Dov'è il banco del check-in?", ans:["أين مكتب تسجيل الوصول؟","ayna maktab tasjil al-wusul"]},
       {it:"Posso fare il check-in online?", ans:["هل يمكنني تسجيل الوصول عبر الإنترنت؟","hal yumkinuni tasjil al-wusul abra al-internet"]},
       {it:"Ho prenotato un volo per Roma.", ans:["لقد حجزت رحلة إلى روما.","laqad hajaztu rihla ila roma"]},
@@ -1847,7 +1970,7 @@ const BEGINNER = {
       {it:"A che ora inizia l'imbarco?", ans:["متى يبدأ الصعود إلى الطائرة؟","mata yabdau as-suud ila at-taira"]},
       {it:"Ho perso la carta d'imbarco, cosa devo fare?", ans:["لقد فقدت بطاقة الصعود، ماذا أفعل؟","laqad faqadtu bitaqat as-suud madha afal"]},
     ],
-    [ // Livello 12
+    [ // Livello 19 (In Aeroporto - parte 2)
       {it:"Deve togliere le scarpe per il controllo di sicurezza.", ans:["يجب أن تخلع حذاءك لفحص الأمن.","yajibu an takhlaa hidhaaka lifahs al-amn"]},
       {it:"Metta gli oggetti metallici nel vassoio.", ans:["ضع الأشياء المعدنية في الصينية.","dai al-ashya al-madaniya fi as-siniya"]},
       {it:"Ha liquidi nel bagaglio a mano?", ans:["هل لديك سوائل في حقيبة اليد؟","hal ladayka sawail fi haqibat al-yad"]},
@@ -1859,7 +1982,7 @@ const BEGINNER = {
       {it:"Non è consentito portare oggetti taglienti a bordo.", ans:["لا يسمح بحمل أشياء حادة على متن الطائرة.","la yusmahu bihamli ashya hadda ala matn at-taira"]},
       {it:"Il controllo di sicurezza durerà pochi minuti.", ans:["سيستغرق فحص الأمن بضع دقائق.","sayastaghriqu fahs al-amn bida daqaiq"]},
     ],
-    [ // Livello 13
+    [ // Livello 20 (In Aeroporto - parte 3)
       {it:"Da quale porta parte il volo per Londra?", ans:["من أي بوابة تغادر الرحلة إلى لندن؟","min ayyi bawaba tughadiru ar-rihla ila landan"]},
       {it:"Il tabellone delle partenze mostra un ritardo.", ans:["لوحة المغادرة تظهر تأخيرا.","lawhat al-mughadara tuzhiru taakhiran"]},
       {it:"Il nostro volo è indicato come \"in orario\".", ans:["رحلتنا مدرجة كـ في الموعد.","rihlatuna mudraja ka fi al-mawid"]},
@@ -1871,7 +1994,7 @@ const BEGINNER = {
       {it:"La partenza è stata posticipata di un'ora.", ans:["تأخرت المغادرة ساعة واحدة.","taakharat al-mughadara saatan wahida"]},
       {it:"Buon viaggio e buon volo!", ans:["رحلة سعيدة وطيرانا طيبا!","rihla saida wa-tayaranan tayyiban"]},
     ],
-    [ // Livello 14
+    [ // Livello 21 (In Aeroporto - parte 4)
       {it:"Il volo da Parigi è appena atterrato.", ans:["الرحلة القادمة من باريس هبطت للتو.","ar-rihla al-qadima min baris habatat lilttaw"]},
       {it:"A che ora arriva il tuo volo?", ans:["متى تصل رحلتك؟","mata tasilu rihlatuka"]},
       {it:"Sono appena arrivato in aeroporto.", ans:["وصلت للتو إلى المطار.","wasaltu lilttaw ila al-matar"]},
@@ -1883,7 +2006,7 @@ const BEGINNER = {
       {it:"Siamo atterrati sani e salvi.", ans:["هبطنا بسلام.","habatna bisalam"]},
       {it:"Dopo l'atterraggio, restate seduti finché l'aereo non si ferma.", ans:["بعد الهبوط، ابقوا جالسين حتى تتوقف الطائرة تماما.","bada al-hubut ibqu jalisin hatta tatawaqqafa at-taira tamaman"]},
     ],
-    [ // Livello 15
+    [ // Livello 22 (In Aeroporto - parte 5)
       {it:"Il volo è stato cancellato per maltempo.", ans:["ألغيت الرحلة بسبب سوء الأحوال الجوية.","ulghiyat ar-rihla bisabab suu al-ahwal al-jawwiya"]},
       {it:"Mi dispiace informarla che il suo volo è in ritardo.", ans:["يؤسفني إبلاغك أن رحلتك متأخرة.","yusifuni iblaghuka anna rihlataka mutaakhira"]},
       {it:"L'aereo è stato sospeso per un guasto tecnico.", ans:["توقفت الطائرة عن العمل بسبب عطل فني.","tawaqqafat at-taira an al-amal bisabab atl fanni"]},
@@ -1895,7 +2018,7 @@ const BEGINNER = {
       {it:"Il volo è stato riprogrammato per domani mattina.", ans:["أعيدت جدولة الرحلة إلى صباح الغد.","uidat jadwalat ar-rihla ila sabah al-ghad"]},
       {it:"A causa dello sciopero, molti voli sono stati cancellati.", ans:["بسبب الإضراب، ألغيت العديد من الرحلات.","bisabab al-idrab ulghiyat al-adid min ar-rihalat"]},
     ],
-    [ // Livello 16
+    [ // Livello 23 (In Aeroporto - parte 6)
       {it:"Dove posso ritirare il mio bagaglio?", ans:["أين يمكنني استلام أمتعتي؟","ayna yumkinuni istilamu amtiati"]},
       {it:"Il mio bagaglio non è arrivato.", ans:["لم تصل أمتعتي.","lam tasil amtiati"]},
       {it:"Ho perso una valigia, a chi devo rivolgermi?", ans:["فقدت حقيبة، بمن يجب أن أتصل؟","faqadtu haqiba biman yajibu an attasil"]},
@@ -1907,7 +2030,7 @@ const BEGINNER = {
       {it:"Compili questo modulo per il bagaglio smarrito.", ans:["املأ هذا النموذج للأمتعة المفقودة.","imla hadha an-namudhaj lilamtia al-mafquda"]},
       {it:"La valigia le sarà consegnata a casa entro domani.", ans:["ستسلم حقيبتك إلى منزلك بحلول الغد.","satusallamu haqibatuka ila manzilika bihululi al-ghad"]},
     ],
-    [ // Livello 17
+    [ // Livello 24 (In Aeroporto - parte 7)
       {it:"Il gate è stato cambiato all'ultimo momento.", ans:["تم تغيير البوابة في اللحظة الأخيرة.","tamma taghyir al-bawaba fi al-lahza al-akhira"]},
       {it:"Dov'è il gate numero 15?", ans:["أين البوابة رقم 15؟","ayna al-bawaba raqm khamsata ashar"]},
       {it:"L'imbarco avviene per fila, a partire dai posti in fondo.", ans:["يتم الصعود صفا صفا، بدءا من المقاعد الخلفية.","yatimmu as-suud saffan saffan badan min al-maqaid al-khalfiyya"]},
@@ -1919,7 +2042,7 @@ const BEGINNER = {
       {it:"L'imbarco terminerà tra cinque minuti.", ans:["سينتهي الصعود خلال خمس دقائق.","sayantahi as-suud khilala khamsi daqaiq"]},
       {it:"Mi scusi, questo è il gate giusto per il volo per Madrid?", ans:["عفوا، هل هذه البوابة الصحيحة لرحلة مدريد؟","afwan hal hadhihi al-bawaba as-sahiha lirihlati madrid"]},
     ],
-    [ // Livello 18
+    [ // Livello 25 (In Aeroporto - parte 8)
       {it:"Ha qualcosa da dichiarare alla dogana?", ans:["هل لديك شيء لتصرح به للجمارك؟","hal ladayka shay litusarriha bihi liljamarik"]},
       {it:"Qual è il motivo del suo viaggio?", ans:["ما سبب رحلتك؟","ma sababu rihlatika"]},
       {it:"Quanto tempo rimarrà nel paese?", ans:["كم من الوقت ستبقى في البلد؟","kam min al-waqt satabqa fi al-balad"]},
@@ -1931,7 +2054,7 @@ const BEGINNER = {
       {it:"Non ho nulla da dichiarare.", ans:["ليس لدي شيء لأصرح به.","laysa ladayya shay liusarriha bihi"]},
       {it:"Benvenuto, buona permanenza nel nostro paese.", ans:["أهلا بك، أتمنى لك إقامة طيبة في بلدنا.","ahlan bika atamanna laka iqama tayyiba fi baladina"]},
     ],
-    [ // Livello 19
+    [ // Livello 26 (In Aeroporto - parte 9)
       {it:"Dov'è la sala d'attesa più vicina?", ans:["أين أقرب صالة انتظار؟","ayna aqrab salat intizar"]},
       {it:"C'è un bancomat qui in aeroporto?", ans:["هل يوجد صراف آلي هنا في المطار؟","hal yujadu sarraf ali huna fi al-matar"]},
       {it:"Dove posso cambiare valuta?", ans:["أين يمكنني تبديل العملة؟","ayna yumkinuni tabdil al-umla"]},
@@ -1943,7 +2066,7 @@ const BEGINNER = {
       {it:"Avete un servizio di assistenza per persone con disabilità?", ans:["هل لديكم خدمة مساعدة لذوي الإعاقة؟","hal ladaykum khidmat musaada lidhawi al-iaqa"]},
       {it:"Dov'è la fermata del bus navetta per il parcheggio?", ans:["أين محطة الحافلة المكوكية إلى موقف السيارات؟","ayna mahattat al-hafila al-makukiyya ila mawqif as-sayyarat"]},
     ],
-    [ // Livello 20
+    [ // Livello 27 (In Aeroporto - parte 10)
       {it:"Ho perso la coincidenza per colpa del ritardo.", ans:["فاتتني رحلة الوصلة بسبب التأخير.","fatatni rihlat al-wasla bisabab at-taakhir"]},
       {it:"Il mio volo è stato dirottato su un altro aeroporto.", ans:["حولت رحلتي إلى مطار آخر.","huwwilat rihlati ila matarin akhar"]},
       {it:"Non riesco a trovare il mio bagaglio a mano.", ans:["لا أستطيع إيجاد حقيبة يدي.","la astatiu ijad haqibat yadi"]},
@@ -1979,25 +2102,45 @@ const BEGINNER = {
     ],
     [ // Livello 2
       {it:"Posso pagare con la carta?", ans:["puedo pagar con tarjeta"]},
-      {it:"Dov'è la stazione più vicina?", ans:["donde esta la estacion mas cercana", "dónde está la estación más cercana"]},
+      {it:"Dov'è la stazione più vicina?", ans:["donde esta la estacion mas cercana","dónde está la estación más cercana"]},
       {it:"Ho bisogno di aiuto, per favore.", ans:["necesito ayuda por favor"]},
-      {it:"A che ora apre il negozio?", ans:["a que hora abre la tienda", "a qué hora abre la tienda"]},
+      {it:"A che ora apre il negozio?", ans:["a que hora abre la tienda","a qué hora abre la tienda"]},
       {it:"Questo è troppo caro.", ans:["esto es demasiado caro"]},
       {it:"Posso avere il conto, per favore?", ans:["puedo tener la cuenta por favor"]},
       {it:"Sto imparando questa lingua.", ans:["estoy aprendiendo este idioma"]},
       {it:"Cosa fai questo weekend?", ans:["que haces este fin de semana"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["estoy perdido puedes ayudarme", "estoy perdida puedes ayudarme"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["estoy perdido puedes ayudarme","estoy perdida puedes ayudarme"]},
       {it:"Vado al mercato oggi.", ans:["voy al mercado hoy"]},
       {it:"Che tempo fa oggi?", ans:["que tiempo hace hoy"]},
-      {it:"Dov'è il bagno, per favore?", ans:["donde esta el bano por favor", "dónde está el baño por favor"]},
+      {it:"Dov'è il bagno, per favore?", ans:["donde esta el bano por favor","dónde está el baño por favor"]},
       {it:"Quanto costa questo?", ans:["cuanto cuesta esto"]},
       {it:"Hai un minuto per parlare?", ans:["tienes un minuto para hablar"]},
       {it:"Mi piace molto questo posto.", ans:["me gusta mucho este lugar"]},
-      {it:"Sono stanco/a oggi.", ans:["estoy cansado hoy", "estoy cansada hoy"]},
+      {it:"Sono stanco/a oggi.", ans:["estoy cansado hoy","estoy cansada hoy"]},
       {it:"Puoi ripetere più lentamente?", ans:["puedes repetir mas despacio"]},
       {it:"Grazie mille per il tuo aiuto.", ans:["muchas gracias por tu ayuda"]},
     ],
-    [ // Livello 3
+    [ // Livello 3 (ponte per principianti assoluti)
+      {it:"Buon appetito!", ans:["buen provecho"]},
+      {it:"Salute!", ans:["salud"]},
+      {it:"A domani!", ans:["hasta manana","hasta mañana"]},
+      {it:"Ci vediamo dopo!", ans:["hasta luego"]},
+      {it:"Come si dice questo?", ans:["como se dice esto"]},
+      {it:"Non lo so.", ans:["no lo se"]},
+      {it:"Forse.", ans:["quizas"]},
+      {it:"Sono d'accordo.", ans:["estoy de acuerdo"]},
+      {it:"Non sono d'accordo.", ans:["no estoy de acuerdo"]},
+      {it:"Hai ragione.", ans:["tienes razon"]},
+      {it:"Mi dispiace.", ans:["lo siento"]},
+      {it:"Non fa niente.", ans:["no pasa nada"]},
+      {it:"Con piacere.", ans:["con gusto"]},
+      {it:"Certo!", ans:["claro"]},
+      {it:"Aspetta un momento, per favore.", ans:["espera un momento por favor"]},
+      {it:"Ho fame.", ans:["tengo hambre"]},
+      {it:"Ho sete.", ans:["tengo sed"]},
+      {it:"Sono felice.", ans:["estoy feliz"]},
+    ],
+    [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["creo que esta ciudad es muy interesante"]},
       {it:"Se avessi più tempo, viaggerei di più.", ans:["si tuviera mas tiempo viajaria mas","si tuviera más tiempo viajaría más"]},
       {it:"Preferisco il tè al caffè.", ans:["prefiero el te al cafe","prefiero el té al café"]},
@@ -2011,7 +2154,7 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["es dificil explicar exactamente como me siento","es difícil explicar exactamente cómo me siento"]},
       {it:"Spero che tutto vada per il meglio.", ans:["espero que todo salga bien"]},
     ],
-    [ // Livello 4
+    [ // Livello 5
       {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["la semana pasada visite una ciudad que no conocia","la semana pasada visité una ciudad que no conocía"]},
       {it:"Di solito mi sveglio presto durante la settimana.", ans:["normalmente me despierto temprano entre semana"]},
       {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["podrias recomendarme un buen restaurante cerca de aqui","podrías recomendarme un buen restaurante cerca de aquí"]},
@@ -2025,7 +2168,7 @@ const BEGINNER = {
       {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["estoy intentando mejorar mi pronunciacion todos los dias","estoy intentando mejorar mi pronunciación todos los días"]},
       {it:"Qual è la differenza tra queste due opzioni?", ans:["cual es la diferencia entre estas dos opciones","cuál es la diferencia entre estas dos opciones"]},
     ],
-    [ // Livello 5
+    [ // Livello 6
       {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["si pudiera volver atras tomaria decisiones diferentes","si pudiera volver atrás tomaría decisiones diferentes"]},
       {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["es importante escuchar puntos de vista diferentes al propio"]},
       {it:"Mi sono reso conto che avevo torto.", ans:["me di cuenta de que estaba equivocado"]},
@@ -2039,7 +2182,7 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["pase lo que pase intentare mantener la calma","pase lo que pase intentaré mantener la calma"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["en retrospectiva habria hecho las cosas de otra manera","en retrospectiva habría hecho las cosas de otra manera"]},
     ],
-    [ // Livello 6
+    [ // Livello 7
       {it:"Secondo me dovremmo provare un approccio diverso.", ans:["en mi opinion deberiamos probar un enfoque diferente","en mi opinión deberíamos probar un enfoque diferente"]},
       {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["no estoy del todo de acuerdo con lo que dijiste"]},
       {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["me pregunto si es realmente la mejor opcion","me pregunto si es realmente la mejor opción"]},
@@ -2053,7 +2196,7 @@ const BEGINNER = {
       {it:"Se fossi in te, ci penserei due volte.", ans:["si yo fuera tu me lo pensaria dos veces","si yo fuera tú me lo pensaría dos veces"]},
       {it:"A conti fatti, ne è valsa la pena.", ans:["a fin de cuentas valio la pena","a fin de cuentas valió la pena"]},
     ],
-    [ // Livello 7
+    [ // Livello 8
       {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["el ano pasado hice un viaje que cambio mi forma de ver las cosas","el año pasado hice un viaje que cambió mi forma de ver las cosas"]},
       {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["cuando era mas joven pasaba horas leyendo en la biblioteca","cuando era más joven pasaba horas leyendo en la biblioteca"]},
       {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["todavia recuerdo la primera vez que probe este plato","todavía recuerdo la primera vez que probé este plato"]},
@@ -2067,7 +2210,7 @@ const BEGINNER = {
       {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["con el tiempo he aprendido a aceptar mis errores"]},
       {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["mirando atras estoy contento con el camino que he recorrido","mirando atrás estoy contento con el camino que he recorrido"]},
     ],
-    [ // Livello 8
+    [ // Livello 9
       {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["tenemos que entregar el proyecto antes del viernes"]},
       {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["podriamos organizar una reunion para aclarar los detalles","podríamos organizar una reunión para aclarar los detalles"]},
       {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mi jefe me pidio que revisara el informe","mi jefe me pidió que revisara el informe"]},
@@ -2081,7 +2224,7 @@ const BEGINNER = {
       {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["la entrevista fue mejor de lo que esperaba"]},
       {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["tenemos que encontrar un compromiso que funcione para todos"]},
     ],
-    [ // Livello 9
+    [ // Livello 10
       {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["si todos hicieran su parte el mundo seria un lugar mejor","si todos hicieran su parte el mundo sería un lugar mejor"]},
       {it:"È probabile che le cose cambino nei prossimi anni.", ans:["es probable que las cosas cambien en los proximos anos","es probable que las cosas cambien en los próximos años"]},
       {it:"Non si può sempre prevedere come andranno le cose.", ans:["no siempre se puede predecir como saldran las cosas","no siempre se puede predecir cómo saldrán las cosas"]},
@@ -2095,7 +2238,7 @@ const BEGINNER = {
       {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["en un mundo ideal todos tendrian las mismas oportunidades","en un mundo ideal todos tendrían las mismas oportunidades"]},
       {it:"Le apparenze, a volte, ingannano.", ans:["las apariencias a veces enganan","las apariencias a veces engañan"]},
     ],
-    [ // Livello 10
+    [ // Livello 11
       {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["no quiero andarme con rodeos tenemos que hablarlo en serio"]},
       {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["digamos las cosas como son sin muchos rodeos"]},
       {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["me doy cuenta de que no fue facil para nadie","me doy cuenta de que no fue fácil para nadie"]},
@@ -2109,47 +2252,67 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["en el fondo nunca se deja de aprender"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["a la larga la sinceridad siempre da sus frutos"]},
     ],
-    [ // Livello 11 · di dove sei (parte 1)
+    [ // Livello 12 (Di dove sei - parte 1)
       {it:"Di dove sei?", ans:["de donde eres"]},
-      {it:"Sono italiano/a, di Roma.", ans:["soy italiano de roma", "soy italiana de roma"]},
+      {it:"Sono italiano/a, di Roma.", ans:["soy italiano de roma","soy italiana de roma"]},
       {it:"Dove sei nato/a?", ans:["donde naciste"]},
-      {it:"Sono nato/a in una piccola città.", ans:["naci en una ciudad pequena", "nací en una ciudad pequeña"]},
+      {it:"Sono nato/a in una piccola città.", ans:["naci en una ciudad pequena","nací en una ciudad pequeña"]},
       {it:"Da quanto tempo vivi qui?", ans:["cuanto tiempo llevas viviendo aqui"]},
-      {it:"Vivo qui da cinque anni.", ans:["llevo cinco anos viviendo aqui", "llevo cinco años viviendo aquí"]},
+      {it:"Vivo qui da cinque anni.", ans:["llevo cinco anos viviendo aqui","llevo cinco años viviendo aquí"]},
       {it:"Qual è la tua lingua madre?", ans:["cual es tu lengua materna"]},
       {it:"La mia lingua madre è l'italiano.", ans:["mi lengua materna es el italiano"]},
     ],
-    [ // Livello 12 · di dove sei (parte 2)
+    [ // Livello 13 (Di dove sei - parte 2)
       {it:"In quale quartiere abiti?", ans:["en que barrio vives"]},
       {it:"Abito in centro città.", ans:["vivo en el centro de la ciudad"]},
       {it:"Hai sempre vissuto qui?", ans:["siempre has vivido aqui"]},
-      {it:"Mi sono trasferito qui due anni fa.", ans:["me mude aqui hace dos anos", "me mudé aquí hace dos años"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["me mude aqui hace dos anos","me mudé aquí hace dos años"]},
       {it:"Da dove vengono i tuoi genitori?", ans:["de donde son tus padres"]},
       {it:"I miei genitori vengono dal sud Italia.", ans:["mis padres son del sur de italia"]},
       {it:"Ti manca il tuo paese d'origine?", ans:["extranas tu pais de origen"]},
       {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["si lo extrano mucho sobre todo la comida"]},
     ],
-    [ // Livello 13 · presentazione (parte 1)
+    [ // Livello 14 (Presentazione - parte 1)
       {it:"Come ti chiami?", ans:["como te llamas"]},
       {it:"Mi chiamo Marco, piacere.", ans:["me llamo marco mucho gusto"]},
       {it:"Che lavoro fai?", ans:["a que te dedicas"]},
-      {it:"Sono uno studente universitario.", ans:["soy estudiante universitario", "soy estudiante universitaria"]},
-      {it:"Quanti anni hai?", ans:["cuantos anos tienes", "cuántos años tienes"]},
-      {it:"Ho ventotto anni.", ans:["tengo veintiocho anos", "tengo veintiocho años"]},
+      {it:"Sono uno studente universitario.", ans:["soy estudiante universitario","soy estudiante universitaria"]},
+      {it:"Quanti anni hai?", ans:["cuantos anos tienes","cuántos años tienes"]},
+      {it:"Ho ventotto anni.", ans:["tengo veintiocho anos","tengo veintiocho años"]},
       {it:"Quali sono i tuoi hobby?", ans:["cuales son tus aficiones"]},
       {it:"Mi piace leggere e viaggiare.", ans:["me gusta leer y viajar"]},
     ],
-    [ // Livello 14 · presentazione (parte 2)
-      {it:"Sei sposato o single?", ans:["estas casado o soltero", "estas casada o soltera"]},
-      {it:"Sono sposato con due figli.", ans:["estoy casado y tengo dos hijos", "estoy casada y tengo dos hijos"]},
+    [ // Livello 15 (Presentazione - parte 2)
+      {it:"Sei sposato o single?", ans:["estas casado o soltero","estas casada o soltera"]},
+      {it:"Sono sposato con due figli.", ans:["estoy casado y tengo dos hijos","estoy casada y tengo dos hijos"]},
       {it:"Con chi vivi?", ans:["con quien vives"]},
-      {it:"Vivo da solo in un appartamento.", ans:["vivo solo en un apartamento", "vivo sola en un apartamento"]},
+      {it:"Vivo da solo in un appartamento.", ans:["vivo solo en un apartamento","vivo sola en un apartamento"]},
       {it:"Che cosa studi all'università?", ans:["que estudias en la universidad"]},
-      {it:"Studio economia al secondo anno.", ans:["estudio economia segundo ano", "estudio economía segundo año"]},
+      {it:"Studio economia al secondo anno.", ans:["estudio economia segundo ano","estudio economía segundo año"]},
       {it:"Hai fratelli o sorelle?", ans:["tienes hermanos o hermanas"]},
       {it:"Ho una sorella più piccola.", ans:["tengo una hermana menor"]},
     ],
-    [ // Livello 13 (ex 11)
+    [ // Livello 16 (Dal Ristorante - parte 1)
+      {it:"Un tavolo per due, per favore.", ans:["una mesa para dos por favor"]},
+      {it:"Avete un tavolo libero?", ans:["tienen una mesa libre"]},
+      {it:"Possiamo vedere il menù, per favore?", ans:["podemos ver el menu por favor"]},
+      {it:"Cosa mi consiglia?", ans:["que me recomienda"]},
+      {it:"Vorrei ordinare, per favore.", ans:["quisiera pedir por favor"]},
+      {it:"Per me una pizza margherita.", ans:["para mi una pizza margarita"]},
+      {it:"Cosa c'è nel piatto del giorno?", ans:["que lleva el plato del dia"]},
+      {it:"Ha qualche piatto vegetariano?", ans:["tienen algun plato vegetariano"]},
+    ],
+    [ // Livello 17 (Dal Ristorante - parte 2)
+      {it:"Vorrei un bicchiere di vino rosso.", ans:["quisiera una copa de vino tinto"]},
+      {it:"Un'acqua naturale, per favore.", ans:["un agua sin gas por favor"]},
+      {it:"Il conto, per favore.", ans:["la cuenta por favor"]},
+      {it:"Il servizio è incluso?", ans:["el servicio esta incluido"]},
+      {it:"Il cibo era delizioso.", ans:["la comida estaba deliciosa"]},
+      {it:"Sono allergico alle noci.", ans:["soy alergico a los frutos secos","soy alergica a los frutos secos"]},
+      {it:"Posso avere ancora un po' di pane?", ans:["puedo tener un poco mas de pan"]},
+      {it:"Possiamo pagare separatamente?", ans:["podemos pagar por separado"]},
+    ],
+    [ // Livello 18 (In Aeroporto - parte 1)
       {it:"Dov'è il banco del check-in?", ans:["donde esta el mostrador de facturacion"]},
       {it:"Posso fare il check-in online?", ans:["puedo hacer el check-in en linea","puedo hacer el checkin en linea"]},
       {it:"Ho prenotato un volo per Roma.", ans:["he reservado un vuelo a roma"]},
@@ -2161,7 +2324,7 @@ const BEGINNER = {
       {it:"A che ora inizia l'imbarco?", ans:["a que hora empieza el embarque"]},
       {it:"Ho perso la carta d'imbarco, cosa devo fare?", ans:["he perdido mi tarjeta de embarque que debo hacer"]},
     ],
-    [ // Livello 12
+    [ // Livello 19 (In Aeroporto - parte 2)
       {it:"Deve togliere le scarpe per il controllo di sicurezza.", ans:["debe quitarse los zapatos para el control de seguridad"]},
       {it:"Metta gli oggetti metallici nel vassoio.", ans:["ponga los objetos metalicos en la bandeja"]},
       {it:"Ha liquidi nel bagaglio a mano?", ans:["tiene liquidos en el equipaje de mano"]},
@@ -2173,7 +2336,7 @@ const BEGINNER = {
       {it:"Non è consentito portare oggetti taglienti a bordo.", ans:["no esta permitido llevar objetos cortantes a bordo"]},
       {it:"Il controllo di sicurezza durerà pochi minuti.", ans:["el control de seguridad durara unos minutos"]},
     ],
-    [ // Livello 13
+    [ // Livello 20 (In Aeroporto - parte 3)
       {it:"Da quale porta parte il volo per Londra?", ans:["desde que puerta sale el vuelo a londres"]},
       {it:"Il tabellone delle partenze mostra un ritardo.", ans:["el panel de salidas muestra un retraso"]},
       {it:"Il nostro volo è indicato come \"in orario\".", ans:["nuestro vuelo figura como a tiempo"]},
@@ -2185,7 +2348,7 @@ const BEGINNER = {
       {it:"La partenza è stata posticipata di un'ora.", ans:["la salida se ha retrasado una hora"]},
       {it:"Buon viaggio e buon volo!", ans:["buen viaje y buen vuelo"]},
     ],
-    [ // Livello 14
+    [ // Livello 21 (In Aeroporto - parte 4)
       {it:"Il volo da Parigi è appena atterrato.", ans:["el vuelo desde paris acaba de aterrizar"]},
       {it:"A che ora arriva il tuo volo?", ans:["a que hora llega tu vuelo"]},
       {it:"Sono appena arrivato in aeroporto.", ans:["acabo de llegar al aeropuerto"]},
@@ -2197,7 +2360,7 @@ const BEGINNER = {
       {it:"Siamo atterrati sani e salvi.", ans:["aterrizamos sanos y salvos"]},
       {it:"Dopo l'atterraggio, restate seduti finché l'aereo non si ferma.", ans:["despues del aterrizaje permanezcan sentados hasta que el avion se detenga"]},
     ],
-    [ // Livello 15
+    [ // Livello 22 (In Aeroporto - parte 5)
       {it:"Il volo è stato cancellato per maltempo.", ans:["el vuelo fue cancelado por mal tiempo"]},
       {it:"Mi dispiace informarla che il suo volo è in ritardo.", ans:["lamento informarle que su vuelo esta retrasado"]},
       {it:"L'aereo è stato sospeso per un guasto tecnico.", ans:["el avion fue inmovilizado por un fallo tecnico"]},
@@ -2209,7 +2372,7 @@ const BEGINNER = {
       {it:"Il volo è stato riprogrammato per domani mattina.", ans:["el vuelo ha sido reprogramado para manana por la manana"]},
       {it:"A causa dello sciopero, molti voli sono stati cancellati.", ans:["debido a la huelga muchos vuelos han sido cancelados"]},
     ],
-    [ // Livello 16
+    [ // Livello 23 (In Aeroporto - parte 6)
       {it:"Dove posso ritirare il mio bagaglio?", ans:["donde puedo recoger mi equipaje"]},
       {it:"Il mio bagaglio non è arrivato.", ans:["mi equipaje no ha llegado"]},
       {it:"Ho perso una valigia, a chi devo rivolgermi?", ans:["he perdido una maleta a quien debo dirigirme"]},
@@ -2221,7 +2384,7 @@ const BEGINNER = {
       {it:"Compili questo modulo per il bagaglio smarrito.", ans:["rellene este formulario para el equipaje perdido"]},
       {it:"La valigia le sarà consegnata a casa entro domani.", ans:["su maleta le sera entregada en casa antes de manana"]},
     ],
-    [ // Livello 17
+    [ // Livello 24 (In Aeroporto - parte 7)
       {it:"Il gate è stato cambiato all'ultimo momento.", ans:["la puerta ha cambiado en el ultimo momento"]},
       {it:"Dov'è il gate numero 15?", ans:["donde esta la puerta numero 15","donde esta la puerta numero quince"]},
       {it:"L'imbarco avviene per fila, a partire dai posti in fondo.", ans:["el embarque se hace por filas empezando por los asientos del fondo"]},
@@ -2233,7 +2396,7 @@ const BEGINNER = {
       {it:"L'imbarco terminerà tra cinque minuti.", ans:["el embarque terminara en cinco minutos"]},
       {it:"Mi scusi, questo è il gate giusto per il volo per Madrid?", ans:["disculpe es esta la puerta correcta para el vuelo a madrid"]},
     ],
-    [ // Livello 18
+    [ // Livello 25 (In Aeroporto - parte 8)
       {it:"Ha qualcosa da dichiarare alla dogana?", ans:["tiene algo que declarar en la aduana"]},
       {it:"Qual è il motivo del suo viaggio?", ans:["cual es el motivo de su viaje"]},
       {it:"Quanto tempo rimarrà nel paese?", ans:["cuanto tiempo se quedara en el pais"]},
@@ -2245,7 +2408,7 @@ const BEGINNER = {
       {it:"Non ho nulla da dichiarare.", ans:["no tengo nada que declarar"]},
       {it:"Benvenuto, buona permanenza nel nostro paese.", ans:["bienvenido que disfrute su estancia en nuestro pais"]},
     ],
-    [ // Livello 19
+    [ // Livello 26 (In Aeroporto - parte 9)
       {it:"Dov'è la sala d'attesa più vicina?", ans:["donde esta la sala de espera mas cercana"]},
       {it:"C'è un bancomat qui in aeroporto?", ans:["hay un cajero automatico aqui en el aeropuerto"]},
       {it:"Dove posso cambiare valuta?", ans:["donde puedo cambiar moneda"]},
@@ -2257,7 +2420,7 @@ const BEGINNER = {
       {it:"Avete un servizio di assistenza per persone con disabilità?", ans:["tienen servicio de asistencia para personas con discapacidad"]},
       {it:"Dov'è la fermata del bus navetta per il parcheggio?", ans:["donde esta la parada del autobus lanzadera al aparcamiento"]},
     ],
-    [ // Livello 20
+    [ // Livello 27 (In Aeroporto - parte 10)
       {it:"Ho perso la coincidenza per colpa del ritardo.", ans:["perdi mi conexion por culpa del retraso"]},
       {it:"Il mio volo è stato dirottato su un altro aeroporto.", ans:["mi vuelo fue desviado a otro aeropuerto"]},
       {it:"Non riesco a trovare il mio bagaglio a mano.", ans:["no encuentro mi equipaje de mano"]},
@@ -2293,9 +2456,9 @@ const BEGINNER = {
     ],
     [ // Livello 2
       {it:"Posso pagare con la carta?", ans:["kann ich mit karte bezahlen"]},
-      {it:"Dov'è la stazione più vicina?", ans:["wo ist der nachste bahnhof", "wo ist der nächste bahnhof"]},
+      {it:"Dov'è la stazione più vicina?", ans:["wo ist der nachste bahnhof","wo ist der nächste bahnhof"]},
       {it:"Ho bisogno di aiuto, per favore.", ans:["ich brauche hilfe bitte"]},
-      {it:"A che ora apre il negozio?", ans:["wann offnet das geschaft", "wann öffnet das geschäft", "um wieviel uhr offnet der laden"]},
+      {it:"A che ora apre il negozio?", ans:["wann offnet das geschaft","wann öffnet das geschäft","um wieviel uhr offnet der laden"]},
       {it:"Questo è troppo caro.", ans:["das ist zu teuer"]},
       {it:"Posso avere il conto, per favore?", ans:["kann ich bitte die rechnung haben"]},
       {it:"Sto imparando questa lingua.", ans:["ich lerne diese sprache"]},
@@ -2304,14 +2467,34 @@ const BEGINNER = {
       {it:"Vado al mercato oggi.", ans:["ich gehe heute zum markt"]},
       {it:"Che tempo fa oggi?", ans:["wie ist das wetter heute"]},
       {it:"Dov'è il bagno, per favore?", ans:["wo ist die toilette bitte"]},
-      {it:"Quanto costa questo?", ans:["wie viel kostet das", "wieviel kostet das"]},
+      {it:"Quanto costa questo?", ans:["wie viel kostet das","wieviel kostet das"]},
       {it:"Hai un minuto per parlare?", ans:["hast du eine minute zeit"]},
-      {it:"Mi piace molto questo posto.", ans:["mir gefallt dieser ort sehr", "mir gefällt dieser ort sehr"]},
-      {it:"Sono stanco/a oggi.", ans:["ich bin heute mude", "ich bin heute müde"]},
+      {it:"Mi piace molto questo posto.", ans:["mir gefallt dieser ort sehr","mir gefällt dieser ort sehr"]},
+      {it:"Sono stanco/a oggi.", ans:["ich bin heute mude","ich bin heute müde"]},
       {it:"Puoi ripetere più lentamente?", ans:["kannst du langsamer wiederholen"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["vielen dank fur deine hilfe", "vielen dank für deine hilfe"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["vielen dank fur deine hilfe","vielen dank für deine hilfe"]},
     ],
-    [ // Livello 3
+    [ // Livello 3 (ponte per principianti assoluti)
+      {it:"Buon appetito!", ans:["guten appetit"]},
+      {it:"Salute!", ans:["gesundheit"]},
+      {it:"A domani!", ans:["bis morgen"]},
+      {it:"Ci vediamo dopo!", ans:["bis spater","bis später"]},
+      {it:"Come si dice questo?", ans:["wie sagt man das"]},
+      {it:"Non lo so.", ans:["ich weiss es nicht","ich weiß es nicht"]},
+      {it:"Forse.", ans:["vielleicht"]},
+      {it:"Sono d'accordo.", ans:["ich stimme zu"]},
+      {it:"Non sono d'accordo.", ans:["ich stimme nicht zu"]},
+      {it:"Hai ragione.", ans:["du hast recht"]},
+      {it:"Mi dispiace.", ans:["es tut mir leid"]},
+      {it:"Non fa niente.", ans:["das macht nichts"]},
+      {it:"Con piacere.", ans:["mit vergnugen","mit vergnügen"]},
+      {it:"Certo!", ans:["naturlich","natürlich"]},
+      {it:"Aspetta un momento, per favore.", ans:["warte einen moment bitte"]},
+      {it:"Ho fame.", ans:["ich habe hunger"]},
+      {it:"Ho sete.", ans:["ich habe durst"]},
+      {it:"Sono felice.", ans:["ich bin glucklich","ich bin glücklich"]},
+    ],
+    [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["ich denke dass diese stadt sehr interessant ist"]},
       {it:"Se avessi più tempo, viaggerei di più.", ans:["wenn ich mehr zeit hatte wurde ich mehr reisen","wenn ich mehr zeit hätte würde ich mehr reisen"]},
       {it:"Preferisco il tè al caffè.", ans:["ich bevorzuge tee gegenuber kaffee","ich bevorzuge tee gegenüber kaffee","ich mag tee lieber als kaffee"]},
@@ -2325,7 +2508,7 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["es ist schwer genau zu erklaren wie ich mich fuhle","es ist schwer genau zu erklären wie ich mich fühle"]},
       {it:"Spero che tutto vada per il meglio.", ans:["ich hoffe dass alles gut wird","ich hoffe alles wird gut"]},
     ],
-    [ // Livello 4
+    [ // Livello 5
       {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["letzte woche habe ich eine stadt besucht die ich nicht kannte"]},
       {it:"Di solito mi sveglio presto durante la settimana.", ans:["normalerweise wache ich unter der woche fruh auf","normalerweise wache ich unter der woche früh auf"]},
       {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["konntest du mir ein gutes restaurant in der nahe empfehlen","könntest du mir ein gutes restaurant in der nähe empfehlen"]},
@@ -2339,7 +2522,7 @@ const BEGINNER = {
       {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["ich versuche meine aussprache jeden tag zu verbessern"]},
       {it:"Qual è la differenza tra queste due opzioni?", ans:["was ist der unterschied zwischen diesen beiden optionen"]},
     ],
-    [ // Livello 5
+    [ // Livello 6
       {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["wenn ich zuruckgehen konnte wurde ich andere entscheidungen treffen","wenn ich zurückgehen könnte würde ich andere entscheidungen treffen"]},
       {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["es ist wichtig auf andere sichtweisen als die eigene zu horen","es ist wichtig auf andere sichtweisen als die eigene zu hören"]},
       {it:"Mi sono reso conto che avevo torto.", ans:["mir ist klar geworden dass ich falsch lag"]},
@@ -2353,7 +2536,7 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["was auch immer passiert ich werde versuchen ruhig zu bleiben"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["im nachhinein hatte ich die dinge anders gemacht","im nachhinein hätte ich die dinge anders gemacht"]},
     ],
-    [ // Livello 6
+    [ // Livello 7
       {it:"Secondo me dovremmo provare un approccio diverso.", ans:["meiner meinung nach sollten wir einen anderen ansatz versuchen"]},
       {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["ich stimme nicht ganz mit dem uberein was du gesagt hast","ich stimme nicht ganz mit dem überein was du gesagt hast"]},
       {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["ich frage mich ob das wirklich die beste wahl ist"]},
@@ -2367,7 +2550,7 @@ const BEGINNER = {
       {it:"Se fossi in te, ci penserei due volte.", ans:["wenn ich du ware wurde ich zweimal nachdenken","wenn ich du wäre würde ich zweimal nachdenken"]},
       {it:"A conti fatti, ne è valsa la pena.", ans:["alles in allem hat es sich gelohnt"]},
     ],
-    [ // Livello 7
+    [ // Livello 8
       {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["letztes jahr habe ich eine reise gemacht die meine sichtweise verandert hat","letztes jahr habe ich eine reise gemacht die meine sichtweise verändert hat"]},
       {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["als ich junger war verbrachte ich stunden mit lesen in der bibliothek","als ich jünger war verbrachte ich stunden mit lesen in der bibliothek"]},
       {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["ich erinnere mich noch an das erste mal als ich dieses gericht probiert habe"]},
@@ -2381,7 +2564,7 @@ const BEGINNER = {
       {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["mit der zeit habe ich gelernt meine fehler zu akzeptieren"]},
       {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["ruckblickend bin ich zufrieden mit dem weg den ich gegangen bin","rückblickend bin ich zufrieden mit dem weg den ich gegangen bin"]},
     ],
-    [ // Livello 8
+    [ // Livello 9
       {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["wir mussen das projekt bis freitag abgeben","wir müssen das projekt bis freitag abgeben"]},
       {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["konnten wir ein treffen organisieren um die details zu klaren","könnten wir ein treffen organisieren um die details zu klären"]},
       {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["mein chef hat mich gebeten den bericht zu uberprufen","mein chef hat mich gebeten den bericht zu überprüfen"]},
@@ -2395,7 +2578,7 @@ const BEGINNER = {
       {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["das vorstellungsgesprach lief besser als erwartet","das vorstellungsgespräch lief besser als erwartet"]},
       {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["wir mussen einen kompromiss finden der fur alle passt","wir müssen einen kompromiss finden der für alle passt"]},
     ],
-    [ // Livello 9
+    [ // Livello 10
       {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["wenn jeder seinen teil beitragen wurde ware die welt ein besserer ort","wenn jeder seinen teil beitragen würde wäre die welt ein besserer ort"]},
       {it:"È probabile che le cose cambino nei prossimi anni.", ans:["es ist wahrscheinlich dass sich die dinge in den kommenden jahren andern","es ist wahrscheinlich dass sich die dinge in den kommenden jahren ändern"]},
       {it:"Non si può sempre prevedere come andranno le cose.", ans:["man kann nicht immer vorhersehen wie die dinge sich entwickeln"]},
@@ -2409,7 +2592,7 @@ const BEGINNER = {
       {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["in einer idealen welt hatten alle die gleichen chancen","in einer idealen welt hätten alle die gleichen chancen"]},
       {it:"Le apparenze, a volte, ingannano.", ans:["der schein trugt manchmal","der schein trügt manchmal"]},
     ],
-    [ // Livello 10
+    [ // Livello 11
       {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["ich will nicht um den heissen brei herumreden wir mussen ernsthaft daruber sprechen","ich will nicht um den heißen brei herumreden wir müssen ernsthaft darüber sprechen"]},
       {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["sagen wir die dinge wie sie sind ohne gross drumherum zu reden","sagen wir die dinge wie sie sind ohne groß drumherum zu reden"]},
       {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["mir ist klar dass es fur niemanden leicht war","mir ist klar dass es für niemanden leicht war"]},
@@ -2423,47 +2606,67 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["man hort im grunde nie auf zu lernen","man hört im grunde nie auf zu lernen"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["auf dauer zahlt sich ehrlichkeit immer aus"]},
     ],
-    [ // Livello 11 · di dove sei (parte 1)
+    [ // Livello 12 (Di dove sei - parte 1)
       {it:"Di dove sei?", ans:["woher kommst du"]},
-      {it:"Sono italiano/a, di Roma.", ans:["ich bin italiener aus rom", "ich bin italienerin aus rom"]},
+      {it:"Sono italiano/a, di Roma.", ans:["ich bin italiener aus rom","ich bin italienerin aus rom"]},
       {it:"Dove sei nato/a?", ans:["wo bist du geboren"]},
       {it:"Sono nato/a in una piccola città.", ans:["ich bin in einer kleinen stadt geboren"]},
       {it:"Da quanto tempo vivi qui?", ans:["wie lange lebst du schon hier"]},
-      {it:"Vivo qui da cinque anni.", ans:["ich lebe seit funf jahren hier", "ich lebe seit fünf jahren hier"]},
+      {it:"Vivo qui da cinque anni.", ans:["ich lebe seit funf jahren hier","ich lebe seit fünf jahren hier"]},
       {it:"Qual è la tua lingua madre?", ans:["was ist deine muttersprache"]},
       {it:"La mia lingua madre è l'italiano.", ans:["meine muttersprache ist italienisch"]},
     ],
-    [ // Livello 12 · di dove sei (parte 2)
+    [ // Livello 13 (Di dove sei - parte 2)
       {it:"In quale quartiere abiti?", ans:["in welchem viertel wohnst du"]},
       {it:"Abito in centro città.", ans:["ich wohne in der innenstadt"]},
       {it:"Hai sempre vissuto qui?", ans:["hast du schon immer hier gewohnt"]},
       {it:"Mi sono trasferito qui due anni fa.", ans:["ich bin vor zwei jahren hierher gezogen"]},
       {it:"Da dove vengono i tuoi genitori?", ans:["woher kommen deine eltern"]},
-      {it:"I miei genitori vengono dal sud Italia.", ans:["meine eltern kommen aus suditalien", "meine eltern kommen aus süditalien"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["meine eltern kommen aus suditalien","meine eltern kommen aus süditalien"]},
       {it:"Ti manca il tuo paese d'origine?", ans:["vermisst du dein heimatland"]},
       {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["ja ich vermisse es sehr besonders das essen"]},
     ],
-    [ // Livello 13 · presentazione (parte 1)
-      {it:"Come ti chiami?", ans:["wie heisst du", "wie heißt du"]},
-      {it:"Mi chiamo Marco, piacere.", ans:["ich heisse marco freut mich", "ich heiße marco freut mich"]},
-      {it:"Che lavoro fai?", ans:["was arbeitest du", "was machst du beruflich"]},
-      {it:"Sono uno studente universitario.", ans:["ich bin student", "ich bin studentin"]},
+    [ // Livello 14 (Presentazione - parte 1)
+      {it:"Come ti chiami?", ans:["wie heisst du","wie heißt du"]},
+      {it:"Mi chiamo Marco, piacere.", ans:["ich heisse marco freut mich","ich heiße marco freut mich"]},
+      {it:"Che lavoro fai?", ans:["was arbeitest du","was machst du beruflich"]},
+      {it:"Sono uno studente universitario.", ans:["ich bin student","ich bin studentin"]},
       {it:"Quanti anni hai?", ans:["wie alt bist du"]},
       {it:"Ho ventotto anni.", ans:["ich bin achtundzwanzig jahre alt"]},
       {it:"Quali sono i tuoi hobby?", ans:["was sind deine hobbys"]},
       {it:"Mi piace leggere e viaggiare.", ans:["ich lese und reise gerne"]},
     ],
-    [ // Livello 14 · presentazione (parte 2)
+    [ // Livello 15 (Presentazione - parte 2)
       {it:"Sei sposato o single?", ans:["bist du verheiratet oder single"]},
       {it:"Sono sposato con due figli.", ans:["ich bin verheiratet und habe zwei kinder"]},
       {it:"Con chi vivi?", ans:["mit wem wohnst du"]},
       {it:"Vivo da solo in un appartamento.", ans:["ich wohne allein in einer wohnung"]},
-      {it:"Che cosa studi all'università?", ans:["was studierst du an der universitat", "was studierst du an der universität"]},
+      {it:"Che cosa studi all'università?", ans:["was studierst du an der universitat","was studierst du an der universität"]},
       {it:"Studio economia al secondo anno.", ans:["ich studiere wirtschaft im zweiten jahr"]},
       {it:"Hai fratelli o sorelle?", ans:["hast du geschwister"]},
-      {it:"Ho una sorella più piccola.", ans:["ich habe eine jungere schwester", "ich habe eine jüngere schwester"]},
+      {it:"Ho una sorella più piccola.", ans:["ich habe eine jungere schwester","ich habe eine jüngere schwester"]},
     ],
-    [ // Livello 13 (ex 11)
+    [ // Livello 16 (Dal Ristorante - parte 1)
+      {it:"Un tavolo per due, per favore.", ans:["einen tisch fur zwei bitte","einen tisch für zwei bitte"]},
+      {it:"Avete un tavolo libero?", ans:["haben sie einen freien tisch"]},
+      {it:"Possiamo vedere il menù, per favore?", ans:["konnen wir die speisekarte sehen bitte","können wir die speisekarte sehen bitte"]},
+      {it:"Cosa mi consiglia?", ans:["was empfehlen sie mir"]},
+      {it:"Vorrei ordinare, per favore.", ans:["ich mochte bestellen bitte","ich möchte bestellen bitte"]},
+      {it:"Per me una pizza margherita.", ans:["ich nehme eine pizza margherita"]},
+      {it:"Cosa c'è nel piatto del giorno?", ans:["was ist im tagesgericht"]},
+      {it:"Ha qualche piatto vegetariano?", ans:["haben sie vegetarische gerichte"]},
+    ],
+    [ // Livello 17 (Dal Ristorante - parte 2)
+      {it:"Vorrei un bicchiere di vino rosso.", ans:["ich hatte gern ein glas rotwein","ich hätte gern ein glas rotwein"]},
+      {it:"Un'acqua naturale, per favore.", ans:["ein stilles wasser bitte"]},
+      {it:"Il conto, per favore.", ans:["die rechnung bitte"]},
+      {it:"Il servizio è incluso?", ans:["ist die bedienung inbegriffen"]},
+      {it:"Il cibo era delizioso.", ans:["das essen war kostlich","das essen war köstlich"]},
+      {it:"Sono allergico alle noci.", ans:["ich bin allergisch gegen nusse","ich bin allergisch gegen nüsse"]},
+      {it:"Posso avere ancora un po' di pane?", ans:["kann ich noch etwas brot haben"]},
+      {it:"Possiamo pagare separatamente?", ans:["konnen wir getrennt zahlen","können wir getrennt zahlen"]},
+    ],
+    [ // Livello 18 (In Aeroporto - parte 1)
       {it:"Dov'è il banco del check-in?", ans:["wo ist der check-in-schalter","wo ist der checkin schalter"]},
       {it:"Posso fare il check-in online?", ans:["kann ich online einchecken"]},
       {it:"Ho prenotato un volo per Roma.", ans:["ich habe einen flug nach rom gebucht"]},
@@ -2475,7 +2678,7 @@ const BEGINNER = {
       {it:"A che ora inizia l'imbarco?", ans:["um wie viel uhr beginnt das boarding"]},
       {it:"Ho perso la carta d'imbarco, cosa devo fare?", ans:["ich habe meine bordkarte verloren was soll ich tun"]},
     ],
-    [ // Livello 12
+    [ // Livello 19 (In Aeroporto - parte 2)
       {it:"Deve togliere le scarpe per il controllo di sicurezza.", ans:["sie mussen fur die sicherheitskontrolle ihre schuhe ausziehen","sie müssen für die sicherheitskontrolle ihre schuhe ausziehen"]},
       {it:"Metta gli oggetti metallici nel vassoio.", ans:["legen sie die metallgegenstande in die schale","legen sie die metallgegenstände in die schale"]},
       {it:"Ha liquidi nel bagaglio a mano?", ans:["haben sie flussigkeiten im handgepack","haben sie flüssigkeiten im handgepäck"]},
@@ -2487,7 +2690,7 @@ const BEGINNER = {
       {it:"Non è consentito portare oggetti taglienti a bordo.", ans:["scharfe gegenstande sind an bord nicht erlaubt","scharfe gegenstände sind an bord nicht erlaubt"]},
       {it:"Il controllo di sicurezza durerà pochi minuti.", ans:["die sicherheitskontrolle dauert nur ein paar minuten"]},
     ],
-    [ // Livello 13
+    [ // Livello 20 (In Aeroporto - parte 3)
       {it:"Da quale porta parte il volo per Londra?", ans:["von welchem gate fliegt der flug nach london ab"]},
       {it:"Il tabellone delle partenze mostra un ritardo.", ans:["die abflugtafel zeigt eine verspatung","die abflugtafel zeigt eine verspätung"]},
       {it:"Il nostro volo è indicato come \"in orario\".", ans:["unser flug wird als punktlich angezeigt","unser flug wird als pünktlich angezeigt"]},
@@ -2499,7 +2702,7 @@ const BEGINNER = {
       {it:"La partenza è stata posticipata di un'ora.", ans:["der abflug hat sich um eine stunde verzogert","der abflug hat sich um eine stunde verzögert"]},
       {it:"Buon viaggio e buon volo!", ans:["gute reise und guten flug"]},
     ],
-    [ // Livello 14
+    [ // Livello 21 (In Aeroporto - parte 4)
       {it:"Il volo da Parigi è appena atterrato.", ans:["der flug aus paris ist gerade gelandet"]},
       {it:"A che ora arriva il tuo volo?", ans:["um wie viel uhr kommt dein flug an"]},
       {it:"Sono appena arrivato in aeroporto.", ans:["ich bin gerade am flughafen angekommen"]},
@@ -2511,7 +2714,7 @@ const BEGINNER = {
       {it:"Siamo atterrati sani e salvi.", ans:["wir sind sicher gelandet"]},
       {it:"Dopo l'atterraggio, restate seduti finché l'aereo non si ferma.", ans:["bleiben sie nach der landung sitzen bis das flugzeug zum stehen kommt"]},
     ],
-    [ // Livello 15
+    [ // Livello 22 (In Aeroporto - parte 5)
       {it:"Il volo è stato cancellato per maltempo.", ans:["der flug wurde wegen schlechten wetters gestrichen"]},
       {it:"Mi dispiace informarla che il suo volo è in ritardo.", ans:["es tut mir leid ihnen mitteilen zu mussen dass ihr flug verspatet ist","es tut mir leid ihnen mitteilen zu müssen dass ihr flug verspätet ist"]},
       {it:"L'aereo è stato sospeso per un guasto tecnico.", ans:["das flugzeug wurde wegen eines technischen defekts am boden gehalten"]},
@@ -2523,7 +2726,7 @@ const BEGINNER = {
       {it:"Il volo è stato riprogrammato per domani mattina.", ans:["der flug wurde auf morgen fruh verschoben","der flug wurde auf morgen früh verschoben"]},
       {it:"A causa dello sciopero, molti voli sono stati cancellati.", ans:["wegen des streiks wurden viele fluge gestrichen","wegen des streiks wurden viele flüge gestrichen"]},
     ],
-    [ // Livello 16
+    [ // Livello 23 (In Aeroporto - parte 6)
       {it:"Dove posso ritirare il mio bagaglio?", ans:["wo kann ich mein gepack abholen","wo kann ich mein gepäck abholen"]},
       {it:"Il mio bagaglio non è arrivato.", ans:["mein gepack ist nicht angekommen","mein gepäck ist nicht angekommen"]},
       {it:"Ho perso una valigia, a chi devo rivolgermi?", ans:["ich habe einen koffer verloren an wen soll ich mich wenden"]},
@@ -2535,7 +2738,7 @@ const BEGINNER = {
       {it:"Compili questo modulo per il bagaglio smarrito.", ans:["fullen sie dieses formular fur verlorenes gepack aus","füllen sie dieses formular für verlorenes gepäck aus"]},
       {it:"La valigia le sarà consegnata a casa entro domani.", ans:["ihr koffer wird ihnen bis morgen nach hause geliefert"]},
     ],
-    [ // Livello 17
+    [ // Livello 24 (In Aeroporto - parte 7)
       {it:"Il gate è stato cambiato all'ultimo momento.", ans:["das gate wurde in letzter minute geandert","das gate wurde in letzter minute geändert"]},
       {it:"Dov'è il gate numero 15?", ans:["wo ist gate nummer 15","wo ist gate nummer funfzehn","wo ist gate nummer fünfzehn"]},
       {it:"L'imbarco avviene per fila, a partire dai posti in fondo.", ans:["das boarding erfolgt nach reihen beginnend mit den hinteren platzen","das boarding erfolgt nach reihen beginnend mit den hinteren plätzen"]},
@@ -2547,7 +2750,7 @@ const BEGINNER = {
       {it:"L'imbarco terminerà tra cinque minuti.", ans:["das boarding endet in funf minuten","das boarding endet in fünf minuten"]},
       {it:"Mi scusi, questo è il gate giusto per il volo per Madrid?", ans:["entschuldigung ist das das richtige gate fur den flug nach madrid","entschuldigung ist das das richtige gate für den flug nach madrid"]},
     ],
-    [ // Livello 18
+    [ // Livello 25 (In Aeroporto - parte 8)
       {it:"Ha qualcosa da dichiarare alla dogana?", ans:["haben sie etwas beim zoll zu verzollen"]},
       {it:"Qual è il motivo del suo viaggio?", ans:["was ist der zweck ihrer reise"]},
       {it:"Quanto tempo rimarrà nel paese?", ans:["wie lange werden sie im land bleiben"]},
@@ -2559,7 +2762,7 @@ const BEGINNER = {
       {it:"Non ho nulla da dichiarare.", ans:["ich habe nichts zu verzollen"]},
       {it:"Benvenuto, buona permanenza nel nostro paese.", ans:["willkommen geniessen sie ihren aufenthalt in unserem land","willkommen genießen sie ihren aufenthalt in unserem land"]},
     ],
-    [ // Livello 19
+    [ // Livello 26 (In Aeroporto - parte 9)
       {it:"Dov'è la sala d'attesa più vicina?", ans:["wo ist der nachste warteraum","wo ist der nächste warteraum"]},
       {it:"C'è un bancomat qui in aeroporto?", ans:["gibt es hier am flughafen einen geldautomaten"]},
       {it:"Dove posso cambiare valuta?", ans:["wo kann ich geld wechseln"]},
@@ -2571,7 +2774,7 @@ const BEGINNER = {
       {it:"Avete un servizio di assistenza per persone con disabilità?", ans:["haben sie einen assistenzservice fur menschen mit behinderung","haben sie einen assistenzservice für menschen mit behinderung"]},
       {it:"Dov'è la fermata del bus navetta per il parcheggio?", ans:["wo ist die haltestelle des shuttlebusses zum parkplatz"]},
     ],
-    [ // Livello 20
+    [ // Livello 27 (In Aeroporto - parte 10)
       {it:"Ho perso la coincidenza per colpa del ritardo.", ans:["ich habe meinen anschlussflug wegen der verspatung verpasst","ich habe meinen anschlussflug wegen der verspätung verpasst"]},
       {it:"Il mio volo è stato dirottato su un altro aeroporto.", ans:["mein flug wurde zu einem anderen flughafen umgeleitet"]},
       {it:"Non riesco a trovare il mio bagaglio a mano.", ans:["ich kann mein handgepack nicht finden","ich kann mein handgepäck nicht finden"]},
@@ -2606,26 +2809,46 @@ const BEGINNER = {
       {it:"A che ora parte il treno?", ans:["火车几点开","huo che ji dian kai"]},
     ],
     [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["我可以刷卡付款吗？", "wo ke yi shua ka fu kuan ma"]},
-      {it:"Dov'è la stazione più vicina?", ans:["最近的车站在哪里？", "zui jin de che zhan zai na li"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["我需要帮助，麻烦你了。", "wo xu yao bang zhu ma fan ni le"]},
-      {it:"A che ora apre il negozio?", ans:["商店几点开门？", "shang dian ji dian kai men"]},
-      {it:"Questo è troppo caro.", ans:["这个太贵了。", "zhe ge tai gui le"]},
-      {it:"Posso avere il conto, per favore?", ans:["可以给我账单吗？", "ke yi gei wo zhang dan ma"]},
-      {it:"Sto imparando questa lingua.", ans:["我在学习这门语言。", "wo zai xue xi zhe men yu yan"]},
-      {it:"Cosa fai questo weekend?", ans:["你这个周末做什么？", "ni zhe ge zhou mo zuo shen me"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["我迷路了，你能帮我吗？", "wo mi lu le ni neng bang wo ma"]},
-      {it:"Vado al mercato oggi.", ans:["我今天要去市场。", "wo jin tian yao qu shi chang"]},
-      {it:"Che tempo fa oggi?", ans:["今天天气怎么样？", "jin tian tian qi zen me yang"]},
-      {it:"Dov'è il bagno, per favore?", ans:["请问洗手间在哪里？", "qing wen xi shou jian zai na li"]},
-      {it:"Quanto costa questo?", ans:["这个多少钱？", "zhe ge duo shao qian"]},
-      {it:"Hai un minuto per parlare?", ans:["你有时间聊一聊吗？", "ni you shi jian liao yi liao ma"]},
-      {it:"Mi piace molto questo posto.", ans:["我很喜欢这个地方。", "wo hen xi huan zhe ge di fang"]},
-      {it:"Sono stanco/a oggi.", ans:["我今天很累。", "wo jin tian hen lei"]},
-      {it:"Puoi ripetere più lentamente?", ans:["你能说慢一点吗？", "ni neng shuo man yi dian ma"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["非常感谢你的帮助。", "fei chang gan xie ni de bang zhu"]},
+      {it:"Posso pagare con la carta?", ans:["我可以刷卡付款吗？","wo ke yi shua ka fu kuan ma"]},
+      {it:"Dov'è la stazione più vicina?", ans:["最近的车站在哪里？","zui jin de che zhan zai na li"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["我需要帮助，麻烦你了。","wo xu yao bang zhu ma fan ni le"]},
+      {it:"A che ora apre il negozio?", ans:["商店几点开门？","shang dian ji dian kai men"]},
+      {it:"Questo è troppo caro.", ans:["这个太贵了。","zhe ge tai gui le"]},
+      {it:"Posso avere il conto, per favore?", ans:["可以给我账单吗？","ke yi gei wo zhang dan ma"]},
+      {it:"Sto imparando questa lingua.", ans:["我在学习这门语言。","wo zai xue xi zhe men yu yan"]},
+      {it:"Cosa fai questo weekend?", ans:["你这个周末做什么？","ni zhe ge zhou mo zuo shen me"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["我迷路了，你能帮我吗？","wo mi lu le ni neng bang wo ma"]},
+      {it:"Vado al mercato oggi.", ans:["我今天要去市场。","wo jin tian yao qu shi chang"]},
+      {it:"Che tempo fa oggi?", ans:["今天天气怎么样？","jin tian tian qi zen me yang"]},
+      {it:"Dov'è il bagno, per favore?", ans:["请问洗手间在哪里？","qing wen xi shou jian zai na li"]},
+      {it:"Quanto costa questo?", ans:["这个多少钱？","zhe ge duo shao qian"]},
+      {it:"Hai un minuto per parlare?", ans:["你有时间聊一聊吗？","ni you shi jian liao yi liao ma"]},
+      {it:"Mi piace molto questo posto.", ans:["我很喜欢这个地方。","wo hen xi huan zhe ge di fang"]},
+      {it:"Sono stanco/a oggi.", ans:["我今天很累。","wo jin tian hen lei"]},
+      {it:"Puoi ripetere più lentamente?", ans:["你能说慢一点吗？","ni neng shuo man yi dian ma"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["非常感谢你的帮助。","fei chang gan xie ni de bang zhu"]},
     ],
-    [ // Livello 3
+    [ // Livello 3 (ponte per principianti assoluti)
+      {it:"Buon appetito!", ans:["祝你用餐愉快！","zhu ni yong can yu kuai"]},
+      {it:"Salute!", ans:["保重！","bao zhong"]},
+      {it:"A domani!", ans:["明天见！","ming tian jian"]},
+      {it:"Ci vediamo dopo!", ans:["待会儿见！","dai huir jian"]},
+      {it:"Come si dice questo?", ans:["这个怎么说？","zhe ge zen me shuo"]},
+      {it:"Non lo so.", ans:["我不知道。","wo bu zhi dao"]},
+      {it:"Forse.", ans:["也许。","ye xu"]},
+      {it:"Sono d'accordo.", ans:["我同意。","wo tong yi"]},
+      {it:"Non sono d'accordo.", ans:["我不同意。","wo bu tong yi"]},
+      {it:"Hai ragione.", ans:["你说得对。","ni shuo de dui"]},
+      {it:"Mi dispiace.", ans:["对不起。","dui bu qi"]},
+      {it:"Non fa niente.", ans:["没关系。","mei guan xi"]},
+      {it:"Con piacere.", ans:["很乐意。","hen le yi"]},
+      {it:"Certo!", ans:["当然！","dang ran"]},
+      {it:"Aspetta un momento, per favore.", ans:["请稍等一下。","qing shao deng yi xia"]},
+      {it:"Ho fame.", ans:["我饿了。","wo e le"]},
+      {it:"Ho sete.", ans:["我渴了。","wo ke le"]},
+      {it:"Sono felice.", ans:["我很开心。","wo hen kai xin"]},
+    ],
+    [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["我觉得这座城市很有意思。","wo jue de zhe zuo cheng shi hen you yi si"]},
       {it:"Se avessi più tempo, viaggerei di più.", ans:["如果我有更多时间，我会多旅行。","ru guo wo you geng duo shi jian wo hui duo lv xing"]},
       {it:"Preferisco il tè al caffè.", ans:["比起咖啡我更喜欢茶。","bi qi ka fei wo geng xi huan cha"]},
@@ -2639,7 +2862,7 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["很难准确解释我的感受。","hen nan zhun que jie shi wo de gan shou"]},
       {it:"Spero che tutto vada per il meglio.", ans:["希望一切都会顺利。","xi wang yi qie dou hui shun li"]},
     ],
-    [ // Livello 4
+    [ // Livello 5
       {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["上周我去了一个我不认识的城市。","shang zhou wo qu le yi ge wo bu ren shi de cheng shi"]},
       {it:"Di solito mi sveglio presto durante la settimana.", ans:["我平时在工作日都起得很早。","wo ping shi zai gong zuo ri dou qi de hen zao"]},
       {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["你能推荐一个附近的好餐厅吗？","ni neng tui jian yi ge fu jin de hao can ting ma"]},
@@ -2653,7 +2876,7 @@ const BEGINNER = {
       {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["我每天都在努力提高我的发音。","wo mei tian dou zai nu li ti gao wo de fa yin"]},
       {it:"Qual è la differenza tra queste due opzioni?", ans:["这两个选择有什么区别？","zhe liang ge xuan ze you shen me qu bie"]},
     ],
-    [ // Livello 5
+    [ // Livello 6
       {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["如果能重来，我会做不同的选择。","ru guo neng chong lai wo hui zuo bu tong de xuan ze"]},
       {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["倾听与自己不同的观点很重要。","qing ting yu zi ji bu tong de guan dian hen zhong yao"]},
       {it:"Mi sono reso conto che avevo torto.", ans:["我意识到自己错了。","wo yi shi dao zi ji cuo le"]},
@@ -2667,7 +2890,7 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["无论发生什么，我都会尽量保持冷静。","wu lun fa sheng shen me wo dou hui jin liang bao chi leng jing"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["事后看来，我本可以把事情做得不一样。","shi hou kan lai wo ben ke yi ba shi qing zuo de bu yi yang"]},
     ],
-    [ // Livello 6
+    [ // Livello 7
       {it:"Secondo me dovremmo provare un approccio diverso.", ans:["我觉得我们应该尝试不同的方法。","wo jue de wo men ying gai chang shi bu tong de fang fa"]},
       {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["我不完全同意你说的话。","wo bu wan quan tong yi ni shuo de hua"]},
       {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["我在想这是不是真的是最好的选择。","wo zai xiang zhe shi bu shi zhen de shi zui hao de xuan ze"]},
@@ -2681,7 +2904,7 @@ const BEGINNER = {
       {it:"Se fossi in te, ci penserei due volte.", ans:["如果我是你，我会三思而后行。","ru guo wo shi ni wo hui san si er hou xing"]},
       {it:"A conti fatti, ne è valsa la pena.", ans:["总的来说，这一切都是值得的。","zong de lai shuo zhe yi qie dou shi zhi de de"]},
     ],
-    [ // Livello 7
+    [ // Livello 8
       {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["去年我进行了一次改变我看待事物方式的旅行。","qu nian wo jin xing le yi ci gai bian wo kan dai shi wu fang shi de lv xing"]},
       {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["我年轻的时候常常在图书馆读书好几个小时。","wo nian qing de shi hou chang chang zai tu shu guan du shu hao ji ge xiao shi"]},
       {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["我还记得第一次尝试这道菜的情景。","wo hai ji de di yi ci chang shi zhe dao cai de qing jing"]},
@@ -2695,7 +2918,7 @@ const BEGINNER = {
       {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["随着时间的推移，我学会了接受自己的错误。","sui zhe shi jian de tui yi wo xue hui le jie shou zi ji de cuo wu"]},
       {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["回顾过去，我很满意自己走过的路。","hui gu guo qu wo hen man yi zi ji zou guo de lu"]},
     ],
-    [ // Livello 8
+    [ // Livello 9
       {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["我们需要在星期五之前提交项目。","wo men xu yao zai xing qi wu zhi qian ti jiao xiang mu"]},
       {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["我们能安排一次会议来澄清细节吗？","wo men neng an pai yi ci hui yi lai cheng qing xi jie ma"]},
       {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["我老板让我审查一下报告。","wo lao ban rang wo shen cha yi xia bao gao"]},
@@ -2709,7 +2932,7 @@ const BEGINNER = {
       {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["面试比我预期的进行得更顺利。","mian shi bi wo yu qi de jin xing de geng shun li"]},
       {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["我们需要找到一个对所有人都合适的折中方案。","wo men xu yao zhao dao yi ge dui suo you ren dou he shi de zhe zhong fang an"]},
     ],
-    [ // Livello 9
+    [ // Livello 10
       {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["如果每个人都尽自己的一份力，世界会变得更美好。","ru guo mei ge ren dou jin zi ji de yi fen li shi jie hui bian de geng mei hao"]},
       {it:"È probabile che le cose cambino nei prossimi anni.", ans:["未来几年情况很可能会发生变化。","wei lai ji nian qing kuang hen ke neng hui fa sheng bian hua"]},
       {it:"Non si può sempre prevedere come andranno le cose.", ans:["人们无法总是预测事情会如何发展。","ren men wu fa zong shi yu ce shi qing hui ru he fa zhan"]},
@@ -2723,7 +2946,7 @@ const BEGINNER = {
       {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["在一个理想的世界里，每个人都会拥有同样的机会。","zai yi ge li xiang de shi jie li mei ge ren dou hui yong you tong yang de ji hui"]},
       {it:"Le apparenze, a volte, ingannano.", ans:["有时候，表象是会骗人的。","you shi hou biao xiang shi hui pian ren de"]},
     ],
-    [ // Livello 10
+    [ // Livello 11
       {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["我不想拐弯抹角：我们得认真谈谈这件事。","wo bu xiang guai wan mo jiao wo men dei ren zhen tan tan zhe jian shi"]},
       {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["我们就直说吧，别绕圈子了。","wo men jiu zhi shuo ba bie rao quan zi le"]},
       {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["我明白这对谁来说都不容易。","wo ming bai zhe dui shei lai shuo dou bu rong yi"]},
@@ -2737,47 +2960,67 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["说到底，人永远不会停止学习。","shuo dao di ren yong yuan bu hui ting zhi xue xi"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["从长远看，真诚总是有回报的。","cong chang yuan kan zhen cheng zong shi you hui bao de"]},
     ],
-    [ // Livello 11 · di dove sei (parte 1)
-      {it:"Di dove sei?", ans:["你从哪里来？", "ni cong na li lai"]},
-      {it:"Sono italiano/a, di Roma.", ans:["我是意大利人，来自罗马。", "wo shi yi da li ren lai zi luo ma"]},
-      {it:"Dove sei nato/a?", ans:["你在哪里出生？", "ni zai na li chu sheng"]},
-      {it:"Sono nato/a in una piccola città.", ans:["我出生在一个小城市。", "wo chu sheng zai yi ge xiao cheng shi"]},
-      {it:"Da quanto tempo vivi qui?", ans:["你在这里住多久了？", "ni zai zhe li zhu duo jiu le"]},
-      {it:"Vivo qui da cinque anni.", ans:["我在这里住了五年了。", "wo zai zhe li zhu le wu nian le"]},
-      {it:"Qual è la tua lingua madre?", ans:["你的母语是什么？", "ni de mu yu shi shen me"]},
-      {it:"La mia lingua madre è l'italiano.", ans:["我的母语是意大利语。", "wo de mu yu shi yi da li yu"]},
+    [ // Livello 12 (Di dove sei - parte 1)
+      {it:"Di dove sei?", ans:["你从哪里来？","ni cong na li lai"]},
+      {it:"Sono italiano/a, di Roma.", ans:["我是意大利人，来自罗马。","wo shi yi da li ren lai zi luo ma"]},
+      {it:"Dove sei nato/a?", ans:["你在哪里出生？","ni zai na li chu sheng"]},
+      {it:"Sono nato/a in una piccola città.", ans:["我出生在一个小城市。","wo chu sheng zai yi ge xiao cheng shi"]},
+      {it:"Da quanto tempo vivi qui?", ans:["你在这里住多久了？","ni zai zhe li zhu duo jiu le"]},
+      {it:"Vivo qui da cinque anni.", ans:["我在这里住了五年了。","wo zai zhe li zhu le wu nian le"]},
+      {it:"Qual è la tua lingua madre?", ans:["你的母语是什么？","ni de mu yu shi shen me"]},
+      {it:"La mia lingua madre è l'italiano.", ans:["我的母语是意大利语。","wo de mu yu shi yi da li yu"]},
     ],
-    [ // Livello 12 · di dove sei (parte 2)
-      {it:"In quale quartiere abiti?", ans:["你住在哪个街区？", "ni zhu zai na ge jie qu"]},
-      {it:"Abito in centro città.", ans:["我住在市中心。", "wo zhu zai shi zhong xin"]},
-      {it:"Hai sempre vissuto qui?", ans:["你一直住在这里吗？", "ni yi zhi zhu zai zhe li ma"]},
-      {it:"Mi sono trasferito qui due anni fa.", ans:["我两年前搬到这里。", "wo liang nian qian ban dao zhe li"]},
-      {it:"Da dove vengono i tuoi genitori?", ans:["你父母来自哪里？", "ni fu mu lai zi na li"]},
-      {it:"I miei genitori vengono dal sud Italia.", ans:["我父母来自意大利南部。", "wo fu mu lai zi yi da li nan bu"]},
-      {it:"Ti manca il tuo paese d'origine?", ans:["你想念你的祖国吗？", "ni xiang nian ni de zu guo ma"]},
-      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["是的，我很想念，尤其是食物。", "shi de wo hen xiang nian you qi shi shi wu"]},
+    [ // Livello 13 (Di dove sei - parte 2)
+      {it:"In quale quartiere abiti?", ans:["你住在哪个街区？","ni zhu zai na ge jie qu"]},
+      {it:"Abito in centro città.", ans:["我住在市中心。","wo zhu zai shi zhong xin"]},
+      {it:"Hai sempre vissuto qui?", ans:["你一直住在这里吗？","ni yi zhi zhu zai zhe li ma"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["我两年前搬到这里。","wo liang nian qian ban dao zhe li"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["你父母来自哪里？","ni fu mu lai zi na li"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["我父母来自意大利南部。","wo fu mu lai zi yi da li nan bu"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["你想念你的祖国吗？","ni xiang nian ni de zu guo ma"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["是的，我很想念，尤其是食物。","shi de wo hen xiang nian you qi shi shi wu"]},
     ],
-    [ // Livello 13 · presentazione (parte 1)
-      {it:"Come ti chiami?", ans:["你叫什么名字？", "ni jiao shen me ming zi"]},
-      {it:"Mi chiamo Marco, piacere.", ans:["我叫马可，很高兴认识你。", "wo jiao ma ke hen gao xing ren shi ni"]},
-      {it:"Che lavoro fai?", ans:["你是做什么工作的？", "ni shi zuo shen me gong zuo de"]},
-      {it:"Sono uno studente universitario.", ans:["我是大学生。", "wo shi da xue sheng"]},
-      {it:"Quanti anni hai?", ans:["你多大了？", "ni duo da le"]},
-      {it:"Ho ventotto anni.", ans:["我二十八岁。", "wo er shi ba sui"]},
-      {it:"Quali sono i tuoi hobby?", ans:["你有什么爱好？", "ni you shen me ai hao"]},
-      {it:"Mi piace leggere e viaggiare.", ans:["我喜欢读书和旅行。", "wo xi huan du shu he lv xing"]},
+    [ // Livello 14 (Presentazione - parte 1)
+      {it:"Come ti chiami?", ans:["你叫什么名字？","ni jiao shen me ming zi"]},
+      {it:"Mi chiamo Marco, piacere.", ans:["我叫马可，很高兴认识你。","wo jiao ma ke hen gao xing ren shi ni"]},
+      {it:"Che lavoro fai?", ans:["你是做什么工作的？","ni shi zuo shen me gong zuo de"]},
+      {it:"Sono uno studente universitario.", ans:["我是大学生。","wo shi da xue sheng"]},
+      {it:"Quanti anni hai?", ans:["你多大了？","ni duo da le"]},
+      {it:"Ho ventotto anni.", ans:["我二十八岁。","wo er shi ba sui"]},
+      {it:"Quali sono i tuoi hobby?", ans:["你有什么爱好？","ni you shen me ai hao"]},
+      {it:"Mi piace leggere e viaggiare.", ans:["我喜欢读书和旅行。","wo xi huan du shu he lv xing"]},
     ],
-    [ // Livello 14 · presentazione (parte 2)
-      {it:"Sei sposato o single?", ans:["你结婚了还是单身？", "ni jie hun le hai shi dan shen"]},
-      {it:"Sono sposato con due figli.", ans:["我结婚了，有两个孩子。", "wo jie hun le you liang ge hai zi"]},
-      {it:"Con chi vivi?", ans:["你和谁住在一起？", "ni he shei zhu zai yi qi"]},
-      {it:"Vivo da solo in un appartamento.", ans:["我一个人住在公寓里。", "wo yi ge ren zhu zai gong yu li"]},
-      {it:"Che cosa studi all'università?", ans:["你在大学学什么专业？", "ni zai da xue xue shen me zhuan ye"]},
-      {it:"Studio economia al secondo anno.", ans:["我读经济学，二年级。", "wo du jing ji xue er nian ji"]},
-      {it:"Hai fratelli o sorelle?", ans:["你有兄弟姐妹吗？", "ni you xiong di jie mei ma"]},
-      {it:"Ho una sorella più piccola.", ans:["我有一个妹妹。", "wo you yi ge mei mei"]},
+    [ // Livello 15 (Presentazione - parte 2)
+      {it:"Sei sposato o single?", ans:["你结婚了还是单身？","ni jie hun le hai shi dan shen"]},
+      {it:"Sono sposato con due figli.", ans:["我结婚了，有两个孩子。","wo jie hun le you liang ge hai zi"]},
+      {it:"Con chi vivi?", ans:["你和谁住在一起？","ni he shei zhu zai yi qi"]},
+      {it:"Vivo da solo in un appartamento.", ans:["我一个人住在公寓里。","wo yi ge ren zhu zai gong yu li"]},
+      {it:"Che cosa studi all'università?", ans:["你在大学学什么专业？","ni zai da xue xue shen me zhuan ye"]},
+      {it:"Studio economia al secondo anno.", ans:["我读经济学，二年级。","wo du jing ji xue er nian ji"]},
+      {it:"Hai fratelli o sorelle?", ans:["你有兄弟姐妹吗？","ni you xiong di jie mei ma"]},
+      {it:"Ho una sorella più piccola.", ans:["我有一个妹妹。","wo you yi ge mei mei"]},
     ],
-    [ // Livello 13 (ex 11)
+    [ // Livello 16 (Dal Ristorante - parte 1)
+      {it:"Un tavolo per due, per favore.", ans:["请给我们一张双人桌。","qing gei wo men yi zhang shuang ren zhuo"]},
+      {it:"Avete un tavolo libero?", ans:["你们有空桌吗？","ni men you kong zhuo ma"]},
+      {it:"Possiamo vedere il menù, per favore?", ans:["我们可以看一下菜单吗？","wo men ke yi kan yi xia cai dan ma"]},
+      {it:"Cosa mi consiglia?", ans:["您有什么推荐的吗？","nin you shen me tui jian de ma"]},
+      {it:"Vorrei ordinare, per favore.", ans:["我想点餐。","wo xiang dian can"]},
+      {it:"Per me una pizza margherita.", ans:["我要一份玛格丽特披萨。","wo yao yi fen ma ge li te pi sa"]},
+      {it:"Cosa c'è nel piatto del giorno?", ans:["今日特餐有什么？","jin ri te can you shen me"]},
+      {it:"Ha qualche piatto vegetariano?", ans:["你们有素食菜品吗？","ni men you su shi cai pin ma"]},
+    ],
+    [ // Livello 17 (Dal Ristorante - parte 2)
+      {it:"Vorrei un bicchiere di vino rosso.", ans:["我想要一杯红酒。","wo xiang yao yi bei hong jiu"]},
+      {it:"Un'acqua naturale, per favore.", ans:["请给我一瓶无气泡水。","qing gei wo yi ping wu qi pao shui"]},
+      {it:"Il conto, per favore.", ans:["请结账。","qing jie zhang"]},
+      {it:"Il servizio è incluso?", ans:["服务费包含在内吗？","fu wu fei bao han zai nei ma"]},
+      {it:"Il cibo era delizioso.", ans:["这顿饭很美味。","zhe dun fan hen mei wei"]},
+      {it:"Sono allergico alle noci.", ans:["我对坚果过敏。","wo dui jian guo guo min"]},
+      {it:"Posso avere ancora un po' di pane?", ans:["可以再给我一些面包吗？","ke yi zai gei wo yi xie mian bao ma"]},
+      {it:"Possiamo pagare separatamente?", ans:["我们可以分开付款吗？","wo men ke yi fen kai fu kuan ma"]},
+    ],
+    [ // Livello 18 (In Aeroporto - parte 1)
       {it:"Dov'è il banco del check-in?", ans:["值机柜台在哪里？","zhi ji gui tai zai na li"]},
       {it:"Posso fare il check-in online?", ans:["我可以在网上办理值机吗？","wo ke yi zai wang shang ban li zhi ji ma"]},
       {it:"Ho prenotato un volo per Roma.", ans:["我预订了一趟去罗马的航班。","wo yu ding le yi tang qu luo ma de hang ban"]},
@@ -2789,7 +3032,7 @@ const BEGINNER = {
       {it:"A che ora inizia l'imbarco?", ans:["几点开始登机？","ji dian kai shi deng ji"]},
       {it:"Ho perso la carta d'imbarco, cosa devo fare?", ans:["我的登机牌丢了，我该怎么办？","wo de deng ji pai diu le wo gai zen me ban"]},
     ],
-    [ // Livello 12
+    [ // Livello 19 (In Aeroporto - parte 2)
       {it:"Deve togliere le scarpe per il controllo di sicurezza.", ans:["安检时需要脱鞋。","an jian shi xu yao tuo xie"]},
       {it:"Metta gli oggetti metallici nel vassoio.", ans:["请把金属物品放进托盘里。","qing ba jin shu wu pin fang jin tuo pan li"]},
       {it:"Ha liquidi nel bagaglio a mano?", ans:["您的随身行李里有液体吗？","nin de sui shen xing li li you ye ti ma"]},
@@ -2801,7 +3044,7 @@ const BEGINNER = {
       {it:"Non è consentito portare oggetti taglienti a bordo.", ans:["不允许携带锐器登机。","bu yun xu xie dai rui qi deng ji"]},
       {it:"Il controllo di sicurezza durerà pochi minuti.", ans:["安检需要几分钟时间。","an jian xu yao ji fen zhong shi jian"]},
     ],
-    [ // Livello 13
+    [ // Livello 20 (In Aeroporto - parte 3)
       {it:"Da quale porta parte il volo per Londra?", ans:["去伦敦的航班从哪个登机口出发？","qu lun dun de hang ban cong na ge deng ji kou chu fa"]},
       {it:"Il tabellone delle partenze mostra un ritardo.", ans:["出发显示屏显示有延误。","chu fa xian shi ping xian shi you yan wu"]},
       {it:"Il nostro volo è indicato come \"in orario\".", ans:["我们的航班显示为准时。","wo men de hang ban xian shi wei zhun shi"]},
@@ -2813,7 +3056,7 @@ const BEGINNER = {
       {it:"La partenza è stata posticipata di un'ora.", ans:["起飞时间推迟了一个小时。","qi fei shi jian tui chi le yi ge xiao shi"]},
       {it:"Buon viaggio e buon volo!", ans:["祝你旅途愉快，一路平安！","zhu ni lv tu yu kuai yi lu ping an"]},
     ],
-    [ // Livello 14
+    [ // Livello 21 (In Aeroporto - parte 4)
       {it:"Il volo da Parigi è appena atterrato.", ans:["从巴黎来的航班刚刚降落。","cong ba li lai de hang ban gang gang jiang luo"]},
       {it:"A che ora arriva il tuo volo?", ans:["你的航班几点到达？","ni de hang ban ji dian dao da"]},
       {it:"Sono appena arrivato in aeroporto.", ans:["我刚到机场。","wo gang dao ji chang"]},
@@ -2825,7 +3068,7 @@ const BEGINNER = {
       {it:"Siamo atterrati sani e salvi.", ans:["我们安全降落了。","wo men an quan jiang luo le"]},
       {it:"Dopo l'atterraggio, restate seduti finché l'aereo non si ferma.", ans:["降落后请系好安全带坐好，直到飞机完全停稳。","jiang luo hou qing ji hao an quan dai zuo hao zhi dao fei ji wan quan ting wen"]},
     ],
-    [ // Livello 15
+    [ // Livello 22 (In Aeroporto - parte 5)
       {it:"Il volo è stato cancellato per maltempo.", ans:["航班因天气恶劣被取消了。","hang ban yin tian qi e lie bei qu xiao le"]},
       {it:"Mi dispiace informarla che il suo volo è in ritardo.", ans:["很抱歉通知您，您的航班延误了。","hen bao qian tong zhi nin nin de hang ban yan wu le"]},
       {it:"L'aereo è stato sospeso per un guasto tecnico.", ans:["飞机因技术故障停飞了。","fei ji yin ji shu gu zhang ting fei le"]},
@@ -2837,7 +3080,7 @@ const BEGINNER = {
       {it:"Il volo è stato riprogrammato per domani mattina.", ans:["航班已改签到明天早上。","hang ban yi gai qian dao ming tian zao shang"]},
       {it:"A causa dello sciopero, molti voli sono stati cancellati.", ans:["由于罢工，许多航班都被取消了。","you yu ba gong xu duo hang ban dou bei qu xiao le"]},
     ],
-    [ // Livello 16
+    [ // Livello 23 (In Aeroporto - parte 6)
       {it:"Dove posso ritirare il mio bagaglio?", ans:["我在哪里可以领取我的行李？","wo zai na li ke yi ling qu wo de xing li"]},
       {it:"Il mio bagaglio non è arrivato.", ans:["我的行李没有到。","wo de xing li mei you dao"]},
       {it:"Ho perso una valigia, a chi devo rivolgermi?", ans:["我丢了一个行李箱，应该联系谁？","wo diu le yi ge xing li xiang ying gai lian xi shei"]},
@@ -2849,7 +3092,7 @@ const BEGINNER = {
       {it:"Compili questo modulo per il bagaglio smarrito.", ans:["请填写这份行李遗失表格。","qing tian xie zhe fen xing li yi shi biao ge"]},
       {it:"La valigia le sarà consegnata a casa entro domani.", ans:["您的行李箱明天之前会送到您家。","nin de xing li xiang ming tian zhi qian hui song dao nin jia"]},
     ],
-    [ // Livello 17
+    [ // Livello 24 (In Aeroporto - parte 7)
       {it:"Il gate è stato cambiato all'ultimo momento.", ans:["登机口在最后一刻改变了。","deng ji kou zai zui hou yi ke gai bian le"]},
       {it:"Dov'è il gate numero 15?", ans:["15号登机口在哪里？","shi wu hao deng ji kou zai na li"]},
       {it:"L'imbarco avviene per fila, a partire dai posti in fondo.", ans:["登机按排从后排座位开始。","deng ji an pai cong hou pai zuo wei kai shi"]},
@@ -2861,7 +3104,7 @@ const BEGINNER = {
       {it:"L'imbarco terminerà tra cinque minuti.", ans:["登机将在五分钟后结束。","deng ji jiang zai wu fen zhong hou jie shu"]},
       {it:"Mi scusi, questo è il gate giusto per il volo per Madrid?", ans:["打扰一下，这是去马德里航班的登机口吗？","da rao yi xia zhe shi qu ma de li hang ban de deng ji kou ma"]},
     ],
-    [ // Livello 18
+    [ // Livello 25 (In Aeroporto - parte 8)
       {it:"Ha qualcosa da dichiarare alla dogana?", ans:["您有东西需要向海关申报吗？","nin you dong xi xu yao xiang hai guan shen bao ma"]},
       {it:"Qual è il motivo del suo viaggio?", ans:["您此行的目的是什么？","nin ci xing de mu di shi shen me"]},
       {it:"Quanto tempo rimarrà nel paese?", ans:["您会在这个国家停留多久？","nin hui zai zhe ge guo jia ting liu duo jiu"]},
@@ -2873,7 +3116,7 @@ const BEGINNER = {
       {it:"Non ho nulla da dichiarare.", ans:["我没有什么需要申报的。","wo mei you shen me xu yao shen bao de"]},
       {it:"Benvenuto, buona permanenza nel nostro paese.", ans:["欢迎，祝您在我们国家逗留愉快。","huan ying zhu nin zai wo men guo jia dou liu yu kuai"]},
     ],
-    [ // Livello 19
+    [ // Livello 26 (In Aeroporto - parte 9)
       {it:"Dov'è la sala d'attesa più vicina?", ans:["最近的候机休息室在哪里？","zui jin de hou ji xiu xi shi zai na li"]},
       {it:"C'è un bancomat qui in aeroporto?", ans:["机场里有自动取款机吗？","ji chang li you zi dong qu kuan ji ma"]},
       {it:"Dove posso cambiare valuta?", ans:["我在哪里可以换外币？","wo zai na li ke yi huan wai bi"]},
@@ -2885,7 +3128,7 @@ const BEGINNER = {
       {it:"Avete un servizio di assistenza per persone con disabilità?", ans:["你们有为残障人士提供的协助服务吗？","ni men you wei can zhang ren shi ti gong de xie zhu fu wu ma"]},
       {it:"Dov'è la fermata del bus navetta per il parcheggio?", ans:["去停车场的班车站在哪里？","qu ting che chang de ban che zhan zai na li"]},
     ],
-    [ // Livello 20
+    [ // Livello 27 (In Aeroporto - parte 10)
       {it:"Ho perso la coincidenza per colpa del ritardo.", ans:["我因为延误错过了转机。","wo yin wei yan wu cuo guo le zhuan ji"]},
       {it:"Il mio volo è stato dirottato su un altro aeroporto.", ans:["我的航班被改降到另一个机场。","wo de hang ban bei gai jiang dao ling yi ge ji chang"]},
       {it:"Non riesco a trovare il mio bagaglio a mano.", ans:["我找不到我的随身行李了。","wo zhao bu dao wo de sui shen xing li le"]},
@@ -2920,26 +3163,46 @@ const BEGINNER = {
       {it:"A che ora parte il treno?", ans:["電車は何時に出発しますか","densha wa nanji ni shuppatsu shimasu ka"]},
     ],
     [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["カードで払えますか？", "kaado de haraemasu ka"]},
-      {it:"Dov'è la stazione più vicina?", ans:["一番近い駅はどこですか？", "ichiban chikai eki wa doko desu ka"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["助けが必要です、お願いします。", "tasuke ga hitsuyou desu onegaishimasu"]},
-      {it:"A che ora apre il negozio?", ans:["お店は何時に開きますか？", "omise wa nanji ni hirakimasu ka"]},
-      {it:"Questo è troppo caro.", ans:["これは高すぎます。", "kore wa takasugimasu"]},
-      {it:"Posso avere il conto, per favore?", ans:["お会計をお願いできますか？", "okaikei wo onegai dekimasu ka"]},
-      {it:"Sto imparando questa lingua.", ans:["この言語を勉強しています。", "kono gengo wo benkyou shite imasu"]},
-      {it:"Cosa fai questo weekend?", ans:["今週末は何をしますか？", "konshuumatsu wa nani wo shimasu ka"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["道に迷いました、助けてもらえますか？", "michi ni mayoimashita tasukete moraemasu ka"]},
-      {it:"Vado al mercato oggi.", ans:["今日市場に行きます。", "kyou ichiba ni ikimasu"]},
-      {it:"Che tempo fa oggi?", ans:["今日の天気はどうですか？", "kyou no tenki wa dou desu ka"]},
-      {it:"Dov'è il bagno, per favore?", ans:["すみません、お手洗いはどこですか？", "sumimasen otearai wa doko desu ka"]},
-      {it:"Quanto costa questo?", ans:["これはいくらですか？", "kore wa ikura desu ka"]},
-      {it:"Hai un minuto per parlare?", ans:["少し話す時間はありますか？", "sukoshi hanasu jikan wa arimasu ka"]},
-      {it:"Mi piace molto questo posto.", ans:["この場所がとても気に入っています。", "kono basho ga totemo kiniitte imasu"]},
-      {it:"Sono stanco/a oggi.", ans:["今日は疲れています。", "kyou wa tsukarete imasu"]},
-      {it:"Puoi ripetere più lentamente?", ans:["もっとゆっくり繰り返してもらえますか？", "motto yukkuri kurikaeshite moraemasu ka"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["手伝ってくれて本当にありがとう。", "tetsudatte kurete hontou ni arigatou"]},
+      {it:"Posso pagare con la carta?", ans:["カードで払えますか？","kaado de haraemasu ka"]},
+      {it:"Dov'è la stazione più vicina?", ans:["一番近い駅はどこですか？","ichiban chikai eki wa doko desu ka"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["助けが必要です、お願いします。","tasuke ga hitsuyou desu onegaishimasu"]},
+      {it:"A che ora apre il negozio?", ans:["お店は何時に開きますか？","omise wa nanji ni hirakimasu ka"]},
+      {it:"Questo è troppo caro.", ans:["これは高すぎます。","kore wa takasugimasu"]},
+      {it:"Posso avere il conto, per favore?", ans:["お会計をお願いできますか？","okaikei wo onegai dekimasu ka"]},
+      {it:"Sto imparando questa lingua.", ans:["この言語を勉強しています。","kono gengo wo benkyou shite imasu"]},
+      {it:"Cosa fai questo weekend?", ans:["今週末は何をしますか？","konshuumatsu wa nani wo shimasu ka"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["道に迷いました、助けてもらえますか？","michi ni mayoimashita tasukete moraemasu ka"]},
+      {it:"Vado al mercato oggi.", ans:["今日市場に行きます。","kyou ichiba ni ikimasu"]},
+      {it:"Che tempo fa oggi?", ans:["今日の天気はどうですか？","kyou no tenki wa dou desu ka"]},
+      {it:"Dov'è il bagno, per favore?", ans:["すみません、お手洗いはどこですか？","sumimasen otearai wa doko desu ka"]},
+      {it:"Quanto costa questo?", ans:["これはいくらですか？","kore wa ikura desu ka"]},
+      {it:"Hai un minuto per parlare?", ans:["少し話す時間はありますか？","sukoshi hanasu jikan wa arimasu ka"]},
+      {it:"Mi piace molto questo posto.", ans:["この場所がとても気に入っています。","kono basho ga totemo kiniitte imasu"]},
+      {it:"Sono stanco/a oggi.", ans:["今日は疲れています。","kyou wa tsukarete imasu"]},
+      {it:"Puoi ripetere più lentamente?", ans:["もっとゆっくり繰り返してもらえますか？","motto yukkuri kurikaeshite moraemasu ka"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["手伝ってくれて本当にありがとう。","tetsudatte kurete hontou ni arigatou"]},
     ],
-    [ // Livello 3
+    [ // Livello 3 (ponte per principianti assoluti)
+      {it:"Buon appetito!", ans:["いただきます！","itadakimasu"]},
+      {it:"Salute!", ans:["お大事に！","odaiji ni"]},
+      {it:"A domani!", ans:["また明日！","mata ashita"]},
+      {it:"Ci vediamo dopo!", ans:["またあとで！","mata atode"]},
+      {it:"Come si dice questo?", ans:["これは何と言いますか？","kore wa nan to iimasu ka"]},
+      {it:"Non lo so.", ans:["わかりません。","wakarimasen"]},
+      {it:"Forse.", ans:["たぶん。","tabun"]},
+      {it:"Sono d'accordo.", ans:["賛成です。","sansei desu"]},
+      {it:"Non sono d'accordo.", ans:["反対です。","hantai desu"]},
+      {it:"Hai ragione.", ans:["あなたが正しいです。","anata ga tadashii desu"]},
+      {it:"Mi dispiace.", ans:["ごめんなさい。","gomennasai"]},
+      {it:"Non fa niente.", ans:["大丈夫です。","daijoubu desu"]},
+      {it:"Con piacere.", ans:["喜んで。","yorokonde"]},
+      {it:"Certo!", ans:["もちろん！","mochiron"]},
+      {it:"Aspetta un momento, per favore.", ans:["少し待ってください。","sukoshi matte kudasai"]},
+      {it:"Ho fame.", ans:["お腹がすきました。","onaka ga sukimashita"]},
+      {it:"Ho sete.", ans:["のどが渇きました。","nodo ga kawakimashita"]},
+      {it:"Sono felice.", ans:["嬉しいです。","ureshii desu"]},
+    ],
+    [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["この街はとても面白いと思います。","kono machi wa totemo omoshiroi to omoimasu"]},
       {it:"Se avessi più tempo, viaggerei di più.", ans:["もっと時間があれば、もっと旅行するのに。","motto jikan ga areba motto ryokou suru noni"]},
       {it:"Preferisco il tè al caffè.", ans:["コーヒーより紅茶の方が好きです。","koohii yori koucha no hou ga suki desu"]},
@@ -2953,7 +3216,7 @@ const BEGINNER = {
       {it:"È difficile spiegare esattamente come mi sento.", ans:["自分の気持ちを正確に説明するのは難しいです。","jibun no kimochi wo seikaku ni setsumei suru no wa muzukashii desu"]},
       {it:"Spero che tutto vada per il meglio.", ans:["すべてがうまくいくことを願っています。","subete ga umaku iku koto wo negatte imasu"]},
     ],
-    [ // Livello 4
+    [ // Livello 5
       {it:"La settimana scorsa ho visitato una città che non conoscevo.", ans:["先週、知らなかった街を訪れました。","senshuu shiranakatta machi wo otozuremashita"]},
       {it:"Di solito mi sveglio presto durante la settimana.", ans:["普段、平日は早く起きます。","fudan heijitsu wa hayaku okimasu"]},
       {it:"Potresti consigliarmi un buon ristorante qui vicino?", ans:["この近くの良いレストランを教えてもらえますか？","kono chikaku no ii resutoran wo oshiete moraemasu ka"]},
@@ -2967,7 +3230,7 @@ const BEGINNER = {
       {it:"Sto cercando di migliorare la mia pronuncia ogni giorno.", ans:["毎日発音を上達させようとしています。","mainichi hatsuon wo joutatsu saseyou to shite imasu"]},
       {it:"Qual è la differenza tra queste due opzioni?", ans:["この二つの選択肢の違いは何ですか？","kono futatsu no sentakushi no chigai wa nan desu ka"]},
     ],
-    [ // Livello 5
+    [ // Livello 6
       {it:"Se potessi tornare indietro, farei scelte diverse.", ans:["もし戻れるなら、違う選択をするでしょう。","moshi modoreru nara chigau sentaku wo suru deshou"]},
       {it:"È importante ascoltare punti di vista diversi dal proprio.", ans:["自分と違う視点に耳を傾けることは大切です。","jibun to chigau shiten ni mimi wo katamukeru koto wa taisetsu desu"]},
       {it:"Mi sono reso conto che avevo torto.", ans:["自分が間違っていたことに気づきました。","jibun ga machigatte ita koto ni kizukimashita"]},
@@ -2981,7 +3244,7 @@ const BEGINNER = {
       {it:"Qualunque cosa succeda, cercherò di rimanere calmo.", ans:["何が起きても、冷静でいるようにします。","nani ga okitemo reisei de iru you ni shimasu"]},
       {it:"Col senno di poi, avrei fatto le cose diversamente.", ans:["今にして思えば、違うやり方をしていたでしょう。","ima ni shite omoeba chigau yarikata wo shite ita deshou"]},
     ],
-    [ // Livello 6
+    [ // Livello 7
       {it:"Secondo me dovremmo provare un approccio diverso.", ans:["私たちは違うアプローチを試すべきだと思います。","watashitachi wa chigau apuroochi wo tamesu beki da to omoimasu"]},
       {it:"Non sono del tutto d'accordo con quello che hai detto.", ans:["あなたが言ったことに完全には同意できません。","anata ga itta koto ni kanzen niwa doui dekimasen"]},
       {it:"Mi chiedo se sia davvero la scelta migliore.", ans:["それが本当に最善の選択なのか疑問です。","sore ga hontou ni saizen no sentaku na no ka gimon desu"]},
@@ -2995,7 +3258,7 @@ const BEGINNER = {
       {it:"Se fossi in te, ci penserei due volte.", ans:["もし私があなたなら、もう一度考え直すでしょう。","moshi watashi ga anata nara mou ichido kangaenaosu deshou"]},
       {it:"A conti fatti, ne è valsa la pena.", ans:["結局のところ、それだけの価値がありました。","kekkyoku no tokoro sore dake no kachi ga arimashita"]},
     ],
-    [ // Livello 7
+    [ // Livello 8
       {it:"L'anno scorso ho fatto un viaggio che ha cambiato il mio modo di vedere le cose.", ans:["去年、物事の見方を変える旅をしました。","kyonen monogoto no mikata wo kaeru tabi wo shimashita"]},
       {it:"Quando ero più giovane, passavo ore a leggere in biblioteca.", ans:["若い頃、よく図書館で何時間も読書をしていました。","wakai koro yoku toshokan de nanjikan mo dokusho wo shite imashita"]},
       {it:"Mi ricordo ancora la prima volta che ho provato questo piatto.", ans:["この料理を初めて食べた時のことを今でも覚えています。","kono ryouri wo hajimete tabeta toki no koto wo ima demo oboete imasu"]},
@@ -3009,7 +3272,7 @@ const BEGINNER = {
       {it:"Con il tempo, ho imparato ad accettare i miei errori.", ans:["時間が経つにつれて、自分の失敗を受け入れることを学びました。","jikan ga tatsu ni tsurete jibun no shippai wo ukeireru koto wo manabimashita"]},
       {it:"Guardando indietro, sono contento della strada che ho fatto.", ans:["振り返ってみると、自分が歩んできた道に満足しています。","furikaette miru to jibun ga ayunde kita michi ni manzoku shite imasu"]},
     ],
-    [ // Livello 8
+    [ // Livello 9
       {it:"Dobbiamo consegnare il progetto entro venerdì.", ans:["金曜日までにプロジェクトを提出しなければなりません。","kinyoubi made ni purojekuto wo teishutsu shinakereba narimasen"]},
       {it:"Potremmo organizzare una riunione per chiarire i dettagli?", ans:["詳細を明確にするための会議を開けますか？","shousai wo meikaku ni suru tame no kaigi wo hirakemasu ka"]},
       {it:"Il mio capo mi ha chiesto di rivedere il rapporto.", ans:["上司にレポートを見直すよう頼まれました。","joushi ni repooto wo minaosu you tanomaremashita"]},
@@ -3023,7 +3286,7 @@ const BEGINNER = {
       {it:"Il colloquio è andato meglio di quanto mi aspettassi.", ans:["面接は思っていたよりもうまくいきました。","mensetsu wa omotte ita yorimo umaku ikimashita"]},
       {it:"Dobbiamo trovare un compromesso che vada bene a tutti.", ans:["みんなにとって都合の良い妥協点を見つける必要があります。","minna ni totte tsugou no ii dakyouten wo mitsukeru hitsuyou ga arimasu"]},
     ],
-    [ // Livello 9
+    [ // Livello 10
       {it:"Se tutti facessero la loro parte, il mondo sarebbe un posto migliore.", ans:["もし皆が自分の役割を果たせば、世界はもっと良い場所になるでしょう。","moshi mina ga jibun no yakuwari wo hataseba sekai wa motto ii basho ni naru deshou"]},
       {it:"È probabile che le cose cambino nei prossimi anni.", ans:["これから数年で状況が変わる可能性が高いです。","korekara suunen de joukyou ga kawaru kanousei ga takai desu"]},
       {it:"Non si può sempre prevedere come andranno le cose.", ans:["物事がどうなるかは常に予測できるわけではありません。","monogoto ga dou naru ka wa tsuneni yosoku dekiru wake dewa arimasen"]},
@@ -3037,7 +3300,7 @@ const BEGINNER = {
       {it:"In un mondo ideale, tutti avrebbero le stesse opportunità.", ans:["理想的な世界では、誰もが同じ機会を持つでしょう。","risouteki na sekai dewa dare mo ga onaji kikai wo motsu deshou"]},
       {it:"Le apparenze, a volte, ingannano.", ans:["見た目は時に人を欺くものです。","mitame wa tokini hito wo azamuku mono desu"]},
     ],
-    [ // Livello 10
+    [ // Livello 11
       {it:"Non voglio girarci intorno: dobbiamo parlarne seriamente.", ans:["遠回しには言いたくありません。真剣に話し合う必要があります。","toomawashi niwa iitaku arimasen shinken ni hanashiau hitsuyou ga arimasu"]},
       {it:"Diciamo le cose come stanno, senza troppi giri di parole.", ans:["遠回しな言い方はやめて、はっきり言いましょう。","toomawashi na iikata wa yamete hakkiri iimashou"]},
       {it:"Mi rendo conto che non è stato facile per nessuno.", ans:["誰にとっても簡単ではなかったと分かっています。","dare ni totte mo kantan dewa nakatta to wakatte imasu"]},
@@ -3051,47 +3314,67 @@ const BEGINNER = {
       {it:"Non si finisce mai di imparare, in fondo.", ans:["結局、人は学ぶことを決してやめません。","kekkyoku hito wa manabu koto wo kesshite yamemasen"]},
       {it:"Alla lunga, la sincerità paga sempre.", ans:["長い目で見れば、誠実さは常に報われます。","nagai me de mireba seijitsusa wa tsuneni mukuwaremasu"]},
     ],
-    [ // Livello 11 · di dove sei (parte 1)
-      {it:"Di dove sei?", ans:["どこの出身ですか", "doko no shusshin desu ka"]},
-      {it:"Sono italiano/a, di Roma.", ans:["私はイタリア人で、ローマ出身です", "watashi wa itariajin de rooma shusshin desu"]},
-      {it:"Dove sei nato/a?", ans:["どこで生まれましたか", "doko de umaremashita ka"]},
-      {it:"Sono nato/a in una piccola città.", ans:["小さな町で生まれました", "chiisana machi de umaremashita"]},
-      {it:"Da quanto tempo vivi qui?", ans:["ここにどのくらい住んでいますか", "koko ni dono kurai sunde imasu ka"]},
-      {it:"Vivo qui da cinque anni.", ans:["ここに5年間住んでいます", "koko ni gonenkan sunde imasu"]},
-      {it:"Qual è la tua lingua madre?", ans:["あなたの母語は何ですか", "anata no bogo wa nan desu ka"]},
-      {it:"La mia lingua madre è l'italiano.", ans:["私の母語はイタリア語です", "watashi no bogo wa itariago desu"]},
+    [ // Livello 12 (Di dove sei - parte 1)
+      {it:"Di dove sei?", ans:["どこの出身ですか","doko no shusshin desu ka"]},
+      {it:"Sono italiano/a, di Roma.", ans:["私はイタリア人で、ローマ出身です","watashi wa itariajin de rooma shusshin desu"]},
+      {it:"Dove sei nato/a?", ans:["どこで生まれましたか","doko de umaremashita ka"]},
+      {it:"Sono nato/a in una piccola città.", ans:["小さな町で生まれました","chiisana machi de umaremashita"]},
+      {it:"Da quanto tempo vivi qui?", ans:["ここにどのくらい住んでいますか","koko ni dono kurai sunde imasu ka"]},
+      {it:"Vivo qui da cinque anni.", ans:["ここに5年間住んでいます","koko ni gonenkan sunde imasu"]},
+      {it:"Qual è la tua lingua madre?", ans:["あなたの母語は何ですか","anata no bogo wa nan desu ka"]},
+      {it:"La mia lingua madre è l'italiano.", ans:["私の母語はイタリア語です","watashi no bogo wa itariago desu"]},
     ],
-    [ // Livello 12 · di dove sei (parte 2)
-      {it:"In quale quartiere abiti?", ans:["どの地区に住んでいますか？", "dono chiku ni sunde imasu ka"]},
-      {it:"Abito in centro città.", ans:["街の中心部に住んでいます。", "machi no chuushinbu ni sunde imasu"]},
-      {it:"Hai sempre vissuto qui?", ans:["ずっとここに住んでいますか？", "zutto koko ni sunde imasu ka"]},
-      {it:"Mi sono trasferito qui due anni fa.", ans:["2年前にここに引っ越してきました。", "ninen mae ni koko ni hikkoshite kimashita"]},
-      {it:"Da dove vengono i tuoi genitori?", ans:["ご両親はどちらの出身ですか？", "goryoushin wa dochira no shusshin desu ka"]},
-      {it:"I miei genitori vengono dal sud Italia.", ans:["両親はイタリア南部の出身です。", "ryoushin wa itaria nanbu no shusshin desu"]},
-      {it:"Ti manca il tuo paese d'origine?", ans:["故郷が恋しいですか？", "furusato ga koishii desu ka"]},
-      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["はい、特に食べ物がとても恋しいです。", "hai tokuni tabemono ga totemo koishii desu"]},
+    [ // Livello 13 (Di dove sei - parte 2)
+      {it:"In quale quartiere abiti?", ans:["どの地区に住んでいますか？","dono chiku ni sunde imasu ka"]},
+      {it:"Abito in centro città.", ans:["街の中心部に住んでいます。","machi no chuushinbu ni sunde imasu"]},
+      {it:"Hai sempre vissuto qui?", ans:["ずっとここに住んでいますか？","zutto koko ni sunde imasu ka"]},
+      {it:"Mi sono trasferito qui due anni fa.", ans:["2年前にここに引っ越してきました。","ninen mae ni koko ni hikkoshite kimashita"]},
+      {it:"Da dove vengono i tuoi genitori?", ans:["ご両親はどちらの出身ですか？","goryoushin wa dochira no shusshin desu ka"]},
+      {it:"I miei genitori vengono dal sud Italia.", ans:["両親はイタリア南部の出身です。","ryoushin wa itaria nanbu no shusshin desu"]},
+      {it:"Ti manca il tuo paese d'origine?", ans:["故郷が恋しいですか？","furusato ga koishii desu ka"]},
+      {it:"Sì, mi manca molto, soprattutto il cibo.", ans:["はい、特に食べ物がとても恋しいです。","hai tokuni tabemono ga totemo koishii desu"]},
     ],
-    [ // Livello 13 · presentazione (parte 1)
-      {it:"Come ti chiami?", ans:["お名前は何ですか", "onamae wa nan desu ka"]},
-      {it:"Mi chiamo Marco, piacere.", ans:["マルコと申します、よろしくお願いします", "maruko to moushimasu yoroshiku onegaishimasu"]},
-      {it:"Che lavoro fai?", ans:["お仕事は何ですか", "oshigoto wa nan desu ka"]},
-      {it:"Sono uno studente universitario.", ans:["私は大学生です", "watashi wa daigakusei desu"]},
-      {it:"Quanti anni hai?", ans:["おいくつですか", "oikutsu desu ka"]},
-      {it:"Ho ventotto anni.", ans:["28歳です", "nijuuhassai desu"]},
-      {it:"Quali sono i tuoi hobby?", ans:["趣味は何ですか", "shumi wa nan desu ka"]},
-      {it:"Mi piace leggere e viaggiare.", ans:["読書と旅行が好きです", "dokusho to ryokou ga suki desu"]},
+    [ // Livello 14 (Presentazione - parte 1)
+      {it:"Come ti chiami?", ans:["お名前は何ですか","onamae wa nan desu ka"]},
+      {it:"Mi chiamo Marco, piacere.", ans:["マルコと申します、よろしくお願いします","maruko to moushimasu yoroshiku onegaishimasu"]},
+      {it:"Che lavoro fai?", ans:["お仕事は何ですか","oshigoto wa nan desu ka"]},
+      {it:"Sono uno studente universitario.", ans:["私は大学生です","watashi wa daigakusei desu"]},
+      {it:"Quanti anni hai?", ans:["おいくつですか","oikutsu desu ka"]},
+      {it:"Ho ventotto anni.", ans:["28歳です","nijuuhassai desu"]},
+      {it:"Quali sono i tuoi hobby?", ans:["趣味は何ですか","shumi wa nan desu ka"]},
+      {it:"Mi piace leggere e viaggiare.", ans:["読書と旅行が好きです","dokusho to ryokou ga suki desu"]},
     ],
-    [ // Livello 14 · presentazione (parte 2)
-      {it:"Sei sposato o single?", ans:["結婚していますか、それとも独身ですか？", "kekkon shite imasu ka soretomo dokushin desu ka"]},
-      {it:"Sono sposato con due figli.", ans:["結婚していて、子供が二人います。", "kekkon shite ite kodomo ga futari imasu"]},
-      {it:"Con chi vivi?", ans:["誰と住んでいますか？", "dare to sunde imasu ka"]},
-      {it:"Vivo da solo in un appartamento.", ans:["アパートに一人で住んでいます。", "apaato ni hitori de sunde imasu"]},
-      {it:"Che cosa studi all'università?", ans:["大学で何を勉強していますか？", "daigaku de nani wo benkyou shite imasu ka"]},
-      {it:"Studio economia al secondo anno.", ans:["経済学を勉強していて、2年生です。", "keizaigaku wo benkyou shite ite ninensei desu"]},
-      {it:"Hai fratelli o sorelle?", ans:["兄弟姉妹はいますか？", "kyoudai shimai wa imasu ka"]},
-      {it:"Ho una sorella più piccola.", ans:["妹が一人います。", "imouto ga hitori imasu"]},
+    [ // Livello 15 (Presentazione - parte 2)
+      {it:"Sei sposato o single?", ans:["結婚していますか、それとも独身ですか？","kekkon shite imasu ka soretomo dokushin desu ka"]},
+      {it:"Sono sposato con due figli.", ans:["結婚していて、子供が二人います。","kekkon shite ite kodomo ga futari imasu"]},
+      {it:"Con chi vivi?", ans:["誰と住んでいますか？","dare to sunde imasu ka"]},
+      {it:"Vivo da solo in un appartamento.", ans:["アパートに一人で住んでいます。","apaato ni hitori de sunde imasu"]},
+      {it:"Che cosa studi all'università?", ans:["大学で何を勉強していますか？","daigaku de nani wo benkyou shite imasu ka"]},
+      {it:"Studio economia al secondo anno.", ans:["経済学を勉強していて、2年生です。","keizaigaku wo benkyou shite ite ninensei desu"]},
+      {it:"Hai fratelli o sorelle?", ans:["兄弟姉妹はいますか？","kyoudai shimai wa imasu ka"]},
+      {it:"Ho una sorella più piccola.", ans:["妹が一人います。","imouto ga hitori imasu"]},
     ],
-    [ // Livello 13 (ex 11)
+    [ // Livello 16 (Dal Ristorante - parte 1)
+      {it:"Un tavolo per due, per favore.", ans:["二人用のテーブルをお願いします。","futariyou no teeburu wo onegaishimasu"]},
+      {it:"Avete un tavolo libero?", ans:["空いているテーブルはありますか？","aite iru teeburu wa arimasu ka"]},
+      {it:"Possiamo vedere il menù, per favore?", ans:["メニューを見せていただけますか？","menyuu wo misete itadakemasu ka"]},
+      {it:"Cosa mi consiglia?", ans:["おすすめは何ですか？","osusume wa nan desu ka"]},
+      {it:"Vorrei ordinare, per favore.", ans:["注文をお願いします。","chuumon wo onegaishimasu"]},
+      {it:"Per me una pizza margherita.", ans:["マルゲリータピザをお願いします。","marugeriita piza wo onegaishimasu"]},
+      {it:"Cosa c'è nel piatto del giorno?", ans:["本日のおすすめ料理は何が入っていますか？","honjitsu no osusume ryouri wa nani ga haitte imasu ka"]},
+      {it:"Ha qualche piatto vegetariano?", ans:["ベジタリアン料理はありますか？","bejitarian ryouri wa arimasu ka"]},
+    ],
+    [ // Livello 17 (Dal Ristorante - parte 2)
+      {it:"Vorrei un bicchiere di vino rosso.", ans:["赤ワインを一杯お願いします。","akawain wo ippai onegaishimasu"]},
+      {it:"Un'acqua naturale, per favore.", ans:["炭酸なしの水をお願いします。","tansan nashi no mizu wo onegaishimasu"]},
+      {it:"Il conto, per favore.", ans:["お会計をお願いします。","okaikei wo onegaishimasu"]},
+      {it:"Il servizio è incluso?", ans:["サービス料は含まれていますか？","saabisuryou wa fukumarete imasu ka"]},
+      {it:"Il cibo era delizioso.", ans:["料理はとても美味しかったです。","ryouri wa totemo oishikatta desu"]},
+      {it:"Sono allergico alle noci.", ans:["ナッツにアレルギーがあります。","nattsu ni arerugii ga arimasu"]},
+      {it:"Posso avere ancora un po' di pane?", ans:["パンをもう少しいただけますか？","pan wo mou sukoshi itadakemasu ka"]},
+      {it:"Possiamo pagare separatamente?", ans:["別々に支払うことはできますか？","betsubetsu ni shiharau koto wa dekimasu ka"]},
+    ],
+    [ // Livello 18 (In Aeroporto - parte 1)
       {it:"Dov'è il banco del check-in?", ans:["チェックインカウンターはどこですか？","chekkuin kauntaa wa doko desu ka"]},
       {it:"Posso fare il check-in online?", ans:["オンラインでチェックインできますか？","onrain de chekkuin dekimasu ka"]},
       {it:"Ho prenotato un volo per Roma.", ans:["ローマ行きのフライトを予約しました。","rooma yuki no furaito wo yoyaku shimashita"]},
@@ -3103,7 +3386,7 @@ const BEGINNER = {
       {it:"A che ora inizia l'imbarco?", ans:["搭乗は何時に始まりますか？","toujou wa nanji ni hajimarimasu ka"]},
       {it:"Ho perso la carta d'imbarco, cosa devo fare?", ans:["搭乗券をなくしました、どうすればいいですか？","toujouken wo nakushimashita dou sureba ii desu ka"]},
     ],
-    [ // Livello 12
+    [ // Livello 19 (In Aeroporto - parte 2)
       {it:"Deve togliere le scarpe per il controllo di sicurezza.", ans:["セキュリティチェックのために靴を脱ぐ必要があります。","sekyuriti chekku no tame ni kutsu wo nugu hitsuyou ga arimasu"]},
       {it:"Metta gli oggetti metallici nel vassoio.", ans:["金属製品をトレイに入れてください。","kinzoku seihin wo torei ni irete kudasai"]},
       {it:"Ha liquidi nel bagaglio a mano?", ans:["手荷物に液体はありますか？","tenimotsu ni ekitai wa arimasu ka"]},
@@ -3115,7 +3398,7 @@ const BEGINNER = {
       {it:"Non è consentito portare oggetti taglienti a bordo.", ans:["刃物を機内に持ち込むことはできません。","hamono wo kinai ni mochikomu koto wa dekimasen"]},
       {it:"Il controllo di sicurezza durerà pochi minuti.", ans:["セキュリティチェックには数分かかります。","sekyuriti chekku niwa suufun kakarimasu"]},
     ],
-    [ // Livello 13
+    [ // Livello 20 (In Aeroporto - parte 3)
       {it:"Da quale porta parte il volo per Londra?", ans:["ロンドン行きのフライトはどのゲートから出発しますか？","rondon yuki no furaito wa dono geeto kara shuppatsu shimasu ka"]},
       {it:"Il tabellone delle partenze mostra un ritardo.", ans:["出発案内板は遅延を示しています。","shuppatsu annaiban wa chien wo shimeshite imasu"]},
       {it:"Il nostro volo è indicato come \"in orario\".", ans:["私たちのフライトは「定刻」と表示されています。","watashitachi no furaito wa teikoku to hyouji sarete imasu"]},
@@ -3127,7 +3410,7 @@ const BEGINNER = {
       {it:"La partenza è stata posticipata di un'ora.", ans:["出発が1時間遅れました。","shuppatsu ga ichijikan okuremashita"]},
       {it:"Buon viaggio e buon volo!", ans:["良い旅を、良いフライトを！","yoi tabi wo yoi furaito wo"]},
     ],
-    [ // Livello 14
+    [ // Livello 21 (In Aeroporto - parte 4)
       {it:"Il volo da Parigi è appena atterrato.", ans:["パリからのフライトがちょうど着陸しました。","pari kara no furaito ga choudo chakuriku shimashita"]},
       {it:"A che ora arriva il tuo volo?", ans:["あなたのフライトは何時に到着しますか？","anata no furaito wa nanji ni touchaku shimasu ka"]},
       {it:"Sono appena arrivato in aeroporto.", ans:["たった今空港に着きました。","tatta ima kuukou ni tsukimashita"]},
@@ -3139,7 +3422,7 @@ const BEGINNER = {
       {it:"Siamo atterrati sani e salvi.", ans:["無事に着陸しました。","buji ni chakuriku shimashita"]},
       {it:"Dopo l'atterraggio, restate seduti finché l'aereo non si ferma.", ans:["着陸後、飛行機が完全に停止するまで座ったままでいてください。","chakuriku go hikouki ga kanzen ni teishi suru made suwatta mama de ite kudasai"]},
     ],
-    [ // Livello 15
+    [ // Livello 22 (In Aeroporto - parte 5)
       {it:"Il volo è stato cancellato per maltempo.", ans:["フライトは悪天候のためキャンセルされました。","furaito wa akutenkou no tame kyanseru saremashita"]},
       {it:"Mi dispiace informarla che il suo volo è in ritardo.", ans:["残念ながらあなたのフライトは遅れています。","zannen nagara anata no furaito wa okurete imasu"]},
       {it:"L'aereo è stato sospeso per un guasto tecnico.", ans:["飛行機は技術的な故障のため運航停止になりました。","hikouki wa gijutsuteki na koshou no tame unkou teishi ni narimashita"]},
@@ -3151,7 +3434,7 @@ const BEGINNER = {
       {it:"Il volo è stato riprogrammato per domani mattina.", ans:["フライトは明日の朝に変更されました。","furaito wa ashita no asa ni henkou saremashita"]},
       {it:"A causa dello sciopero, molti voli sono stati cancellati.", ans:["ストライキのため、多くの便がキャンセルされました。","sutoraiki no tame ooku no bin ga kyanseru saremashita"]},
     ],
-    [ // Livello 16
+    [ // Livello 23 (In Aeroporto - parte 6)
       {it:"Dove posso ritirare il mio bagaglio?", ans:["どこで荷物を受け取れますか？","doko de nimotsu wo uketoremasu ka"]},
       {it:"Il mio bagaglio non è arrivato.", ans:["私の荷物が届いていません。","watashi no nimotsu ga todoite imasen"]},
       {it:"Ho perso una valigia, a chi devo rivolgermi?", ans:["スーツケースをなくしました、誰に連絡すればいいですか？","suutsukeesu wo nakushimashita dare ni renraku sureba ii desu ka"]},
@@ -3163,7 +3446,7 @@ const BEGINNER = {
       {it:"Compili questo modulo per il bagaglio smarrito.", ans:["紛失した荷物についてこの用紙にご記入ください。","funshitsu shita nimotsu ni tsuite kono youshi ni gokinyuu kudasai"]},
       {it:"La valigia le sarà consegnata a casa entro domani.", ans:["スーツケースは明日までにご自宅にお届けします。","suutsukeesu wa ashita made ni gojitaku ni otodoke shimasu"]},
     ],
-    [ // Livello 17
+    [ // Livello 24 (In Aeroporto - parte 7)
       {it:"Il gate è stato cambiato all'ultimo momento.", ans:["ゲートが土壇場で変更されました。","geeto ga dotanba de henkou saremashita"]},
       {it:"Dov'è il gate numero 15?", ans:["15番ゲートはどこですか？","juugoban geeto wa doko desu ka"]},
       {it:"L'imbarco avviene per fila, a partire dai posti in fondo.", ans:["搭乗は後方の席から列ごとに行われます。","toujou wa kouhou no seki kara retsu goto ni okonawaremasu"]},
@@ -3175,7 +3458,7 @@ const BEGINNER = {
       {it:"L'imbarco terminerà tra cinque minuti.", ans:["搭乗は5分後に終了します。","toujou wa gofun go ni shuuryou shimasu"]},
       {it:"Mi scusi, questo è il gate giusto per il volo per Madrid?", ans:["すみません、これはマドリード行きの正しいゲートですか？","sumimasen kore wa madoriido yuki no tadashii geeto desu ka"]},
     ],
-    [ // Livello 18
+    [ // Livello 25 (In Aeroporto - parte 8)
       {it:"Ha qualcosa da dichiarare alla dogana?", ans:["税関に申告するものはありますか？","zeikan ni shinkoku suru mono wa arimasu ka"]},
       {it:"Qual è il motivo del suo viaggio?", ans:["ご旅行の目的は何ですか？","goryokou no mokuteki wa nan desu ka"]},
       {it:"Quanto tempo rimarrà nel paese?", ans:["この国にはどのくらい滞在しますか？","kono kuni niwa dono kurai taizai shimasu ka"]},
@@ -3187,7 +3470,7 @@ const BEGINNER = {
       {it:"Non ho nulla da dichiarare.", ans:["申告するものは何もありません。","shinkoku suru mono wa nani mo arimasen"]},
       {it:"Benvenuto, buona permanenza nel nostro paese.", ans:["ようこそ、私たちの国での滞在をお楽しみください。","youkoso watashitachi no kuni deno taizai wo otanoshimi kudasai"]},
     ],
-    [ // Livello 19
+    [ // Livello 26 (In Aeroporto - parte 9)
       {it:"Dov'è la sala d'attesa più vicina?", ans:["一番近い待合室はどこですか？","ichiban chikai machiaishitsu wa doko desu ka"]},
       {it:"C'è un bancomat qui in aeroporto?", ans:["この空港にATMはありますか？","kono kuukou ni eetiemu wa arimasu ka"]},
       {it:"Dove posso cambiare valuta?", ans:["どこで両替できますか？","doko de ryougae dekimasu ka"]},
@@ -3199,7 +3482,7 @@ const BEGINNER = {
       {it:"Avete un servizio di assistenza per persone con disabilità?", ans:["障害のある方への介助サービスはありますか？","shougai no aru kata eno kaijo saabisu wa arimasu ka"]},
       {it:"Dov'è la fermata del bus navetta per il parcheggio?", ans:["駐車場行きのシャトルバス乗り場はどこですか？","chuushajou yuki no shatorubasu noriba wa doko desu ka"]},
     ],
-    [ // Livello 20
+    [ // Livello 27 (In Aeroporto - parte 10)
       {it:"Ho perso la coincidenza per colpa del ritardo.", ans:["遅延のせいで乗り継ぎに乗り遅れました。","chien no sei de noritsugi ni noriokuremashita"]},
       {it:"Il mio volo è stato dirottato su un altro aeroporto.", ans:["私のフライトは別の空港に変更されました。","watashi no furaito wa betsu no kuukou ni henkou saremashita"]},
       {it:"Non riesco a trovare il mio bagaglio a mano.", ans:["機内持ち込み手荷物が見つかりません。","kinai mochikomi tenimotsu ga mitsukarimasen"]},
@@ -3958,7 +4241,7 @@ function logMistake(it, correct){
 }
 function freshProgressAllLevels(){
   const p = {};
-  for(let lvl=1; lvl<=24; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
+  for(let lvl=1; lvl<=27; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
   return p;
 }
 
@@ -3969,7 +4252,7 @@ async function loadState(lang){
   }catch(e){ state = { streak:0, lastDate:null, done:[], notebook:[] }; }
 
   if(!state.beginner){
-    state.beginner = { direction:'to_target', level:1, progress: freshProgressAllLevels(), _migratedAirportLevels2026:true, _migratedSplitLevels2026:true };
+    state.beginner = { direction:'to_target', level:1, progress: freshProgressAllLevels(), _migratedAirportLevels2026:true, _migratedSplitLevels2026:true, _migratedRestaurantLevels2026:true };
   } else if(!state.beginner.progress){
     let oldToTarget, oldToIt;
     if(state.beginner.to_target){
@@ -3985,7 +4268,8 @@ async function loadState(lang){
       level: 1,
       progress: freshProgressAllLevels(),
       _migratedAirportLevels2026: true,
-      _migratedSplitLevels2026: true
+      _migratedSplitLevels2026: true,
+      _migratedRestaurantLevels2026: true
     };
     state.beginner.progress[1] = { to_target: oldToTarget, to_it: oldToIt };
   } else {
@@ -4020,7 +4304,29 @@ async function loadState(lang){
       else if(state.beginner.level >= 13) state.beginner.level = Math.min(state.beginner.level + 2, 24);
       state.beginner._migratedSplitLevels2026 = true;
     }
-    for(let lvl=1; lvl<=24; lvl++){
+    if(!state.beginner._migratedRestaurantLevels2026){
+      // Migrazione una tantum: nuovo Livello 3 "ponte" (i vecchi 3-14 traslocano di +1) e nuovo
+      // capitolo "Dal Ristorante" da 2 livelli prima di "In Aeroporto" (i vecchi 15-24 traslocano di +3).
+      const oldProgress = state.beginner.progress;
+      const newProgress = {};
+      if(oldProgress[1]) newProgress[1] = oldProgress[1];
+      if(oldProgress[2]) newProgress[2] = oldProgress[2];
+      newProgress[3] = { to_target: freshDirState(), to_it: freshDirState() };
+      for(let lvl=3; lvl<=14; lvl++){
+        if(oldProgress[lvl]) newProgress[lvl+1] = oldProgress[lvl];
+      }
+      newProgress[16] = { to_target: freshDirState(), to_it: freshDirState() };
+      newProgress[17] = { to_target: freshDirState(), to_it: freshDirState() };
+      for(let lvl=15; lvl<=24; lvl++){
+        if(oldProgress[lvl]) newProgress[lvl+3] = oldProgress[lvl];
+      }
+      state.beginner.progress = newProgress;
+      const lvl = state.beginner.level;
+      if(lvl >= 3 && lvl <= 14) state.beginner.level = lvl + 1;
+      else if(lvl >= 15) state.beginner.level = Math.min(lvl + 3, 27);
+      state.beginner._migratedRestaurantLevels2026 = true;
+    }
+    for(let lvl=1; lvl<=27; lvl++){
       if(!state.beginner.progress[lvl]) state.beginner.progress[lvl] = { to_target: freshDirState(), to_it: freshDirState() };
     }
     if(!state.beginner.level) state.beginner.level = 1;
@@ -4557,7 +4863,7 @@ function renderBeginner(){
     document.getElementById('bpPrompt').removeAttribute('dir');
     document.getElementById('bpPrompt').classList.remove('rtl-text');
 
-    const nextLevel = level < 24 ? level + 1 : null;
+    const nextLevel = level < 27 ? level + 1 : null;
     const otherDirDone = state.beginner.progress[level][dir === 'to_target' ? 'to_it' : 'to_target'].index >= list.length;
     let nextStepMsg;
     if(nextLevel && otherDirDone){
@@ -5276,7 +5582,7 @@ const ACHIEVEMENTS = [
   { id:'poly3', icon:'🌍', name:'Poliglotta (3 lingue)', check: s => s.languagesWithProgress >= 3 },
   { id:'poly7', icon:'🗺️', name:'Iperpoliglotta (7 lingue)', check: s => s.languagesWithProgress >= 7 },
   { id:'base10', icon:'🎓', name:'Diplomato Base', check: s => s.maxBaseLevelDone >= 10 },
-  { id:'airport', icon:'✈️', name:"Pronto per l'aeroporto", check: s => s.maxBaseLevelDone >= 24 },
+  { id:'airport', icon:'✈️', name:"Pronto per l'aeroporto", check: s => s.maxBaseLevelDone >= 27 },
   { id:'impara', icon:'🧠', name:'Impara Superstar', check: s => s.imparaFullyDone },
   { id:'notebook10', icon:'📓', name:'Studente diligente', check: s => s.notebookEntries >= 10 },
   { id:'hundred', icon:'💯', name:'Cento frasi', check: s => s.totalDone >= 100 },
@@ -5295,7 +5601,7 @@ async function computeGlobalStats(){
     if(s.streak && s.streak > stats.maxStreak) stats.maxStreak = s.streak;
     if(s.notebook && s.notebook.length){ stats.notebookEntries += s.notebook.length; hasProgress = true; }
     if(s.beginner && s.beginner.progress){
-      for(let lvl=1; lvl<=24; lvl++){
+      for(let lvl=1; lvl<=27; lvl++){
         const p = s.beginner.progress[lvl];
         if(!p || !p.to_target) continue;
         const listLen = (BEGINNER[lang] && BEGINNER[lang][lvl-1]) ? BEGINNER[lang][lvl-1].length : null;
@@ -5357,20 +5663,22 @@ async function renderTraguardi(){
 /* ---------- MAPPA A TAPPE ---------- */
 // Etichette dei sotto-capitoli del Percorso Base, livelli 11-24 (i livelli 1-10 restano "Percorso Base").
 const LEVEL_CHAPTER_LABEL = {
-  11: 'Di dove sei · parte 1',
-  12: 'Di dove sei · parte 2',
-  13: 'Presentazione · parte 1',
-  14: 'Presentazione · parte 2',
-  15: 'In Aeroporto · parte 1',
-  16: 'In Aeroporto · parte 2',
-  17: 'In Aeroporto · parte 3',
-  18: 'In Aeroporto · parte 4',
-  19: 'In Aeroporto · parte 5',
-  20: 'In Aeroporto · parte 6',
-  21: 'In Aeroporto · parte 7',
-  22: 'In Aeroporto · parte 8',
-  23: 'In Aeroporto · parte 9',
-  24: 'In Aeroporto · parte 10',
+  12: 'Di dove sei · parte 1',
+  13: 'Di dove sei · parte 2',
+  14: 'Presentazione · parte 1',
+  15: 'Presentazione · parte 2',
+  16: 'Dal Ristorante · parte 1',
+  17: 'Dal Ristorante · parte 2',
+  18: 'In Aeroporto · parte 1',
+  19: 'In Aeroporto · parte 2',
+  20: 'In Aeroporto · parte 3',
+  21: 'In Aeroporto · parte 4',
+  22: 'In Aeroporto · parte 5',
+  23: 'In Aeroporto · parte 6',
+  24: 'In Aeroporto · parte 7',
+  25: 'In Aeroporto · parte 8',
+  26: 'In Aeroporto · parte 9',
+  27: 'In Aeroporto · parte 10',
 };
 
 const MAP_NODES = [
@@ -5388,27 +5696,31 @@ const MAP_NODES = [
   { id:'sfida-4', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
   { id:'base-9', label:'Livello 9', kind:'percorso', level:9, gating:true },
   { id:'base-10', label:'Livello 10', kind:'percorso', level:10, gating:true },
+  { id:'base-11', label:'Livello 11', kind:'percorso', level:11, gating:true },
   { id:'sfida-5', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
-  { id:'base-11', label:'Livello 11 · Di dove sei · parte 1', kind:'percorso', level:11, gating:true },
-  { id:'base-12', label:'Livello 12 · Di dove sei · parte 2', kind:'percorso', level:12, gating:true },
-  { id:'base-13', label:'Livello 13 · Presentazione · parte 1', kind:'percorso', level:13, gating:true },
-  { id:'base-14', label:'Livello 14 · Presentazione · parte 2', kind:'percorso', level:14, gating:true },
-  { id:'sfida-5b', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
-  { id:'base-15', label:'Livello 15 · In Aeroporto · parte 1', kind:'percorso', level:15, gating:true },
-  { id:'base-16', label:'Livello 16 · In Aeroporto · parte 2', kind:'percorso', level:16, gating:true },
-  { id:'sfida-6', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
-  { id:'base-17', label:'Livello 17 · In Aeroporto · parte 3', kind:'percorso', level:17, gating:true },
-  { id:'base-18', label:'Livello 18 · In Aeroporto · parte 4', kind:'percorso', level:18, gating:true },
+  { id:'base-12', label:'Livello 12 · Di dove sei · parte 1', kind:'percorso', level:12, gating:true },
+  { id:'base-13', label:'Livello 13 · Di dove sei · parte 2', kind:'percorso', level:13, gating:true },
+  { id:'base-14', label:'Livello 14 · Presentazione · parte 1', kind:'percorso', level:14, gating:true },
+  { id:'base-15', label:'Livello 15 · Presentazione · parte 2', kind:'percorso', level:15, gating:true },
+  { id:'sfida-6', label:'Sfida · Principiante', kind:'sfida', level:'principiante', gating:false },
+  { id:'base-16', label:'Livello 16 · Dal Ristorante · parte 1', kind:'percorso', level:16, gating:true },
+  { id:'base-17', label:'Livello 17 · Dal Ristorante · parte 2', kind:'percorso', level:17, gating:true },
   { id:'sfida-7', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
-  { id:'base-19', label:'Livello 19 · In Aeroporto · parte 5', kind:'percorso', level:19, gating:true },
-  { id:'base-20', label:'Livello 20 · In Aeroporto · parte 6', kind:'percorso', level:20, gating:true },
+  { id:'base-18', label:'Livello 18 · In Aeroporto · parte 1', kind:'percorso', level:18, gating:true },
+  { id:'base-19', label:'Livello 19 · In Aeroporto · parte 2', kind:'percorso', level:19, gating:true },
   { id:'sfida-8', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
-  { id:'base-21', label:'Livello 21 · In Aeroporto · parte 7', kind:'percorso', level:21, gating:true },
-  { id:'base-22', label:'Livello 22 · In Aeroporto · parte 8', kind:'percorso', level:22, gating:true },
+  { id:'base-20', label:'Livello 20 · In Aeroporto · parte 3', kind:'percorso', level:20, gating:true },
+  { id:'base-21', label:'Livello 21 · In Aeroporto · parte 4', kind:'percorso', level:21, gating:true },
   { id:'sfida-9', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
-  { id:'base-23', label:'Livello 23 · In Aeroporto · parte 9', kind:'percorso', level:23, gating:true },
-  { id:'base-24', label:'Livello 24 · In Aeroporto · parte 10', kind:'percorso', level:24, gating:true },
+  { id:'base-22', label:'Livello 22 · In Aeroporto · parte 5', kind:'percorso', level:22, gating:true },
+  { id:'base-23', label:'Livello 23 · In Aeroporto · parte 6', kind:'percorso', level:23, gating:true },
   { id:'sfida-10', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
+  { id:'base-24', label:'Livello 24 · In Aeroporto · parte 7', kind:'percorso', level:24, gating:true },
+  { id:'base-25', label:'Livello 25 · In Aeroporto · parte 8', kind:'percorso', level:25, gating:true },
+  { id:'sfida-11', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
+  { id:'base-26', label:'Livello 26 · In Aeroporto · parte 9', kind:'percorso', level:26, gating:true },
+  { id:'base-27', label:'Livello 27 · In Aeroporto · parte 10', kind:'percorso', level:27, gating:true },
+  { id:'sfida-12', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
 ];
 
 function isMapNodeComplete(node){
@@ -5434,19 +5746,25 @@ function renderMap(){
   wrap.innerHTML = '';
   let prevGateComplete = true;
   MAP_NODES.forEach((node, i)=>{
-    if(node.id === 'base-11'){
+    if(node.id === 'base-12'){
       const divider = document.createElement('div');
       divider.className = 'map-chapter-divider';
       divider.innerHTML = '<span>&#128205; Di dove sei</span>';
       wrap.appendChild(divider);
     }
-    if(node.id === 'base-13'){
+    if(node.id === 'base-14'){
       const divider = document.createElement('div');
       divider.className = 'map-chapter-divider';
       divider.innerHTML = '<span>&#128075; Presentazione</span>';
       wrap.appendChild(divider);
     }
-    if(node.id === 'base-15'){
+    if(node.id === 'base-16'){
+      const divider = document.createElement('div');
+      divider.className = 'map-chapter-divider';
+      divider.innerHTML = '<span>&#127860; Dal Ristorante</span>';
+      wrap.appendChild(divider);
+    }
+    if(node.id === 'base-18'){
       const divider = document.createElement('div');
       divider.className = 'map-chapter-divider';
       divider.innerHTML = '<span>&#9992;&#65039; In Aeroporto</span>';
