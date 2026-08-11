@@ -1,7 +1,7 @@
 {
   "name": "Quattro Voci",
   "short_name": "4 Voci",
-  "description": "Ecosistema di immersione EN / FR / AR / ES / DE — sfide, shadowing, pronuncia, dialoghi e percorso iniziale",
+  "description": "Ecosistema di immersione in 7 lingue — EN / FR / ES / DE / AR / 中文 / 日本語 — sfide, shadowing, pronuncia, dialoghi, duelli e percorso completo",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -9,7 +9,8 @@
   "background_color": "#1B1916",
   "theme_color": "#1B1916",
   "icons": [
-    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

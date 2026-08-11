@@ -506,6 +506,7 @@
         </div>
         <button class="ghost" id="reminderToggle" style="flex-shrink:0; padding:8px 14px; font-size:12.5px; white-space:nowrap;">Attiva</button>
       </div>
+      <button class="ghost" id="reviewTutorialBtn" style="width:100%; margin-top:16px;">&#128214; Rivedi il tutorial</button>
     </div>
   </div>
 
@@ -6280,16 +6281,20 @@ const ONBOARD_SLIDES = [
     body: "Un ecosistema di immersione multilingue — Inglese, Français, Español, Deutsch, العربية, 中文 e 日本語 — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
   },
   {
-    title: "Un'app, otto strumenti",
-    body: "Impara la lingua da zero, sfida del giorno, percorso Base con progressi strutturati, timer di shadowing, suoni critici di pronuncia, dialoghi di role-play, quaderno di correzione e cronologia dei progressi. Tutto in un unico posto, per ogni lingua."
+    title: "Undici strumenti, un'unica app",
+    body: "Impara da zero, Traduci al volo, Mappa dei progressi, Percorso Base (27 livelli, dai saluti all'aeroporto e al ristorante), Sfida del giorno, Shadowing, Suoni critici, Dialoghi, Quaderno di correzione, Storia con Ripasso mirato e Traguardi. Tutto per ogni lingua."
   },
   {
     title: "Comunicazione prima, grammatica dopo",
     body: "L'obiettivo non è la frase perfetta al primo colpo: è farti parlare, sbagliare, e correggerti dopo con calma. Non aspettare di sentirti pronto per iniziare."
   },
   {
-    title: "Facoltativo: account e classifica",
-    body: "Puoi usare l'app così com'è, con i progressi salvati solo su questo dispositivo. Oppure creare un account gratuito (icona in alto a destra) per sincronizzare tutto e competere in classifica nel percorso Base."
+    title: "Sfida un amico, sblocca i Traguardi",
+    body: "Dentro Sfida trovi il Duello: stesse 5 frasi da tradurre, cronometrate — chi le indovina tutte più in fretta vince. Nel tab Traguardi, Nottola tiene traccia dei tuoi progressi in tutte le lingue con badge da sbloccare."
+  },
+  {
+    title: "Facoltativo: account, sync e promemoria",
+    body: "Crea un account gratuito (icona in alto a destra) per sincronizzare i progressi su più dispositivi, competere in classifica e sfidare amici. Password dimenticata? C'è il link per reimpostarla. Vuoi un promemoria giornaliero? Si attiva dallo stesso pannello, resta disattivato finché non lo scegli tu."
   }
 ];
 let obIndex = 0;
@@ -6306,9 +6311,13 @@ function openOnboard(){
   renderOnboard();
   document.getElementById('onboardModal').classList.remove('hidden');
 }
+document.getElementById('reviewTutorialBtn').onclick = ()=>{
+  document.getElementById('authModal').classList.add('hidden');
+  openOnboard();
+};
 function closeOnboard(){
   document.getElementById('onboardModal').classList.add('hidden');
-  try{ localStorage.setItem('qv_onboarding_done', '1'); }catch(e){}
+  try{ localStorage.setItem('qv_onboarding_done_v2', '1'); }catch(e){}
 }
 document.getElementById('obNext').onclick = ()=>{
   if(obIndex < ONBOARD_SLIDES.length - 1){ obIndex++; renderOnboard(); }
@@ -6321,7 +6330,7 @@ document.getElementById('onboardSkip').onclick = closeOnboard;
 
 (function maybeShowOnboarding(){
   try{
-    if(!localStorage.getItem('qv_onboarding_done')){ openOnboard(); }
+    if(!localStorage.getItem('qv_onboarding_done_v2')){ openOnboard(); }
   }catch(e){}
 })();
 
