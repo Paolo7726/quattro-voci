@@ -307,6 +307,26 @@
   }
   .ripasso-item .rit{ color: var(--ink-dim); margin-bottom:4px; }
   .ripasso-item .rcorr{ color: var(--ink); font-weight:600; }
+
+  .oggi-task-card{
+    display:flex; align-items:center; gap:14px; background: var(--panel-2);
+    border:1px solid var(--hair); border-radius: 14px; padding:14px 16px; margin-bottom:10px;
+  }
+  .oggi-task-icon{ font-size:25px; flex-shrink:0; width:38px; text-align:center; }
+  .oggi-task-body{ flex:1; min-width:0; }
+  .oggi-task-body .t{ font-weight:600; font-size:14.5px; color: var(--ink); }
+  .oggi-task-body .s{ font-size:12px; color: var(--ink-dim); margin-top:2px; }
+  .oggi-task-card button{ flex-shrink:0; padding:9px 14px; font-size:13px; }
+  .oggi-task-card.done{ opacity:.55; }
+  .oggi-task-card.done .oggi-task-icon{ filter:grayscale(1); }
+  .oggi-week{ display:flex; justify-content:space-between; gap:4px; margin-top:12px; }
+  .oggi-day{ display:flex; flex-direction:column; align-items:center; gap:7px; flex:1; }
+  .oggi-day .lbl{ font-family:'IBM Plex Mono', monospace; font-size:10px; color: var(--ink-dim); text-transform:uppercase; }
+  .oggi-day .dot{ width:16px; height:16px; border-radius:50%; border:2px solid var(--hair); box-sizing:border-box; }
+  .oggi-day .dot.done{ background: var(--accent); border-color: var(--accent); }
+  .oggi-day .dot.today:not(.done){ border-color: var(--accent); }
+  .oggi-all-done{ text-align:center; padding:18px 10px; color: var(--ink-dim); font-size:13.5px; line-height:1.6; }
+  .oggi-all-done .big{ font-size:28px; margin-bottom:6px; }
   .map-node-col{ display:flex; flex-direction:column; align-items:center; width:100%; }
   .map-node{
     width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -594,8 +614,23 @@
     </div>
   </section>
 
+  <!-- OGGI -->
+  <section class="card" id="tab-oggi">
+    <span class="tag">Oggi</span>
+    <h2 id="oggiGreeting">Ciao!</h2>
+    <p class="sub" id="oggiSubline">Bastano pochi minuti.</p>
+    <div class="streak" style="margin-top:0; margin-bottom:14px;">
+      <span>Serie di pratica</span>
+      <span><span class="flame">&#9679;</span> <b id="oggiStreakCount">0</b> giorni</span>
+    </div>
+    <div id="oggiCards"></div>
+    <div class="rec-divider"></div>
+    <span class="tag">Questa settimana</span>
+    <div id="oggiWeekRow" class="oggi-week"></div>
+  </section>
+
   <!-- SFIDA -->
-  <section class="card" id="tab-sfida">
+  <section class="card hidden" id="tab-sfida">
     <span class="tag">Sfida del giorno</span>
     <h2 id="sfidaTitle">Parla per 60 secondi</h2>
     <p class="sub">Scegli il tuo livello, poi registrati a voce di getto, senza scrivere nulla prima. Il messaggio conta più della forma.</p>
@@ -822,6 +857,10 @@
 
   <div class="scroll-hint-wrap nav-hint-wrap" id="navWrap">
   <nav class="tabs">
+  <button data-tab="oggi" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1v-9"/></svg>
+    Oggi
+  </button>
   <button data-tab="impara">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4L3 8l9 4 9-4-9-4z"/><path d="M6 10v6c0 1.5 3 2.5 6 2.5s6-1 6-2.5v-6"/></svg>
     Impara
@@ -838,7 +877,7 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V6a2 2 0 012-2h9l5 5v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M9 12l2 2 4-4"/></svg>
     Base
   </button>
-  <button data-tab="sfida" class="active">
+  <button data-tab="sfida">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
     Sfida
   </button>
@@ -5151,6 +5190,15 @@ const PHASES = [
   {label:"Fase 4 · Registra e confronta", secs:60},
 ];
 
+// Sicurezza: qualsiasi testo scritto da un utente (nickname, email, note personali, trascrizioni
+// vocali) va sempre passato da qui prima di finire dentro innerHTML, per evitare che caratteri
+// come < > " permettano di iniettare codice nella pagina di chi lo visualizza.
+function escapeHTML(str){
+  return String(str == null ? '' : str).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+}
+
 function todayStr(){ return new Date().toISOString().slice(0,10); }
 function dayOfMonthIndex(len){ return (new Date().getDate() - 1) % len; }
 
@@ -5349,6 +5397,7 @@ async function switchLang(key){
   renderMap();
   renderImpara();
   renderTraduci();
+  renderOggi();
 }
 
 function renderStreak(){
@@ -5467,7 +5516,7 @@ function showSfidaTranscript(transcript){
   }
   const box = document.getElementById('sfidaTranscriptBox');
   box.classList.remove('hidden');
-  box.innerHTML = `<div class="bp-feedback ok">Hai detto: "${transcript}"</div>${refHtml}`;
+  box.innerHTML = `<div class="bp-feedback ok">Hai detto: "${escapeHTML(transcript)}"</div>${refHtml}`;
 }
 
 document.getElementById('sfidaMicToggle').onclick = ()=>{
@@ -5669,7 +5718,7 @@ function renderNotebook(){
   [...state.notebook].reverse().forEach(e=>{
     const div = document.createElement('div');
     div.className='entry';
-    div.innerHTML = `<div class="orig">${e.orig}</div><div class="corr">${e.corr}</div><div class="meta">${e.date}</div>`;
+    div.innerHTML = `<div class="orig">${escapeHTML(e.orig)}</div><div class="corr">${escapeHTML(e.corr)}</div><div class="meta">${escapeHTML(e.date)}</div>`;
     box.appendChild(div);
   });
 }
@@ -6124,8 +6173,8 @@ function showDuelStatus(code, duel){
   if(duel.creatorTimeMs != null && duel.opponentTimeMs != null){
     const winner = duel.creatorTimeMs <= duel.opponentTimeMs ? duel.creatorNickname : duel.opponentNickname;
     box.innerHTML = `<div class="sound-tip" style="font-style:normal;">
-      <b>${duel.creatorNickname}</b>: ${fmtDuelTime(duel.creatorTimeMs)} &middot; <b>${duel.opponentNickname||'—'}</b>: ${fmtDuelTime(duel.opponentTimeMs)}<br>
-      🏆 Vince <b>${winner}</b>!</div>`;
+      <b>${escapeHTML(duel.creatorNickname)}</b>: ${fmtDuelTime(duel.creatorTimeMs)} &middot; <b>${escapeHTML(duel.opponentNickname)||'—'}</b>: ${fmtDuelTime(duel.opponentTimeMs)}<br>
+      🏆 Vince <b>${escapeHTML(winner)}</b>!</div>`;
   } else {
     box.innerHTML = `<div class="empty">Duello "${code}" &middot; in attesa che entrambi completino le 5 frasi. Ricontrolla più tardi inserendo di nuovo il codice.</div>`;
   }
@@ -6203,7 +6252,7 @@ function startDuelPlay(ctx){
   document.getElementById('duelPlayModal').classList.remove('hidden');
   document.getElementById('duelPlayTitle').textContent = ctx.role === 'creator'
     ? `Il tuo duello (${LANGS[ctx.lang].label})`
-    : `Duello di ${ctx.creatorNickname || 'un amico'} (${LANGS[ctx.lang].label})`;
+    : `Duello di ${escapeHTML(ctx.creatorNickname) || 'un amico'} (${LANGS[ctx.lang].label})`;
   renderDuelSlot();
   if(duelActive.timerInterval) clearInterval(duelActive.timerInterval);
   duelActive.timerInterval = setInterval(()=>{
@@ -6711,6 +6760,124 @@ function switchToTab(tabName){
   if(btn) btn.click();
 }
 
+/* ---------- OGGI: home dinamica, sceglie cosa proporre in base allo stato reale ---------- */
+let cachedNickname = null;
+
+function computeOggiTasks(){
+  const candidates = [];
+  const mistakeCount = (state.mistakes || []).length;
+  const doneToday = state.done.some(d => d.startsWith(todayStr()));
+
+  if(mistakeCount > 0){
+    candidates.push({ priority:1, icon:'🧠', title:'Ripasso mirato',
+      sub:`${mistakeCount} frase${mistakeCount===1?'':'i'} da rivedere`,
+      minutes:2, btnLabel:'Ripassa', tab:'cronologia' });
+  }
+  if(!doneToday){
+    candidates.push({ priority:2, icon:'🎤', title:'Sfida del giorno',
+      sub:`Parla per ${SFIDA_DURATION[state.sfida.level]}`,
+      minutes:1, btnLabel:'Inizia', tab:'sfida' });
+  }
+
+  const lvl = state.beginner.level;
+  const list = BEGINNER[currentLang] && BEGINNER[currentLang][lvl-1];
+  const dirState = state.beginner.progress[lvl] && state.beginner.progress[lvl][state.beginner.direction];
+  if(list && dirState){
+    if(dirState.index > 0 && dirState.index < list.length){
+      candidates.push({ priority:3, icon:'📘', title:'Percorso Base',
+        sub:`Continua il Livello ${lvl} · frase ${dirState.index+1} di ${list.length}`,
+        minutes:3, btnLabel:'Continua', tab:'percorso' });
+    } else if(dirState.index === 0){
+      candidates.push({ priority:4, icon:'📘', title:'Percorso Base',
+        sub:`Livello ${lvl} · ${list.length} frasi`,
+        minutes:3, btnLabel:'Inizia', tab:'percorso' });
+    }
+  }
+
+  candidates.push({ priority:5, icon:'👂', title:'Shadowing',
+    sub:'Ascolta e ripeti una frase, 5 minuti', minutes:5, btnLabel:'Inizia', tab:'shadow' });
+
+  if(doneToday){
+    candidates.push({ priority:6, icon:'🎤', title:'Sfida del giorno',
+      sub:'Fatta oggi ✓ — puoi rifarla per esercitarti ancora', minutes:1, btnLabel:'Rivedi', tab:'sfida' });
+  }
+  candidates.push({ priority:7, icon:'🗣️', title:'Dialoghi',
+    sub:'Interpreta uno scenario a scelta', minutes:4, btnLabel:'Vai', tab:'dialoghi' });
+  candidates.push({ priority:8, icon:'🔤', title:'Traduci',
+    sub:'Prova a tradurre una frase libera', minutes:2, btnLabel:'Vai', tab:'traduci' });
+
+  candidates.sort((a,b)=>a.priority-b.priority);
+  return candidates.slice(0,3);
+}
+
+function computeWeekProgress(){
+  const days = ['Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
+  const now = new Date();
+  const jsDay = now.getDay(); // 0=Dom,1=Lun,...6=Sab
+  const mondayOffset = jsDay === 0 ? -6 : 1 - jsDay;
+  const monday = new Date(now);
+  monday.setDate(now.getDate() + mondayOffset);
+  const todayIdx = jsDay === 0 ? 6 : jsDay - 1;
+  const doneDates = new Set(state.done.map(d => d.split(':')[0]));
+  return days.map((lbl, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    const dateStr = d.toISOString().slice(0,10);
+    return { lbl, done: doneDates.has(dateStr), isToday: i === todayIdx };
+  });
+}
+
+async function renderOggi(){
+  const hour = new Date().getHours();
+  const greetWord = hour < 12 ? 'Buongiorno' : (hour < 18 ? 'Buon pomeriggio' : 'Buonasera');
+  const greetEl = document.getElementById('oggiGreeting');
+  greetEl.textContent = cachedNickname ? `${greetWord}, ${cachedNickname}.` : `${greetWord}!`;
+
+  if(!cachedNickname && window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser){
+    try{
+      const nickname = await window.cloudAPI.getMyNickname();
+      if(nickname && nickname !== 'Anonimo'){
+        cachedNickname = nickname;
+        greetEl.textContent = `${greetWord}, ${nickname}.`;
+      }
+    }catch(e){ /* niente, resta il saluto generico */ }
+  }
+
+  const tasks = computeOggiTasks();
+  const totalMinutes = tasks.reduce((s,t)=>s+t.minutes, 0);
+  document.getElementById('oggiSubline').textContent = totalMinutes > 0
+    ? `Oggi bastano ${totalMinutes} minuti in ${LANGS[currentLang].label}.`
+    : `Hai già completato quello che avevi in programma in ${LANGS[currentLang].label} oggi.`;
+  document.getElementById('oggiStreakCount').textContent = state.streak;
+
+  const cardsBox = document.getElementById('oggiCards');
+  if(tasks.length === 0){
+    cardsBox.innerHTML = `<div class="oggi-all-done"><div class="big">🎉</div>Hai già completato tutto quello che avevi in programma oggi.<br>Ottimo lavoro!</div>`;
+  } else {
+    cardsBox.innerHTML = tasks.map(t => `
+      <div class="oggi-task-card">
+        <div class="oggi-task-icon">${t.icon}</div>
+        <div class="oggi-task-body">
+          <div class="t">${escapeHTML(t.title)}</div>
+          <div class="s">${escapeHTML(t.sub)}</div>
+        </div>
+        <button class="primary oggi-task-btn" data-tab="${t.tab}">${escapeHTML(t.btnLabel)}</button>
+      </div>
+    `).join('');
+    cardsBox.querySelectorAll('.oggi-task-btn').forEach(btn=>{
+      btn.onclick = () => switchToTab(btn.dataset.tab);
+    });
+  }
+
+  const week = computeWeekProgress();
+  document.getElementById('oggiWeekRow').innerHTML = week.map(d => `
+    <div class="oggi-day">
+      <span class="lbl">${d.lbl}</span>
+      <span class="dot ${d.done?'done':''} ${d.isToday?'today':''}"></span>
+    </div>
+  `).join('');
+}
+
 function renderMap(){
   document.getElementById('mapLangLabel').textContent = LANGS[currentLang].label;
   const wrap = document.getElementById('mapPath');
@@ -6877,6 +7044,9 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     }
     if(btn.dataset.tab === 'traguardi' && typeof renderTraguardi === 'function'){
       renderTraguardi();
+    }
+    if(btn.dataset.tab === 'oggi' && typeof renderOggi === 'function'){
+      renderOggi();
     }
   };
 });
@@ -7106,7 +7276,7 @@ async function renderAdminPanel(){
     listEl.innerHTML = directory.map(u=>{
       const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString('it-IT') : '&mdash;';
       return `<div class="lb-row">
-        <span class="lb-name" style="flex:2;">${u.email || '&mdash;'}<br><span style="font-size:11px;color:var(--ink-dim);">${u.nickname || 'senza nickname'} &middot; dal ${date}</span></span>
+        <span class="lb-name" style="flex:2;">${escapeHTML(u.email) || '&mdash;'}<br><span style="font-size:11px;color:var(--ink-dim);">${escapeHTML(u.nickname) || 'senza nickname'} &middot; dal ${date}</span></span>
         <span class="lb-score">${scoreByUid[u.uid] ?? 0}</span>
       </div>`;
     }).join('');
@@ -7188,7 +7358,7 @@ async function renderLeaderboard(){
       const isMe = r.uid === myUid;
       return `<div class="lb-row${isMe ? ' me':''}">
         <span class="lb-rank">#${i+1}</span>
-        <span class="lb-name">${(r.nickname||'Anonimo')}${isMe ? ' (tu)':''}</span>
+        <span class="lb-name">${escapeHTML(r.nickname||'Anonimo')}${isMe ? ' (tu)':''}</span>
         <span class="lb-score">${r.totalScore||0}</span>
       </div>`;
     }).join('');
