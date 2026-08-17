@@ -825,10 +825,11 @@
       <div class="challenge-text" id="bpPrompt">&mdash;</div>
       <input type="text" id="bpInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
       <div class="bp-feedback" id="bpFeedback"></div>
-      <div class="row">
+      <div class="row" id="bpCheckRow">
         <button class="primary" id="bpCheck">Verifica</button>
         <button class="ghost" id="bpSkip">Salta</button>
       </div>
+      <button class="primary hidden" id="bpNext" style="width:100%; margin-top:8px;">Avanti &rarr;</button>
       <button class="ghost" id="bpReset" style="width:100%; margin-top:8px;">Ricomincia questa direzione</button>
 
       <div class="lb-divider"></div>
@@ -5337,6 +5338,21 @@ async function loadState(lang){
     if(!state.beginner.level) state.beginner.level = 1;
   }
 
+  // Sblocco permanente dei livelli: una volta raggiunto un livello, resettarne uno precedente
+  // ("Ricomincia questa direzione") non deve mai richiudere il lucchetto su quelli successivi
+  // già fatti. Per questo teniamo un contatore che sale soltanto, mai calcolato "al volo".
+  if(!state.beginner.maxLevelUnlocked){
+    let seeded = 1;
+    for(let lvl=1; lvl<=27; lvl++){
+      const list = BEGINNER[currentLang] && BEGINNER[currentLang][lvl-1];
+      const ds = state.beginner.progress[lvl] && state.beginner.progress[lvl].to_target;
+      if(list && ds && ds.index >= list.length){
+        seeded = Math.max(seeded, lvl + 1);
+      }
+    }
+    state.beginner.maxLevelUnlocked = Math.min(seeded, 27);
+  }
+
   if(!state.sfida){
     state.sfida = { level: 'principiante', direction: 'to_target' };
   }
@@ -5857,6 +5873,9 @@ function renderBeginner(){
   document.getElementById('bpFeedback').textContent='';
   document.getElementById('bpFeedback').className='bp-feedback';
   document.getElementById('bpInput').value='';
+  document.getElementById('bpInput').disabled = false;
+  document.getElementById('bpCheckRow').classList.remove('hidden');
+  document.getElementById('bpNext').classList.add('hidden');
 
   const inputIsArabic = (dir === 'to_target' && currentLang === 'ar');
   document.getElementById('bpInput').dir = inputIsArabic ? 'rtl' : 'ltr';
@@ -5886,6 +5905,7 @@ function renderBeginner(){
     document.getElementById('bpInput').classList.add('hidden');
     document.getElementById('bpCheck').classList.add('hidden');
     document.getElementById('bpSkip').classList.add('hidden');
+    document.getElementById('bpNext').classList.add('hidden');
     return;
   }
   document.getElementById('bpInput').classList.remove('hidden');
@@ -5905,6 +5925,11 @@ async function bpAdvance(){
   const ds = currentDirState();
   ds.index++;
   ds.wrong = 0;
+  const list = currentBeginnerList();
+  if(state.beginner.direction === 'to_target' && ds.index >= list.length){
+    state.beginner.maxLevelUnlocked = Math.max(state.beginner.maxLevelUnlocked || 1, state.beginner.level + 1);
+    state.beginner.maxLevelUnlocked = Math.min(state.beginner.maxLevelUnlocked, 27);
+  }
   await saveState(currentLang);
   renderBeginner();
   renderMap();
@@ -5932,11 +5957,16 @@ document.getElementById('bpCheck').onclick = async ()=>{
     ds.completed++;
     fb.className='bp-feedback ok';
     fb.textContent = `Corretto ✓  +${gained} punti`;
+    if(dir === 'to_target'){
+      fb.appendChild(imMakeSpeakBtn(item.ans[0]));
+    }
     await saveState(currentLang);
     if(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser){
       window.cloudAPI.addPoints(gained).then(()=>renderLeaderboard()).catch(()=>{});
     }
-    setTimeout(bpAdvance, 800);
+    document.getElementById('bpCheckRow').classList.add('hidden');
+    document.getElementById('bpNext').classList.remove('hidden');
+    document.getElementById('bpInput').disabled = true;
   } else {
     ds.wrong = (ds.wrong||0)+1;
     fb.className='bp-feedback ko';
@@ -5954,10 +5984,12 @@ document.getElementById('bpInput').addEventListener('keydown', (e)=>{
   if(e.key === 'Enter'){ document.getElementById('bpCheck').click(); }
 });
 document.getElementById('bpSkip').onclick = bpAdvance;
+document.getElementById('bpNext').onclick = bpAdvance;
 document.getElementById('bpReset').onclick = async ()=>{
   state.beginner.progress[state.beginner.level][state.beginner.direction] = { index:0, wrong:0, score:0, correctFirstTry:0, completed:0 };
   await saveState(currentLang);
   renderBeginner();
+  renderMap();
 };
 document.querySelectorAll('#bpLevelTabs button').forEach(btn=>{
   btn.onclick = async ()=>{
@@ -6941,7 +6973,7 @@ function renderMap(){
   document.getElementById('mapLangLabel').textContent = LANGS[currentLang].label;
   const wrap = document.getElementById('mapPath');
   wrap.innerHTML = '';
-  let prevGateComplete = true;
+  let prevGateUnlocked = true;
   MAP_NODES.forEach((node, i)=>{
     if(node.id === 'base-12'){
       const divider = document.createElement('div');
@@ -6968,9 +7000,14 @@ function renderMap(){
       wrap.appendChild(divider);
     }
     const complete = isMapNodeComplete(node);
-    const unlocked = prevGateComplete;
+    let unlocked;
+    if(node.kind === 'percorso'){
+      unlocked = node.level <= (state.beginner.maxLevelUnlocked || 1);
+    } else {
+      unlocked = prevGateUnlocked;
+    }
     const status = complete ? 'done' : (unlocked ? 'current' : 'locked');
-    if(node.gating){ prevGateComplete = complete; }
+    if(node.gating){ prevGateUnlocked = unlocked; }
 
     const row = document.createElement('div');
     row.className = 'map-node-row';
