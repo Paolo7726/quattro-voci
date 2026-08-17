@@ -4231,7 +4231,7 @@ const BEGINNER = {
   ],
 };
 
-/* ---------- IMPARA LA LINGUA: dataset con fonetica "all'italiana", 7 lingue, 5 livelli, doppia direzione ---------- */
+/* ---------- IMPARA LA LINGUA: dataset con fonetica "all'italiana", 9 lingue, 5 livelli, doppia direzione ---------- */
 const LEARN = {
   en: [
     [ // Livello 1 · parole e saluti
@@ -6551,7 +6551,7 @@ const ACHIEVEMENTS = [
   { id:'streak7', icon:'🔥', name:'Serie di 7 giorni', check: s => s.maxStreak >= 7 },
   { id:'streak30', icon:'🔥', name:'Serie di 30 giorni', check: s => s.maxStreak >= 30 },
   { id:'poly3', icon:'🌍', name:'Poliglotta (3 lingue)', check: s => s.languagesWithProgress >= 3 },
-  { id:'poly7', icon:'🗺️', name:'Iperpoliglotta (7 lingue)', check: s => s.languagesWithProgress >= 7 },
+  { id:'poly7', icon:'🗺️', name:'Iperpoliglotta (9 lingue)', check: s => s.languagesWithProgress >= 9 },
   { id:'base10', icon:'🎓', name:'Diplomato Base', check: s => s.maxBaseLevelDone >= 10 },
   { id:'airport', icon:'✈️', name:"Pronto per l'aeroporto", check: s => s.maxBaseLevelDone >= 27 },
   { id:'impara', icon:'🧠', name:'Impara Superstar', check: s => s.imparaFullyDone },
@@ -7203,7 +7203,7 @@ document.getElementById('lbRefresh').onclick = renderLeaderboard;
 const ONBOARD_SLIDES = [
   {
     title: "Benvenuto in Quattro Voci",
-    body: "Un ecosistema di immersione multilingue — Inglese, Français, Español, Deutsch, العربية, 中文 e 日本語 — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
+    body: "Un ecosistema di immersione multilingue — Inglese, Français, Español, Deutsch, العربية, 中文, 日本語, Русский e Türkçe — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
   },
   {
     title: "Undici strumenti, un'unica app",

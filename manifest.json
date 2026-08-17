@@ -1,7 +1,7 @@
 {
   "name": "Quattro Voci",
   "short_name": "4 Voci",
-  "description": "Ecosistema di immersione in 7 lingue — EN / FR / ES / DE / AR / 中文 / 日本語 — sfide, shadowing, pronuncia, dialoghi, duelli e percorso completo",
+  "description": "Ecosistema di immersione in 9 lingue — EN / FR / ES / DE / AR / 中文 / 日本語 / RU / TR — sfide, shadowing, pronuncia, dialoghi, duelli e percorso completo",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
