@@ -366,9 +366,9 @@
   nav.tabs button svg{ width:20px; height:20px; }
   nav.tabs button.active{ color: var(--accent); }
   .nav-group-label{
-    flex:0 0 auto; align-self:center; font-family:'IBM Plex Mono', monospace; font-size:9.5px;
-    letter-spacing:.08em; text-transform:uppercase; color: var(--ink-dim); opacity:.65;
-    padding:0 5px; white-space:nowrap; pointer-events:none;
+    /* Su mobile le etichette di testo affollavano la barra: restano nascoste qui e
+       riappaiono solo nella sidebar desktop (vedi media query più sotto). */
+    display:none;
   }
 
   [dir="rtl"] .challenge-text, [dir="rtl"] .scenario-box{ text-align:right; }
@@ -705,66 +705,6 @@
   </section>
 
   <!-- PERCORSO INIZIALE -->
-  <section class="card hidden" id="tab-percorso">
-    <span class="tag" id="bpChapterTag">Percorso iniziale &middot; da zero</span>
-    <h2>Traduci con la tastiera</h2>
-    <p class="sub">Scegli livello e direzione, poi scrivi la traduzione. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
-    <div class="level-tabs" id="bpLevelTabs">
-      <button data-level="1" class="active">Livello 1</button>
-      <button data-level="2">Livello 2</button>
-      <button data-level="3">Livello 3</button>
-      <button data-level="4">Livello 4</button>
-      <button data-level="5">Livello 5</button>
-      <button data-level="6">Livello 6</button>
-      <button data-level="7">Livello 7</button>
-      <button data-level="8">Livello 8</button>
-      <button data-level="9">Livello 9</button>
-      <button data-level="10">Livello 10</button>
-      <button data-level="11">Livello 11</button>
-      <button data-level="12">Livello 12</button>
-      <button data-level="13">Livello 13</button>
-      <button data-level="14">Livello 14</button>
-      <button data-level="15">Livello 15</button>
-      <button data-level="16">Livello 16</button>
-      <button data-level="17">Livello 17</button>
-      <button data-level="18">Livello 18</button>
-      <button data-level="19">Livello 19</button>
-      <button data-level="20">Livello 20</button>
-      <button data-level="21">Livello 21</button>
-      <button data-level="22">Livello 22</button>
-      <button data-level="23">Livello 23</button>
-      <button data-level="24">Livello 24</button>
-      <button data-level="25">Livello 25</button>
-      <button data-level="26">Livello 26</button>
-      <button data-level="27">Livello 27</button>
-    </div>
-    <div class="level-tabs" id="bpDirTabs">
-      <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
-      <button data-dir="to_it" id="bpDirToIt">Lingua &rarr; Italiano</button>
-    </div>
-    <div class="stats-row" id="bpStatsRow"></div>
-    <div class="bp-progress-wrap">
-      <div class="bp-progress-bar"><div class="bp-progress-fill" id="bpProgressFill"></div></div>
-      <div class="bp-progress-label" id="bpProgressLabel">Frase 1 di 18</div>
-    </div>
-    <div class="challenge-text" id="bpPrompt">&mdash;</div>
-    <input type="text" id="bpInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
-    <div class="bp-feedback" id="bpFeedback"></div>
-    <div class="row">
-      <button class="primary" id="bpCheck">Verifica</button>
-      <button class="ghost" id="bpSkip">Salta</button>
-    </div>
-    <button class="ghost" id="bpReset" style="width:100%; margin-top:8px;">Ricomincia questa direzione</button>
-
-    <div class="lb-divider"></div>
-    <div class="lb-head">
-      <span class="tag" style="margin-bottom:0;">Classifica &middot; punti totali</span>
-      <button class="ghost" id="lbRefresh" style="padding:6px 12px; font-size:12px;">Aggiorna</button>
-    </div>
-    <div id="leaderboardLoggedOut" class="empty">Accedi o registrati (icona in alto a destra) per partecipare alla classifica e vedere come ti posizioni rispetto agli altri.</div>
-    <div id="leaderboardList" class="hidden"></div>
-  </section>
-
   <!-- SHADOWING -->
   <section class="card hidden" id="tab-shadow">
     <span class="tag">Shadowing</span>
@@ -836,9 +776,69 @@
   <section class="card hidden" id="tab-mappa">
     <span class="tag">Percorso a tappe</span>
     <h2>La tua mappa &mdash; <span id="mapLangLabel">English</span></h2>
-    <p class="sub">Le tappe del Percorso Base si sbloccano completando la precedente. Le tappe Sfida (bordo tratteggiato) sono facoltative: se hai difficoltà, tocca pure quella successiva e vai avanti.</p>
+    <p class="sub">Le tappe del Percorso Base si sbloccano completando la precedente. Le tappe Sfida (bordo tratteggiato) sono facoltative: se hai difficoltà, tocca pure quella successiva e vai avanti. Tocca una tappa per aprire subito l'esercizio qui sotto.</p>
     <div class="map-wrap" id="mapPath"></div>
-    <button class="ghost" id="mapToLeaderboard" style="width:100%; margin-top:6px;">Vedi la classifica &rarr;</button>
+
+    <div class="lb-divider"></div>
+    <div id="percorsoInline">
+      <span class="tag" id="bpChapterTag">Percorso iniziale &middot; da zero</span>
+      <h2>Traduci con la tastiera</h2>
+      <p class="sub">Scegli livello e direzione, poi scrivi la traduzione. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
+      <div class="level-tabs" id="bpLevelTabs">
+        <button data-level="1" class="active">Livello 1</button>
+        <button data-level="2">Livello 2</button>
+        <button data-level="3">Livello 3</button>
+        <button data-level="4">Livello 4</button>
+        <button data-level="5">Livello 5</button>
+        <button data-level="6">Livello 6</button>
+        <button data-level="7">Livello 7</button>
+        <button data-level="8">Livello 8</button>
+        <button data-level="9">Livello 9</button>
+        <button data-level="10">Livello 10</button>
+        <button data-level="11">Livello 11</button>
+        <button data-level="12">Livello 12</button>
+        <button data-level="13">Livello 13</button>
+        <button data-level="14">Livello 14</button>
+        <button data-level="15">Livello 15</button>
+        <button data-level="16">Livello 16</button>
+        <button data-level="17">Livello 17</button>
+        <button data-level="18">Livello 18</button>
+        <button data-level="19">Livello 19</button>
+        <button data-level="20">Livello 20</button>
+        <button data-level="21">Livello 21</button>
+        <button data-level="22">Livello 22</button>
+        <button data-level="23">Livello 23</button>
+        <button data-level="24">Livello 24</button>
+        <button data-level="25">Livello 25</button>
+        <button data-level="26">Livello 26</button>
+        <button data-level="27">Livello 27</button>
+      </div>
+      <div class="level-tabs" id="bpDirTabs">
+        <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
+        <button data-dir="to_it" id="bpDirToIt">Lingua &rarr; Italiano</button>
+      </div>
+      <div class="stats-row" id="bpStatsRow"></div>
+      <div class="bp-progress-wrap">
+        <div class="bp-progress-bar"><div class="bp-progress-fill" id="bpProgressFill"></div></div>
+        <div class="bp-progress-label" id="bpProgressLabel">Frase 1 di 18</div>
+      </div>
+      <div class="challenge-text" id="bpPrompt">&mdash;</div>
+      <input type="text" id="bpInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="bp-feedback" id="bpFeedback"></div>
+      <div class="row">
+        <button class="primary" id="bpCheck">Verifica</button>
+        <button class="ghost" id="bpSkip">Salta</button>
+      </div>
+      <button class="ghost" id="bpReset" style="width:100%; margin-top:8px;">Ricomincia questa direzione</button>
+
+      <div class="lb-divider"></div>
+      <div class="lb-head">
+        <span class="tag" style="margin-bottom:0;">Classifica &middot; punti totali</span>
+        <button class="ghost" id="lbRefresh" style="padding:6px 12px; font-size:12px;">Aggiorna</button>
+      </div>
+      <div id="leaderboardLoggedOut" class="empty">Accedi o registrati (icona in alto a destra) per partecipare alla classifica e vedere come ti posizioni rispetto agli altri.</div>
+      <div id="leaderboardList" class="hidden"></div>
+    </div>
   </section>
 
   <!-- CRONOLOGIA -->
@@ -906,10 +906,6 @@
   </button>
 
   <span class="nav-group-label">Parla</span>
-  <button data-tab="percorso">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V6a2 2 0 012-2h9l5 5v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M9 12l2 2 4-4"/></svg>
-    Base
-  </button>
   <button data-tab="sfida">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
     Sfida
@@ -6819,11 +6815,11 @@ function computeOggiTasks(){
     if(dirState.index > 0 && dirState.index < list.length){
       candidates.push({ priority:3, icon:'📘', title:'Percorso Base',
         sub:`Continua il Livello ${lvl} · frase ${dirState.index+1} di ${list.length}`,
-        minutes:3, btnLabel:'Continua', tab:'percorso' });
+        minutes:3, btnLabel:'Continua', tab:'mappa', scrollTo:'percorsoInline' });
     } else if(dirState.index === 0){
       candidates.push({ priority:4, icon:'📘', title:'Percorso Base',
         sub:`Livello ${lvl} · ${list.length} frasi`,
-        minutes:3, btnLabel:'Inizia', tab:'percorso' });
+        minutes:3, btnLabel:'Inizia', tab:'mappa', scrollTo:'percorsoInline' });
     }
   }
 
@@ -6916,11 +6912,19 @@ async function renderOggi(){
           <div class="t">${escapeHTML(t.title)}</div>
           <div class="s">${escapeHTML(t.sub)}</div>
         </div>
-        <button class="primary oggi-task-btn" data-tab="${t.tab}">${escapeHTML(t.btnLabel)}</button>
+        <button class="primary oggi-task-btn" data-tab="${t.tab}" data-scroll="${t.scrollTo||''}">${escapeHTML(t.btnLabel)}</button>
       </div>
     `).join('');
     cardsBox.querySelectorAll('.oggi-task-btn').forEach(btn=>{
-      btn.onclick = () => switchToTab(btn.dataset.tab);
+      btn.onclick = () => {
+        switchToTab(btn.dataset.tab);
+        if(btn.dataset.scroll){
+          setTimeout(()=>{
+            const target = document.getElementById(btn.dataset.scroll);
+            if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+          }, 80);
+        }
+      };
     });
   }
 
@@ -6993,8 +6997,9 @@ function renderMap(){
           state.beginner.level = node.level;
           state.beginner.direction = 'to_target';
           await saveState(currentLang);
-          switchToTab('percorso');
           renderBeginner();
+          const target = document.getElementById('percorsoInline');
+          if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
         } else {
           state.sfida.level = node.level;
           await saveState(currentLang);
@@ -7010,7 +7015,6 @@ function renderMap(){
     wrap.appendChild(row);
   });
 }
-document.getElementById('mapToLeaderboard').onclick = ()=> switchToTab('percorso');
 
 /* ---------- CRONOLOGIA ---------- */
 function renderHistory(){
@@ -7094,7 +7098,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     btn.classList.add('active');
     document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
     document.getElementById('tab-'+btn.dataset.tab).classList.remove('hidden');
-    if(btn.dataset.tab === 'percorso' && typeof renderLeaderboard === 'function'){
+    if(btn.dataset.tab === 'mappa' && typeof renderLeaderboard === 'function'){
       renderLeaderboard();
     }
     if(btn.dataset.tab === 'traguardi' && typeof renderTraguardi === 'function'){
