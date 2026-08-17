@@ -365,6 +365,11 @@
   }
   nav.tabs button svg{ width:20px; height:20px; }
   nav.tabs button.active{ color: var(--accent); }
+  .nav-group-label{
+    flex:0 0 auto; align-self:center; font-family:'IBM Plex Mono', monospace; font-size:9.5px;
+    letter-spacing:.08em; text-transform:uppercase; color: var(--ink-dim); opacity:.65;
+    padding:0 5px; white-space:nowrap; pointer-events:none;
+  }
 
   [dir="rtl"] .challenge-text, [dir="rtl"] .scenario-box{ text-align:right; }
   .challenge-text[dir="rtl"], .scenario-box[dir="rtl"]{ text-align:right; }
@@ -445,6 +450,11 @@
     nav.tabs button svg{ width:19px; height:19px; flex-shrink:0; }
     nav.tabs button:hover{ background: var(--panel-2); color: var(--ink); }
     nav.tabs button.active{ background: var(--accent-soft); }
+    .nav-group-label{
+      display:block; text-align:left; margin:16px 4px 4px; padding:0;
+      font-size:10.5px; opacity:.6;
+    }
+    .nav-group-label:first-of-type{ margin-top:6px; }
 
     /* piccoli accorgimenti da mouse, non invasivi */
     button.primary:hover, button.ghost:hover{ filter:brightness(1.08); cursor:pointer; }
@@ -622,6 +632,21 @@
     <div class="streak" style="margin-top:0; margin-bottom:14px;">
       <span>Serie di pratica</span>
       <span><span class="flame">&#9679;</span> <b id="oggiStreakCount">0</b> giorni</span>
+    </div>
+    <div class="mascot-box" style="margin-bottom:14px;">
+      <div class="mascot-avatar">
+        <svg viewBox="0 0 64 64" width="44" height="44">
+          <ellipse cx="32" cy="36" rx="22" ry="20" fill="var(--panel-2)" stroke="var(--accent)" stroke-width="2"/>
+          <path d="M18 20 L26 26" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M46 20 L38 26" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="23" cy="33" r="7.5" fill="var(--ink)"/>
+          <circle cx="41" cy="33" r="7.5" fill="var(--ink)"/>
+          <circle cx="23" cy="33" r="3" fill="var(--bg)"/>
+          <circle cx="41" cy="33" r="3" fill="var(--bg)"/>
+          <path d="M30 40 L32 44 L34 40" stroke="var(--accent)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="mascot-bubble" id="oggiNottolaMsg">Un momento...</div>
     </div>
     <div id="oggiCards"></div>
     <div class="rec-divider"></div>
@@ -861,18 +886,26 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1v-9"/></svg>
     Oggi
   </button>
-  <button data-tab="impara">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4L3 8l9 4 9-4-9-4z"/><path d="M6 10v6c0 1.5 3 2.5 6 2.5s6-1 6-2.5v-6"/></svg>
-    Impara
-  </button>
-  <button data-tab="traduci">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 8c0 3 3 5 7 5s7-2 7-5"/><path d="M3 3l3 2-3 2M21 17l-3 2 3 2"/></svg>
-    Traduci
-  </button>
   <button data-tab="mappa">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="18" r="2.5"/><circle cx="12" cy="7" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 16.5L10.5 9M13.5 9L16 16.5"/></svg>
     Mappa
   </button>
+
+  <span class="nav-group-label">Ascolta</span>
+  <button data-tab="impara">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 4L3 8l9 4 9-4-9-4z"/><path d="M6 10v6c0 1.5 3 2.5 6 2.5s6-1 6-2.5v-6"/></svg>
+    Impara
+  </button>
+  <button data-tab="suoni">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10v4M7 6v12M11 3v18M15 7v10M19 9v6"/></svg>
+    Suoni
+  </button>
+  <button data-tab="shadow">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v10m0 0a4 4 0 004-4M12 13a4 4 0 01-4-4"/><path d="M8 19h8M12 17v2"/></svg>
+    Shadow
+  </button>
+
+  <span class="nav-group-label">Parla</span>
   <button data-tab="percorso">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V6a2 2 0 012-2h9l5 5v10a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M9 12l2 2 4-4"/></svg>
     Base
@@ -881,18 +914,18 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
     Sfida
   </button>
-  <button data-tab="shadow">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v10m0 0a4 4 0 004-4M12 13a4 4 0 01-4-4"/><path d="M8 19h8M12 17v2"/></svg>
-    Shadow
+  <button data-tab="traduci">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 8c0 3 3 5 7 5s7-2 7-5"/><path d="M3 3l3 2-3 2M21 17l-3 2 3 2"/></svg>
+    Traduci
   </button>
-  <button data-tab="suoni">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10v4M7 6v12M11 3v18M15 7v10M19 9v6"/></svg>
-    Suoni
-  </button>
+
+  <span class="nav-group-label">Interagisci</span>
   <button data-tab="dialoghi">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h11v8H8l-4 4V4z"/><path d="M20 9v8l-3-3h-4"/></svg>
     Dialoghi
   </button>
+
+  <span class="nav-group-label">Migliora</span>
   <button data-tab="quaderno">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12v18l-6-3-6 3V3z"/></svg>
     Quaderno
@@ -6827,6 +6860,27 @@ function computeWeekProgress(){
   });
 }
 
+function computeNottolaMessage(tasks){
+  const mistakeCount = (state.mistakes || []).length;
+  if(mistakeCount >= 3){
+    return `Hai ${mistakeCount} frasi che continuano a tornare tra gli errori. Prima di andare avanti con cose nuove, ti conviene sistemare quelle.`;
+  }
+  if(tasks.length === 0){
+    return `Hai già completato tutto quello che avevi in programma oggi. Ottimo lavoro, a domani!`;
+  }
+  if(mistakeCount > 0){
+    return `C'è ${mistakeCount === 1 ? 'una frase' : mistakeCount + ' frasi'} da ripassare quando vuoi — niente di urgente, ma non lasciarla lì troppo a lungo.`;
+  }
+  if(state.streak >= 7){
+    return `Sei a ${state.streak} giorni di fila, davvero notevole. Continuiamo così?`;
+  }
+  if(state.streak === 0){
+    const m = tasks[0].minutes;
+    return `Non c'è fretta: ${m === 1 ? 'basta 1 minuto' : `bastano ${m} minuti`} su "${tasks[0].title}" per ripartire.`;
+  }
+  return `Ti consiglio di iniziare da "${tasks[0].title}": è la cosa più utile da fare adesso.`;
+}
+
 async function renderOggi(){
   const hour = new Date().getHours();
   const greetWord = hour < 12 ? 'Buongiorno' : (hour < 18 ? 'Buon pomeriggio' : 'Buonasera');
@@ -6844,6 +6898,7 @@ async function renderOggi(){
   }
 
   const tasks = computeOggiTasks();
+  document.getElementById('oggiNottolaMsg').textContent = computeNottolaMessage(tasks);
   const totalMinutes = tasks.reduce((s,t)=>s+t.minutes, 0);
   document.getElementById('oggiSubline').textContent = totalMinutes > 0
     ? `Oggi bastano ${totalMinutes} minuti in ${LANGS[currentLang].label}.`
