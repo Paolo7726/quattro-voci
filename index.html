@@ -7472,8 +7472,12 @@ const ONBOARD_SLIDES = [
     body: "Un ecosistema di immersione multilingue — Inglese, Français, Español, Deutsch, العربية, 中文, 日本語, Русский e Türkçe — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
   },
   {
-    title: "Undici strumenti, un'unica app",
-    body: "Impara da zero, Traduci al volo, Mappa dei progressi, Percorso Base (27 livelli, dai saluti all'aeroporto e al ristorante), Sfida del giorno, Shadowing, Suoni critici, Dialoghi, Quaderno di correzione, Storia con Ripasso mirato e Traguardi. Tutto per ogni lingua."
+    title: "Le Quattro Voci",
+    body: "Il nome non si riferisce a quattro lingue — l'app ne gestisce nove. Le \"voci\" sono i quattro modi in cui alleni una lingua ogni giorno: 🎧 Ascolta (comprensione), 🗣️ Parla (produzione orale), 🤝 Interagisci (dialoghi e situazioni reali), 📈 Migliora (errori, ripasso, pronuncia, progressi). Li ritrovi raggruppati proprio così nel menu."
+  },
+  {
+    title: "Undici strumenti, Quattro Voci",
+    body: "Ascolta: Impara, Suoni, Shadowing. Parla: Percorso Base, Sfida, Traduci. Interagisci: Dialoghi. Migliora: Quaderno, Storia, Traguardi. Undici strumenti in tutto, per ogni lingua, organizzati secondo queste quattro voci."
   },
   {
     title: "Comunicazione prima, grammatica dopo",
@@ -7508,7 +7512,7 @@ document.getElementById('reviewTutorialBtn').onclick = ()=>{
 };
 function closeOnboard(){
   document.getElementById('onboardModal').classList.add('hidden');
-  try{ localStorage.setItem('qv_onboarding_done_v2', '1'); }catch(e){}
+  try{ localStorage.setItem('qv_onboarding_done_v3', '1'); }catch(e){}
 }
 document.getElementById('obNext').onclick = ()=>{
   if(obIndex < ONBOARD_SLIDES.length - 1){ obIndex++; renderOnboard(); }
@@ -7521,7 +7525,7 @@ document.getElementById('onboardSkip').onclick = closeOnboard;
 
 (function maybeShowOnboarding(){
   try{
-    if(!localStorage.getItem('qv_onboarding_done_v2')){ openOnboard(); }
+    if(!localStorage.getItem('qv_onboarding_done_v3')){ openOnboard(); }
   }catch(e){}
 })();
 
