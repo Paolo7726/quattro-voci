@@ -518,6 +518,7 @@
         <button class="primary" id="authSubmit" style="width:100%">Accedi</button>
         <button type="button" id="forgotPasswordBtn" style="background:none; border:none; color:var(--ink-dim); font-size:12.5px; text-decoration:underline; cursor:pointer; padding:10px 2px 0; display:block;">Password dimenticata?</button>
         <p class="sub" style="margin-top:12px;">Facoltativo: puoi continuare a usare l'app senza account. In quel caso i progressi restano salvati solo su questo dispositivo.</p>
+        <p class="sub" style="margin-top:8px;"><a href="./privacy.html" target="_blank" rel="noopener" style="color:var(--ink-dim); text-decoration:underline;">Privacy Policy</a></p>
       </div>
 
       <div id="authLoggedIn" class="hidden">
@@ -526,6 +527,20 @@
         <p class="sub">I progressi di tutte le lingue si sincronizzano automaticamente su ogni dispositivo dove accedi con questo account.</p>
         <button class="ghost hidden" id="authAdminBtn" style="width:100%; margin-top:10px;">Pannello amministratore &rarr;</button>
         <button class="ghost" id="authLogout" style="width:100%; margin-top:10px;">Esci</button>
+
+        <div class="rec-divider"></div>
+        <button class="ghost" id="deleteAccountBtn" style="width:100%; color:#D96C6C; border-color:#D96C6C;">&#128465; Elimina account</button>
+        <div id="deleteAccountPanel" class="hidden" style="margin-top:12px;">
+          <p class="sub" style="color:#D96C6C; margin-bottom:10px;">Questa azione è <b>definitiva</b>: verranno cancellati per sempre i progressi in tutte le lingue, il punteggio in classifica e l'account stesso. Non si può annullare.</p>
+          <div class="pw-wrap">
+            <input type="password" id="deleteAccountPass" placeholder="Conferma la tua password" autocomplete="current-password">
+          </div>
+          <div class="auth-feedback" id="deleteAccountFeedback"></div>
+          <div class="row">
+            <button class="ghost" id="deleteAccountCancel" style="flex:1;">Annulla</button>
+            <button class="primary" id="deleteAccountConfirm" style="flex:1; background:#D96C6C;">Elimina definitivamente</button>
+          </div>
+        </div>
       </div>
 
       <div class="rec-divider"></div>
@@ -7241,6 +7256,8 @@ function openAuthModal(){
   document.getElementById('authModal').classList.remove('hidden');
   document.getElementById('authFeedback').textContent = '';
   updateReminderBtn();
+  document.getElementById('deleteAccountPanel').classList.add('hidden');
+  document.getElementById('deleteAccountBtn').classList.remove('hidden');
   const loggedIn = window.cloudAPI && window.cloudAPI.currentUser;
   document.getElementById('authLoggedOut').classList.toggle('hidden', !!loggedIn);
   document.getElementById('authLoggedIn').classList.toggle('hidden', !loggedIn);
@@ -7343,6 +7360,49 @@ document.getElementById('authLogout').onclick = async ()=>{
   closeAuthModal();
 };
 
+document.getElementById('deleteAccountBtn').onclick = ()=>{
+  document.getElementById('deleteAccountPanel').classList.remove('hidden');
+  document.getElementById('deleteAccountBtn').classList.add('hidden');
+  document.getElementById('deleteAccountPass').value = '';
+  document.getElementById('deleteAccountFeedback').textContent = '';
+};
+document.getElementById('deleteAccountCancel').onclick = ()=>{
+  document.getElementById('deleteAccountPanel').classList.add('hidden');
+  document.getElementById('deleteAccountBtn').classList.remove('hidden');
+};
+document.getElementById('deleteAccountConfirm').onclick = async ()=>{
+  const fb = document.getElementById('deleteAccountFeedback');
+  if(!window.cloudAPI || !window.cloudAPI.enabled || !window.cloudAPI.currentUser){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Devi essere connesso per eliminare l\'account.';
+    return;
+  }
+  const password = document.getElementById('deleteAccountPass').value;
+  if(!password){
+    fb.className='auth-feedback err';
+    fb.textContent = 'Inserisci la tua password per confermare.';
+    return;
+  }
+  const btn = document.getElementById('deleteAccountConfirm');
+  btn.disabled = true;
+  fb.className='auth-feedback'; fb.textContent = 'Eliminazione in corso...';
+  try{
+    await window.cloudAPI.deleteAccount(password);
+    try{
+      Object.keys(LANGS).forEach(lang => localStorage.removeItem('state:'+lang));
+    }catch(e){}
+    closeAuthModal();
+    alert('Il tuo account e tutti i tuoi dati sono stati eliminati definitivamente.');
+    location.reload();
+  }catch(e){
+    console.warn('delete account error', e);
+    fb.className='auth-feedback err';
+    fb.textContent = translateAuthError(e);
+  } finally {
+    btn.disabled = false;
+  }
+};
+
 /* ---------- PANNELLO AMMINISTRATORE ---------- */
 document.getElementById('authAdminBtn').onclick = ()=>{
   closeAuthModal();
@@ -7393,6 +7453,7 @@ function translateAuthError(e){
     'auth/wrong-password': 'Password errata.',
     'auth/invalid-credential': 'Email o password errate.',
     'auth/too-many-requests': 'Troppi tentativi, riprova tra qualche minuto.',
+    'auth/requires-recent-login': 'Per sicurezza, reinserisci la password e riprova.',
   };
   return map[code] || 'Qualcosa è andato storto, riprova.';
 }
@@ -7561,10 +7622,11 @@ window.addEventListener('cloud-ready', ()=>{
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-    onAuthStateChanged, signOut, sendPasswordResetEmail
+    onAuthStateChanged, signOut, sendPasswordResetEmail,
+    deleteUser, reauthenticateWithCredential, EmailAuthProvider
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
-    getFirestore, doc, getDoc, setDoc, increment,
+    getFirestore, doc, getDoc, setDoc, increment, deleteDoc,
     collection, query, orderBy, limit, getDocs
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
@@ -7600,6 +7662,22 @@ window.addEventListener('cloud-ready', ()=>{
     async login(email, pass){ return signInWithEmailAndPassword(auth, email, pass); },
     async logout(){ return signOut(auth); },
     async resetPassword(email){ return sendPasswordResetEmail(auth, email); },
+    async deleteAccount(password){
+      if(!auth || !auth.currentUser) throw new Error('not-logged-in');
+      const user = auth.currentUser;
+      const uid = user.uid;
+      if(password){
+        const cred = EmailAuthProvider.credential(user.email, password);
+        await reauthenticateWithCredential(user, cred);
+      }
+      const ALL_LANGS = ['en','fr','es','de','ar','zh','ja','ru','tr'];
+      for(const lang of ALL_LANGS){
+        try{ await deleteDoc(doc(db, 'users', uid, 'progress', lang)); }catch(e){ console.warn('delete progress error', lang, e); }
+      }
+      try{ await deleteDoc(doc(db, 'leaderboard', uid)); }catch(e){ console.warn('delete leaderboard error', e); }
+      try{ await deleteDoc(doc(db, 'directory', uid)); }catch(e){ console.warn('delete directory error', e); }
+      await deleteUser(user);
+    },
     onAuthChange(cb){ if(auth) onAuthStateChanged(auth, cb); },
     async pushState(lang, stateObj){
       if(!auth || !auth.currentUser) return;
