@@ -72,7 +72,7 @@
     font-size: 13.5px; font-weight:500; cursor:pointer; position:relative;
     transition: color .3s ease, background-color .3s ease;
   }
-  .voice-btn .script{ display:block; font-size: 15px; margin-bottom:1px; }
+  .voice-btn .script{ display:block; font-size: 17px; margin-bottom:2px; line-height:1; }
   .voice-btn.active{ color: #17140F; background: var(--accent); font-weight:600; }
   .voice-abbr{ font-size:11px; opacity:.75; font-weight:500; }
 
@@ -1050,7 +1050,7 @@
 /* ---------- DATA ---------- */
 const LANGS = {
   en: {
-    label:'English', script:'En', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
+    label:'English', script:'En', flag:'🇬🇧', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
     audioSource:{ name:'BBC 6 Minute English', where:'YouTube', tip:'Episodi brevi, parlato chiaro e naturale — cerca esattamente questo nome del programma.' },
     sounds:[
       {sym:'θ/ð', name:'Th sordo e sonoro (think / this)', desc:'Lingua tra i denti, non dietro. L\'errore tipico è dire "sink" invece di "think".', pairs:'think / sink &middot; this / dis', tip:'Metti la lingua tra i denti davanti a uno specchio e soffia leggermente: se non vedi la punta della lingua, non è un vero th.'},
@@ -1061,7 +1061,7 @@ const LANGS = {
     ],
   },
   fr: {
-    label:'Français', script:'Fr', word:'Voix', accent:'#6C7BC4', dir:'ltr', rtlText:false,
+    label:'Français', script:'Fr', flag:'🇫🇷', word:'Voix', accent:'#6C7BC4', dir:'ltr', rtlText:false,
     audioSource:{ name:'Innerfrench', where:'YouTube o Spotify (podcast)', tip:'Parlato lento e chiaro, pensato apposta per chi impara. In alternativa cerca "France Inter podcast".' },
     sounds:[
       {sym:'ɑ̃/ɛ̃', name:'Vocali nasali (an / en / in / un)', desc:'Prova con una mano sul naso: deve vibrare. È il tratto che più smaschera un accento italiano.', pairs:'sans / sang &middot; vin / vent', tip:'Chiudi il velo del palato come se avessi il raffreddore: l\'aria deve uscire in parte dal naso mentre pronunci la vocale.'},
@@ -1072,7 +1072,7 @@ const LANGS = {
     ],
   },
   es: {
-    label:'Español', script:'Es', word:'Voces', accent:'#C1432E', dir:'ltr', rtlText:false,
+    label:'Español', script:'Es', flag:'🇪🇸', word:'Voces', accent:'#C1432E', dir:'ltr', rtlText:false,
     audioSource:{ name:'Dreaming Spanish', where:'YouTube', tip:'Video pensati per l\'apprendimento con parlato comprensibile a diversi livelli.' },
     sounds:[
       {sym:'b/v', name:'B e V (stesso suono)', desc:'In spagnolo sono lo stesso fonema, spesso una approssimante morbida, non un\'occlusiva piena come in italiano.', pairs:'vaca / baca (identiche)', tip:'Tra le vocali, non chiudere del tutto le labbra: lasciale quasi a contatto e lascia passare un filo d\'aria.'},
@@ -1083,7 +1083,7 @@ const LANGS = {
     ],
   },
   de: {
-    label:'Deutsch', script:'De', word:'Stimmen', accent:'#8B5FA3', dir:'ltr', rtlText:false,
+    label:'Deutsch', script:'De', flag:'🇩🇪', word:'Stimmen', accent:'#8B5FA3', dir:'ltr', rtlText:false,
     audioSource:{ name:'Easy German', where:'YouTube', tip:'Interviste di strada con sottotitoli in tedesco e inglese, ottimo per abituarsi al parlato reale.' },
     sounds:[
       {sym:'ü', name:'La vocale Ü', desc:'Non esiste in italiano: labbra arrotondate come per dire "u", ma lingua in posizione da "i".', pairs:'für / Fuhr', tip:'Metti la bocca a "o" stretta come per fischiare, poi prova a dire "i" senza muovere le labbra.'},
@@ -1093,8 +1093,19 @@ const LANGS = {
       {sym:'-d/-b/-g', name:'Consonanti finali sorde (Auslautverhärtung)', desc:'A fine parola, le consonanti b/d/g diventano sorde (p/t/k): una regola che non esiste in italiano.', pairs:'Rad (si dice come "Rat") / Räder (qui la D si sente)', tip:'A fine parola, "ammorbidisci" la consonante fino a farla suonare come la sua versione sorda: b\u2192p, d\u2192t, g\u2192k.'},
     ],
   },
+  pt: {
+    label:'Português', script:'Pt', flag:'🇧🇷', word:'Vozes', accent:'#2E8B57', dir:'ltr', rtlText:false, abbr:'Por',
+    audioSource:{ name:'Easy Portuguese', where:'YouTube', tip:'Interviste di strada con sottotitoli in portoghese e inglese, ottimo per abituarsi al parlato reale (brasiliano ed europeo).' },
+    sounds:[
+      {sym:'ão', name:'Il dittongo nasale ão', desc:'Una vocale nasale che non esiste in italiano: l\'aria esce in parte dal naso mentre si pronuncia "au".', pairs:'não (no) &middot; pão (pane)', tip:'Tieni il velo del palato abbassato come quando hai il raffreddore, e pronuncia "au" lasciando risuonare il naso.'},
+      {sym:'lh / nh', name:'I gruppi LH e NH', desc:'La lh suona come il "gli" italiano di "aglio"; la nh suona come il "gn" di "gnomo".', pairs:'trabalho (lavoro, "traba-lio") &middot; manhã (mattina, "ma-gnã")', tip:'Per la lh pensa a "aglio", per la nh pensa a "gnocco": sono suoni che l\'italiano già conosce bene.'},
+      {sym:'ç', name:'La cediglia', desc:'Si pronuncia sempre come una "s" sorda, anche davanti a vocali dove il portoghese senza cediglia suonerebbe diverso.', pairs:'começar (iniziare) &middot;ação (azione)', tip:'Ogni volta che vedi la ç, pronunciala semplicemente come la "s" di "sasso".'},
+      {sym:'s intervocalica', name:'La S tra vocali', desc:'Tra due vocali la S si pronuncia come una "z" sonora, non come una "s" sorda come farebbe un italiano.', pairs:'casa ("caza") &middot; mesa ("meza")', tip:'Tra due vocali, fai vibrare le corde vocali sulla "s": deve suonare quasi come una "z" italiana di "rosa".'},
+      {sym:'r/rr', name:'La R iniziale o doppia', desc:'A inizio parola o raddoppiata, la R portoghese (soprattutto brasiliana) si pronuncia come una H aspirata gutturale, non come la R italiana.', pairs:'carro (macchina) &middot; rua (strada)', tip:'Prova a pronunciarla come la H inglese di "hat", ma raschiata leggermente in gola.'},
+    ],
+  },
   ar: {
-    label:'العربية', abbr:'Ara', script:'ع', word:'أصوات', accent:'#D4A73D', dir:'rtl', rtlText:true,
+    label:'العربية', abbr:'Ara', script:'ع', flag:'🇸🇦', word:'أصوات', accent:'#D4A73D', dir:'rtl', rtlText:true,
     audioSource:{ name:'Al Jazeera (notiziari)', where:'YouTube', tip:'Cerca notiziari in arabo standard (fus\'ha/MSA), coerenti con quello scelto per il percorso Base.' },
     sounds:[
       {sym:'ص/ط', name:'Consonanti enfatiche', desc:'Stessa lettera della non-enfatica ma con la radice della lingua abbassata e la bocca più ampia.', pairs:'سِر / صِر', tip:'Abbassa il dorso della lingua e allarga leggermente la gola, come se stessi per sbadigliare, mentre pronunci la consonante.'},
@@ -1105,7 +1116,7 @@ const LANGS = {
     ],
   },
   zh: {
-    label:'中文', abbr:'Cin', script:'中', word:'语音', accent:'#3F9973', dir:'ltr', rtlText:false,
+    label:'中文', abbr:'Cin', script:'中', flag:'🇨🇳', word:'语音', accent:'#3F9973', dir:'ltr', rtlText:false,
     audioSource:{ name:'Mandarin Corner', where:'YouTube', tip:'Interviste di strada per le vie della Cina con sottotitoli in cinese e inglese, ottimo per il parlato reale.' },
     sounds:[
       {sym:'ā á ǎ à', name:'I quattro toni', desc:'Il mandarino è una lingua tonale: la stessa sillaba cambia significato secondo l\'intonazione. È il tratto assente in italiano che più smaschera un accento straniero.', pairs:'mā (mamma) / mǎ (cavallo)', tip:'Esagera il movimento del tono con la mano mentre parli: su per il 2° tono, giù-su per il 3°, giù deciso per il 4°.'},
@@ -1116,7 +1127,7 @@ const LANGS = {
     ],
   },
   ja: {
-    label:'日本語', abbr:'Giap', script:'あ', word:'声', accent:'#3D5A80', dir:'ltr', rtlText:false,
+    label:'日本語', abbr:'Giap', script:'あ', flag:'🇯🇵', word:'声', accent:'#3D5A80', dir:'ltr', rtlText:false,
     audioSource:{ name:'Comprehensible Japanese', where:'YouTube', tip:'Video con parlato naturale ma comprensibile, pensati apposta per chi impara.' },
     sounds:[
       {sym:'ā / a', name:'Vocali lunghe vs brevi', desc:'La durata della vocale cambia il significato della parola: un tratto quasi assente in italiano.', pairs:'おばさん obasan (zia) / おばあさん obaasan (nonna)', tip:'Conta mentalmente "due tempi" per le vocali lunghe invece di uno, come se le raddoppiassi leggermente.'},
@@ -1127,7 +1138,7 @@ const LANGS = {
     ],
   },
   ru: {
-    label:'Русский', abbr:'Rus', script:'Ру', word:'Голоса', accent:'#4E7CB5', dir:'ltr', rtlText:false,
+    label:'Русский', abbr:'Rus', script:'Ру', flag:'🇷🇺', word:'Голоса', accent:'#4E7CB5', dir:'ltr', rtlText:false,
     audioSource:{ name:'Easy Russian', where:'YouTube', tip:'Interviste di strada con sottotitoli in russo e inglese, ottimo per abituarsi al parlato reale.' },
     sounds:[
       {sym:'ы', name:'La vocale Ы', desc:'Suono centrale che non esiste in italiano, a metà tra "i" e "u": si pronuncia con la lingua arretrata, senza arrotondare le labbra.', pairs:'мы (noi) / ми', tip:'Prova a dire "i" tenendo la lingua tirata indietro come per dire "u", senza muovere le labbra.'},
@@ -1138,7 +1149,7 @@ const LANGS = {
     ],
   },
   tr: {
-    label:'Türkçe', script:'Tr', word:'Sesler', accent:'#CC6B3C', dir:'ltr', rtlText:false, abbr:'Tur',
+    label:'Türkçe', script:'Tr', flag:'🇹🇷', word:'Sesler', accent:'#CC6B3C', dir:'ltr', rtlText:false, abbr:'Tur',
     audioSource:{ name:'Easy Turkish', where:'YouTube', tip:'Interviste di strada con sottotitoli in turco e inglese, ottimo per abituarsi al parlato reale.' },
     sounds:[
       {sym:'ı', name:'La vocale I senza puntino', desc:'Diversa dalla "i" italiana: si pronuncia con la lingua più arretrata, un suono chiuso e quasi "muto".', pairs:'kız (ragazza) &middot; kiraz (ciliegia)', tip:'Di\' "i" ma arretra la lingua verso la gola, tenendo la bocca quasi ferma: il suono deve restare piatto.'},
@@ -1146,17 +1157,6 @@ const LANGS = {
       {sym:'ö / ü', name:'Vocali arrotondate anteriori', desc:'Come in tedesco: suoni a metà tra "o"/"u" e "e"/"i", assenti in italiano.', pairs:'göz (occhio) &middot; güzel (bello)', tip:'Per la ö, di\' "e" arrotondando le labbra come per "o". Per la ü, di\' "i" arrotondando le labbra come per "u".'},
       {sym:'armonia vocalica', name:'Armonia vocalica', desc:'I suffissi cambiano vocale in base all\'ultima vocale della parola: una regola sistematica che non esiste in italiano.', pairs:'evler (case) &middot; kitaplar (libri): stesso suffisso plurale, vocale diversa', tip:'Ascolta l\'ultima vocale della parola prima di aggiungere un suffisso: la vocale del suffisso deve "intonarsi" con essa.'},
       {sym:'c / ç', name:'C dolce e C dura turche', desc:'La c turca suona come la "g" italiana di "gelato"; la ç suona invece come la "c" di "cena".', pairs:'can (anima, "gian") &middot; çay (tè, "ciai")', tip:'Ricorda: la c senza cediglia è sempre dolce come "g" di gelato, la ç con cediglia è sempre come "c" di cena.'},
-    ],
-  },
-  pt: {
-    label:'Português', script:'Pt', word:'Vozes', accent:'#2E8B57', dir:'ltr', rtlText:false, abbr:'Por',
-    audioSource:{ name:'Easy Portuguese', where:'YouTube', tip:'Interviste di strada con sottotitoli in portoghese e inglese, ottimo per abituarsi al parlato reale (brasiliano ed europeo).' },
-    sounds:[
-      {sym:'ão', name:'Il dittongo nasale ão', desc:'Una vocale nasale che non esiste in italiano: l\'aria esce in parte dal naso mentre si pronuncia "au".', pairs:'não (no) &middot; pão (pane)', tip:'Tieni il velo del palato abbassato come quando hai il raffreddore, e pronuncia "au" lasciando risuonare il naso.'},
-      {sym:'lh / nh', name:'I gruppi LH e NH', desc:'La lh suona come il "gli" italiano di "aglio"; la nh suona come il "gn" di "gnomo".', pairs:'trabalho (lavoro, "traba-lio") &middot; manhã (mattina, "ma-gnã")', tip:'Per la lh pensa a "aglio", per la nh pensa a "gnocco": sono suoni che l\'italiano già conosce bene.'},
-      {sym:'ç', name:'La cediglia', desc:'Si pronuncia sempre come una "s" sorda, anche davanti a vocali dove il portoghese senza cediglia suonerebbe diverso.', pairs:'começar (iniziare) &middot;ação (azione)', tip:'Ogni volta che vedi la ç, pronunciala semplicemente come la "s" di "sasso".'},
-      {sym:'s intervocalica', name:'La S tra vocali', desc:'Tra due vocali la S si pronuncia come una "z" sonora, non come una "s" sorda come farebbe un italiano.', pairs:'casa ("caza") &middot; mesa ("meza")', tip:'Tra due vocali, fai vibrare le corde vocali sulla "s": deve suonare quasi come una "z" italiana di "rosa".'},
-      {sym:'r/rr', name:'La R iniziale o doppia', desc:'A inizio parola o raddoppiata, la R portoghese (soprattutto brasiliana) si pronuncia come una H aspirata gutturale, non come la R italiana.', pairs:'carro (macchina) &middot; rua (strada)', tip:'Prova a pronunciarla come la H inglese di "hat", ma raschiata leggermente in gola.'},
     ],
   },
 };
@@ -6008,7 +6008,7 @@ function renderRing(){
   Object.entries(LANGS).forEach(([key, l])=>{
     const btn = document.createElement('button');
     btn.className = 'voice-btn' + (key===currentLang ? ' active':'');
-    btn.innerHTML = `<span class="script">${l.script}</span>${l.label}${l.abbr ? ` <span class="voice-abbr">(${l.abbr})</span>` : ''}`;
+    btn.innerHTML = `<span class="script">${l.flag || l.script}</span>${l.label}${l.abbr ? ` <span class="voice-abbr">(${l.abbr})</span>` : ''}`;
     btn.onclick = ()=> switchLang(key);
     ring.appendChild(btn);
   });
@@ -8479,7 +8479,7 @@ document.getElementById('lbRefresh').onclick = renderLeaderboard;
 const ONBOARD_SLIDES = [
   {
     title: "Benvenuto in Quattro Voci",
-    body: "Un ecosistema di immersione multilingue — Inglese, Français, Español, Deutsch, العربية, 中文, 日本語, Русский e Türkçe — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
+    body: "Un ecosistema di immersione multilingue — Inglese, Français, Español, Deutsch, Português, العربية, 中文, 日本語, Русский e Türkçe — pensato per allenare il parlato ogni giorno, non solo la grammatica sulla carta."
   },
   {
     title: "Le Quattro Voci",
@@ -8522,7 +8522,7 @@ document.getElementById('reviewTutorialBtn').onclick = ()=>{
 };
 function closeOnboard(){
   document.getElementById('onboardModal').classList.add('hidden');
-  try{ localStorage.setItem('qv_onboarding_done_v4', '1'); }catch(e){}
+  try{ localStorage.setItem('qv_onboarding_done_v5', '1'); }catch(e){}
 }
 document.getElementById('obNext').onclick = ()=>{
   if(obIndex < ONBOARD_SLIDES.length - 1){ obIndex++; renderOnboard(); }
@@ -8535,7 +8535,7 @@ document.getElementById('onboardSkip').onclick = closeOnboard;
 
 (function maybeShowOnboarding(){
   try{
-    if(!localStorage.getItem('qv_onboarding_done_v4')){ openOnboard(); }
+    if(!localStorage.getItem('qv_onboarding_done_v5')){ openOnboard(); }
   }catch(e){}
 })();
 
