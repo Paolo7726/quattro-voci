@@ -819,6 +819,9 @@
       <span class="tag" id="bpChapterTag">Percorso iniziale &middot; da zero</span>
       <h2>Traduci con la tastiera</h2>
       <p class="sub">Scegli livello e direzione, poi scrivi la traduzione. Se è corretta si passa subito alla successiva &mdash; niente scelte multiple, solo produzione.</p>
+      <p class="sub" style="margin-top:-8px; font-size:12px;">La sigla accanto al livello (A1, A2, B1&hellip;) è il <b>Quadro Comune Europeo</b>: indicativa, dal più semplice (A1) al più avanzato (C2).</p>
+      <div id="placementResultBox"></div>
+      <button class="ghost" id="placementStartBtn" style="width:100%; margin-bottom:14px;">🎯 Non sai da che livello iniziare? Fai il test d'ingresso</button>
       <div class="level-tabs" id="bpLevelTabs">
         <button data-level="1" class="active">Livello 1</button>
         <button data-level="2">Livello 2</button>
@@ -995,6 +998,37 @@
   <div class="scroll-fade nav-fade left"></div>
   <div class="scroll-fade nav-fade right"></div>
   </div>
+  <div class="modal-overlay hidden" id="placementModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="placementTitle">Test d'ingresso</h3>
+        <button class="modal-close" id="placementClose">&times;</button>
+      </div>
+      <div id="placementIntro">
+        <p class="sub">8 frasi da tradurre, dal più semplice al più difficile: qualche minuto per capire da che livello ti conviene partire in <span id="placementLangName">English</span>. Se non sai una frase, salta pure — fa parte del test.</p>
+        <button class="primary" id="placementBeginBtn" style="width:100%;">Inizia il test</button>
+      </div>
+      <div id="placementQuiz" class="hidden">
+        <span class="tag" id="placementSlotTag">Frase 1/8</span>
+        <div class="challenge-text" id="placementPrompt">&mdash;</div>
+        <input type="text" id="placementInput" placeholder="Scrivi qui la traduzione..." autocomplete="off" autocapitalize="off" spellcheck="false">
+        <div class="bp-feedback" id="placementFeedback"></div>
+        <div class="row">
+          <button class="primary" id="placementCheck">Verifica</button>
+          <button class="ghost" id="placementSkip">Non lo so</button>
+        </div>
+      </div>
+      <div id="placementResults" class="hidden">
+        <div class="bp-done">
+          <div class="n" id="placementEstimate">A2</div>
+          <p class="sub" id="placementSummary">Hai risposto correttamente al 60% delle frasi.</p>
+        </div>
+        <button class="primary" id="placementGoBtn" style="width:100%; margin-top:8px;">Vai al livello consigliato</button>
+        <button class="ghost" id="placementCloseResultsBtn" style="width:100%; margin-top:8px;">Resta dove sei</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay hidden" id="duelPlayModal">
     <div class="modal-box">
       <div class="modal-head">
@@ -5943,6 +5977,7 @@ function currentBeginnerList(){ return BEGINNER[currentLang][state.beginner.leve
 function currentDirState(){ return state.beginner.progress[state.beginner.level][state.beginner.direction]; }
 
 function renderBeginner(){
+  if(typeof renderPlacementResultBox === 'function') renderPlacementResultBox();
   const list = currentBeginnerList();
   const dir = state.beginner.direction;
   const level = state.beginner.level;
@@ -5956,9 +5991,9 @@ function renderBeginner(){
   document.querySelectorAll('#bpDirTabs button').forEach(b=>{
     b.classList.toggle('active', b.dataset.dir === dir);
   });
-  document.getElementById('bpChapterTag').textContent = LEVEL_CHAPTER_LABEL[level]
-    ? LEVEL_CHAPTER_LABEL[level]
-    : 'Percorso iniziale \u00b7 da zero';
+  const chapterText = LEVEL_CHAPTER_LABEL[level] ? LEVEL_CHAPTER_LABEL[level] : 'Percorso iniziale \u00b7 da zero';
+  const cefr = CEFR_LEVEL[level] ? ` \u00b7 ${CEFR_LEVEL[level]}` : '';
+  document.getElementById('bpChapterTag').textContent = chapterText + cefr;
 
   if(!list){
     document.getElementById('bpStatsRow').innerHTML = '';
@@ -6887,6 +6922,17 @@ async function renderTraguardi(){
 
 /* ---------- MAPPA A TAPPE ---------- */
 // Etichette dei sotto-capitoli del Percorso Base, livelli 11-24 (i livelli 1-10 restano "Percorso Base").
+// Etichette CEFR (A1-C2) di orientamento per ciascun livello del Percorso Base. Sono indicative
+// (il quadro CEFR nasce per l'inglese e per lingue standardizzate, qui è un riferimento di massima
+// per farsi un'idea, non una certificazione) e riflettono la difficoltà reale del contenuto — che
+// non cresce sempre in modo lineare col numero del livello, perché alcuni capitoli (es. "Di dove
+// sei", "Dal Ristorante") sono deliberatamente più semplici anche se vengono numericamente dopo.
+const CEFR_LEVEL = {
+  1:'A1', 2:'A1', 3:'A1', 4:'A2', 5:'A2', 6:'B1', 7:'B1', 8:'B1', 9:'B1', 10:'B2', 11:'B2',
+  12:'A1', 13:'A2', 14:'A1', 15:'A2', 16:'A2', 17:'A2',
+  18:'A2', 19:'A2', 20:'A2', 21:'A2', 22:'B1', 23:'A2', 24:'A2', 25:'B1', 26:'A2', 27:'B1',
+};
+
 const LEVEL_CHAPTER_LABEL = {
   12: 'Di dove sei · parte 1',
   13: 'Di dove sei · parte 2',
@@ -6958,6 +7004,160 @@ function isMapNodeComplete(node){
     const count = state.done.filter(d => d.split(':')[1] === node.level).length;
     return count >= 3;
   }
+}
+
+/* ---------- TEST D'INGRESSO / PLACEMENT ---------- */
+const PLACEMENT_TIERS = ['A1','A2','B1','B2'];
+let placementQueue = [];
+let placementIdx = 0;
+let placementScores = {};
+
+function levelsForCEFR(tier){
+  return Object.keys(CEFR_LEVEL).map(Number).filter(l => CEFR_LEVEL[l] === tier).sort((a,b)=>a-b);
+}
+function firstLevelForCEFR(tier){
+  const levels = levelsForCEFR(tier);
+  return levels.length ? levels[0] : null;
+}
+
+function buildPlacementQuestions(){
+  const questions = [];
+  PLACEMENT_TIERS.forEach(tier=>{
+    const levels = levelsForCEFR(tier);
+    const pool = [];
+    levels.forEach(lvl=>{
+      const list = BEGINNER[currentLang] && BEGINNER[currentLang][lvl-1];
+      if(list) list.forEach(item => pool.push(item));
+    });
+    // due frasi a caso per livello CEFR
+    for(let i = pool.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i+1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    pool.slice(0, 2).forEach(item => questions.push({ it: item.it, ans: item.ans, tier }));
+  });
+  return questions;
+}
+
+function renderPlacementResultBox(){
+  const box = document.getElementById('placementResultBox');
+  if(!box) return;
+  const r = state.placementResult;
+  if(!r){ box.innerHTML = ''; return; }
+  box.innerHTML = `<div class="sound-tip" style="font-style:normal; margin-bottom:10px;">Ultimo test d'ingresso: livello stimato <b>${r.cefr}</b>, consigliato di partire dal Livello <b>${r.recommendedLevel}</b>.</div>`;
+}
+
+function openPlacementModal(){
+  document.getElementById('placementLangName').textContent = LANGS[currentLang].label;
+  document.getElementById('placementIntro').classList.remove('hidden');
+  document.getElementById('placementQuiz').classList.add('hidden');
+  document.getElementById('placementResults').classList.add('hidden');
+  document.getElementById('placementModal').classList.remove('hidden');
+}
+function closePlacementModal(){
+  document.getElementById('placementModal').classList.add('hidden');
+}
+
+document.getElementById('placementStartBtn').onclick = openPlacementModal;
+document.getElementById('placementClose').onclick = closePlacementModal;
+document.getElementById('placementCloseResultsBtn').onclick = closePlacementModal;
+
+document.getElementById('placementBeginBtn').onclick = ()=>{
+  placementQueue = buildPlacementQuestions();
+  placementIdx = 0;
+  placementScores = { A1:{correct:0,total:0}, A2:{correct:0,total:0}, B1:{correct:0,total:0}, B2:{correct:0,total:0} };
+  document.getElementById('placementIntro').classList.add('hidden');
+  document.getElementById('placementQuiz').classList.remove('hidden');
+  renderPlacementQuestion();
+};
+
+function renderPlacementQuestion(){
+  const q = placementQueue[placementIdx];
+  document.getElementById('placementSlotTag').textContent = `Frase ${placementIdx+1}/${placementQueue.length} · ${q.tier}`;
+  const isNative = currentLang === 'ar';
+  const promptEl = document.getElementById('placementPrompt');
+  promptEl.textContent = q.it;
+  promptEl.removeAttribute('dir');
+  promptEl.classList.remove('rtl-text');
+  const input = document.getElementById('placementInput');
+  input.value = '';
+  input.dir = isNative ? 'rtl' : 'ltr';
+  input.placeholder = `Scrivi in ${LANGS[currentLang].label}...`;
+  input.focus();
+  document.getElementById('placementFeedback').textContent = '';
+  document.getElementById('placementFeedback').className = 'bp-feedback';
+}
+
+function placementAdvance(wasCorrect){
+  const q = placementQueue[placementIdx];
+  placementScores[q.tier].total++;
+  if(wasCorrect) placementScores[q.tier].correct++;
+  placementIdx++;
+  if(placementIdx >= placementQueue.length){
+    showPlacementResults();
+  } else {
+    renderPlacementQuestion();
+  }
+}
+
+document.getElementById('placementCheck').onclick = ()=>{
+  const q = placementQueue[placementIdx];
+  const isNative = currentLang === 'ar';
+  const given = normalizeAnswer(document.getElementById('placementInput').value, isNative);
+  if(!given) return;
+  const ok = q.ans.some(a => normalizeAnswer(a, isNative) === given);
+  const fb = document.getElementById('placementFeedback');
+  fb.className = 'bp-feedback ' + (ok ? 'ok' : 'ko');
+  fb.textContent = ok ? 'Corretto ✓' : 'Non corretto';
+  setTimeout(()=> placementAdvance(ok), 500);
+};
+document.getElementById('placementInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ document.getElementById('placementCheck').click(); }
+});
+document.getElementById('placementSkip').onclick = ()=> placementAdvance(false);
+
+async function showPlacementResults(){
+  document.getElementById('placementQuiz').classList.add('hidden');
+  document.getElementById('placementResults').classList.remove('hidden');
+
+  let masteredIdx = -1;
+  PLACEMENT_TIERS.forEach((tier, i)=>{
+    const s = placementScores[tier];
+    if(s.total > 0 && (s.correct / s.total) >= 0.5) masteredIdx = i;
+  });
+  const estimate = masteredIdx >= 0 ? PLACEMENT_TIERS[masteredIdx] : 'Pre-A1';
+  const nextTier = PLACEMENT_TIERS[masteredIdx+1];
+  let recommendedLevel;
+  if(nextTier){
+    recommendedLevel = firstLevelForCEFR(nextTier) || 1;
+  } else if(masteredIdx === -1){
+    recommendedLevel = 1;
+  } else {
+    recommendedLevel = 27; // ha superato anche il livello più avanzato disponibile
+  }
+
+  const totalCorrect = Object.values(placementScores).reduce((s,t)=>s+t.correct,0);
+  const totalQuestions = Object.values(placementScores).reduce((s,t)=>s+t.total,0);
+  const pct = totalQuestions ? Math.round((totalCorrect/totalQuestions)*100) : 0;
+
+  document.getElementById('placementEstimate').textContent = estimate;
+  document.getElementById('placementSummary').textContent =
+    `Hai risposto correttamente al ${pct}% delle frasi. Ti consigliamo di iniziare dal Livello ${recommendedLevel} del Percorso Base.`;
+
+  state.placementResult = { cefr: estimate, recommendedLevel, pct, date: todayStr() };
+  await saveState(currentLang);
+  renderPlacementResultBox();
+
+  document.getElementById('placementGoBtn').onclick = async ()=>{
+    state.beginner.level = recommendedLevel;
+    state.beginner.direction = 'to_target';
+    await saveState(currentLang);
+    closePlacementModal();
+    renderBeginner();
+    renderMap();
+    const target = document.getElementById('percorsoInline');
+    if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+  };
 }
 
 function switchToTab(tabName){
@@ -7174,7 +7374,8 @@ function renderMap(){
 
     const labelEl = document.createElement('div');
     labelEl.className = 'map-node-label' + (status === 'done' ? ' done' : '');
-    labelEl.textContent = node.label + (node.gating ? '' : ' (facoltativa)');
+    const cefrSuffix = (node.kind === 'percorso' && CEFR_LEVEL[node.level]) ? ` · ${CEFR_LEVEL[node.level]}` : '';
+    labelEl.textContent = node.label + cefrSuffix + (node.gating ? '' : ' (facoltativa)');
 
     if(status !== 'locked'){
       nodeEl.onclick = async ()=>{
