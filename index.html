@@ -850,6 +850,10 @@
         <button data-level="25">Livello 25</button>
         <button data-level="26">Livello 26</button>
         <button data-level="27">Livello 27</button>
+        <button data-level="28">Livello 28</button>
+        <button data-level="29">Livello 29</button>
+        <button data-level="30">Livello 30</button>
+        <button data-level="31">Livello 31</button>
       </div>
       <div class="level-tabs" id="bpDirTabs">
         <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -1234,27 +1238,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["i would like a coffee please","id like a coffee please","i'd like a coffee please"]},
       {it:"A che ora parte il treno?", ans:["what time does the train leave","what time does the train depart"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["can i pay by card","can i pay with card"]},
-      {it:"Dov'è la stazione più vicina?", ans:["where is the nearest station"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["i need help please"]},
-      {it:"A che ora apre il negozio?", ans:["what time does the shop open","what time does the store open"]},
-      {it:"Questo è troppo caro.", ans:["this is too expensive"]},
-      {it:"Posso avere il conto, per favore?", ans:["can i have the bill please","can i have the check please"]},
-      {it:"Sto imparando questa lingua.", ans:["im learning this language","i'm learning this language","i am learning this language"]},
-      {it:"Cosa fai questo weekend?", ans:["what are you doing this weekend"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["im lost can you help me","i'm lost can you help me","i am lost can you help me"]},
-      {it:"Vado al mercato oggi.", ans:["im going to the market today","i'm going to the market today","i am going to the market today"]},
-      {it:"Che tempo fa oggi?", ans:["whats the weather like today","what's the weather like today"]},
-      {it:"Dov'è il bagno, per favore?", ans:["where is the bathroom please"]},
-      {it:"Quanto costa questo?", ans:["how much does this cost","how much is this"]},
-      {it:"Hai un minuto per parlare?", ans:["do you have a minute to talk"]},
-      {it:"Mi piace molto questo posto.", ans:["i really like this place"]},
-      {it:"Sono stanco/a oggi.", ans:["im tired today","i'm tired today","i am tired today"]},
-      {it:"Puoi ripetere più lentamente?", ans:["can you repeat more slowly"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["thank you so much for your help","thanks a lot for your help"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["enjoy your meal","bon appetit"]},
       {it:"Salute!", ans:["bless you"]},
       {it:"A domani!", ans:["see you tomorrow"]},
@@ -1273,6 +1257,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["im hungry","i'm hungry","i am hungry"]},
       {it:"Ho sete.", ans:["im thirsty","i'm thirsty","i am thirsty"]},
       {it:"Sono felice.", ans:["im happy","i'm happy","i am happy"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["can i pay by card","can i pay with card"]},
+      {it:"Dov'è la stazione più vicina?", ans:["where is the nearest station"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["i need help please"]},
+      {it:"A che ora apre il negozio?", ans:["what time does the shop open","what time does the store open"]},
+      {it:"Questo è troppo caro.", ans:["this is too expensive"]},
+      {it:"Posso avere il conto, per favore?", ans:["can i have the bill please","can i have the check please"]},
+      {it:"Sto imparando questa lingua.", ans:["im learning this language","i'm learning this language","i am learning this language"]},
+      {it:"Cosa fai questo weekend?", ans:["what are you doing this weekend"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["im lost can you help me","i'm lost can you help me","i am lost can you help me"]},
+      {it:"Vado al mercato oggi.", ans:["im going to the market today","i'm going to the market today","i am going to the market today"]},
+      {it:"Che tempo fa oggi?", ans:["whats the weather like today","what's the weather like today"]},
+      {it:"Dov'è il bagno, per favore?", ans:["where is the bathroom please"]},
+      {it:"Quanto costa questo?", ans:["how much does this cost","how much is this"]},
+      {it:"Hai un minuto per parlare?", ans:["do you have a minute to talk"]},
+      {it:"Mi piace molto questo posto.", ans:["i really like this place"]},
+      {it:"Sono stanco/a oggi.", ans:["im tired today","i'm tired today","i am tired today"]},
+      {it:"Puoi ripetere più lentamente?", ans:["can you repeat more slowly"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["thank you so much for your help","thanks a lot for your help"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["i think this city is very interesting"]},
@@ -1566,6 +1570,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["i need to change the date of my return flight"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["who can i contact in case of an emergency at the airport"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["what time is it"]},
+      {it:"Sono le tre.", ans:["it's three o'clock","its three oclock","it is three oclock"]},
+      {it:"È mezzogiorno.", ans:["it's noon","its noon","it is noon"]},
+      {it:"È mezzanotte.", ans:["it's midnight","its midnight","it is midnight"]},
+      {it:"Sono le tre e mezza.", ans:["it's half past three","its half past three","it's three thirty","its three thirty"]},
+      {it:"Sono le tre e un quarto.", ans:["it's a quarter past three","its a quarter past three","it's three fifteen"]},
+      {it:"Manca un quarto alle tre.", ans:["it's a quarter to three","its a quarter to three","it's two forty five"]},
+      {it:"Hai un orologio?", ans:["do you have a watch"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["what time shall we meet","what time should we meet"]},
+      {it:"Ci vediamo alle cinque.", ans:["let's meet at five","lets meet at five"]},
+      {it:"A che ora inizia il film?", ans:["what time does the movie start"]},
+      {it:"Il film inizia alle otto in punto.", ans:["the movie starts at eight sharp","the movie starts at eight o'clock","the movie starts at eight oclock"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["can we meet a bit later"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["i have an appointment at ten"]},
+      {it:"A che ora chiudi il negozio?", ans:["what time do you close the shop"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["let's set an appointment for tomorrow","lets set an appointment for tomorrow"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["i'm late","im late","i am late"]},
+      {it:"Scusa il ritardo.", ans:["sorry for being late"]},
+      {it:"Arrivo tra cinque minuti.", ans:["i'll be there in five minutes","ill be there in five minutes"]},
+      {it:"Sei arrivato in anticipo.", ans:["you arrived early"]},
+      {it:"Ti aspetto qui davanti.", ans:["i'll wait for you right here","ill wait for you right here"]},
+      {it:"Non fare tardi, per favore.", ans:["don't be late, please","dont be late please"]},
+      {it:"Sono arrivato puntuale.", ans:["i arrived on time"]},
+      {it:"Quanto tempo devo aspettare?", ans:["how long do i have to wait"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["i usually get up at seven"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["i work from monday to friday"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["the shop opens at nine in the morning"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["we always have dinner around eight in the evening"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["on weekends i sleep in late","on the weekend i sleep in late"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["every morning i leave home at eight"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["the weekend starts on friday evening"]},
+      {it:"Che programmi hai per stasera?", ans:["what plans do you have for tonight"]},
+    ],
   ],
   fr: [
     [ // Livello 1
@@ -1588,27 +1632,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["je voudrais un cafe s'il vous plait","je voudrais un cafe stp"]},
       {it:"A che ora parte il treno?", ans:["a quelle heure part le train"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["est-ce que je peux payer par carte","je peux payer par carte"]},
-      {it:"Dov'è la stazione più vicina?", ans:["ou est la gare la plus proche"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["j'ai besoin d'aide s'il vous plait","jai besoin daide sil vous plait"]},
-      {it:"A che ora apre il negozio?", ans:["a quelle heure ouvre le magasin"]},
-      {it:"Questo è troppo caro.", ans:["c'est trop cher","cest trop cher"]},
-      {it:"Posso avere il conto, per favore?", ans:["est-ce que je peux avoir l'addition s'il vous plait","je peux avoir laddition sil vous plait"]},
-      {it:"Sto imparando questa lingua.", ans:["j'apprends cette langue","japprends cette langue"]},
-      {it:"Cosa fai questo weekend?", ans:["qu'est-ce que tu fais ce week-end","quest ce que tu fais ce week-end","quest ce que tu fais ce weekend"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["je suis perdu tu peux m'aider","je suis perdu tu peux maider"]},
-      {it:"Vado al mercato oggi.", ans:["je vais au marche aujourd'hui","je vais au marche aujourdhui"]},
-      {it:"Che tempo fa oggi?", ans:["quel temps fait-il aujourd'hui","quel temps fait il aujourdhui"]},
-      {it:"Dov'è il bagno, per favore?", ans:["ou sont les toilettes s'il vous plait","ou sont les toilettes sil vous plait"]},
-      {it:"Quanto costa questo?", ans:["combien ca coute"]},
-      {it:"Hai un minuto per parlare?", ans:["tu as une minute pour parler"]},
-      {it:"Mi piace molto questo posto.", ans:["j'aime beaucoup cet endroit","jaime beaucoup cet endroit"]},
-      {it:"Sono stanco/a oggi.", ans:["je suis fatigue aujourd'hui","je suis fatigue aujourdhui"]},
-      {it:"Puoi ripetere più lentamente?", ans:["peux-tu repeter plus lentement","peux tu repeter plus lentement"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["merci beaucoup pour ton aide"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["bon appetit"]},
       {it:"Salute!", ans:["a tes souhaits","a vos souhaits"]},
       {it:"A domani!", ans:["a demain"]},
@@ -1627,6 +1651,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["j'ai faim","jai faim"]},
       {it:"Ho sete.", ans:["j'ai soif","jai soif"]},
       {it:"Sono felice.", ans:["je suis content","je suis contente"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["est-ce que je peux payer par carte","je peux payer par carte"]},
+      {it:"Dov'è la stazione più vicina?", ans:["ou est la gare la plus proche"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["j'ai besoin d'aide s'il vous plait","jai besoin daide sil vous plait"]},
+      {it:"A che ora apre il negozio?", ans:["a quelle heure ouvre le magasin"]},
+      {it:"Questo è troppo caro.", ans:["c'est trop cher","cest trop cher"]},
+      {it:"Posso avere il conto, per favore?", ans:["est-ce que je peux avoir l'addition s'il vous plait","je peux avoir laddition sil vous plait"]},
+      {it:"Sto imparando questa lingua.", ans:["j'apprends cette langue","japprends cette langue"]},
+      {it:"Cosa fai questo weekend?", ans:["qu'est-ce que tu fais ce week-end","quest ce que tu fais ce week-end","quest ce que tu fais ce weekend"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["je suis perdu tu peux m'aider","je suis perdu tu peux maider"]},
+      {it:"Vado al mercato oggi.", ans:["je vais au marche aujourd'hui","je vais au marche aujourdhui"]},
+      {it:"Che tempo fa oggi?", ans:["quel temps fait-il aujourd'hui","quel temps fait il aujourdhui"]},
+      {it:"Dov'è il bagno, per favore?", ans:["ou sont les toilettes s'il vous plait","ou sont les toilettes sil vous plait"]},
+      {it:"Quanto costa questo?", ans:["combien ca coute"]},
+      {it:"Hai un minuto per parlare?", ans:["tu as une minute pour parler"]},
+      {it:"Mi piace molto questo posto.", ans:["j'aime beaucoup cet endroit","jaime beaucoup cet endroit"]},
+      {it:"Sono stanco/a oggi.", ans:["je suis fatigue aujourd'hui","je suis fatigue aujourdhui"]},
+      {it:"Puoi ripetere più lentamente?", ans:["peux-tu repeter plus lentement","peux tu repeter plus lentement"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["merci beaucoup pour ton aide"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["je pense que cette ville est tres interessante"]},
@@ -1920,6 +1964,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["je dois changer la date de mon vol retour"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["qui puis-je contacter en cas d'urgence a l'aeroport","qui puis je contacter en cas durgence a laeroport"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["quelle heure est-il","quelle heure est il"]},
+      {it:"Sono le tre.", ans:["il est trois heures"]},
+      {it:"È mezzogiorno.", ans:["il est midi"]},
+      {it:"È mezzanotte.", ans:["il est minuit"]},
+      {it:"Sono le tre e mezza.", ans:["il est trois heures et demie"]},
+      {it:"Sono le tre e un quarto.", ans:["il est trois heures et quart"]},
+      {it:"Manca un quarto alle tre.", ans:["il est trois heures moins le quart"]},
+      {it:"Hai un orologio?", ans:["tu as une montre"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["on se voit a quelle heure"]},
+      {it:"Ci vediamo alle cinque.", ans:["on se voit a cinq heures"]},
+      {it:"A che ora inizia il film?", ans:["le film commence a quelle heure"]},
+      {it:"Il film inizia alle otto in punto.", ans:["le film commence a huit heures pile"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["on peut se voir un peu plus tard"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["j'ai rendez-vous a dix heures","jai rendez vous a dix heures"]},
+      {it:"A che ora chiudi il negozio?", ans:["tu fermes le magasin a quelle heure"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["fixons un rendez-vous pour demain","fixons un rendez vous pour demain"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["je suis en retard"]},
+      {it:"Scusa il ritardo.", ans:["desole pour le retard","désolé pour le retard"]},
+      {it:"Arrivo tra cinque minuti.", ans:["j'arrive dans cinq minutes","jarrive dans cinq minutes"]},
+      {it:"Sei arrivato in anticipo.", ans:["tu es arrive en avance"]},
+      {it:"Ti aspetto qui davanti.", ans:["je t'attends ici devant","je tattends ici devant"]},
+      {it:"Non fare tardi, per favore.", ans:["ne sois pas en retard s'il te plait","ne sois pas en retard sil te plait"]},
+      {it:"Sono arrivato puntuale.", ans:["je suis arrive a l'heure","je suis arrive a lheure"]},
+      {it:"Quanto tempo devo aspettare?", ans:["combien de temps dois-je attendre","combien de temps dois je attendre"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["d'habitude je me leve a sept heures","dhabitude je me leve a sept heures"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["je travaille du lundi au vendredi"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["le magasin ouvre a neuf heures du matin"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["on dine toujours vers huit heures du soir"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["le week-end je dors tard","le weekend je dors tard"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["chaque matin je sors de chez moi a huit heures"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["le week-end commence le vendredi soir","le weekend commence le vendredi soir"]},
+      {it:"Che programmi hai per stasera?", ans:["qu'est-ce que tu fais ce soir","quest ce que tu fais ce soir"]},
+    ],
   ],
   ar: [
     [ // Livello 1
@@ -1942,27 +2026,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["أريد قهوة من فضلك","ureedu qahwa min fadlik"]},
       {it:"A che ora parte il treno?", ans:["متى يغادر القطار","mata yughadir al-qitar"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["هل يمكنني الدفع بالبطاقة","hal yumkinuni al-daf' bil-bitaqa"]},
-      {it:"Dov'è la stazione più vicina?", ans:["أين أقرب محطة","ayna aqrab mahatta"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["أحتاج إلى مساعدة من فضلك","ahtaju ila musa'ada min fadlik"]},
-      {it:"A che ora apre il negozio?", ans:["متى يفتح المتجر","mata yaftah al-matjar"]},
-      {it:"Questo è troppo caro.", ans:["هذا غال جدا","hadha ghalin jiddan"]},
-      {it:"Posso avere il conto, per favore?", ans:["هل يمكنني الحصول على الفاتورة من فضلك","hal yumkinuni al-husul ala al-fatura min fadlik"]},
-      {it:"Sto imparando questa lingua.", ans:["أنا أتعلم هذه اللغة","ana ataallamu hadhihi al-lugha"]},
-      {it:"Cosa fai questo weekend?", ans:["ماذا تفعل في نهاية هذا الأسبوع","madha tafalu fi nihayat hadha al-usbu"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["أنا تائه هل يمكنك مساعدتي","ana ta'ih hal yumkinuka musa'adati"]},
-      {it:"Vado al mercato oggi.", ans:["سأذهب إلى السوق اليوم","saadhhabu ila as-suq al-yawm"]},
-      {it:"Che tempo fa oggi?", ans:["كيف الطقس اليوم","kayfa at-taqs al-yawm"]},
-      {it:"Dov'è il bagno, per favore?", ans:["أين الحمام من فضلك","ayna al-hammam min fadlik"]},
-      {it:"Quanto costa questo?", ans:["كم يكلف هذا","kam yukallifu hadha"]},
-      {it:"Hai un minuto per parlare?", ans:["هل لديك دقيقة للحديث","hal ladayka daqiqa lilhadith"]},
-      {it:"Mi piace molto questo posto.", ans:["يعجبني هذا المكان كثيرا","yujibuni hadha al-makan kathiran"]},
-      {it:"Sono stanco/a oggi.", ans:["أنا متعب اليوم","ana mutaab al-yawm"]},
-      {it:"Puoi ripetere più lentamente?", ans:["هل يمكنك أن تكرر ببطء أكثر","hal yumkinuka an tukarrira bibut akthar"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["شكرا جزيلا على مساعدتك","shukran jazilan ala musaadatik"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["بالهناء والشفاء","bilhana wa ash-shifa"]},
       {it:"Salute!", ans:["صحة","sahha"]},
       {it:"A domani!", ans:["أراك غدا","araka ghadan"]},
@@ -1981,6 +2045,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["أنا جائع","ana jaie"]},
       {it:"Ho sete.", ans:["أنا عطشان","ana atshan"]},
       {it:"Sono felice.", ans:["أنا سعيد","ana saeed"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["هل يمكنني الدفع بالبطاقة","hal yumkinuni al-daf' bil-bitaqa"]},
+      {it:"Dov'è la stazione più vicina?", ans:["أين أقرب محطة","ayna aqrab mahatta"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["أحتاج إلى مساعدة من فضلك","ahtaju ila musa'ada min fadlik"]},
+      {it:"A che ora apre il negozio?", ans:["متى يفتح المتجر","mata yaftah al-matjar"]},
+      {it:"Questo è troppo caro.", ans:["هذا غال جدا","hadha ghalin jiddan"]},
+      {it:"Posso avere il conto, per favore?", ans:["هل يمكنني الحصول على الفاتورة من فضلك","hal yumkinuni al-husul ala al-fatura min fadlik"]},
+      {it:"Sto imparando questa lingua.", ans:["أنا أتعلم هذه اللغة","ana ataallamu hadhihi al-lugha"]},
+      {it:"Cosa fai questo weekend?", ans:["ماذا تفعل في نهاية هذا الأسبوع","madha tafalu fi nihayat hadha al-usbu"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["أنا تائه هل يمكنك مساعدتي","ana ta'ih hal yumkinuka musa'adati"]},
+      {it:"Vado al mercato oggi.", ans:["سأذهب إلى السوق اليوم","saadhhabu ila as-suq al-yawm"]},
+      {it:"Che tempo fa oggi?", ans:["كيف الطقس اليوم","kayfa at-taqs al-yawm"]},
+      {it:"Dov'è il bagno, per favore?", ans:["أين الحمام من فضلك","ayna al-hammam min fadlik"]},
+      {it:"Quanto costa questo?", ans:["كم يكلف هذا","kam yukallifu hadha"]},
+      {it:"Hai un minuto per parlare?", ans:["هل لديك دقيقة للحديث","hal ladayka daqiqa lilhadith"]},
+      {it:"Mi piace molto questo posto.", ans:["يعجبني هذا المكان كثيرا","yujibuni hadha al-makan kathiran"]},
+      {it:"Sono stanco/a oggi.", ans:["أنا متعب اليوم","ana mutaab al-yawm"]},
+      {it:"Puoi ripetere più lentamente?", ans:["هل يمكنك أن تكرر ببطء أكثر","hal yumkinuka an tukarrira bibut akthar"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["شكرا جزيلا على مساعدتك","shukran jazilan ala musaadatik"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["أعتقد أن هذه المدينة مثيرة للاهتمام جدا","a'taqidu anna hadhihi al-madina muthira lil-ihtimam jiddan"]},
@@ -2274,6 +2358,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["يجب أن أغير تاريخ رحلة عودتي.","yajibu an ughayyira tarikha rihlati awdati"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["بمن يمكنني الاتصال في حالة الطوارئ في المطار؟","biman yumkinuni al-ittisal fi halat at-tawari fi al-matar"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["كم الساعة؟","kam as-saa"]},
+      {it:"Sono le tre.", ans:["الساعة الثالثة.","as-saa ath-thalitha"]},
+      {it:"È mezzogiorno.", ans:["إنه الظهر.","innahu adh-dhuhr"]},
+      {it:"È mezzanotte.", ans:["إنها منتصف الليل.","innaha muntasaf al-layl"]},
+      {it:"Sono le tre e mezza.", ans:["الساعة الثالثة والنصف.","as-saa ath-thalitha wan-nisf"]},
+      {it:"Sono le tre e un quarto.", ans:["الساعة الثالثة والربع.","as-saa ath-thalitha war-rub"]},
+      {it:"Manca un quarto alle tre.", ans:["الساعة الثالثة إلا ربع.","as-saa ath-thalitha illa rub"]},
+      {it:"Hai un orologio?", ans:["هل لديك ساعة؟","hal ladayka saa"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["في أي ساعة سنلتقي؟","fi ayyi saa sanaltaqi"]},
+      {it:"Ci vediamo alle cinque.", ans:["سنلتقي الساعة الخامسة.","sanaltaqi as-saa al-khamisa"]},
+      {it:"A che ora inizia il film?", ans:["في أي ساعة يبدأ الفيلم؟","fi ayyi saa yabda al-film"]},
+      {it:"Il film inizia alle otto in punto.", ans:["يبدأ الفيلم الساعة الثامنة تماما.","yabda al-film as-saa ath-thamina taman"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["هل يمكننا اللقاء لاحقا قليلا؟","hal yumkinuna al-liqa lahiqan qalilan"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["لدي موعد الساعة العاشرة.","ladayya mawid as-saa al-ashira"]},
+      {it:"A che ora chiudi il negozio?", ans:["في أي ساعة تغلق المتجر؟","fi ayyi saa tughliq al-matjar"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["لنحدد موعدا للغد.","linuhaddid mawidan lil-ghad"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["أنا متأخر.","ana mutaakhir"]},
+      {it:"Scusa il ritardo.", ans:["آسف على التأخير.","asif ala at-taakhir"]},
+      {it:"Arrivo tra cinque minuti.", ans:["سأصل خلال خمس دقائق.","saasilu khilala khamsi daqaiq"]},
+      {it:"Sei arrivato in anticipo.", ans:["لقد وصلت مبكرا.","laqad wasalta mubakkiran"]},
+      {it:"Ti aspetto qui davanti.", ans:["سأنتظرك هنا في الأمام.","saantadhiruka huna fil-amam"]},
+      {it:"Non fare tardi, per favore.", ans:["لا تتأخر من فضلك.","la tataakhar min fadlik"]},
+      {it:"Sono arrivato puntuale.", ans:["وصلت في الوقت المحدد.","wasaltu fil-waqt al-muhaddad"]},
+      {it:"Quanto tempo devo aspettare?", ans:["كم من الوقت يجب أن أنتظر؟","kam min al-waqt yajibu an antadhir"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["عادة أستيقظ الساعة السابعة.","adatan astayqidhu as-saa as-sabia"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["أعمل من الاثنين إلى الجمعة.","amalu min al-ithnayn ila al-jumua"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["يفتح المتجر الساعة التاسعة صباحا.","yaftahu al-matjar as-saa at-tasia sabahan"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["نتناول العشاء دائما حوالي الساعة الثامنة مساء.","natanawalu al-asha daiman hawali as-saa ath-thamina masaan"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["في عطلة نهاية الأسبوع أنام حتى وقت متأخر.","fi utlat nihayat al-usbu anamu hatta waqt mutaakhir"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["كل صباح أغادر المنزل الساعة الثامنة.","kulla sabah ughadiru al-manzil as-saa ath-thamina"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["تبدأ عطلة نهاية الأسبوع مساء الجمعة.","tabda utlat nihayat al-usbu masaa al-jumua"]},
+      {it:"Che programmi hai per stasera?", ans:["ما هي خططك لهذا المساء؟","ma hiya khitatuka lihadha al-masa"]},
+    ],
   ],
   es: [
     [ // Livello 1
@@ -2296,27 +2420,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["quisiera un cafe por favor"]},
       {it:"A che ora parte il treno?", ans:["a que hora sale el tren","a qué hora sale el tren"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["puedo pagar con tarjeta"]},
-      {it:"Dov'è la stazione più vicina?", ans:["donde esta la estacion mas cercana","dónde está la estación más cercana"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["necesito ayuda por favor"]},
-      {it:"A che ora apre il negozio?", ans:["a que hora abre la tienda","a qué hora abre la tienda"]},
-      {it:"Questo è troppo caro.", ans:["esto es demasiado caro"]},
-      {it:"Posso avere il conto, per favore?", ans:["puedo tener la cuenta por favor"]},
-      {it:"Sto imparando questa lingua.", ans:["estoy aprendiendo este idioma"]},
-      {it:"Cosa fai questo weekend?", ans:["que haces este fin de semana"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["estoy perdido puedes ayudarme","estoy perdida puedes ayudarme"]},
-      {it:"Vado al mercato oggi.", ans:["voy al mercado hoy"]},
-      {it:"Che tempo fa oggi?", ans:["que tiempo hace hoy"]},
-      {it:"Dov'è il bagno, per favore?", ans:["donde esta el bano por favor","dónde está el baño por favor"]},
-      {it:"Quanto costa questo?", ans:["cuanto cuesta esto"]},
-      {it:"Hai un minuto per parlare?", ans:["tienes un minuto para hablar"]},
-      {it:"Mi piace molto questo posto.", ans:["me gusta mucho este lugar"]},
-      {it:"Sono stanco/a oggi.", ans:["estoy cansado hoy","estoy cansada hoy"]},
-      {it:"Puoi ripetere più lentamente?", ans:["puedes repetir mas despacio"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["muchas gracias por tu ayuda"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["buen provecho"]},
       {it:"Salute!", ans:["salud"]},
       {it:"A domani!", ans:["hasta manana","hasta mañana"]},
@@ -2335,6 +2439,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["tengo hambre"]},
       {it:"Ho sete.", ans:["tengo sed"]},
       {it:"Sono felice.", ans:["estoy feliz"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["puedo pagar con tarjeta"]},
+      {it:"Dov'è la stazione più vicina?", ans:["donde esta la estacion mas cercana","dónde está la estación más cercana"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["necesito ayuda por favor"]},
+      {it:"A che ora apre il negozio?", ans:["a que hora abre la tienda","a qué hora abre la tienda"]},
+      {it:"Questo è troppo caro.", ans:["esto es demasiado caro"]},
+      {it:"Posso avere il conto, per favore?", ans:["puedo tener la cuenta por favor"]},
+      {it:"Sto imparando questa lingua.", ans:["estoy aprendiendo este idioma"]},
+      {it:"Cosa fai questo weekend?", ans:["que haces este fin de semana"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["estoy perdido puedes ayudarme","estoy perdida puedes ayudarme"]},
+      {it:"Vado al mercato oggi.", ans:["voy al mercado hoy"]},
+      {it:"Che tempo fa oggi?", ans:["que tiempo hace hoy"]},
+      {it:"Dov'è il bagno, per favore?", ans:["donde esta el bano por favor","dónde está el baño por favor"]},
+      {it:"Quanto costa questo?", ans:["cuanto cuesta esto"]},
+      {it:"Hai un minuto per parlare?", ans:["tienes un minuto para hablar"]},
+      {it:"Mi piace molto questo posto.", ans:["me gusta mucho este lugar"]},
+      {it:"Sono stanco/a oggi.", ans:["estoy cansado hoy","estoy cansada hoy"]},
+      {it:"Puoi ripetere più lentamente?", ans:["puedes repetir mas despacio"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["muchas gracias por tu ayuda"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["creo que esta ciudad es muy interesante"]},
@@ -2628,6 +2752,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["necesito cambiar la fecha de mi vuelo de regreso"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["a quien puedo contactar en caso de emergencia en el aeropuerto"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["que hora es"]},
+      {it:"Sono le tre.", ans:["son las tres"]},
+      {it:"È mezzogiorno.", ans:["es mediodia"]},
+      {it:"È mezzanotte.", ans:["es medianoche"]},
+      {it:"Sono le tre e mezza.", ans:["son las tres y media"]},
+      {it:"Sono le tre e un quarto.", ans:["son las tres y cuarto"]},
+      {it:"Manca un quarto alle tre.", ans:["son las tres menos cuarto"]},
+      {it:"Hai un orologio?", ans:["tienes reloj"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["a que hora nos vemos"]},
+      {it:"Ci vediamo alle cinque.", ans:["nos vemos a las cinco"]},
+      {it:"A che ora inizia il film?", ans:["a que hora empieza la pelicula"]},
+      {it:"Il film inizia alle otto in punto.", ans:["la pelicula empieza a las ocho en punto"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["podemos vernos un poco mas tarde"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["tengo una cita a las diez"]},
+      {it:"A che ora chiudi il negozio?", ans:["a que hora cierras la tienda"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["fijemos una cita para manana"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["llego tarde"]},
+      {it:"Scusa il ritardo.", ans:["perdon por el retraso"]},
+      {it:"Arrivo tra cinque minuti.", ans:["llego en cinco minutos"]},
+      {it:"Sei arrivato in anticipo.", ans:["llegaste temprano"]},
+      {it:"Ti aspetto qui davanti.", ans:["te espero aqui delante"]},
+      {it:"Non fare tardi, per favore.", ans:["no llegues tarde por favor"]},
+      {it:"Sono arrivato puntuale.", ans:["llegue puntual"]},
+      {it:"Quanto tempo devo aspettare?", ans:["cuanto tiempo tengo que esperar"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["normalmente me levanto a las siete"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["trabajo de lunes a viernes"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["la tienda abre a las nueve de la manana"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["siempre cenamos sobre las ocho de la noche"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["los fines de semana duermo hasta tarde"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["todas las mananas salgo de casa a las ocho"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["el fin de semana empieza el viernes por la noche"]},
+      {it:"Che programmi hai per stasera?", ans:["que planes tienes para esta noche"]},
+    ],
   ],
   de: [
     [ // Livello 1
@@ -2650,27 +2814,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["ich hatte gern einen kaffee bitte","ich hätte gern einen kaffee bitte","ich mochte einen kaffee bitte","ich möchte einen kaffee bitte"]},
       {it:"A che ora parte il treno?", ans:["wann fahrt der zug ab","wann fährt der zug ab","um wieviel uhr fahrt der zug"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["kann ich mit karte bezahlen"]},
-      {it:"Dov'è la stazione più vicina?", ans:["wo ist der nachste bahnhof","wo ist der nächste bahnhof"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["ich brauche hilfe bitte"]},
-      {it:"A che ora apre il negozio?", ans:["wann offnet das geschaft","wann öffnet das geschäft","um wieviel uhr offnet der laden"]},
-      {it:"Questo è troppo caro.", ans:["das ist zu teuer"]},
-      {it:"Posso avere il conto, per favore?", ans:["kann ich bitte die rechnung haben"]},
-      {it:"Sto imparando questa lingua.", ans:["ich lerne diese sprache"]},
-      {it:"Cosa fai questo weekend?", ans:["was machst du dieses wochenende"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["ich habe mich verlaufen kannst du mir helfen"]},
-      {it:"Vado al mercato oggi.", ans:["ich gehe heute zum markt"]},
-      {it:"Che tempo fa oggi?", ans:["wie ist das wetter heute"]},
-      {it:"Dov'è il bagno, per favore?", ans:["wo ist die toilette bitte"]},
-      {it:"Quanto costa questo?", ans:["wie viel kostet das","wieviel kostet das"]},
-      {it:"Hai un minuto per parlare?", ans:["hast du eine minute zeit"]},
-      {it:"Mi piace molto questo posto.", ans:["mir gefallt dieser ort sehr","mir gefällt dieser ort sehr"]},
-      {it:"Sono stanco/a oggi.", ans:["ich bin heute mude","ich bin heute müde"]},
-      {it:"Puoi ripetere più lentamente?", ans:["kannst du langsamer wiederholen"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["vielen dank fur deine hilfe","vielen dank für deine hilfe"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["guten appetit"]},
       {it:"Salute!", ans:["gesundheit"]},
       {it:"A domani!", ans:["bis morgen"]},
@@ -2689,6 +2833,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["ich habe hunger"]},
       {it:"Ho sete.", ans:["ich habe durst"]},
       {it:"Sono felice.", ans:["ich bin glucklich","ich bin glücklich"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["kann ich mit karte bezahlen"]},
+      {it:"Dov'è la stazione più vicina?", ans:["wo ist der nachste bahnhof","wo ist der nächste bahnhof"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["ich brauche hilfe bitte"]},
+      {it:"A che ora apre il negozio?", ans:["wann offnet das geschaft","wann öffnet das geschäft","um wieviel uhr offnet der laden"]},
+      {it:"Questo è troppo caro.", ans:["das ist zu teuer"]},
+      {it:"Posso avere il conto, per favore?", ans:["kann ich bitte die rechnung haben"]},
+      {it:"Sto imparando questa lingua.", ans:["ich lerne diese sprache"]},
+      {it:"Cosa fai questo weekend?", ans:["was machst du dieses wochenende"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["ich habe mich verlaufen kannst du mir helfen"]},
+      {it:"Vado al mercato oggi.", ans:["ich gehe heute zum markt"]},
+      {it:"Che tempo fa oggi?", ans:["wie ist das wetter heute"]},
+      {it:"Dov'è il bagno, per favore?", ans:["wo ist die toilette bitte"]},
+      {it:"Quanto costa questo?", ans:["wie viel kostet das","wieviel kostet das"]},
+      {it:"Hai un minuto per parlare?", ans:["hast du eine minute zeit"]},
+      {it:"Mi piace molto questo posto.", ans:["mir gefallt dieser ort sehr","mir gefällt dieser ort sehr"]},
+      {it:"Sono stanco/a oggi.", ans:["ich bin heute mude","ich bin heute müde"]},
+      {it:"Puoi ripetere più lentamente?", ans:["kannst du langsamer wiederholen"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["vielen dank fur deine hilfe","vielen dank für deine hilfe"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["ich denke dass diese stadt sehr interessant ist"]},
@@ -2982,6 +3146,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["ich muss das datum meines ruckflugs andern","ich muss das datum meines rückflugs ändern"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["wen kann ich im notfall am flughafen kontaktieren"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["wie spat ist es","wie spät ist es"]},
+      {it:"Sono le tre.", ans:["es ist drei uhr"]},
+      {it:"È mezzogiorno.", ans:["es ist mittag"]},
+      {it:"È mezzanotte.", ans:["es ist mitternacht"]},
+      {it:"Sono le tre e mezza.", ans:["es ist halb vier"]},
+      {it:"Sono le tre e un quarto.", ans:["es ist viertel nach drei"]},
+      {it:"Manca un quarto alle tre.", ans:["es ist viertel vor drei"]},
+      {it:"Hai un orologio?", ans:["hast du eine uhr"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["um wie viel uhr treffen wir uns","um wieviel uhr treffen wir uns"]},
+      {it:"Ci vediamo alle cinque.", ans:["wir treffen uns um funf uhr","wir treffen uns um fünf uhr"]},
+      {it:"A che ora inizia il film?", ans:["um wie viel uhr fangt der film an","um wieviel uhr fangt der film an"]},
+      {it:"Il film inizia alle otto in punto.", ans:["der film fangt um acht uhr punktlich an"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["konnen wir uns etwas spater treffen","können wir uns etwas später treffen"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["ich habe einen termin um zehn uhr"]},
+      {it:"A che ora chiudi il negozio?", ans:["um wie viel uhr machst du den laden zu","um wieviel uhr machst du den laden zu"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["lass uns einen termin fur morgen vereinbaren"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["ich bin spat dran","ich bin spät dran"]},
+      {it:"Scusa il ritardo.", ans:["entschuldige die verspatung","entschuldige die verspätung"]},
+      {it:"Arrivo tra cinque minuti.", ans:["ich komme in funf minuten","ich komme in fünf minuten"]},
+      {it:"Sei arrivato in anticipo.", ans:["du bist fruh angekommen","du bist früh angekommen"]},
+      {it:"Ti aspetto qui davanti.", ans:["ich warte hier vorne auf dich"]},
+      {it:"Non fare tardi, per favore.", ans:["komm bitte nicht zu spat","komm bitte nicht zu spät"]},
+      {it:"Sono arrivato puntuale.", ans:["ich bin punktlich angekommen","ich bin pünktlich angekommen"]},
+      {it:"Quanto tempo devo aspettare?", ans:["wie lange muss ich warten"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["normalerweise stehe ich um sieben uhr auf"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["ich arbeite von montag bis freitag"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["der laden offnet um neun uhr morgens","der laden öffnet um neun uhr morgens"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["wir essen immer gegen acht uhr abends zu abend"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["am wochenende schlafe ich lange"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["jeden morgen verlasse ich um acht uhr das haus"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["das wochenende beginnt am freitagabend"]},
+      {it:"Che programmi hai per stasera?", ans:["was hast du heute abend vor"]},
+    ],
   ],
   zh: [
     [ // Livello 1
@@ -3004,27 +3208,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["我要一杯咖啡谢谢","wo yao yi bei ka fei xie xie"]},
       {it:"A che ora parte il treno?", ans:["火车几点开","huo che ji dian kai"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["我可以刷卡付款吗？","wo ke yi shua ka fu kuan ma"]},
-      {it:"Dov'è la stazione più vicina?", ans:["最近的车站在哪里？","zui jin de che zhan zai na li"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["我需要帮助，麻烦你了。","wo xu yao bang zhu ma fan ni le"]},
-      {it:"A che ora apre il negozio?", ans:["商店几点开门？","shang dian ji dian kai men"]},
-      {it:"Questo è troppo caro.", ans:["这个太贵了。","zhe ge tai gui le"]},
-      {it:"Posso avere il conto, per favore?", ans:["可以给我账单吗？","ke yi gei wo zhang dan ma"]},
-      {it:"Sto imparando questa lingua.", ans:["我在学习这门语言。","wo zai xue xi zhe men yu yan"]},
-      {it:"Cosa fai questo weekend?", ans:["你这个周末做什么？","ni zhe ge zhou mo zuo shen me"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["我迷路了，你能帮我吗？","wo mi lu le ni neng bang wo ma"]},
-      {it:"Vado al mercato oggi.", ans:["我今天要去市场。","wo jin tian yao qu shi chang"]},
-      {it:"Che tempo fa oggi?", ans:["今天天气怎么样？","jin tian tian qi zen me yang"]},
-      {it:"Dov'è il bagno, per favore?", ans:["请问洗手间在哪里？","qing wen xi shou jian zai na li"]},
-      {it:"Quanto costa questo?", ans:["这个多少钱？","zhe ge duo shao qian"]},
-      {it:"Hai un minuto per parlare?", ans:["你有时间聊一聊吗？","ni you shi jian liao yi liao ma"]},
-      {it:"Mi piace molto questo posto.", ans:["我很喜欢这个地方。","wo hen xi huan zhe ge di fang"]},
-      {it:"Sono stanco/a oggi.", ans:["我今天很累。","wo jin tian hen lei"]},
-      {it:"Puoi ripetere più lentamente?", ans:["你能说慢一点吗？","ni neng shuo man yi dian ma"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["非常感谢你的帮助。","fei chang gan xie ni de bang zhu"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["祝你用餐愉快！","zhu ni yong can yu kuai"]},
       {it:"Salute!", ans:["保重！","bao zhong"]},
       {it:"A domani!", ans:["明天见！","ming tian jian"]},
@@ -3043,6 +3227,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["我饿了。","wo e le"]},
       {it:"Ho sete.", ans:["我渴了。","wo ke le"]},
       {it:"Sono felice.", ans:["我很开心。","wo hen kai xin"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["我可以刷卡付款吗？","wo ke yi shua ka fu kuan ma"]},
+      {it:"Dov'è la stazione più vicina?", ans:["最近的车站在哪里？","zui jin de che zhan zai na li"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["我需要帮助，麻烦你了。","wo xu yao bang zhu ma fan ni le"]},
+      {it:"A che ora apre il negozio?", ans:["商店几点开门？","shang dian ji dian kai men"]},
+      {it:"Questo è troppo caro.", ans:["这个太贵了。","zhe ge tai gui le"]},
+      {it:"Posso avere il conto, per favore?", ans:["可以给我账单吗？","ke yi gei wo zhang dan ma"]},
+      {it:"Sto imparando questa lingua.", ans:["我在学习这门语言。","wo zai xue xi zhe men yu yan"]},
+      {it:"Cosa fai questo weekend?", ans:["你这个周末做什么？","ni zhe ge zhou mo zuo shen me"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["我迷路了，你能帮我吗？","wo mi lu le ni neng bang wo ma"]},
+      {it:"Vado al mercato oggi.", ans:["我今天要去市场。","wo jin tian yao qu shi chang"]},
+      {it:"Che tempo fa oggi?", ans:["今天天气怎么样？","jin tian tian qi zen me yang"]},
+      {it:"Dov'è il bagno, per favore?", ans:["请问洗手间在哪里？","qing wen xi shou jian zai na li"]},
+      {it:"Quanto costa questo?", ans:["这个多少钱？","zhe ge duo shao qian"]},
+      {it:"Hai un minuto per parlare?", ans:["你有时间聊一聊吗？","ni you shi jian liao yi liao ma"]},
+      {it:"Mi piace molto questo posto.", ans:["我很喜欢这个地方。","wo hen xi huan zhe ge di fang"]},
+      {it:"Sono stanco/a oggi.", ans:["我今天很累。","wo jin tian hen lei"]},
+      {it:"Puoi ripetere più lentamente?", ans:["你能说慢一点吗？","ni neng shuo man yi dian ma"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["非常感谢你的帮助。","fei chang gan xie ni de bang zhu"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["我觉得这座城市很有意思。","wo jue de zhe zuo cheng shi hen you yi si"]},
@@ -3336,6 +3540,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["我需要更改回程航班的日期。","wo xu yao geng gai hui cheng hang ban de ri qi"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["机场紧急情况下我可以联系谁？","ji chang jin ji qing kuang xia wo ke yi lian xi shei"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["现在几点？","xian zai ji dian"]},
+      {it:"Sono le tre.", ans:["现在三点。","xian zai san dian"]},
+      {it:"È mezzogiorno.", ans:["现在是中午。","xian zai shi zhong wu"]},
+      {it:"È mezzanotte.", ans:["现在是午夜。","xian zai shi wu ye"]},
+      {it:"Sono le tre e mezza.", ans:["现在三点半。","xian zai san dian ban"]},
+      {it:"Sono le tre e un quarto.", ans:["现在三点十五分。","xian zai san dian shi wu fen"]},
+      {it:"Manca un quarto alle tre.", ans:["还有一刻到三点。","hai you yi ke dao san dian"]},
+      {it:"Hai un orologio?", ans:["你有手表吗？","ni you shou biao ma"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["我们几点见面？","wo men ji dian jian mian"]},
+      {it:"Ci vediamo alle cinque.", ans:["我们五点见。","wo men wu dian jian"]},
+      {it:"A che ora inizia il film?", ans:["电影几点开始？","dian ying ji dian kai shi"]},
+      {it:"Il film inizia alle otto in punto.", ans:["电影八点整开始。","dian ying ba dian zheng kai shi"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["我们可以晚一点见面吗？","wo men ke yi wan yi dian jian mian ma"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["我十点有个约会。","wo shi dian you ge yue hui"]},
+      {it:"A che ora chiudi il negozio?", ans:["你几点关店？","ni ji dian guan dian"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["我们约明天见面吧。","wo men yue ming tian jian mian ba"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["我迟到了。","wo chi dao le"]},
+      {it:"Scusa il ritardo.", ans:["抱歉迟到了。","bao qian chi dao le"]},
+      {it:"Arrivo tra cinque minuti.", ans:["我五分钟后到。","wo wu fen zhong hou dao"]},
+      {it:"Sei arrivato in anticipo.", ans:["你早到了。","ni zao dao le"]},
+      {it:"Ti aspetto qui davanti.", ans:["我在这前面等你。","wo zai zhe qian mian deng ni"]},
+      {it:"Non fare tardi, per favore.", ans:["请不要迟到。","qing bu yao chi dao"]},
+      {it:"Sono arrivato puntuale.", ans:["我准时到了。","wo zhun shi dao le"]},
+      {it:"Quanto tempo devo aspettare?", ans:["我要等多久？","wo yao deng duo jiu"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["我通常七点起床。","wo tong chang qi dian qi chuang"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["我从星期一工作到星期五。","wo cong xing qi yi gong zuo dao xing qi wu"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["商店早上九点开门。","shang dian zao shang jiu dian kai men"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["我们总是晚上八点左右吃晚饭。","wo men zong shi wan shang ba dian zuo you chi wan fan"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["周末我睡到很晚。","zhou mo wo shui dao hen wan"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["我每天早上八点出门。","wo mei tian zao shang ba dian chu men"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["周末从星期五晚上开始。","zhou mo cong xing qi wu wan shang kai shi"]},
+      {it:"Che programmi hai per stasera?", ans:["你今晚有什么安排？","ni jin wan you shen me an pai"]},
+    ],
   ],
   ja: [
     [ // Livello 1
@@ -3358,27 +3602,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["コーヒーをお願いします","koohii wo onegaishimasu"]},
       {it:"A che ora parte il treno?", ans:["電車は何時に出発しますか","densha wa nanji ni shuppatsu shimasu ka"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["カードで払えますか？","kaado de haraemasu ka"]},
-      {it:"Dov'è la stazione più vicina?", ans:["一番近い駅はどこですか？","ichiban chikai eki wa doko desu ka"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["助けが必要です、お願いします。","tasuke ga hitsuyou desu onegaishimasu"]},
-      {it:"A che ora apre il negozio?", ans:["お店は何時に開きますか？","omise wa nanji ni hirakimasu ka"]},
-      {it:"Questo è troppo caro.", ans:["これは高すぎます。","kore wa takasugimasu"]},
-      {it:"Posso avere il conto, per favore?", ans:["お会計をお願いできますか？","okaikei wo onegai dekimasu ka"]},
-      {it:"Sto imparando questa lingua.", ans:["この言語を勉強しています。","kono gengo wo benkyou shite imasu"]},
-      {it:"Cosa fai questo weekend?", ans:["今週末は何をしますか？","konshuumatsu wa nani wo shimasu ka"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["道に迷いました、助けてもらえますか？","michi ni mayoimashita tasukete moraemasu ka"]},
-      {it:"Vado al mercato oggi.", ans:["今日市場に行きます。","kyou ichiba ni ikimasu"]},
-      {it:"Che tempo fa oggi?", ans:["今日の天気はどうですか？","kyou no tenki wa dou desu ka"]},
-      {it:"Dov'è il bagno, per favore?", ans:["すみません、お手洗いはどこですか？","sumimasen otearai wa doko desu ka"]},
-      {it:"Quanto costa questo?", ans:["これはいくらですか？","kore wa ikura desu ka"]},
-      {it:"Hai un minuto per parlare?", ans:["少し話す時間はありますか？","sukoshi hanasu jikan wa arimasu ka"]},
-      {it:"Mi piace molto questo posto.", ans:["この場所がとても気に入っています。","kono basho ga totemo kiniitte imasu"]},
-      {it:"Sono stanco/a oggi.", ans:["今日は疲れています。","kyou wa tsukarete imasu"]},
-      {it:"Puoi ripetere più lentamente?", ans:["もっとゆっくり繰り返してもらえますか？","motto yukkuri kurikaeshite moraemasu ka"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["手伝ってくれて本当にありがとう。","tetsudatte kurete hontou ni arigatou"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["いただきます！","itadakimasu"]},
       {it:"Salute!", ans:["お大事に！","odaiji ni"]},
       {it:"A domani!", ans:["また明日！","mata ashita"]},
@@ -3397,6 +3621,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["お腹がすきました。","onaka ga sukimashita"]},
       {it:"Ho sete.", ans:["のどが渇きました。","nodo ga kawakimashita"]},
       {it:"Sono felice.", ans:["嬉しいです。","ureshii desu"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["カードで払えますか？","kaado de haraemasu ka"]},
+      {it:"Dov'è la stazione più vicina?", ans:["一番近い駅はどこですか？","ichiban chikai eki wa doko desu ka"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["助けが必要です、お願いします。","tasuke ga hitsuyou desu onegaishimasu"]},
+      {it:"A che ora apre il negozio?", ans:["お店は何時に開きますか？","omise wa nanji ni hirakimasu ka"]},
+      {it:"Questo è troppo caro.", ans:["これは高すぎます。","kore wa takasugimasu"]},
+      {it:"Posso avere il conto, per favore?", ans:["お会計をお願いできますか？","okaikei wo onegai dekimasu ka"]},
+      {it:"Sto imparando questa lingua.", ans:["この言語を勉強しています。","kono gengo wo benkyou shite imasu"]},
+      {it:"Cosa fai questo weekend?", ans:["今週末は何をしますか？","konshuumatsu wa nani wo shimasu ka"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["道に迷いました、助けてもらえますか？","michi ni mayoimashita tasukete moraemasu ka"]},
+      {it:"Vado al mercato oggi.", ans:["今日市場に行きます。","kyou ichiba ni ikimasu"]},
+      {it:"Che tempo fa oggi?", ans:["今日の天気はどうですか？","kyou no tenki wa dou desu ka"]},
+      {it:"Dov'è il bagno, per favore?", ans:["すみません、お手洗いはどこですか？","sumimasen otearai wa doko desu ka"]},
+      {it:"Quanto costa questo?", ans:["これはいくらですか？","kore wa ikura desu ka"]},
+      {it:"Hai un minuto per parlare?", ans:["少し話す時間はありますか？","sukoshi hanasu jikan wa arimasu ka"]},
+      {it:"Mi piace molto questo posto.", ans:["この場所がとても気に入っています。","kono basho ga totemo kiniitte imasu"]},
+      {it:"Sono stanco/a oggi.", ans:["今日は疲れています。","kyou wa tsukarete imasu"]},
+      {it:"Puoi ripetere più lentamente?", ans:["もっとゆっくり繰り返してもらえますか？","motto yukkuri kurikaeshite moraemasu ka"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["手伝ってくれて本当にありがとう。","tetsudatte kurete hontou ni arigatou"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["この街はとても面白いと思います。","kono machi wa totemo omoshiroi to omoimasu"]},
@@ -3690,6 +3934,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["帰りのフライトの日付を変更する必要があります。","kaeri no furaito no hizuke wo henkou suru hitsuyou ga arimasu"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["空港で緊急事態の場合、誰に連絡すればいいですか？","kuukou de kinkyuu jitai no baai dare ni renraku sureba ii desu ka"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["今何時ですか？","ima nanji desu ka"]},
+      {it:"Sono le tre.", ans:["三時です。","sanji desu"]},
+      {it:"È mezzogiorno.", ans:["正午です。","shougo desu"]},
+      {it:"È mezzanotte.", ans:["真夜中です。","mayonaka desu"]},
+      {it:"Sono le tre e mezza.", ans:["三時半です。","sanji han desu"]},
+      {it:"Sono le tre e un quarto.", ans:["三時十五分です。","sanji juugofun desu"]},
+      {it:"Manca un quarto alle tre.", ans:["三時十五分前です。","sanji juugofun mae desu"]},
+      {it:"Hai un orologio?", ans:["時計を持っていますか？","tokei wo motte imasu ka"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["何時に会いましょうか？","nanji ni aimashou ka"]},
+      {it:"Ci vediamo alle cinque.", ans:["五時に会いましょう。","goji ni aimashou"]},
+      {it:"A che ora inizia il film?", ans:["映画は何時に始まりますか？","eiga wa nanji ni hajimarimasu ka"]},
+      {it:"Il film inizia alle otto in punto.", ans:["映画は八時ちょうどに始まります。","eiga wa hachiji choudo ni hajimarimasu"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["もう少し遅く会えますか？","mou sukoshi osoku aemasu ka"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["十時に約束があります。","juuji ni yakusoku ga arimasu"]},
+      {it:"A che ora chiudi il negozio?", ans:["何時に店を閉めますか？","nanji ni mise wo shimemasu ka"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["明日会う約束をしましょう。","ashita au yakusoku wo shimashou"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["遅れています。","okurete imasu"]},
+      {it:"Scusa il ritardo.", ans:["遅れてすみません。","okurete sumimasen"]},
+      {it:"Arrivo tra cinque minuti.", ans:["五分で着きます。","gofun de tsukimasu"]},
+      {it:"Sei arrivato in anticipo.", ans:["早く着きましたね。","hayaku tsukimashita ne"]},
+      {it:"Ti aspetto qui davanti.", ans:["ここの前で待っています。","koko no mae de matte imasu"]},
+      {it:"Non fare tardi, per favore.", ans:["遅れないでください。","okurenaide kudasai"]},
+      {it:"Sono arrivato puntuale.", ans:["時間通りに着きました。","jikandoori ni tsukimashita"]},
+      {it:"Quanto tempo devo aspettare?", ans:["どのくらい待てばいいですか？","dono kurai mateba ii desu ka"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["普段は七時に起きます。","fudan wa shichiji ni okimasu"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["月曜日から金曜日まで働きます。","getsuyoubi kara kinyoubi made hatarakimasu"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["お店は朝九時に開きます。","omise wa asa kuji ni hirakimasu"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["いつも夜八時ごろに夕食を食べます。","itsumo yoru hachiji goro ni yuushoku wo tabemasu"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["週末は遅くまで寝ています。","shuumatsu wa osoku made nete imasu"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["毎朝八時に家を出ます。","maiasa hachiji ni ie wo demasu"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["週末は金曜日の夜から始まります。","shuumatsu wa kinyoubi no yoru kara hajimarimasu"]},
+      {it:"Che programmi hai per stasera?", ans:["今夜の予定は何ですか？","kon'ya no yotei wa nan desu ka"]},
+    ],
   ],
   ru: [
     [ // Livello 1
@@ -3712,27 +3996,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["я хотел бы кофе пожалуйста","ya khotel by kofe pozhaluysta","я хотела бы кофе пожалуйста","ya khotela by kofe pozhaluysta"]},
       {it:"A che ora parte il treno?", ans:["во сколько отправляется поезд","vo skolko otpravlyayetsya poyezd"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["могу я заплатить картой","mogu ya zaplatit kartoy"]},
-      {it:"Dov'è la stazione più vicina?", ans:["где ближайшая станция","gde blizhayshaya stantsiya"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["мне нужна помощь пожалуйста","mne nuzhna pomoshch pozhaluysta"]},
-      {it:"A che ora apre il negozio?", ans:["во сколько открывается магазин","vo skolko otkryvayetsya magazin"]},
-      {it:"Questo è troppo caro.", ans:["это слишком дорого","eto slishkom dorogo"]},
-      {it:"Posso avere il conto, per favore?", ans:["можно счёт пожалуйста","mozhno schyot pozhaluysta","mozhno schet pozhaluysta"]},
-      {it:"Sto imparando questa lingua.", ans:["я учу этот язык","ya uchu etot yazyk"]},
-      {it:"Cosa fai questo weekend?", ans:["что ты делаешь в эти выходные","chto ty delayesh v eti vykhodnyye"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["я потерялся ты можешь мне помочь","ya poteryalsya ty mozhesh mne pomoch","я потерялась ты можешь мне помочь","ya poteryalas ty mozhesh mne pomoch"]},
-      {it:"Vado al mercato oggi.", ans:["сегодня я иду на рынок","segodnya ya idu na rynok"]},
-      {it:"Che tempo fa oggi?", ans:["какая сегодня погода","kakaya segodnya pogoda"]},
-      {it:"Dov'è il bagno, per favore?", ans:["где туалет пожалуйста","gde tualet pozhaluysta"]},
-      {it:"Quanto costa questo?", ans:["сколько это стоит","skolko eto stoit"]},
-      {it:"Hai un minuto per parlare?", ans:["у тебя есть минутка поговорить","u tebya yest minutka pogovorit"]},
-      {it:"Mi piace molto questo posto.", ans:["мне очень нравится это место","mne ochen nravitsya eto mesto"]},
-      {it:"Sono stanco/a oggi.", ans:["я устал сегодня","ya ustal segodnya","я устала сегодня","ya ustala segodnya"]},
-      {it:"Puoi ripetere più lentamente?", ans:["можешь повторить медленнее","mozhesh povtorit medlenneye"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["большое спасибо за твою помощь","bolshoye spasibo za tvoyu pomoshch"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["приятного аппетита","priyatnogo appetita"]},
       {it:"Salute!", ans:["будь здоров","bud zdorov"]},
       {it:"A domani!", ans:["до завтра","do zavtra"]},
@@ -3751,6 +4015,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["я голоден","ya goloden","я голодна","ya golodna"]},
       {it:"Ho sete.", ans:["я хочу пить","ya khochu pit"]},
       {it:"Sono felice.", ans:["я счастлив","ya schastliv","я счастлива","ya schastliva"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["могу я заплатить картой","mogu ya zaplatit kartoy"]},
+      {it:"Dov'è la stazione più vicina?", ans:["где ближайшая станция","gde blizhayshaya stantsiya"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["мне нужна помощь пожалуйста","mne nuzhna pomoshch pozhaluysta"]},
+      {it:"A che ora apre il negozio?", ans:["во сколько открывается магазин","vo skolko otkryvayetsya magazin"]},
+      {it:"Questo è troppo caro.", ans:["это слишком дорого","eto slishkom dorogo"]},
+      {it:"Posso avere il conto, per favore?", ans:["можно счёт пожалуйста","mozhno schyot pozhaluysta","mozhno schet pozhaluysta"]},
+      {it:"Sto imparando questa lingua.", ans:["я учу этот язык","ya uchu etot yazyk"]},
+      {it:"Cosa fai questo weekend?", ans:["что ты делаешь в эти выходные","chto ty delayesh v eti vykhodnyye"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["я потерялся ты можешь мне помочь","ya poteryalsya ty mozhesh mne pomoch","я потерялась ты можешь мне помочь","ya poteryalas ty mozhesh mne pomoch"]},
+      {it:"Vado al mercato oggi.", ans:["сегодня я иду на рынок","segodnya ya idu na rynok"]},
+      {it:"Che tempo fa oggi?", ans:["какая сегодня погода","kakaya segodnya pogoda"]},
+      {it:"Dov'è il bagno, per favore?", ans:["где туалет пожалуйста","gde tualet pozhaluysta"]},
+      {it:"Quanto costa questo?", ans:["сколько это стоит","skolko eto stoit"]},
+      {it:"Hai un minuto per parlare?", ans:["у тебя есть минутка поговорить","u tebya yest minutka pogovorit"]},
+      {it:"Mi piace molto questo posto.", ans:["мне очень нравится это место","mne ochen nravitsya eto mesto"]},
+      {it:"Sono stanco/a oggi.", ans:["я устал сегодня","ya ustal segodnya","я устала сегодня","ya ustala segodnya"]},
+      {it:"Puoi ripetere più lentamente?", ans:["можешь повторить медленнее","mozhesh povtorit medlenneye"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["большое спасибо за твою помощь","bolshoye spasibo za tvoyu pomoshch"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["я думаю что этот город очень интересный","ya dumayu chto etot gorod ochen interesnyy"]},
@@ -4044,6 +4328,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["мне нужно изменить дату обратного рейса","mne nuzhno izmenit datu obratnogo reysa"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["к кому я могу обратиться в случае чрезвычайной ситуации в аэропорту","k komu ya mogu obratitsya v sluchaye chrezvychaynoy situatsii v aeroportu"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["Который час?","kotoryy chas"]},
+      {it:"Sono le tre.", ans:["Сейчас три часа.","seychas tri chasa"]},
+      {it:"È mezzogiorno.", ans:["Сейчас полдень.","seychas polden"]},
+      {it:"È mezzanotte.", ans:["Сейчас полночь.","seychas polnoch"]},
+      {it:"Sono le tre e mezza.", ans:["Сейчас половина четвёртого.","seychas polovina chetvyortogo"]},
+      {it:"Sono le tre e un quarto.", ans:["Сейчас четверть четвёртого.","seychas chetvert chetvyortogo"]},
+      {it:"Manca un quarto alle tre.", ans:["Без четверти три.","bez chetverti tri"]},
+      {it:"Hai un orologio?", ans:["У тебя есть часы?","u tebya yest chasy"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["Во сколько мы встретимся?","vo skolko my vstretimsya"]},
+      {it:"Ci vediamo alle cinque.", ans:["Встретимся в пять.","vstretimsya v pyat"]},
+      {it:"A che ora inizia il film?", ans:["Во сколько начинается фильм?","vo skolko nachinayetsya film"]},
+      {it:"Il film inizia alle otto in punto.", ans:["Фильм начинается ровно в восемь.","film nachinayetsya rovno v vosem"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["Можем встретиться немного позже?","mozhem vstretitsya nemnogo pozzhe"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["У меня встреча в десять.","u menya vstrecha v desyat"]},
+      {it:"A che ora chiudi il negozio?", ans:["Во сколько ты закрываешь магазин?","vo skolko ty zakryvayesh magazin"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["Давай назначим встречу на завтра.","davay naznachim vstrechu na zavtra"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["Я опаздываю.","ya opazdyvayu"]},
+      {it:"Scusa il ritardo.", ans:["Извини за опоздание.","izvini za opozdaniye"]},
+      {it:"Arrivo tra cinque minuti.", ans:["Я приду через пять минут.","ya pridu cherez pyat minut"]},
+      {it:"Sei arrivato in anticipo.", ans:["Ты пришёл раньше.","ty prishyol ranshe"]},
+      {it:"Ti aspetto qui davanti.", ans:["Я подожду тебя здесь, впереди.","ya podozhdu tebya zdes, vperedi"]},
+      {it:"Non fare tardi, per favore.", ans:["Не опаздывай, пожалуйста.","ne opazdyvay pozhaluysta"]},
+      {it:"Sono arrivato puntuale.", ans:["Я пришёл вовремя.","ya prishyol vovremya"]},
+      {it:"Quanto tempo devo aspettare?", ans:["Сколько мне нужно ждать?","skolko mne nuzhno zhdat"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["Обычно я встаю в семь.","obychno ya vstayu v sem"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["Я работаю с понедельника по пятницу.","ya rabotayu s ponedelnika po pyatnitsu"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["Магазин открывается в девять утра.","magazin otkryvayetsya v devyat utra"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["Мы всегда ужинаем около восьми вечера.","my vsegda uzhinayem okolo vosmi vechera"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["По выходным я сплю допоздна.","po vykhodnym ya splyu dopozdna"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["Каждое утро я выхожу из дома в восемь.","kazhdoye utro ya vykhozhu iz doma v vosem"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["Выходные начинаются в пятницу вечером.","vykhodnyye nachinayutsya v pyatnitsu vecherom"]},
+      {it:"Che programmi hai per stasera?", ans:["Какие у тебя планы на сегодняшний вечер?","kakiye u tebya plany na segodnyashniy vecher"]},
+    ],
   ],
   tr: [
     [ // Livello 1
@@ -4066,27 +4390,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["bir kahve istiyorum lütfen","bir kahve istiyorum lutfen"]},
       {it:"A che ora parte il treno?", ans:["tren kaçta kalkıyor","tren kacta kalkiyor"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["kartla ödeyebilir miyim","kartla odeyebilir miyim"]},
-      {it:"Dov'è la stazione più vicina?", ans:["en yakın istasyon nerede","en yakin istasyon nerede"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["yardıma ihtiyacım var lütfen","yardima ihtiyacim var lutfen"]},
-      {it:"A che ora apre il negozio?", ans:["dükkan saat kaçta açılıyor","dukkan saat kacta aciliyor"]},
-      {it:"Questo è troppo caro.", ans:["bu çok pahalı","bu cok pahali"]},
-      {it:"Posso avere il conto, per favore?", ans:["hesabı alabilir miyim lütfen","hesabi alabilir miyim lutfen"]},
-      {it:"Sto imparando questa lingua.", ans:["bu dili öğreniyorum","bu dili ogreniyorum"]},
-      {it:"Cosa fai questo weekend?", ans:["bu hafta sonu ne yapıyorsun","bu hafta sonu ne yapiyorsun"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["kayboldum bana yardım edebilir misin","kayboldum bana yardim edebilir misin"]},
-      {it:"Vado al mercato oggi.", ans:["bugün pazara gidiyorum","bugun pazara gidiyorum"]},
-      {it:"Che tempo fa oggi?", ans:["bugün hava nasıl","bugun hava nasil"]},
-      {it:"Dov'è il bagno, per favore?", ans:["tuvalet nerede lütfen","tuvalet nerede lutfen"]},
-      {it:"Quanto costa questo?", ans:["bu ne kadar"]},
-      {it:"Hai un minuto per parlare?", ans:["konuşmak için bir dakikan var mı","konusmak icin bir dakikan var mi"]},
-      {it:"Mi piace molto questo posto.", ans:["bu yeri çok seviyorum","bu yeri cok seviyorum"]},
-      {it:"Sono stanco/a oggi.", ans:["bugün yorgunum","bugun yorgunum"]},
-      {it:"Puoi ripetere più lentamente?", ans:["daha yavaş tekrar edebilir misin","daha yavas tekrar edebilir misin"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["yardımın için çok teşekkürler","yardimin icin cok tesekkurler"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["afiyet olsun"]},
       {it:"Salute!", ans:["çok yaşa","cok yasa"]},
       {it:"A domani!", ans:["yarın görüşürüz","yarin gorusuruz"]},
@@ -4105,6 +4409,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["açım","acim"]},
       {it:"Ho sete.", ans:["susadım","susadim"]},
       {it:"Sono felice.", ans:["mutluyum"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["kartla ödeyebilir miyim","kartla odeyebilir miyim"]},
+      {it:"Dov'è la stazione più vicina?", ans:["en yakın istasyon nerede","en yakin istasyon nerede"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["yardıma ihtiyacım var lütfen","yardima ihtiyacim var lutfen"]},
+      {it:"A che ora apre il negozio?", ans:["dükkan saat kaçta açılıyor","dukkan saat kacta aciliyor"]},
+      {it:"Questo è troppo caro.", ans:["bu çok pahalı","bu cok pahali"]},
+      {it:"Posso avere il conto, per favore?", ans:["hesabı alabilir miyim lütfen","hesabi alabilir miyim lutfen"]},
+      {it:"Sto imparando questa lingua.", ans:["bu dili öğreniyorum","bu dili ogreniyorum"]},
+      {it:"Cosa fai questo weekend?", ans:["bu hafta sonu ne yapıyorsun","bu hafta sonu ne yapiyorsun"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["kayboldum bana yardım edebilir misin","kayboldum bana yardim edebilir misin"]},
+      {it:"Vado al mercato oggi.", ans:["bugün pazara gidiyorum","bugun pazara gidiyorum"]},
+      {it:"Che tempo fa oggi?", ans:["bugün hava nasıl","bugun hava nasil"]},
+      {it:"Dov'è il bagno, per favore?", ans:["tuvalet nerede lütfen","tuvalet nerede lutfen"]},
+      {it:"Quanto costa questo?", ans:["bu ne kadar"]},
+      {it:"Hai un minuto per parlare?", ans:["konuşmak için bir dakikan var mı","konusmak icin bir dakikan var mi"]},
+      {it:"Mi piace molto questo posto.", ans:["bu yeri çok seviyorum","bu yeri cok seviyorum"]},
+      {it:"Sono stanco/a oggi.", ans:["bugün yorgunum","bugun yorgunum"]},
+      {it:"Puoi ripetere più lentamente?", ans:["daha yavaş tekrar edebilir misin","daha yavas tekrar edebilir misin"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["yardımın için çok teşekkürler","yardimin icin cok tesekkurler"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["bence bu şehir çok ilginç","bence bu sehir cok ilginc"]},
@@ -4398,6 +4722,46 @@ const BEGINNER = {
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["dönüş uçuşumun tarihini değiştirmem gerekiyor","donus ucusumun tarihini degistirmem gerekiyor"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["havaalanında acil bir durumda kiminle iletişime geçebilirim","havaalaninda acil bir durumda kiminle iletisime gecebilirim"]},
     ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["saat kac"]},
+      {it:"Sono le tre.", ans:["saat uc"]},
+      {it:"È mezzogiorno.", ans:["saat oglen"]},
+      {it:"È mezzanotte.", ans:["saat gece yarisi"]},
+      {it:"Sono le tre e mezza.", ans:["saat uc bucuk"]},
+      {it:"Sono le tre e un quarto.", ans:["saat ucu ceyrek geciyor"]},
+      {it:"Manca un quarto alle tre.", ans:["saate ceyrek var"]},
+      {it:"Hai un orologio?", ans:["saatin var mi"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["saat kacta bulusuyoruz"]},
+      {it:"Ci vediamo alle cinque.", ans:["saat beste bulusalim"]},
+      {it:"A che ora inizia il film?", ans:["film saat kacta basliyor"]},
+      {it:"Il film inizia alle otto in punto.", ans:["film tam saat sekizde basliyor"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["biraz daha gec bulusabilir miyiz"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["saat onda randevum var"]},
+      {it:"A che ora chiudi il negozio?", ans:["dukkani saat kacta kapatiyorsun"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["yarin icin bir randevu ayarlayalim"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["gec kaldim"]},
+      {it:"Scusa il ritardo.", ans:["geciktigim icin ozur dilerim"]},
+      {it:"Arrivo tra cinque minuti.", ans:["bes dakikaya varirim"]},
+      {it:"Sei arrivato in anticipo.", ans:["erken geldin"]},
+      {it:"Ti aspetto qui davanti.", ans:["seni burada onde bekliyorum"]},
+      {it:"Non fare tardi, per favore.", ans:["gec kalma lutfen"]},
+      {it:"Sono arrivato puntuale.", ans:["zamaninda geldim"]},
+      {it:"Quanto tempo devo aspettare?", ans:["ne kadar beklemem gerekiyor"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["genellikle yedide kalkarim"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["pazartesiden cumaya kadar calisirim"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["dukkan sabah dokuzda acilir"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["her zaman aksam sekiz civari aksam yemegi yeriz"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["hafta sonu gec saatlere kadar uyurum"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["her sabah sekizde evden cikarim"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["hafta sonu cuma aksami baslar"]},
+      {it:"Che programmi hai per stasera?", ans:["bu aksam icin planlarin ne"]},
+    ],
   ],
   pt: [
     [ // Livello 1
@@ -4420,27 +4784,7 @@ const BEGINNER = {
       {it:"Vorrei un caffè, per favore", ans:["eu gostaria de um cafe, por favor"]},
       {it:"A che ora parte il treno?", ans:["a que horas parte o trem"]},
     ],
-    [ // Livello 2
-      {it:"Posso pagare con la carta?", ans:["posso pagar com cartao"]},
-      {it:"Dov'è la stazione più vicina?", ans:["onde fica a estacao mais proxima"]},
-      {it:"Ho bisogno di aiuto, per favore.", ans:["preciso de ajuda, por favor"]},
-      {it:"A che ora apre il negozio?", ans:["a que horas a loja abre"]},
-      {it:"Questo è troppo caro.", ans:["isso e muito caro"]},
-      {it:"Posso avere il conto, per favore?", ans:["posso pedir a conta, por favor"]},
-      {it:"Sto imparando questa lingua.", ans:["estou aprendendo este idioma"]},
-      {it:"Cosa fai questo weekend?", ans:["o que voce vai fazer neste fim de semana"]},
-      {it:"Sono perso, puoi aiutarmi?", ans:["estou perdido, voce pode me ajudar"]},
-      {it:"Vado al mercato oggi.", ans:["vou ao mercado hoje"]},
-      {it:"Che tempo fa oggi?", ans:["como esta o tempo hoje"]},
-      {it:"Dov'è il bagno, per favore?", ans:["onde fica o banheiro, por favor"]},
-      {it:"Quanto costa questo?", ans:["quanto custa isso"]},
-      {it:"Hai un minuto per parlare?", ans:["voce tem um minuto para conversar"]},
-      {it:"Mi piace molto questo posto.", ans:["eu gosto muito deste lugar"]},
-      {it:"Sono stanco/a oggi.", ans:["estou cansado hoje","estou cansada hoje"]},
-      {it:"Puoi ripetere più lentamente?", ans:["voce pode repetir mais devagar"]},
-      {it:"Grazie mille per il tuo aiuto.", ans:["muito obrigado pela sua ajuda","muito obrigada pela sua ajuda"]},
-    ],
-    [ // Livello 3 (ponte per principianti assoluti)
+    [ // Livello 2 (ponte per principianti assoluti)
       {it:"Buon appetito!", ans:["bom apetite"]},
       {it:"Salute!", ans:["saude"]},
       {it:"A domani!", ans:["ate amanha"]},
@@ -4459,6 +4803,26 @@ const BEGINNER = {
       {it:"Ho fame.", ans:["estou com fome"]},
       {it:"Ho sete.", ans:["estou com sede"]},
       {it:"Sono felice.", ans:["estou feliz"]},
+    ],
+    [ // Livello 3
+      {it:"Posso pagare con la carta?", ans:["posso pagar com cartao"]},
+      {it:"Dov'è la stazione più vicina?", ans:["onde fica a estacao mais proxima"]},
+      {it:"Ho bisogno di aiuto, per favore.", ans:["preciso de ajuda, por favor"]},
+      {it:"A che ora apre il negozio?", ans:["a que horas a loja abre"]},
+      {it:"Questo è troppo caro.", ans:["isso e muito caro"]},
+      {it:"Posso avere il conto, per favore?", ans:["posso pedir a conta, por favor"]},
+      {it:"Sto imparando questa lingua.", ans:["estou aprendendo este idioma"]},
+      {it:"Cosa fai questo weekend?", ans:["o que voce vai fazer neste fim de semana"]},
+      {it:"Sono perso, puoi aiutarmi?", ans:["estou perdido, voce pode me ajudar"]},
+      {it:"Vado al mercato oggi.", ans:["vou ao mercado hoje"]},
+      {it:"Che tempo fa oggi?", ans:["como esta o tempo hoje"]},
+      {it:"Dov'è il bagno, per favore?", ans:["onde fica o banheiro, por favor"]},
+      {it:"Quanto costa questo?", ans:["quanto custa isso"]},
+      {it:"Hai un minuto per parlare?", ans:["voce tem um minuto para conversar"]},
+      {it:"Mi piace molto questo posto.", ans:["eu gosto muito deste lugar"]},
+      {it:"Sono stanco/a oggi.", ans:["estou cansado hoje","estou cansada hoje"]},
+      {it:"Puoi ripetere più lentamente?", ans:["voce pode repetir mais devagar"]},
+      {it:"Grazie mille per il tuo aiuto.", ans:["muito obrigado pela sua ajuda","muito obrigada pela sua ajuda"]},
     ],
     [ // Livello 4
       {it:"Penso che questa città sia molto interessante.", ans:["acho que esta cidade e muito interessante"]},
@@ -4751,6 +5115,46 @@ const BEGINNER = {
       {it:"Ho un problema con la prenotazione del volo.", ans:["tenho um problema com a reserva do voo"]},
       {it:"Devo cambiare la data del mio volo di ritorno.", ans:["preciso mudar a data do meu voo de volta"]},
       {it:"Chi posso contattare in caso di emergenza in aeroporto?", ans:["com quem posso entrar em contato em caso de emergencia no aeroporto"]},
+    ],
+    [ // Livello 28 (Che Ore Sono - parte 1)
+      {it:"Che ore sono?", ans:["que horas sao"]},
+      {it:"Sono le tre.", ans:["sao tres horas"]},
+      {it:"È mezzogiorno.", ans:["e meio-dia","e meio dia"]},
+      {it:"È mezzanotte.", ans:["e meia-noite","e meia noite"]},
+      {it:"Sono le tre e mezza.", ans:["sao tres e meia"]},
+      {it:"Sono le tre e un quarto.", ans:["sao tres e quinze"]},
+      {it:"Manca un quarto alle tre.", ans:["faltam quinze para as tres"]},
+      {it:"Hai un orologio?", ans:["voce tem relogio"]},
+    ],
+    [ // Livello 29 (Che Ore Sono - parte 2)
+      {it:"A che ora ci vediamo?", ans:["a que horas a gente se ve"]},
+      {it:"Ci vediamo alle cinque.", ans:["a gente se ve as cinco"]},
+      {it:"A che ora inizia il film?", ans:["a que horas o filme comeca"]},
+      {it:"Il film inizia alle otto in punto.", ans:["o filme comeca as oito em ponto"]},
+      {it:"Possiamo vederci un po' più tardi?", ans:["podemos nos ver um pouco mais tarde"]},
+      {it:"Ho un appuntamento alle dieci.", ans:["tenho um compromisso as dez"]},
+      {it:"A che ora chiudi il negozio?", ans:["a que horas voce fecha a loja"]},
+      {it:"Fissiamo un appuntamento per domani.", ans:["vamos marcar um compromisso para amanha"]},
+    ],
+    [ // Livello 30 (Che Ore Sono - parte 3)
+      {it:"Sono in ritardo.", ans:["estou atrasado","estou atrasada"]},
+      {it:"Scusa il ritardo.", ans:["desculpe o atraso"]},
+      {it:"Arrivo tra cinque minuti.", ans:["chego em cinco minutos"]},
+      {it:"Sei arrivato in anticipo.", ans:["voce chegou adiantado"]},
+      {it:"Ti aspetto qui davanti.", ans:["te espero aqui na frente"]},
+      {it:"Non fare tardi, per favore.", ans:["nao se atrase, por favor"]},
+      {it:"Sono arrivato puntuale.", ans:["cheguei na hora certa"]},
+      {it:"Quanto tempo devo aspettare?", ans:["quanto tempo eu tenho que esperar"]},
+    ],
+    [ // Livello 31 (Che Ore Sono - parte 4)
+      {it:"Di solito mi alzo alle sette.", ans:["normalmente eu acordo as sete"]},
+      {it:"Lavoro dal lunedì al venerdì.", ans:["eu trabalho de segunda a sexta"]},
+      {it:"Il negozio apre alle nove del mattino.", ans:["a loja abre as nove da manha"]},
+      {it:"Ceniamo sempre verso le otto di sera.", ans:["a gente sempre janta por volta das oito da noite"]},
+      {it:"Nel weekend dormo fino a tardi.", ans:["no fim de semana eu durmo ate tarde"]},
+      {it:"Ogni mattina esco di casa alle otto.", ans:["todo dia de manha eu saio de casa as oito"]},
+      {it:"Il fine settimana comincia il venerdì sera.", ans:["o fim de semana comeca na sexta a noite"]},
+      {it:"Che programmi hai per stasera?", ans:["quais sao seus planos para hoje a noite"]},
     ],
   ],
 };
@@ -5835,7 +6239,7 @@ function srsReview(mistake, correct){
 
 function freshProgressAllLevels(){
   const p = {};
-  for(let lvl=1; lvl<=27; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
+  for(let lvl=1; lvl<=31; lvl++){ p[lvl] = { to_target: freshDirState(), to_it: freshDirState() }; }
   return p;
 }
 
@@ -5846,7 +6250,7 @@ async function loadState(lang){
   }catch(e){ state = { streak:0, lastDate:null, done:[], notebook:[] }; }
 
   if(!state.beginner){
-    state.beginner = { direction:'to_target', level:1, progress: freshProgressAllLevels(), _migratedAirportLevels2026:true, _migratedSplitLevels2026:true, _migratedRestaurantLevels2026:true };
+    state.beginner = { direction:'to_target', level:1, progress: freshProgressAllLevels(), _migratedAirportLevels2026:true, _migratedSplitLevels2026:true, _migratedRestaurantLevels2026:true, _migratedSwapLevels23_2026:true };
   } else if(!state.beginner.progress){
     let oldToTarget, oldToIt;
     if(state.beginner.to_target){
@@ -5863,7 +6267,8 @@ async function loadState(lang){
       progress: freshProgressAllLevels(),
       _migratedAirportLevels2026: true,
       _migratedSplitLevels2026: true,
-      _migratedRestaurantLevels2026: true
+      _migratedRestaurantLevels2026: true,
+      _migratedSwapLevels23_2026: true
     };
     state.beginner.progress[1] = { to_target: oldToTarget, to_it: oldToIt };
   } else {
@@ -5920,7 +6325,20 @@ async function loadState(lang){
       else if(lvl >= 15) state.beginner.level = Math.min(lvl + 3, 27);
       state.beginner._migratedRestaurantLevels2026 = true;
     }
-    for(let lvl=1; lvl<=27; lvl++){
+    if(!state.beginner._migratedSwapLevels23_2026){
+      // Migrazione una tantum: i contenuti dei Livelli 2 e 3 sono stati scambiati (il vecchio
+      // Livello 3, più semplice, ora è il Livello 2). I progressi seguono il contenuto, non il numero.
+      const p2 = state.beginner.progress[2];
+      const p3 = state.beginner.progress[3];
+      if(p2) state.beginner.progress[3] = p2;
+      else delete state.beginner.progress[3];
+      if(p3) state.beginner.progress[2] = p3;
+      else delete state.beginner.progress[2];
+      if(state.beginner.level === 2) state.beginner.level = 3;
+      else if(state.beginner.level === 3) state.beginner.level = 2;
+      state.beginner._migratedSwapLevels23_2026 = true;
+    }
+    for(let lvl=1; lvl<=31; lvl++){
       if(!state.beginner.progress[lvl]) state.beginner.progress[lvl] = { to_target: freshDirState(), to_it: freshDirState() };
     }
     if(!state.beginner.level) state.beginner.level = 1;
@@ -5931,14 +6349,14 @@ async function loadState(lang){
   // già fatti. Per questo teniamo un contatore che sale soltanto, mai calcolato "al volo".
   if(!state.beginner.maxLevelUnlocked){
     let seeded = 1;
-    for(let lvl=1; lvl<=27; lvl++){
+    for(let lvl=1; lvl<=31; lvl++){
       const list = BEGINNER[currentLang] && BEGINNER[currentLang][lvl-1];
       const ds = state.beginner.progress[lvl] && state.beginner.progress[lvl].to_target;
       if(list && ds && ds.index >= list.length){
         seeded = Math.max(seeded, lvl + 1);
       }
     }
-    state.beginner.maxLevelUnlocked = Math.min(seeded, 27);
+    state.beginner.maxLevelUnlocked = Math.min(seeded, 31);
   }
 
   if(!state.sfida){
@@ -6538,7 +6956,7 @@ async function bpAdvance(){
   const list = currentBeginnerList();
   if(state.beginner.direction === 'to_target' && ds.index >= list.length){
     state.beginner.maxLevelUnlocked = Math.max(state.beginner.maxLevelUnlocked || 1, state.beginner.level + 1);
-    state.beginner.maxLevelUnlocked = Math.min(state.beginner.maxLevelUnlocked, 27);
+    state.beginner.maxLevelUnlocked = Math.min(state.beginner.maxLevelUnlocked, 31);
   }
   await saveState(currentLang);
   renderBeginner();
@@ -7325,7 +7743,7 @@ async function computeGlobalStats(){
     stats.totalRipassoReviews += s.ripassoReviewsTotal || 0;
     let exercisesThisLang = (s.done ? s.done.length : 0);
     if(s.beginner && s.beginner.progress){
-      for(let lvl=1; lvl<=27; lvl++){
+      for(let lvl=1; lvl<=31; lvl++){
         const p = s.beginner.progress[lvl];
         if(!p || !p.to_target) continue;
         exercisesThisLang += (p.to_target.completed || 0) + ((p.to_it && p.to_it.completed) || 0);
@@ -7419,6 +7837,7 @@ const CEFR_LEVEL = {
   1:'A1', 2:'A1', 3:'A1', 4:'A2', 5:'A2', 6:'B1', 7:'B1', 8:'B1', 9:'B1', 10:'B2', 11:'B2',
   12:'A1', 13:'A2', 14:'A1', 15:'A2', 16:'A2', 17:'A2',
   18:'A2', 19:'A2', 20:'A2', 21:'A2', 22:'B1', 23:'A2', 24:'A2', 25:'B1', 26:'A2', 27:'B1',
+  28:'A1', 29:'A2', 30:'A2', 31:'A2',
 };
 
 const LEVEL_CHAPTER_LABEL = {
@@ -7438,6 +7857,10 @@ const LEVEL_CHAPTER_LABEL = {
   25: 'In Aeroporto · parte 8',
   26: 'In Aeroporto · parte 9',
   27: 'In Aeroporto · parte 10',
+  28: 'Che Ore Sono · parte 1',
+  29: 'Che Ore Sono · parte 2',
+  30: 'Che Ore Sono · parte 3',
+  31: 'Che Ore Sono · parte 4',
 };
 
 const MAP_NODES = [
@@ -7479,7 +7902,10 @@ const MAP_NODES = [
   { id:'sfida-11', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
   { id:'base-26', label:'Livello 26 · In Aeroporto · parte 9', kind:'percorso', level:26, gating:true },
   { id:'base-27', label:'Livello 27 · In Aeroporto · parte 10', kind:'percorso', level:27, gating:true },
-  { id:'sfida-12', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },
+  { id:'sfida-12', label:'Sfida · Intermedio', kind:'sfida', level:'intermedio', gating:false },  { id:'base-28', label:'Livello 28', kind:'percorso', level:28, gating:true },
+  { id:'base-29', label:'Livello 29', kind:'percorso', level:29, gating:true },
+  { id:'base-30', label:'Livello 30', kind:'percorso', level:30, gating:true },
+  { id:'base-31', label:'Livello 31', kind:'percorso', level:31, gating:true },
 ];
 
 function isMapNodeComplete(node){
@@ -7811,6 +8237,12 @@ function renderMap(){
   wrap.innerHTML = '';
   let prevGateUnlocked = true;
   MAP_NODES.forEach((node, i)=>{
+    if(node.id === 'base-28'){
+      const chOreDivider = document.createElement('div');
+      chOreDivider.className = 'map-chapter-divider';
+      chOreDivider.innerHTML = '<span>&#128337; Che Ore Sono</span>';
+      wrap.appendChild(chOreDivider);
+    }
     if(node.id === 'base-12'){
       const divider = document.createElement('div');
       divider.className = 'map-chapter-divider';
