@@ -6544,6 +6544,18 @@ async function bpAdvance(){
   renderBeginner();
   renderMap();
 }
+// Pronuncia approssimativa per il Percorso Base: non abbiamo un campo fonetico dedicato per
+// ogni frase (a differenza di Impara), quindi riusiamo quello che già esiste altrove nell'app —
+// l'approssimazione "all'italiana" di Traduci per le lingue a scrittura latina, e la
+// traslitterazione già salvata come seconda risposta accettata per le lingue a scrittura diversa.
+function approxPronunciation(item, lang){
+  if(['fr','es','de','en','pt'].includes(lang)){
+    return approxPhonLatin(item.ans[0], lang);
+  }
+  if(item.ans[1]) return item.ans[1];
+  return null;
+}
+
 document.getElementById('bpCheck').onclick = async ()=>{
   const list = currentBeginnerList();
   const dir = state.beginner.direction;
@@ -6566,9 +6578,13 @@ document.getElementById('bpCheck').onclick = async ()=>{
     if(ds.wrong === 0) ds.correctFirstTry++;
     ds.completed++;
     fb.className='bp-feedback ok';
-    fb.textContent = `Corretto ✓  +${gained} punti`;
     if(dir === 'to_target'){
+      const phon = approxPronunciation(item, currentLang);
+      fb.innerHTML = `Corretto ✓  +${gained} punti
+        <div class="sound-tip" style="margin-top:8px; font-style:normal;">Si dice così: <b>${escapeHTML(item.ans[0])}</b>${phon ? `<br>Si pronuncia circa: <b>${escapeHTML(phon)}</b>` : ''}</div>`;
       fb.appendChild(imMakeSpeakBtn(item.ans[0]));
+    } else {
+      fb.textContent = `Corretto ✓  +${gained} punti`;
     }
     await saveState(currentLang);
     if(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser){
@@ -7154,6 +7170,16 @@ function approxPhonLatin(text, lang){
     s = s.replace(/\by\b/g, 'ai');
     s = s.replace(/y\b/g, 'i');
     s = s.replace(/([bcdfgjklmnpqrstvwxz])e\b/g, '$1');
+  } else if(lang === 'pt'){
+    s = s.replace(/ção/g, 'saun');
+    s = s.replace(/ão/g, 'au');
+    s = s.replace(/õe/g, 'oi');
+    s = s.replace(/lh/g, 'li');
+    s = s.replace(/nh/g, 'ni');
+    s = s.replace(/ç/g, 's');
+    s = s.replace(/ch/g, 'sh');
+    s = s.replace(/^r/g, 'rr');
+    s = s.replace(/[áâã]/g, 'a').replace(/[éê]/g, 'e').replace(/í/g, 'i').replace(/[óô]/g, 'o').replace(/ú/g, 'u');
   }
   return s;
 }
@@ -7271,7 +7297,7 @@ const ACHIEVEMENTS = [
   { id:'streak7', icon:'🔥', name:'Serie di 7 giorni', check: s => s.maxStreak >= 7 },
   { id:'streak30', icon:'🔥', name:'Serie di 30 giorni', check: s => s.maxStreak >= 30 },
   { id:'poly3', icon:'🌍', name:'Poliglotta (3 lingue)', check: s => s.languagesWithProgress >= 3 },
-  { id:'poly7', icon:'🗺️', name:'Iperpoliglotta (9 lingue)', check: s => s.languagesWithProgress >= 9 },
+  { id:'poly7', icon:'🗺️', name:'Iperpoliglotta (10 lingue)', check: s => s.languagesWithProgress >= 10 },
   { id:'base10', icon:'🎓', name:'Diplomato Base', check: s => s.maxBaseLevelDone >= 10 },
   { id:'airport', icon:'✈️', name:"Pronto per l'aeroporto", check: s => s.maxBaseLevelDone >= 27 },
   { id:'impara', icon:'🧠', name:'Impara Superstar', check: s => s.imparaFullyDone },
@@ -8483,7 +8509,7 @@ const ONBOARD_SLIDES = [
   },
   {
     title: "Le Quattro Voci",
-    body: "Il nome non si riferisce a quattro lingue — l'app ne gestisce nove. Sono i quattro modi in cui alleni una lingua ogni giorno, e li ritrovi raggruppati proprio così nel menu:<br><br>🎧 <b>Ascolta</b> — comprendi ogni lingua, con audio nativo.<br>🗣️ <b>Parla</b> — pratica e migliora la tua pronuncia.<br>🤝 <b>Interagisci</b> — dialoghi e situazioni reali.<br>📈 <b>Migliora</b> — correggi gli errori, segui i tuoi progressi."
+    body: "Il nome non si riferisce a quattro lingue — l'app ne gestisce dieci. Sono i quattro modi in cui alleni una lingua ogni giorno, e li ritrovi raggruppati proprio così nel menu:<br><br>🎧 <b>Ascolta</b> — comprendi ogni lingua, con audio nativo.<br>🗣️ <b>Parla</b> — pratica e migliora la tua pronuncia.<br>🤝 <b>Interagisci</b> — dialoghi e situazioni reali.<br>📈 <b>Migliora</b> — correggi gli errori, segui i tuoi progressi."
   },
   {
     title: "Undici strumenti, Quattro Voci",
@@ -8522,7 +8548,7 @@ document.getElementById('reviewTutorialBtn').onclick = ()=>{
 };
 function closeOnboard(){
   document.getElementById('onboardModal').classList.add('hidden');
-  try{ localStorage.setItem('qv_onboarding_done_v5', '1'); }catch(e){}
+  try{ localStorage.setItem('qv_onboarding_done_v6', '1'); }catch(e){}
 }
 document.getElementById('obNext').onclick = ()=>{
   if(obIndex < ONBOARD_SLIDES.length - 1){ obIndex++; renderOnboard(); }
@@ -8535,7 +8561,7 @@ document.getElementById('onboardSkip').onclick = closeOnboard;
 
 (function maybeShowOnboarding(){
   try{
-    if(!localStorage.getItem('qv_onboarding_done_v5')){ openOnboard(); }
+    if(!localStorage.getItem('qv_onboarding_done_v6')){ openOnboard(); }
   }catch(e){}
 })();
 
