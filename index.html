@@ -170,6 +170,23 @@
     background: var(--panel-2); border-radius:8px; line-height:1.45; font-style:italic;
   }
 
+  .grammar-box{ margin: 4px 0 14px; }
+  .grammar-toggle{
+    width:100%; text-align:left; background: var(--panel-2); border:1px solid var(--hair);
+    border-radius:10px; padding:10px 12px; color: var(--ink); font-family:'IBM Plex Sans';
+    font-size:13.5px; font-weight:500; cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+  }
+  .grammar-toggle:hover{ border-color: var(--accent); }
+  #grammarChevron{ transition: transform .2s ease; color: var(--ink-dim); }
+  .grammar-toggle.open #grammarChevron{ transform: rotate(180deg); }
+  .grammar-list{
+    list-style:none; margin:8px 0 0; padding:0; display:flex; flex-direction:column; gap:8px;
+  }
+  .grammar-list li{
+    font-size:13px; color: var(--ink-dim); line-height:1.5; padding:9px 12px;
+    background: var(--panel-2); border-radius:8px; border-left:3px solid var(--accent);
+  }
+
   /* registrazione vocale */
   .rec-divider{ height:1px; background: var(--hair); margin: 20px 0 16px; }
   .rec-box{ margin-top:12px; }
@@ -607,6 +624,10 @@
     <span class="tag">Impara la lingua &middot; zona istruzione</span>
     <h2>Scrivi e pronuncia</h2>
     <p class="sub">Il punto di partenza se non conosci ancora questa lingua: leggi la frase, scrivi la traduzione, poi guarda (e ascolta) come si pronuncia. Niente punteggio qui: quando ti senti pronto, vai al <b>Percorso Base</b> per mettere alla prova quello che hai imparato.</p>
+    <div class="grammar-box">
+      <button class="grammar-toggle" id="grammarToggle">📐 Note di grammatica &mdash; <span id="grammarLangName">English</span> <span id="grammarChevron">&#9662;</span></button>
+      <ul class="grammar-list hidden" id="grammarList"></ul>
+    </div>
     <div class="level-tabs" id="imLevelTabs">
       <button data-level="1" class="active">1 &middot; Parole</button>
       <button data-level="2">2 &middot; Frasi semplici</button>
@@ -614,6 +635,8 @@
       <button data-level="4">4 &middot; Vita quotidiana</button>
       <button data-level="5">5 &middot; In viaggio</button>
       <button data-level="6">6 &middot; Lavoro e clienti</button>
+      <button data-level="7">7 &middot; Numeri</button>
+      <button data-level="8">8 &middot; Che ore sono</button>
     </div>
     <div class="level-tabs" id="imDirTabs">
       <button data-dir="to_target" id="imDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -5257,6 +5280,34 @@ const LEARN = {
       {it:"La ringrazio per la pazienza.", ans:["thank you for your patience"], phon:"THENK-iu for ior PEI-shens"},
       {it:"Può firmare qui, per favore?", ans:["could you sign here please"], phon:"cud iu sain hir pliz"},
     ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["zero"], phon:"ZI-ro"},
+      {it:"Uno", ans:["one"], phon:"uan"},
+      {it:"Due", ans:["two"], phon:"tu"},
+      {it:"Tre", ans:["three"], phon:"sri"},
+      {it:"Quattro", ans:["four"], phon:"for"},
+      {it:"Cinque", ans:["five"], phon:"faiv"},
+      {it:"Sei", ans:["six"], phon:"six"},
+      {it:"Sette", ans:["seven"], phon:"SE-ven"},
+      {it:"Otto", ans:["eight"], phon:"eit"},
+      {it:"Nove", ans:["nine"], phon:"nain"},
+      {it:"Dieci", ans:["ten"], phon:"ten"},
+      {it:"Cento", ans:["one hundred"], phon:"uan HAN-dred"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["what time is it?"], phon:"uat taim is it"},
+      {it:"Un'ora", ans:["an hour"], phon:"an AU-ar"},
+      {it:"Un minuto", ans:["a minute"], phon:"a MI-nit"},
+      {it:"Un secondo", ans:["a second"], phon:"a SE-cond"},
+      {it:"Mezzogiorno", ans:["noon"], phon:"nun"},
+      {it:"Mezzanotte", ans:["midnight"], phon:"MID-nait"},
+      {it:"In punto", ans:["o'clock"], phon:"o-CLOK"},
+      {it:"E mezza", ans:["half past"], phon:"haf past"},
+      {it:"Presto", ans:["early"], phon:"ER-li"},
+      {it:"Tardi", ans:["late"], phon:"leit"},
+      {it:"Un quarto d'ora", ans:["a quarter of an hour"], phon:"a KUAR-ter ov an au-ar"},
+      {it:"L'orologio", ans:["the clock"], phon:"de clok"},
+    ],
   ],
   fr: [
     [ // Livello 1
@@ -5353,6 +5404,34 @@ const LEARN = {
       {it:"Abbiamo ricevuto il suo reclamo.", ans:["nous avons bien recu votre reclamation"], phon:"nuz a-VON bien reu-SU VO-tr re-kla-ma-SION"},
       {it:"La ringrazio per la pazienza.", ans:["je vous remercie pour votre patience"], phon:"jeu vu reu-mer-SI pur VO-tr pa-SIANS"},
       {it:"Può firmare qui, per favore?", ans:["pouvez-vous signer ici s'il vous plait","pouvez vous signer ici sil vous plait"], phon:"pu-VE vu si-NIE i-SI sil vu PLE"},
+    ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["zéro","zero"], phon:"ze-RO"},
+      {it:"Uno", ans:["un"], phon:"an"},
+      {it:"Due", ans:["deux"], phon:"deu"},
+      {it:"Tre", ans:["trois"], phon:"trua"},
+      {it:"Quattro", ans:["quatre"], phon:"KA-tr"},
+      {it:"Cinque", ans:["cinq"], phon:"sank"},
+      {it:"Sei", ans:["six"], phon:"sis"},
+      {it:"Sette", ans:["sept"], phon:"set"},
+      {it:"Otto", ans:["huit"], phon:"uit"},
+      {it:"Nove", ans:["neuf"], phon:"neuf"},
+      {it:"Dieci", ans:["dix"], phon:"dis"},
+      {it:"Cento", ans:["cent"], phon:"san"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["quelle heure est-il ?"], phon:"kel eur e til"},
+      {it:"Un'ora", ans:["une heure"], phon:"iun eur"},
+      {it:"Un minuto", ans:["une minute"], phon:"iun mi-NIUT"},
+      {it:"Un secondo", ans:["une seconde"], phon:"iun se-GOND"},
+      {it:"Mezzogiorno", ans:["midi"], phon:"mi-DI"},
+      {it:"Mezzanotte", ans:["minuit"], phon:"mi-NUI"},
+      {it:"In punto", ans:["pile"], phon:"pil"},
+      {it:"E mezza", ans:["et demie"], phon:"e de-MI"},
+      {it:"Presto", ans:["tôt","tot"], phon:"to"},
+      {it:"Tardi", ans:["tard"], phon:"tar"},
+      {it:"Un quarto d'ora", ans:["un quart d'heure"], phon:"an kar deur"},
+      {it:"L'orologio", ans:["l'horloge"], phon:"lor-LOZH"},
     ],
   ],
   es: [
@@ -5451,6 +5530,34 @@ const LEARN = {
       {it:"La ringrazio per la pazienza.", ans:["le agradezco su paciencia"], phon:"le a-gra-DEZ-co su pa-SIEN-sia"},
       {it:"Può firmare qui, per favore?", ans:["puede firmar aqui por favor","puede firmar aquí por favor"], phon:"PUE-de fir-MAR a-KI por fa-VOR"},
     ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["cero"], phon:"SE-ro"},
+      {it:"Uno", ans:["uno"], phon:"U-no"},
+      {it:"Due", ans:["dos"], phon:"dos"},
+      {it:"Tre", ans:["tres"], phon:"tres"},
+      {it:"Quattro", ans:["cuatro"], phon:"KUA-tro"},
+      {it:"Cinque", ans:["cinco"], phon:"SIN-co"},
+      {it:"Sei", ans:["seis"], phon:"seis"},
+      {it:"Sette", ans:["siete"], phon:"si-E-te"},
+      {it:"Otto", ans:["ocho"], phon:"O-cio"},
+      {it:"Nove", ans:["nueve"], phon:"nu-E-ve"},
+      {it:"Dieci", ans:["diez"], phon:"di-ES"},
+      {it:"Cento", ans:["cien"], phon:"si-EN"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["¿qué hora es?","¿que hora es?"], phon:"ke O-ra es"},
+      {it:"Un'ora", ans:["una hora"], phon:"U-na O-ra"},
+      {it:"Un minuto", ans:["un minuto"], phon:"un mi-NU-to"},
+      {it:"Un secondo", ans:["un segundo"], phon:"un se-GUN-do"},
+      {it:"Mezzogiorno", ans:["mediodía","mediodia"], phon:"me-dio-DI-a"},
+      {it:"Mezzanotte", ans:["medianoche"], phon:"me-dia-NO-ce"},
+      {it:"In punto", ans:["en punto"], phon:"en PUN-to"},
+      {it:"E mezza", ans:["y media"], phon:"i ME-dia"},
+      {it:"Presto", ans:["temprano"], phon:"tem-PRA-no"},
+      {it:"Tardi", ans:["tarde"], phon:"TAR-de"},
+      {it:"Un quarto d'ora", ans:["un cuarto de hora"], phon:"un KUAR-to de O-ra"},
+      {it:"L'orologio", ans:["el reloj"], phon:"el re-LOJ"},
+    ],
   ],
   de: [
     [ // Livello 1
@@ -5547,6 +5654,34 @@ const LEARN = {
       {it:"Abbiamo ricevuto il suo reclamo.", ans:["wir haben ihre reklamation erhalten"], phon:"vir HA-ben I-re re-kla-ma-TSION er-HAL-ten"},
       {it:"La ringrazio per la pazienza.", ans:["ich danke ihnen fur ihre geduld","ich danke ihnen für ihre geduld"], phon:"ish DAN-ke I-nen fur I-re ge-DULT"},
       {it:"Può firmare qui, per favore?", ans:["konnen sie bitte hier unterschreiben","können sie bitte hier unterschreiben"], phon:"KOE-nen zi BI-te hir un-ter-SHRAI-ben"},
+    ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["null"], phon:"nul"},
+      {it:"Uno", ans:["eins"], phon:"AINS"},
+      {it:"Due", ans:["zwei"], phon:"TSVAI"},
+      {it:"Tre", ans:["drei"], phon:"DRAI"},
+      {it:"Quattro", ans:["vier"], phon:"FIR"},
+      {it:"Cinque", ans:["fünf","funf"], phon:"FIUNF"},
+      {it:"Sei", ans:["sechs"], phon:"ZEKS"},
+      {it:"Sette", ans:["sieben"], phon:"ZI-ben"},
+      {it:"Otto", ans:["acht"], phon:"AHT"},
+      {it:"Nove", ans:["neun"], phon:"NOIN"},
+      {it:"Dieci", ans:["zehn"], phon:"TSEN"},
+      {it:"Cento", ans:["hundert"], phon:"HUN-dert"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["wie spät ist es?","wie spat ist es?"], phon:"vi shpet ist es"},
+      {it:"Un'ora", ans:["eine stunde"], phon:"AI-ne SHTUN-de"},
+      {it:"Un minuto", ans:["eine minute"], phon:"AI-ne mi-NU-te"},
+      {it:"Un secondo", ans:["eine sekunde"], phon:"AI-ne ze-KUN-de"},
+      {it:"Mezzogiorno", ans:["mittag"], phon:"MI-tak"},
+      {it:"Mezzanotte", ans:["mitternacht"], phon:"MI-ter-naht"},
+      {it:"In punto", ans:["punkt"], phon:"punkt"},
+      {it:"E mezza", ans:["halb"], phon:"halp"},
+      {it:"Presto", ans:["früh","fruh"], phon:"friu"},
+      {it:"Tardi", ans:["spät","spat"], phon:"shpet"},
+      {it:"Un quarto d'ora", ans:["eine viertelstunde"], phon:"AI-ne FIR-tel-shtun-de"},
+      {it:"L'orologio", ans:["die uhr"], phon:"di ur"},
     ],
   ],
   ar: [
@@ -5645,6 +5780,34 @@ const LEARN = {
       {it:"La ringrazio per la pazienza.", ans:["أشكرك على صبرك","ashkuruka ala sabrika"], phon:"ash-KU-ru-ka a-LA SAB-ri-ka"},
       {it:"Può firmare qui, per favore?", ans:["هل يمكنك التوقيع هنا من فضلك","hal yumkinuka at-tawqi huna min fadlik"], phon:"hal yum-KI-nu-ka at-taw-QI HU-na min FAD-lik"},
     ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["صفر","sifr"], phon:"SI-fer"},
+      {it:"Uno", ans:["واحد","wahid"], phon:"UA-hid"},
+      {it:"Due", ans:["اثنان","ithnan"], phon:"it-NAN"},
+      {it:"Tre", ans:["ثلاثة","thalatha"], phon:"tha-LA-tha"},
+      {it:"Quattro", ans:["أربعة","arbaa"], phon:"AR-baa"},
+      {it:"Cinque", ans:["خمسة","khamsa"], phon:"KHAM-sa"},
+      {it:"Sei", ans:["ستة","sitta"], phon:"SIT-ta"},
+      {it:"Sette", ans:["سبعة","sabaa"], phon:"SAB-aa"},
+      {it:"Otto", ans:["ثمانية","thamaniya"], phon:"tha-MA-nia"},
+      {it:"Nove", ans:["تسعة","tisaa"], phon:"TIS-aa"},
+      {it:"Dieci", ans:["عشرة","ashara"], phon:"a-SHA-ra"},
+      {it:"Cento", ans:["مئة","miaa"], phon:"MI-a"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["كم الساعة؟","kam as-saa"], phon:"kam as-SA-a"},
+      {it:"Un'ora", ans:["ساعة","saa"], phon:"SA-a"},
+      {it:"Un minuto", ans:["دقيقة","daqiqa"], phon:"da-QI-qa"},
+      {it:"Un secondo", ans:["ثانية","thania"], phon:"tha-NI-a"},
+      {it:"Mezzogiorno", ans:["الظهر","adh-dhuhr"], phon:"adh-DHUHR"},
+      {it:"Mezzanotte", ans:["منتصف الليل","muntasaf al-layl"], phon:"mun-ta-SAF al-LAIL"},
+      {it:"In punto", ans:["تماما","taman"], phon:"ta-MA-man"},
+      {it:"E mezza", ans:["والنصف","wan-nisf"], phon:"uan-NISF"},
+      {it:"Presto", ans:["مبكرا","mubakkiran"], phon:"mu-BAK-kiran"},
+      {it:"Tardi", ans:["متأخرا","mutaakhiran"], phon:"mu-ta-AKH-khiran"},
+      {it:"Un quarto d'ora", ans:["ربع ساعة","rub saa"], phon:"rub SA-a"},
+      {it:"L'orologio", ans:["الساعة","as-saa"], phon:"as-SA-a"},
+    ],
   ],
   zh: [
     [ // Livello 1
@@ -5741,6 +5904,34 @@ const LEARN = {
       {it:"Abbiamo ricevuto il suo reclamo.", ans:["我们已经收到您的投诉","wo men yi jing shou dao nin de tou su"], phon:"uo men i gin sciou dao nin de tou su"},
       {it:"La ringrazio per la pazienza.", ans:["感谢您的耐心","gan xie nin de nai xin"], phon:"gan sie nin de nai sin"},
       {it:"Può firmare qui, per favore?", ans:["请您在这里签字","qing nin zai zhe li qian zi"], phon:"cing nin dzai ge li cien dzi"},
+    ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["零","ling"], phon:"LING"},
+      {it:"Uno", ans:["一","yi"], phon:"I"},
+      {it:"Due", ans:["二","er"], phon:"ARR"},
+      {it:"Tre", ans:["三","san"], phon:"SAN"},
+      {it:"Quattro", ans:["四","si"], phon:"SZ"},
+      {it:"Cinque", ans:["五","wu"], phon:"U"},
+      {it:"Sei", ans:["六","liu"], phon:"LIÙ"},
+      {it:"Sette", ans:["七","qi"], phon:"CI"},
+      {it:"Otto", ans:["八","ba"], phon:"BA"},
+      {it:"Nove", ans:["九","jiu"], phon:"CIÙ"},
+      {it:"Dieci", ans:["十","shi"], phon:"SCI"},
+      {it:"Cento", ans:["百","bai"], phon:"BAI"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["现在几点？","xian zai ji dian"], phon:"sien-tsai gi-DIEN"},
+      {it:"Un'ora", ans:["一个小时","yi ge xiao shi"], phon:"i ghe sciao-SCI"},
+      {it:"Un minuto", ans:["一分钟","yi fen zhong"], phon:"i fen-GIONG"},
+      {it:"Un secondo", ans:["一秒钟","yi miao zhong"], phon:"i miao-GIONG"},
+      {it:"Mezzogiorno", ans:["中午","zhong wu"], phon:"GIONG-u"},
+      {it:"Mezzanotte", ans:["午夜","wu ye"], phon:"u-IE"},
+      {it:"In punto", ans:["整","zheng"], phon:"GENG"},
+      {it:"E mezza", ans:["半","ban"], phon:"BAN"},
+      {it:"Presto", ans:["早","zao"], phon:"TSAO"},
+      {it:"Tardi", ans:["晚","wan"], phon:"UAN"},
+      {it:"Un quarto d'ora", ans:["一刻钟","yi ke zhong"], phon:"i khe-GIONG"},
+      {it:"L'orologio", ans:["钟表","zhong biao"], phon:"GIONG-biao"},
     ],
   ],
   ja: [
@@ -5839,6 +6030,34 @@ const LEARN = {
       {it:"La ringrazio per la pazienza.", ans:["ご辛抱いただきありがとうございます","goshinbou itadaki arigatou gozaimasu"], phon:"go-scin-bo i-ta-da-ki a-ri-ga-to go-dza-i-mas"},
       {it:"Può firmare qui, per favore?", ans:["ここにサインしていただけますか","koko ni sain shite itadakemasu ka"], phon:"ko-ko ni sa-in sci-te i-ta-da-ke-mas-ka"},
     ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["ゼロ","zero"], phon:"ZE-ro"},
+      {it:"Uno", ans:["一","ichi"], phon:"I-CI"},
+      {it:"Due", ans:["二","ni"], phon:"NI"},
+      {it:"Tre", ans:["三","san"], phon:"SAN"},
+      {it:"Quattro", ans:["四","yon"], phon:"IONN"},
+      {it:"Cinque", ans:["五","go"], phon:"GO"},
+      {it:"Sei", ans:["六","roku"], phon:"RO-ku"},
+      {it:"Sette", ans:["七","nana"], phon:"NA-na"},
+      {it:"Otto", ans:["八","hachi"], phon:"HA-ci"},
+      {it:"Nove", ans:["九","kyuu"], phon:"KIÙ"},
+      {it:"Dieci", ans:["十","juu"], phon:"GIÙ"},
+      {it:"Cento", ans:["百","hyaku"], phon:"HIA-ku"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["今何時ですか？","ima nanji desu ka"], phon:"I-ma NAN-gi DES ka"},
+      {it:"Un'ora", ans:["一時間","ichi jikan"], phon:"I-ci gi-KAN"},
+      {it:"Un minuto", ans:["一分","ippun"], phon:"IP-pun"},
+      {it:"Un secondo", ans:["一秒","ichibyou"], phon:"i-ci-BIÒ"},
+      {it:"Mezzogiorno", ans:["正午","shougo"], phon:"SCIÒ-go"},
+      {it:"Mezzanotte", ans:["真夜中","mayonaka"], phon:"ma-io-NA-ka"},
+      {it:"In punto", ans:["ちょうど","choudo"], phon:"CIÒ-do"},
+      {it:"E mezza", ans:["半","han"], phon:"HAN"},
+      {it:"Presto", ans:["早い","hayai"], phon:"ha-IAI"},
+      {it:"Tardi", ans:["遅い","osoi"], phon:"o-SO-i"},
+      {it:"Un quarto d'ora", ans:["十五分","juugofun"], phon:"giù-go-FUN"},
+      {it:"L'orologio", ans:["時計","tokei"], phon:"to-KEI"},
+    ],
   ],
   ru: [
     [ // Livello 1
@@ -5935,6 +6154,34 @@ const LEARN = {
       {it:"Abbiamo ricevuto il suo reclamo.", ans:["мы получили вашу жалобу","my poluchili vashu zhalobu"], phon:"мы палучи́ли ва́шу жа́лабу"},
       {it:"La ringrazio per la pazienza.", ans:["благодарю вас за терпение","blagodaryu vas za terpeniye"], phon:"благадарю́ вас за тьерпе́ние"},
       {it:"Può firmare qui, per favore?", ans:["распишитесь здесь пожалуйста","raspishites zdes pozhaluysta"], phon:"распиши́тесь здьесь пажа́луста"},
+    ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["Ноль","nol"], phon:"NOL"},
+      {it:"Uno", ans:["Один","odin"], phon:"a-DIN"},
+      {it:"Due", ans:["Два","dva"], phon:"DVA"},
+      {it:"Tre", ans:["Три","tri"], phon:"TRI"},
+      {it:"Quattro", ans:["Четыре","chetyre"], phon:"cet-Y-rie"},
+      {it:"Cinque", ans:["Пять","pyat"], phon:"PIAT"},
+      {it:"Sei", ans:["Шесть","shest"], phon:"SCESCT"},
+      {it:"Sette", ans:["Семь","sem"], phon:"SIEM"},
+      {it:"Otto", ans:["Восемь","vosem"], phon:"VO-siem"},
+      {it:"Nove", ans:["Девять","devyat"], phon:"DIE-viat"},
+      {it:"Dieci", ans:["Десять","desyat"], phon:"DIE-siat"},
+      {it:"Cento", ans:["Сто","sto"], phon:"STO"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["Который час?","kotoryy chas"], phon:"ka-TO-rij cias"},
+      {it:"Un'ora", ans:["Час","chas"], phon:"CIAS"},
+      {it:"Un minuto", ans:["Минута","minuta"], phon:"mi-NU-ta"},
+      {it:"Un secondo", ans:["Секунда","sekunda"], phon:"si-KUN-da"},
+      {it:"Mezzogiorno", ans:["Полдень","polden"], phon:"POL-dien"},
+      {it:"Mezzanotte", ans:["Полночь","polnoch"], phon:"POL-noc"},
+      {it:"In punto", ans:["Ровно","rovno"], phon:"ROV-no"},
+      {it:"E mezza", ans:["Половина","polovina"], phon:"pa-la-VI-na"},
+      {it:"Presto", ans:["Рано","rano"], phon:"RA-no"},
+      {it:"Tardi", ans:["Поздно","pozdno"], phon:"POZ-dno"},
+      {it:"Un quarto d'ora", ans:["Четверть часа","chetvert chasa"], phon:"CET-viert CIA-sa"},
+      {it:"L'orologio", ans:["Часы","chasy"], phon:"cia-SY"},
     ],
   ],
   tr: [
@@ -6033,6 +6280,34 @@ const LEARN = {
       {it:"La ringrazio per la pazienza.", ans:["sabrınız için teşekkür ederim","sabriniz icin tesekkur ederim"], phon:"sab-ri-NIZ i-CIN te-sciuk-kiur e-de-rim"},
       {it:"Può firmare qui, per favore?", ans:["burayı imzalayabilir misiniz lütfen","burayi imzalayabilir misiniz lutfen"], phon:"bu-ra-YI im-za-la-ya-bi-lir mi-si-niz liut-fen"},
     ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["sıfır"], phon:"si-FIR"},
+      {it:"Uno", ans:["bir"], phon:"BIR"},
+      {it:"Due", ans:["i̇ki","iki"], phon:"i-KI"},
+      {it:"Tre", ans:["üç","uc"], phon:"UCC"},
+      {it:"Quattro", ans:["dört","dort"], phon:"DEURT"},
+      {it:"Cinque", ans:["beş","bes"], phon:"BESC"},
+      {it:"Sei", ans:["altı","alti"], phon:"al-TI"},
+      {it:"Sette", ans:["yedi"], phon:"ie-DI"},
+      {it:"Otto", ans:["sekiz"], phon:"se-KIZ"},
+      {it:"Nove", ans:["dokuz"], phon:"do-KUZ"},
+      {it:"Dieci", ans:["on"], phon:"ON"},
+      {it:"Cento", ans:["yüz","yuz"], phon:"IUZ"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["saat kaç?","saat kac?"], phon:"sa-AT kacc"},
+      {it:"Un'ora", ans:["bir saat"], phon:"bir sa-AT"},
+      {it:"Un minuto", ans:["bir dakika"], phon:"bir da-ki-KA"},
+      {it:"Un secondo", ans:["bir saniye"], phon:"bir sa-ni-IE"},
+      {it:"Mezzogiorno", ans:["öğlen","oglen"], phon:"EU-len"},
+      {it:"Mezzanotte", ans:["gece yarısı","gece yarisi"], phon:"ghe-GE ia-RI-si"},
+      {it:"In punto", ans:["tam"], phon:"TAM"},
+      {it:"E mezza", ans:["buçuk","bucuk"], phon:"bu-CIUK"},
+      {it:"Presto", ans:["erken"], phon:"er-KEN"},
+      {it:"Tardi", ans:["geç","gec"], phon:"GECC"},
+      {it:"Un quarto d'ora", ans:["çeyrek saat","ceyrek saat"], phon:"ceI-rek sa-AT"},
+      {it:"L'orologio", ans:["saat"], phon:"sa-AT"},
+    ],
   ],
   pt: [
     [ // Livello 1
@@ -6129,6 +6404,34 @@ const LEARN = {
       {it:"Abbiamo ricevuto il suo reclamo.", ans:["recebemos sua reclamação.","recebemos sua reclamacao."], phon:"re-ce-BE-mus SU-a re-cla-ma-SAUN"},
       {it:"La ringrazio per la pazienza.", ans:["agradeço pela paciência.","agradeco pela paciencia."], phon:"a-gra-DE-su PE-la pa-si-EN-sia"},
       {it:"Può firmare qui, per favore?", ans:["pode assinar aqui, por favor?"], phon:"PO-dgi as-si-NAR a-QUI por fa-VOR"},
+    ],
+    [ // Livello 7 (Numeri)
+      {it:"Zero", ans:["zero"], phon:"ZE-ru"},
+      {it:"Uno", ans:["um"], phon:"UN"},
+      {it:"Due", ans:["dois"], phon:"DOIS"},
+      {it:"Tre", ans:["três","tres"], phon:"TRES"},
+      {it:"Quattro", ans:["quatro"], phon:"QUA-tru"},
+      {it:"Cinque", ans:["cinco"], phon:"SIN-cu"},
+      {it:"Sei", ans:["seis"], phon:"SEIS"},
+      {it:"Sette", ans:["sete"], phon:"SE-tchi"},
+      {it:"Otto", ans:["oito"], phon:"OI-tu"},
+      {it:"Nove", ans:["nove"], phon:"NO-vi"},
+      {it:"Dieci", ans:["dez"], phon:"DES"},
+      {it:"Cento", ans:["cem"], phon:"SEIN"},
+    ],
+    [ // Livello 8 (Che ore sono)
+      {it:"Che ore sono?", ans:["que horas são?","que horas sao?"], phon:"ki O-ras saun"},
+      {it:"Un'ora", ans:["uma hora"], phon:"U-ma O-ra"},
+      {it:"Un minuto", ans:["um minuto"], phon:"un mi-NU-tu"},
+      {it:"Un secondo", ans:["um segundo"], phon:"un se-GUN-du"},
+      {it:"Mezzogiorno", ans:["meio-dia"], phon:"MEI-u DGI-a"},
+      {it:"Mezzanotte", ans:["meia-noite"], phon:"MEI-a NOI-tchi"},
+      {it:"In punto", ans:["em ponto"], phon:"ein PON-tu"},
+      {it:"E mezza", ans:["e meia"], phon:"i MEI-a"},
+      {it:"Presto", ans:["cedo"], phon:"SE-du"},
+      {it:"Tardi", ans:["tarde"], phon:"TAR-dgi"},
+      {it:"Un quarto d'ora", ans:["um quarto de hora"], phon:"un KUAR-tu dgi O-ra"},
+      {it:"L'orologio", ans:["o relógio","o relogio"], phon:"u re-LO-djiu"},
     ],
   ],
 };
@@ -6369,7 +6672,8 @@ async function loadState(lang){
       progress:{
         1:{to_target:{index:0}, to_it:{index:0}}, 2:{to_target:{index:0}, to_it:{index:0}},
         3:{to_target:{index:0}, to_it:{index:0}}, 4:{to_target:{index:0}, to_it:{index:0}},
-        5:{to_target:{index:0}, to_it:{index:0}}, 6:{to_target:{index:0}, to_it:{index:0}}
+        5:{to_target:{index:0}, to_it:{index:0}}, 6:{to_target:{index:0}, to_it:{index:0}},
+        7:{to_target:{index:0}, to_it:{index:0}}, 8:{to_target:{index:0}, to_it:{index:0}}
       }
     };
   } else {
@@ -6389,7 +6693,7 @@ async function loadState(lang){
       if(state.impara.level >= 2) state.impara.level = Math.min(state.impara.level + 1, 6);
       state.impara._migratedLevels2026 = true;
     }
-    [1,2,3,4,5,6].forEach(lvl=>{
+    [1,2,3,4,5,6,7,8].forEach(lvl=>{
       if(!state.impara.progress[lvl]) state.impara.progress[lvl] = { to_target:{index:0}, to_it:{index:0} };
       else {
         if(!state.impara.progress[lvl].to_target) state.impara.progress[lvl].to_target = {index:0};
@@ -7066,7 +7370,97 @@ function imMakeSpeakBtn(text){
   return speakBtn;
 }
 
+const GRAMMAR_NOTES = {
+  en: [
+    "Ordine delle parole quasi fisso: soggetto + verbo + oggetto, anche nelle domande cambia poco.",
+    "Niente genere per i nomi: \"the\" funziona per maschile, femminile e plurale.",
+    "Il verbo cambia pochissimo: solo una \"-s\" alla terza persona singolare al presente (\"I speak\" &rarr; \"he speaks\").",
+    "Le domande si formano spesso con \"do/does\" + soggetto + verbo base (\"Do you speak English?\").",
+    "Per il futuro spesso basta \"will\" + verbo base, senza coniugare nulla.",
+  ],
+  fr: [
+    "Ogni nome ha un genere (maschile/femminile) e l'articolo deve concordare: \"le\" o \"la\".",
+    "Gli aggettivi di solito vanno dopo il nome, non prima (\"une maison bleue\").",
+    "Il verbo cambia in base al soggetto: forme diverse per je/tu/il/nous/vous/ils.",
+    "La negazione racchiude il verbo: \"ne...pas\" (\"je ne sais pas\").",
+    "Molte lettere finali scritte non si pronunciano.",
+  ],
+  es: [
+    "Ogni nome ha un genere e l'articolo concorda: \"el\" (maschile) o \"la\" (femminile).",
+    "Esistono due verbi per \"essere\": \"ser\" (permanente) e \"estar\" (temporaneo/stato).",
+    "Il verbo cambia per ogni persona; il soggetto si può spesso omettere (\"hablo\" = io parlo).",
+    "Gli aggettivi di solito vanno dopo il nome (\"una casa grande\").",
+    "Domande ed esclamazioni si aprono anche con il segno capovolto: ¿ e ¡.",
+  ],
+  de: [
+    "Ogni nome ha un genere (der/die/das) e va imparato a memoria insieme alla parola.",
+    "Tutti i nomi si scrivono sempre con la lettera maiuscola.",
+    "Nelle frasi principali il verbo coniugato va quasi sempre al secondo posto.",
+    "Nomi, articoli e aggettivi cambiano forma secondo il ruolo nella frase (i \"casi\").",
+    "Nei verbi con prefisso separabile, il prefisso finisce spesso in fondo alla frase.",
+  ],
+  pt: [
+    "Ogni nome ha un genere e l'articolo concorda: \"o\" (maschile) o \"a\" (femminile).",
+    "Il verbo cambia per ogni persona; il soggetto si può spesso omettere (\"falo\" = io parlo).",
+    "Come lo spagnolo, ha due verbi per \"essere\": \"ser\" (permanente) e \"estar\" (temporaneo).",
+    "Gli aggettivi di solito vanno dopo il nome (\"uma casa grande\").",
+    "La nasalizzazione (ão, õe) si scrive con la tilde o con \"m/n\" finale.",
+  ],
+  ar: [
+    "Si scrive e si legge da destra a sinistra.",
+    "I nomi hanno un genere; il femminile è spesso riconoscibile da una ة finale.",
+    "Le parole nascono da una \"radice\" di 3 consonanti che porta il significato di base.",
+    "Niente verbo \"essere\" al presente nelle frasi semplici: \"io felice\" invece di \"io sono felice\".",
+    "Il plurale spesso cambia la parola in modo irregolare, non aggiunge solo una desinenza.",
+  ],
+  zh: [
+    "I verbi non si coniugano mai: stessa forma per io, tu, lui, noi, sempre.",
+    "Il tempo (passato/futuro) si indica con parole extra (\"ieri\", \"domani\"), non cambiando il verbo.",
+    "Ogni sillaba ha un tono: la stessa sillaba con tono diverso cambia significato.",
+    "Non esistono articoli come \"il/la/un\": il sostantivo si usa da solo.",
+    "Ordine delle parole simile all'italiano: soggetto + verbo + oggetto.",
+  ],
+  ja: [
+    "L'ordine delle parole è soggetto + oggetto + verbo: il verbo va sempre alla fine.",
+    "Le particelle (piccole parole come は, を, に) indicano il ruolo di ogni parola nella frase.",
+    "Non ci sono articoli (\"il/la/un\") né distinzione singolare/plurale nei nomi.",
+    "Esistono livelli di formalità diversi: si parla in modo diverso con amici o superiori.",
+    "Si scrive con tre sistemi insieme: hiragana, katakana e kanji.",
+  ],
+  ru: [
+    "Niente articoli (\"il/la/un\"): il sostantivo si usa da solo, il contesto chiarisce il resto.",
+    "I nomi cambiano finale a seconda del ruolo nella frase (i \"casi\"), non solo per il plurale.",
+    "Il verbo \"essere\" al presente di solito si omette: \"io felice\" invece di \"io sono felice\".",
+    "Ogni verbo ha due forme diverse (aspetto): una per azioni complete, una per azioni in corso.",
+    "Alcune lettere cirilliche sembrano latine ma si leggono diversamente (es. \"Р\" si legge \"R\").",
+  ],
+  tr: [
+    "Il verbo va quasi sempre alla fine della frase.",
+    "Non esiste il genere grammaticale: stessa parola per \"lui\" e \"lei\" (o).",
+    "Il turco aggiunge tanti suffissi a una stessa parola invece di usare parole separate.",
+    "Vale l'armonia vocalica: i suffissi cambiano vocale per \"intonarsi\" con l'ultima vocale della parola.",
+    "Non ci sono articoli come \"il/la/un\".",
+  ],
+};
+
+function renderGrammarNotes(){
+  const nameEl = document.getElementById('grammarLangName');
+  const listEl = document.getElementById('grammarList');
+  if(!nameEl || !listEl) return;
+  nameEl.textContent = LANGS[currentLang].label;
+  const notes = GRAMMAR_NOTES[currentLang] || [];
+  listEl.innerHTML = notes.map(n => `<li>${n}</li>`).join('');
+}
+document.getElementById('grammarToggle').onclick = ()=>{
+  const btn = document.getElementById('grammarToggle');
+  const list = document.getElementById('grammarList');
+  const opening = list.classList.contains('hidden');
+  list.classList.toggle('hidden');
+  btn.classList.toggle('open', opening);
+};
+
 function renderImpara(){
+  renderGrammarNotes();
   const list = currentImparaList();
   const level = state.impara.level;
   const dir = state.impara.direction;
@@ -7759,7 +8153,7 @@ async function computeGlobalStats(){
     stats.totalExercises += exercisesThisLang;
     if(s.impara && s.impara.progress){
       let allDone = true;
-      for(let lvl=1; lvl<=6; lvl++){
+      for(let lvl=1; lvl<=8; lvl++){
         const p = s.impara.progress[lvl];
         const listLen = (LEARN[lang] && LEARN[lang][lvl-1]) ? LEARN[lang][lvl-1].length : null;
         if(!p || !listLen || !p.to_target || !p.to_it || p.to_target.index < listLen || p.to_it.index < listLen){
