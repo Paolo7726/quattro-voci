@@ -83,7 +83,7 @@
     display:flex; align-items:center; opacity:0; transition:opacity .25s ease;
     font-family:'IBM Plex Sans', sans-serif; font-size:15px; font-weight:700; color: var(--accent);
   }
-  .scroll-fade.show{ opacity:1; }
+  .scroll-fade.show{ opacity:1; pointer-events:auto; cursor:pointer; }
   .scroll-fade.left{ left:0; justify-content:flex-start; padding-left:6px;
     background: linear-gradient(to right, var(--panel) 35%, transparent); border-radius:999px 0 0 999px; }
   .scroll-fade.right{ right:0; justify-content:flex-end; padding-right:6px;
@@ -628,6 +628,7 @@
       <button class="grammar-toggle" id="grammarToggle">📐 Note di grammatica &mdash; <span id="grammarLangName">English</span> <span id="grammarChevron">&#9662;</span></button>
       <ul class="grammar-list hidden" id="grammarList"></ul>
     </div>
+    <div class="scroll-hint-wrap" id="imLevelTabsWrap">
     <div class="level-tabs" id="imLevelTabs">
       <button data-level="1" class="active">1 &middot; Parole</button>
       <button data-level="2">2 &middot; Frasi semplici</button>
@@ -637,6 +638,9 @@
       <button data-level="6">6 &middot; Lavoro e clienti</button>
       <button data-level="7">7 &middot; Numeri</button>
       <button data-level="8">8 &middot; Che ore sono</button>
+    </div>
+    <div class="scroll-fade left"></div>
+    <div class="scroll-fade right"></div>
     </div>
     <div class="level-tabs" id="imDirTabs">
       <button data-dir="to_target" id="imDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -845,6 +849,7 @@
       <p class="sub" style="margin-top:-8px; font-size:12px;">La sigla accanto al livello (A1, A2, B1&hellip;) è il <b>Quadro Comune Europeo</b>: indicativa, dal più semplice (A1) al più avanzato (C2).</p>
       <div id="placementResultBox"></div>
       <button class="ghost" id="placementStartBtn" style="width:100%; margin-bottom:14px;">🎯 Non sai da che livello iniziare? Fai il test d'ingresso</button>
+      <div class="scroll-hint-wrap" id="bpLevelTabsWrap">
       <div class="level-tabs" id="bpLevelTabs">
         <button data-level="1" class="active">Livello 1</button>
         <button data-level="2">Livello 2</button>
@@ -877,6 +882,9 @@
         <button data-level="29">Livello 29</button>
         <button data-level="30">Livello 30</button>
         <button data-level="31">Livello 31</button>
+      </div>
+      <div class="scroll-fade left"></div>
+      <div class="scroll-fade right"></div>
       </div>
       <div class="level-tabs" id="bpDirTabs">
         <button data-dir="to_target" id="bpDirToTarget" class="active">Italiano &rarr; Lingua</button>
@@ -9034,6 +9042,10 @@ function setupScrollHint(scrollEl, wrapId){
     left.classList.toggle('show', canLeft);
     right.classList.toggle('show', canRight);
   }
+  // Le frecce non sono solo un indizio visivo: su PC, senza trackpad o schermo touch,
+  // sono l'unico modo comodo per scorrere l'elenco. Un clic scorre di circa una "schermata".
+  left.onclick = ()=> scrollEl.scrollBy({ left: -scrollEl.clientWidth * 0.7, behavior:'smooth' });
+  right.onclick = ()=> scrollEl.scrollBy({ left: scrollEl.clientWidth * 0.7, behavior:'smooth' });
   scrollEl.addEventListener('scroll', update, { passive:true });
   window.addEventListener('resize', update);
   window.addEventListener('load', update);
@@ -9042,6 +9054,8 @@ function setupScrollHint(scrollEl, wrapId){
 }
 setupScrollHint(document.getElementById('ring'), 'ringWrap');
 setupScrollHint(document.querySelector('nav.tabs'), 'navWrap');
+setupScrollHint(document.getElementById('imLevelTabs'), 'imLevelTabsWrap');
+setupScrollHint(document.getElementById('bpLevelTabs'), 'bpLevelTabsWrap');
 
 /* Registra il service worker solo se disponibile (non nell'ambiente artifact di Claude) */
 if('serviceWorker' in navigator){
