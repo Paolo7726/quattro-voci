@@ -8959,6 +8959,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     btn.classList.add('active');
     document.querySelectorAll('.card').forEach(c=>c.classList.add('hidden'));
     document.getElementById('tab-'+btn.dataset.tab).classList.remove('hidden');
+    if(typeof refreshScrollHintsFor === 'function') refreshScrollHintsFor(btn.dataset.tab);
     if(btn.dataset.tab === 'mappa' && typeof renderLeaderboard === 'function'){
       renderLeaderboard();
     }
@@ -9031,6 +9032,7 @@ function maybeShowPracticeReminder(){
 })();
 
 /* Indicatori "si può scorrere" per l'anello lingue e la barra di navigazione */
+const scrollHintUpdaters = {};
 function setupScrollHint(scrollEl, wrapId){
   if(!scrollEl) return;
   const wrap = document.getElementById(wrapId);
@@ -9051,11 +9053,18 @@ function setupScrollHint(scrollEl, wrapId){
   window.addEventListener('load', update);
   update();
   setTimeout(update, 300); // dopo che i font sono caricati e le larghezze si sono assestate
+  scrollHintUpdaters[wrapId] = update;
 }
 setupScrollHint(document.getElementById('ring'), 'ringWrap');
 setupScrollHint(document.querySelector('nav.tabs'), 'navWrap');
 setupScrollHint(document.getElementById('imLevelTabs'), 'imLevelTabsWrap');
 setupScrollHint(document.getElementById('bpLevelTabs'), 'bpLevelTabsWrap');
+// Un tab nascosto (display:none) misura sempre larghezza zero: quando l'utente lo apre per la
+// prima volta va ricalcolato da capo, altrimenti le frecce restano bloccate nello stato iniziale.
+function refreshScrollHintsFor(tabName){
+  if(tabName === 'impara' && scrollHintUpdaters['imLevelTabsWrap']) scrollHintUpdaters['imLevelTabsWrap']();
+  if(tabName === 'mappa' && scrollHintUpdaters['bpLevelTabsWrap']) scrollHintUpdaters['bpLevelTabsWrap']();
+}
 
 /* Registra il service worker solo se disponibile (non nell'ambiente artifact di Claude) */
 if('serviceWorker' in navigator){
