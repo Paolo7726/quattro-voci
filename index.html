@@ -73,6 +73,8 @@
     transition: color .3s ease, background-color .3s ease;
   }
   .voice-btn .script{ display:block; font-size: 17px; margin-bottom:2px; line-height:1; }
+  .voice-btn .flag-icon{ display:flex; justify-content:center; margin-bottom:3px; }
+  .voice-btn .flag-icon svg{ width:22px; height:15.4px; border-radius:2px; box-shadow: 0 0 0 1px rgba(0,0,0,0.15); display:block; }
   .voice-btn.active{ color: #17140F; background: var(--accent); font-weight:600; }
   .voice-abbr{ font-size:11px; opacity:.75; font-weight:500; }
 
@@ -527,7 +529,7 @@
     </div>
     <div class="streak">
       <span>Serie di pratica &mdash; <b id="langLabel">English</b></span>
-      <span><span class="flame">&#9679;</span> <b id="streakCount">0</b> giorni</span>
+      <span><span class="flame">&#9679;</span> <b id="streakCount">0</b> giorni<span id="streakFreezeBadge"></span></span>
     </div>
   </header>
 
@@ -708,8 +710,9 @@
     <p class="sub" id="oggiSubline">Bastano pochi minuti.</p>
     <div class="streak" style="margin-top:0; margin-bottom:14px;">
       <span>Serie di pratica</span>
-      <span><span class="flame">&#9679;</span> <b id="oggiStreakCount">0</b> giorni</span>
+      <span><span class="flame">&#9679;</span> <b id="oggiStreakCount">0</b> giorni<span id="oggiFreezeBadge"></span></span>
     </div>
+    <div id="oggiFreezeNotice"></div>
     <div class="mascot-box" style="margin-bottom:14px;">
       <div class="mascot-avatar">
         <svg viewBox="0 0 64 64" width="44" height="44">
@@ -923,8 +926,12 @@
 
       <div class="lb-divider"></div>
       <div class="lb-head">
-        <span class="tag" style="margin-bottom:0;">Classifica &middot; punti totali</span>
+        <span class="tag" style="margin-bottom:0;" id="lbTitleTag">Classifica &middot; questa settimana</span>
         <button class="ghost" id="lbRefresh" style="padding:6px 12px; font-size:12px;">Aggiorna</button>
+      </div>
+      <div class="level-tabs" id="lbModeTabs" style="margin-bottom:10px;">
+        <button data-mode="weekly" class="active">Questa settimana</button>
+        <button data-mode="alltime">Punti totali</button>
       </div>
       <div id="leaderboardLoggedOut" class="empty">Accedi o registrati (icona in alto a destra) per partecipare alla classifica e vedere come ti posizioni rispetto agli altri.</div>
       <div id="leaderboardList" class="hidden"></div>
@@ -1100,6 +1107,22 @@
 
 <script>
 /* ---------- DATA ---------- */
+// Bandiere disegnate a mano come SVG, non emoji: su alcuni sistemi (in particolare Windows) le
+// emoji-bandiera non vengono disegnate come immagini ma solo come le due lettere del codice
+// paese. Un SVG appare identico su ogni dispositivo, senza dipendere dal font del sistema.
+const FLAG_SVG = {
+  en: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#00247d"/><path d="M0,0 L20,14 M20,0 L0,14" stroke="#fff" stroke-width="2.6"/><path d="M0,0 L20,14 M20,0 L0,14" stroke="#cf142b" stroke-width="0.9"/><path d="M10,0 V14 M0,7 H20" stroke="#fff" stroke-width="4.2"/><path d="M10,0 V14 M0,7 H20" stroke="#cf142b" stroke-width="2.5"/></svg>',
+  fr: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="6.67" height="14" fill="#0055A4"/><rect x="6.67" width="6.67" height="14" fill="#fff"/><rect x="13.33" width="6.67" height="14" fill="#EF4135"/></svg>',
+  es: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#AA151B"/><rect y="3.5" width="20" height="7" fill="#F1BF00"/></svg>',
+  de: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="4.67" fill="#000"/><rect y="4.67" width="20" height="4.67" fill="#DD0000"/><rect y="9.33" width="20" height="4.67" fill="#FFCE00"/></svg>',
+  pt: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#009739"/><polygon points="10,1.5 18.5,7 10,12.5 1.5,7" fill="#FEDD00"/><circle cx="10" cy="7" r="3.2" fill="#012169"/></svg>',
+  ar: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#006C35"/><rect x="3" y="6.2" width="12" height="1.6" fill="#fff"/></svg>',
+  zh: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#DE2910"/><polygon points="3,2 3.6,3.8 5.5,3.8 4,5 4.6,6.8 3,5.7 1.4,6.8 2,5 0.5,3.8 2.4,3.8" fill="#FFDE00"/></svg>',
+  ja: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#fff"/><circle cx="10" cy="7" r="4" fill="#BC002D"/></svg>',
+  ru: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="4.67" fill="#fff"/><rect y="4.67" width="20" height="4.67" fill="#0039A6"/><rect y="9.33" width="20" height="4.67" fill="#D52B1E"/></svg>',
+  tr: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#E30A17"/><circle cx="8" cy="7" r="3.2" fill="#fff"/><circle cx="9" cy="7" r="2.6" fill="#E30A17"/><polygon points="12,5.5 12.9,7 12,8.5 13.2,7.7 14.3,8.6 13.9,7.2 15,6.3 13.6,6.3 13.2,4.9" fill="#fff"/></svg>',
+};
+
 const LANGS = {
   en: {
     label:'English', script:'En', flag:'🇬🇧', word:'Voices', accent:'#5EA8A0', dir:'ltr', rtlText:false,
@@ -6728,6 +6751,8 @@ async function loadState(lang){
     if(!state.impara.level) state.impara.level = 1;
   }
 
+  if(state.streakFreezes === undefined) state.streakFreezes = 1; // un congelatore in regalo per iniziare
+
   if(!state.mistakes) state.mistakes = [];
   // Migrazione: chi aveva già errori salvati prima della ripetizione dilazionata
   // li ritrova subito pronti da ripassare (nessuno resta "in sospeso" senza programmazione).
@@ -6755,7 +6780,8 @@ function renderRing(){
   Object.entries(LANGS).forEach(([key, l])=>{
     const btn = document.createElement('button');
     btn.className = 'voice-btn' + (key===currentLang ? ' active':'');
-    btn.innerHTML = `<span class="script">${l.flag || l.script}</span>${l.label}${l.abbr ? ` <span class="voice-abbr">(${l.abbr})</span>` : ''}`;
+    const flagHtml = FLAG_SVG[key] ? `<span class="flag-icon">${FLAG_SVG[key]}</span>` : `<span class="script">${l.script}</span>`;
+    btn.innerHTML = `${flagHtml}${l.label}${l.abbr ? ` <span class="voice-abbr">(${l.abbr})</span>` : ''}`;
     btn.onclick = ()=> switchLang(key);
     ring.appendChild(btn);
   });
@@ -6793,6 +6819,11 @@ async function switchLang(key){
 
 function renderStreak(){
   document.getElementById('streakCount').textContent = state.streak;
+  const badge = document.getElementById('streakFreezeBadge');
+  if(badge){
+    const n = state.streakFreezes || 0;
+    badge.innerHTML = n > 0 ? ` &middot; ❄️${n}` : '';
+  }
 }
 
 /* ---------- SFIDA ---------- */
@@ -6857,14 +6888,44 @@ document.querySelectorAll('#sfidaDirTabs button').forEach(btn=>{
     renderChallenge();
   };
 });
+// Aggiorna la streak quando l'utente completa l'azione che conta per la serie (oggi solo Sfida).
+// Se manca un giorno solo e hai almeno un congelatore disponibile, la serie viene salvata invece
+// di azzerarsi — un piccolo margine di tolleranza, come in molte app di abitudini.
+function updateStreakOnActivity(){
+  const today = todayStr();
+  if(state.lastDate === today) return { changed:false, freezeUsed:false, freezeEarned:false };
+  let daysSince = null;
+  if(state.lastDate){
+    const last = new Date(state.lastDate + 'T00:00:00');
+    const now = new Date(today + 'T00:00:00');
+    daysSince = Math.round((now - last) / 86400000);
+  }
+  let freezeUsed = false;
+  if(daysSince === 1){
+    state.streak = (state.streak || 0) + 1;
+  } else if(daysSince === 2 && (state.streakFreezes||0) > 0){
+    state.streakFreezes--;
+    state.streak = (state.streak || 0) + 1;
+    freezeUsed = true;
+  } else {
+    state.streak = 1;
+  }
+  state.lastDate = today;
+  let freezeEarned = false;
+  if(state.streak > 0 && state.streak % 7 === 0 && (state.streakFreezes||0) < 2){
+    state.streakFreezes = Math.min((state.streakFreezes||0) + 1, 2);
+    freezeEarned = true;
+  }
+  if(freezeUsed) state.freezeJustUsedNotice = true;
+  if(freezeEarned) state.freezeJustEarnedNotice = true;
+  return { changed:true, freezeUsed, freezeEarned };
+}
+
 document.getElementById('btnDone').onclick = async ()=>{
   const key = todayStr()+':'+state.sfida.level+':'+currentSlot;
   if(state.done.includes(key)) return;
   state.done.push(key);
-  const y = new Date(); y.setDate(y.getDate()-1);
-  const wasYesterday = state.lastDate === y.toISOString().slice(0,10);
-  state.streak = (state.lastDate === todayStr()) ? state.streak : (wasYesterday ? state.streak+1 : 1);
-  state.lastDate = todayStr();
+  updateStreakOnActivity();
   checkMissionsComplete();
   await saveState(currentLang);
   renderStreak(); renderChallenge(); renderHistory(); renderMap();
@@ -8763,6 +8824,26 @@ async function renderOggi(){
     ? `Oggi bastano ${totalMinutes} minuti in ${LANGS[currentLang].label}.`
     : `Hai già completato quello che avevi in programma in ${LANGS[currentLang].label} oggi.`;
   document.getElementById('oggiStreakCount').textContent = state.streak;
+  const oggiFreezeBadge = document.getElementById('oggiFreezeBadge');
+  if(oggiFreezeBadge){
+    const n = state.streakFreezes || 0;
+    oggiFreezeBadge.innerHTML = n > 0 ? ` &middot; ❄️${n}` : '';
+  }
+  const freezeNoticeEl = document.getElementById('oggiFreezeNotice');
+  const oggiTabVisible = !document.getElementById('tab-oggi').classList.contains('hidden');
+  if(freezeNoticeEl){
+    if(state.freezeJustUsedNotice && oggiTabVisible){
+      freezeNoticeEl.innerHTML = `<div class="sound-tip" style="font-style:normal; margin-bottom:12px;">❄️ Avevi saltato un giorno: il tuo congelatore ha salvato la serie. Te ne resta${(state.streakFreezes===1)?'':'no'} ${state.streakFreezes}.</div>`;
+      state.freezeJustUsedNotice = false;
+      saveState(currentLang);
+    } else if(state.freezeJustEarnedNotice && oggiTabVisible){
+      freezeNoticeEl.innerHTML = `<div class="sound-tip" style="font-style:normal; margin-bottom:12px;">❄️ Nuovo congelatore guadagnato per la serie di ${state.streak} giorni! Ti proteggerà se un giorno dovessi saltare.</div>`;
+      state.freezeJustEarnedNotice = false;
+      saveState(currentLang);
+    } else if(!state.freezeJustUsedNotice && !state.freezeJustEarnedNotice){
+      freezeNoticeEl.innerHTML = '';
+    }
+  }
 
   const cardsBox = document.getElementById('oggiCards');
   if(tasks.length === 0){
@@ -9494,6 +9575,8 @@ async function syncAllLanguagesFromCloud(){
 }
 
 /* ---------- CLASSIFICA ---------- */
+let leaderboardMode = 'weekly';
+
 async function renderLeaderboard(){
   const loggedOutEl = document.getElementById('leaderboardLoggedOut');
   const listEl = document.getElementById('leaderboardList');
@@ -9503,19 +9586,25 @@ async function renderLeaderboard(){
   if(!loggedIn) return;
   listEl.innerHTML = '<div class="empty">Carico la classifica...</div>';
   listEl.classList.remove('hidden');
+  document.getElementById('lbTitleTag').textContent = leaderboardMode === 'weekly' ? 'Classifica · questa settimana' : 'Classifica · punti totali';
   try{
-    const rows = await window.cloudAPI.getLeaderboard(15);
+    const rows = leaderboardMode === 'weekly'
+      ? await window.cloudAPI.getWeeklyLeaderboard(15)
+      : await window.cloudAPI.getLeaderboard(15);
     if(rows.length === 0){
-      listEl.innerHTML = '<div class="empty">Ancora nessun punteggio in classifica. Fai qualche frase nel percorso per essere il primo!</div>';
+      listEl.innerHTML = leaderboardMode === 'weekly'
+        ? '<div class="empty">Nessun punteggio ancora questa settimana. Fai qualche frase per essere il primo!</div>'
+        : '<div class="empty">Ancora nessun punteggio in classifica. Fai qualche frase nel percorso per essere il primo!</div>';
       return;
     }
     const myUid = window.cloudAPI.currentUser.uid;
+    const scoreField = leaderboardMode === 'weekly' ? 'score' : 'totalScore';
     listEl.innerHTML = rows.map((r, i)=>{
       const isMe = r.uid === myUid;
       return `<div class="lb-row${isMe ? ' me':''}">
         <span class="lb-rank">#${i+1}</span>
         <span class="lb-name">${escapeHTML(r.nickname||'Anonimo')}${isMe ? ' (tu)':''}</span>
-        <span class="lb-score">${r.totalScore||0}</span>
+        <span class="lb-score">${r[scoreField]||0}</span>
       </div>`;
     }).join('');
   }catch(e){
@@ -9524,6 +9613,13 @@ async function renderLeaderboard(){
   }
 }
 document.getElementById('lbRefresh').onclick = renderLeaderboard;
+document.querySelectorAll('#lbModeTabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    leaderboardMode = btn.dataset.mode;
+    document.querySelectorAll('#lbModeTabs button').forEach(b=>b.classList.toggle('active', b===btn));
+    renderLeaderboard();
+  };
+});
 
 /* ---------- TUTORIAL DI BENVENUTO ---------- */
 const ONBOARD_SLIDES = [
@@ -9644,6 +9740,19 @@ window.addEventListener('cloud-ready', ()=>{
   const ADMIN_UID = "Xyx8cvHdpnUbyqgSCJZTg8780UM2";
 
   let app = null, auth = null, db = null;
+  let cachedNicknameForWeekly = null;
+
+  // Chiave della settimana ISO corrente (es. "2026-W38"). Usata come percorso della collezione:
+  // una nuova settimana è semplicemente un percorso nuovo, senza bisogno di "azzerare" nulla a mano.
+  function getWeekKey(d){
+    const now = d || new Date();
+    const date = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    const dayNum = date.getUTCDay() || 7;
+    date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+    return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2,'0')}`;
+  }
   const isConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('INCOLLA');
 
   if(isConfigured){
@@ -9690,13 +9799,23 @@ window.addEventListener('cloud-ready', ()=>{
     async setNickname(nickname){
       if(!auth || !auth.currentUser) return;
       await setDoc(doc(db, 'leaderboard', auth.currentUser.uid), { nickname }, { merge:true });
+      cachedNicknameForWeekly = nickname;
     },
     async addPoints(amount){
       if(!auth || !auth.currentUser || !amount) return;
-      await setDoc(doc(db, 'leaderboard', auth.currentUser.uid), {
+      const uid = auth.currentUser.uid;
+      await setDoc(doc(db, 'leaderboard', uid), {
         totalScore: increment(amount),
         updatedAt: Date.now()
       }, { merge:true });
+      try{
+        const weekKey = getWeekKey();
+        await setDoc(doc(db, 'leaderboard_weekly', weekKey, 'entries', uid), {
+          nickname: cachedNicknameForWeekly || 'Anonimo',
+          score: increment(amount),
+          updatedAt: Date.now()
+        }, { merge:true });
+      }catch(e){ console.warn('weekly leaderboard write error', e); }
     },
     async initLeaderboardIfEmpty(startScore, nickname){
       if(!auth || !auth.currentUser) return;
@@ -9705,10 +9824,20 @@ window.addEventListener('cloud-ready', ()=>{
       if(!snap.exists()){
         await setDoc(ref, { nickname: nickname || 'Anonimo', totalScore: startScore || 0, updatedAt: Date.now() });
       }
+      cachedNicknameForWeekly = (snap.exists() && snap.data().nickname) ? snap.data().nickname : (nickname || 'Anonimo');
     },
     async getLeaderboard(topN){
       if(!db) return [];
       const q = query(collection(db, 'leaderboard'), orderBy('totalScore', 'desc'), limit(topN || 15));
+      const snap = await getDocs(q);
+      const out = [];
+      snap.forEach(d => out.push({ uid: d.id, ...d.data() }));
+      return out;
+    },
+    async getWeeklyLeaderboard(topN){
+      if(!db) return [];
+      const weekKey = getWeekKey();
+      const q = query(collection(db, 'leaderboard_weekly', weekKey, 'entries'), orderBy('score', 'desc'), limit(topN || 15));
       const snap = await getDocs(q);
       const out = [];
       snap.forEach(d => out.push({ uid: d.id, ...d.data() }));
@@ -9735,7 +9864,9 @@ window.addEventListener('cloud-ready', ()=>{
       if(!auth || !auth.currentUser) return 'Anonimo';
       try{
         const snap = await getDoc(doc(db, 'leaderboard', auth.currentUser.uid));
-        return (snap.exists() && snap.data().nickname) ? snap.data().nickname : 'Anonimo';
+        const nick = (snap.exists() && snap.data().nickname) ? snap.data().nickname : 'Anonimo';
+        cachedNicknameForWeekly = nick;
+        return nick;
       }catch(e){ return 'Anonimo'; }
     },
     async createDuel(code, data){
