@@ -265,6 +265,7 @@
   .bp-progress-label{ font-family:'IBM Plex Mono', monospace; font-size:11px; color: var(--ink-dim); margin-top:6px; }
   .bp-feedback{ min-height: 20px; font-size:13px; font-weight:500; margin: 8px 2px 10px; line-height:1.5; }
   .bp-feedback.ok{ color:#7FBF7F; }
+  .bp-feedback.near{ color:#D4A73D; }
   .bp-feedback.ko{ color:#D96C6C; }
   .bp-feedback .hint{ display:block; color: var(--ink-dim); font-weight:400; margin-top:4px; font-size:12.5px; }
   .bp-done{ text-align:center; padding: 20px 10px; }
@@ -638,10 +639,12 @@
       <button data-level="6">6 &middot; Lavoro e clienti</button>
       <button data-level="7">7 &middot; Numeri</button>
       <button data-level="8">8 &middot; Che ore sono</button>
+      <button data-level="9">9 &middot; Dettato</button>
     </div>
     <div class="scroll-fade left"></div>
     <div class="scroll-fade right"></div>
     </div>
+    <div id="imNormalMode">
     <div class="level-tabs" id="imDirTabs">
       <button data-dir="to_target" id="imDirToTarget" class="active">Italiano &rarr; Lingua</button>
       <button data-dir="to_it" id="imDirToIt">Lingua &rarr; Italiano</button>
@@ -661,6 +664,19 @@
     <button class="primary hidden" id="imNext" style="width:100%; margin-top:8px;">Avanti &rarr;</button>
     <button class="ghost" id="imSkip" style="width:100%; margin-top:8px;">Salta</button>
     <button class="ghost" id="imReset" style="width:100%; margin-top:8px;">Ricomincia questo livello</button>
+    </div>
+
+    <div id="imDictationMode" class="hidden">
+      <p class="sub" style="margin-top:-6px;">Ascolta la frase in <b id="imDictLangName">English</b> e scrivi esattamente quello che senti, nella stessa lingua &mdash; senza vedere il testo prima. Le frasi sono pescate a caso da tutti i livelli.</p>
+      <button class="primary" id="imDictPlay" style="width:100%; margin-bottom:14px;">&#128266; Ascolta</button>
+      <input type="text" id="imDictInput" placeholder="Scrivi cosa hai sentito..." autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="bp-feedback" id="imDictFeedback"></div>
+      <div class="row" id="imDictCheckRow">
+        <button class="primary" id="imDictCheck">Verifica</button>
+        <button class="ghost" id="imDictSkip">Salta</button>
+      </div>
+      <button class="primary hidden" id="imDictNext" style="width:100%; margin-top:8px;">Un'altra frase &rarr;</button>
+    </div>
   </section>
 
   <!-- TRADUCI: frase libera in italiano -> lingua selezionata -->
@@ -969,6 +985,7 @@
 
     <div class="stats-row" id="achStatsRow"></div>
     <div class="stats-row" id="profileStatsRow" style="margin-top:8px;"></div>
+    <button class="ghost" id="shareProgressBtn" style="width:100%; margin-top:10px;">📤 Condividi i tuoi progressi</button>
     <p class="sub" style="margin-top:4px;">I traguardi qui sotto contano i progressi in <b>tutte</b> le lingue, non solo quella selezionata in alto.</p>
     <div id="badgeGrid" class="badge-grid"></div>
   </section>
@@ -7165,6 +7182,50 @@ function normalizeAnswer(str, isArabic){
   s = s.replace(/['’`.,!?¿¡"]/g,'').replace(/\s+/g,' ').trim();
   return s;
 }
+
+/* ---------- "QUASI CORRETTO": distanza di Levenshtein per beccare refusi ed errori di poco conto ----------
+   Non riconosce parafrasi con parole diverse (serve un'AI vera per quello): coglie solo errori vicini
+   carattere per carattere — una lettera sbagliata, un accento dimenticato, una desinenza mancante. */
+function levenshteinDistance(a, b){
+  const m = a.length, n = b.length;
+  if(m === 0) return n;
+  if(n === 0) return m;
+  let prev = new Array(n+1);
+  let curr = new Array(n+1);
+  for(let j=0; j<=n; j++) prev[j] = j;
+  for(let i=1; i<=m; i++){
+    curr[0] = i;
+    for(let j=1; j<=n; j++){
+      const cost = a[i-1] === b[j-1] ? 0 : 1;
+      curr[j] = Math.min(curr[j-1] + 1, prev[j] + 1, prev[j-1] + cost);
+    }
+    [prev, curr] = [curr, prev];
+  }
+  return prev[n];
+}
+
+// Confronta la risposta (già normalizzata) con l'elenco di risposte accettate (anch'esse da
+// normalizzare qui). Restituisce 'correct' se combacia esatta, 'near' se è vicinissima per un
+// piccolo dettaglio, 'wrong' altrimenti — insieme alla risposta accettata più vicina, per mostrarla.
+function classifyAnswer(given, acceptedList, isNative){
+  let bestMatch = null, bestDist = Infinity;
+  for(const raw of acceptedList){
+    const norm = normalizeAnswer(raw, isNative);
+    if(norm === given) return { level:'correct', closest: norm, dist: 0 };
+    const dist = levenshteinDistance(given, norm);
+    if(dist < bestDist){ bestDist = dist; bestMatch = norm; }
+  }
+  if(!bestMatch) return { level:'wrong', closest: null, dist: Infinity };
+  const len = Math.max(bestMatch.length, given.length, 1);
+  const ratio = bestDist / len;
+  // Soglia tarata per beccare refusi veri (1-2 caratteri su una parola) senza accettare frasi
+  // sostanzialmente diverse: non più del 25% dei caratteri diversi, e comunque non oltre 3 caratteri.
+  if(bestDist > 0 && ratio <= 0.25 && bestDist <= 3){
+    return { level:'near', closest: bestMatch, dist: bestDist };
+  }
+  return { level:'wrong', closest: bestMatch, dist: bestDist };
+}
+
 function currentBeginnerList(){ return BEGINNER[currentLang][state.beginner.level - 1]; }
 function currentDirState(){ return state.beginner.progress[state.beginner.level][state.beginner.direction]; }
 
@@ -7294,27 +7355,32 @@ document.getElementById('bpCheck').onclick = async ()=>{
   if(idx >= list.length) return;
   const item = list[idx];
   const isArInput = (dir === 'to_target' && currentLang === 'ar');
-  const given = normalizeAnswer(document.getElementById('bpInput').value, isArInput);
+  const rawInput = document.getElementById('bpInput').value;
+  const given = normalizeAnswer(rawInput, isArInput);
   if(!given) return;
 
-  const ok = (dir === 'to_target')
-    ? item.ans.some(a => normalizeAnswer(a, isArInput) === given)
-    : normalizeAnswer(item.it, false) === given;
+  const acceptedList = (dir === 'to_target') ? item.ans : [item.it];
+  const correctDisplay = (dir === 'to_target') ? item.ans[0] : item.it;
+  const result = classifyAnswer(given, acceptedList, isArInput);
 
   const fb = document.getElementById('bpFeedback');
-  if(ok){
-    const gained = ds.wrong === 0 ? 10 : (ds.wrong === 1 ? 5 : 2);
+  if(result.level === 'correct' || result.level === 'near'){
+    const isNear = result.level === 'near';
+    const gained = isNear ? (ds.wrong === 0 ? 6 : 3) : (ds.wrong === 0 ? 10 : (ds.wrong === 1 ? 5 : 2));
     ds.score += gained;
-    if(ds.wrong === 0) ds.correctFirstTry++;
+    if(ds.wrong === 0 && !isNear) ds.correctFirstTry++;
     ds.completed++;
-    fb.className='bp-feedback ok';
-    if(dir === 'to_target'){
+    fb.className = 'bp-feedback ' + (isNear ? 'near' : 'ok');
+    let html = isNear
+      ? `🟡 Quasi corretto! +${gained} punti<div class="sound-tip" style="margin-top:8px; font-style:normal;">Hai scritto: <b>${escapeHTML(rawInput.trim())}</b><br>Era quasi giusta — la forma corretta è: <b>${escapeHTML(correctDisplay)}</b></div>`
+      : `Corretto ✓  +${gained} punti`;
+    if(dir === 'to_target' && !isNear){
       const phon = approxPronunciation(item, currentLang);
-      fb.innerHTML = `Corretto ✓  +${gained} punti
-        <div class="sound-tip" style="margin-top:8px; font-style:normal;">Si dice così: <b>${escapeHTML(item.ans[0])}</b>${phon ? `<br>Si pronuncia circa: <b>${escapeHTML(phon)}</b>` : ''}</div>`;
+      html += `<div class="sound-tip" style="margin-top:8px; font-style:normal;">Si dice così: <b>${escapeHTML(item.ans[0])}</b>${phon ? `<br>Si pronuncia circa: <b>${escapeHTML(phon)}</b>` : ''}</div>`;
+    }
+    fb.innerHTML = html;
+    if(dir === 'to_target'){
       fb.appendChild(imMakeSpeakBtn(item.ans[0]));
-    } else {
-      fb.textContent = `Corretto ✓  +${gained} punti`;
     }
     await saveState(currentLang);
     if(window.cloudAPI && window.cloudAPI.enabled && window.cloudAPI.currentUser){
@@ -7327,9 +7393,8 @@ document.getElementById('bpCheck').onclick = async ()=>{
     ds.wrong = (ds.wrong||0)+1;
     fb.className='bp-feedback ko';
     if(ds.wrong >= 3){
-      const correctAnswer = (dir === 'to_target') ? item.ans[0] : item.it;
-      fb.innerHTML = 'Non ancora corretto.<span class="hint">Suggerimento: ' + correctAnswer + '</span>';
-      logMistake(item.it, item.ans[0]);
+      fb.innerHTML = 'Non ancora corretto.<span class="hint">Suggerimento: ' + escapeHTML(correctDisplay) + '</span>';
+      logMistake(item.it, correctDisplay);
     } else {
       fb.textContent = 'Non ancora corretto, riprova.';
     }
@@ -7469,16 +7534,26 @@ document.getElementById('grammarToggle').onclick = ()=>{
 
 function renderImpara(){
   renderGrammarNotes();
-  const list = currentImparaList();
   const level = state.impara.level;
-  const dir = state.impara.direction;
-  const ds = currentImparaState();
-  const idx = ds.index;
-  imAttempts = 0;
 
   document.querySelectorAll('#imLevelTabs button').forEach(b=>{
     b.classList.toggle('active', Number(b.dataset.level) === level);
   });
+
+  if(level === 9){
+    document.getElementById('imNormalMode').classList.add('hidden');
+    document.getElementById('imDictationMode').classList.remove('hidden');
+    renderDictationMode();
+    return;
+  }
+  document.getElementById('imNormalMode').classList.remove('hidden');
+  document.getElementById('imDictationMode').classList.add('hidden');
+
+  const list = currentImparaList();
+  const dir = state.impara.direction;
+  const ds = currentImparaState();
+  const idx = ds.index;
+  imAttempts = 0;
   document.querySelectorAll('#imDirTabs button').forEach(b=>{
     b.classList.toggle('active', b.dataset.dir === dir);
   });
@@ -7630,6 +7705,71 @@ document.getElementById('imReset').onclick = async ()=>{
   await saveState(currentLang);
   renderImpara();
 };
+
+/* ---------- DETTATO: ascolta e trascrivi, pesca a caso da tutti i livelli di Impara ---------- */
+let currentDictationItem = null;
+
+function dictationPool(){
+  const pool = [];
+  for(let lvl=1; lvl<=8; lvl++){
+    const list = LEARN[currentLang] && LEARN[currentLang][lvl-1];
+    if(list) list.forEach(item => pool.push(item));
+  }
+  return pool;
+}
+
+function renderDictationMode(){
+  document.getElementById('imDictLangName').textContent = LANGS[currentLang].label;
+  newDictationCard();
+}
+
+function newDictationCard(){
+  const pool = dictationPool();
+  currentDictationItem = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+  const input = document.getElementById('imDictInput');
+  input.value = '';
+  input.disabled = false;
+  input.dir = (currentLang === 'ar') ? 'rtl' : 'ltr';
+  input.placeholder = `Scrivi cosa hai sentito, in ${LANGS[currentLang].label}...`;
+  document.getElementById('imDictFeedback').textContent = '';
+  document.getElementById('imDictFeedback').className = 'bp-feedback';
+  document.getElementById('imDictCheckRow').classList.remove('hidden');
+  document.getElementById('imDictNext').classList.add('hidden');
+  if(currentDictationItem) speak(currentDictationItem.ans[0], currentLang);
+}
+
+document.getElementById('imDictPlay').onclick = ()=>{
+  if(currentDictationItem) speak(currentDictationItem.ans[0], currentLang);
+};
+document.getElementById('imDictCheck').onclick = ()=>{
+  if(!currentDictationItem) return;
+  const isNative = currentLang === 'ar';
+  const given = normalizeAnswer(document.getElementById('imDictInput').value, isNative);
+  if(!given) return;
+  const item = currentDictationItem;
+  const result = classifyAnswer(given, item.ans, isNative);
+  const fb = document.getElementById('imDictFeedback');
+  const revealBox = `<div class="sound-tip" style="margin-top:8px; font-style:normal;">Hai sentito: <b>${escapeHTML(item.ans[0])}</b> (${escapeHTML(item.it)})${item.phon ? `<br>Si pronuncia circa: <b>${escapeHTML(item.phon)}</b>` : ''}</div>`;
+  if(result.level === 'correct'){
+    fb.className = 'bp-feedback ok';
+    fb.innerHTML = 'Corretto ✓' + revealBox;
+  } else if(result.level === 'near'){
+    fb.className = 'bp-feedback near';
+    fb.innerHTML = '🟡 Quasi corretto!' + revealBox;
+  } else {
+    fb.className = 'bp-feedback ko';
+    fb.innerHTML = 'Non ancora.' + revealBox;
+  }
+  document.getElementById('imDictCheckRow').classList.add('hidden');
+  document.getElementById('imDictInput').disabled = true;
+  document.getElementById('imDictNext').classList.remove('hidden');
+};
+document.getElementById('imDictInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter'){ document.getElementById('imDictCheck').click(); }
+});
+document.getElementById('imDictSkip').onclick = newDictationCard;
+document.getElementById('imDictNext').onclick = newDictationCard;
+
 document.querySelectorAll('#imLevelTabs button').forEach(btn=>{
   btn.onclick = async ()=>{
     state.impara.level = Number(btn.dataset.level);
@@ -7795,13 +7935,13 @@ document.getElementById('duelCheckBtn').onclick = ()=>{
   const isNativeInput = (duelActive.dir === 'to_target' && duelActive.lang === 'ar');
   const given = normalizeAnswer(document.getElementById('duelInput').value, isNativeInput);
   if(!given) return;
-  const ok = (duelActive.dir === 'to_target')
-    ? item.ans.some(a => normalizeAnswer(a, isNativeInput) === given)
-    : normalizeAnswer(item.it, false) === given;
+  const acceptedList = (duelActive.dir === 'to_target') ? item.ans : [item.it];
+  const result = classifyAnswer(given, acceptedList, isNativeInput);
+  const ok = (result.level === 'correct' || result.level === 'near');
   const fb = document.getElementById('duelFeedback');
   if(ok){
-    fb.className = 'bp-feedback ok';
-    fb.textContent = 'Corretto ✓';
+    fb.className = 'bp-feedback ' + (result.level === 'near' ? 'near' : 'ok');
+    fb.textContent = result.level === 'near' ? '🟡 Quasi corretto ✓' : 'Corretto ✓';
     duelActive.slot++;
     if(duelActive.slot >= duelActive.phrases.length){
       setTimeout(finishDuel, 400);
@@ -8226,7 +8366,37 @@ async function renderTraguardi(){
     const isEarned = earned.includes(a);
     return `<div class="badge-card ${isEarned?'earned':''}"><div class="icon">${a.icon}</div><div class="name">${a.name}</div></div>`;
   }).join('');
+
+  window.lastComputedStats = stats;
+  window.lastComputedEarned = earned;
 }
+
+/* ---------- CONDIVIDI PROGRESSI: testo pronto per l'app di messaggistica preferita ---------- */
+async function shareProgress(){
+  const stats = window.lastComputedStats || await computeGlobalStats();
+  const earned = window.lastComputedEarned || ACHIEVEMENTS.filter(a => a.check(stats));
+  const level = Math.floor((stats.totalXP || 0) / 100) + 1;
+  const text = `🔥 Serie di ${stats.maxStreak} giorni su Quattro Voci!\n`
+    + `📈 Livello utente ${level} · 🏆 ${earned.length}/${ACHIEVEMENTS.length} traguardi sbloccati\n`
+    + `🌍 ${stats.languagesWithProgress} lingue in pratica · ${stats.totalExercises} esercizi svolti\n\n`
+    + `Ascolta, Parla, Interagisci, Migliora: imparo le lingue con Quattro Voci 🎧🗣️🤝📈`;
+
+  if(navigator.share){
+    try{ await navigator.share({ text }); }
+    catch(e){ /* l'utente ha annullato la condivisione, nessun problema */ }
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(text);
+    const btn = document.getElementById('shareProgressBtn');
+    const original = btn.textContent;
+    btn.textContent = '✓ Copiato! Incollalo dove vuoi';
+    setTimeout(()=>{ btn.textContent = original; }, 2500);
+  }catch(e){
+    alert(text);
+  }
+}
+document.getElementById('shareProgressBtn').onclick = shareProgress;
 
 /* ---------- MAPPA A TAPPE ---------- */
 // Etichette dei sotto-capitoli del Percorso Base, livelli 11-24 (i livelli 1-10 restano "Percorso Base").
@@ -8421,10 +8591,11 @@ document.getElementById('placementCheck').onclick = ()=>{
   const isNative = currentLang === 'ar';
   const given = normalizeAnswer(document.getElementById('placementInput').value, isNative);
   if(!given) return;
-  const ok = q.ans.some(a => normalizeAnswer(a, isNative) === given);
+  const result = classifyAnswer(given, q.ans, isNative);
+  const ok = (result.level === 'correct' || result.level === 'near');
   const fb = document.getElementById('placementFeedback');
-  fb.className = 'bp-feedback ' + (ok ? 'ok' : 'ko');
-  fb.textContent = ok ? 'Corretto ✓' : 'Non corretto';
+  fb.className = 'bp-feedback ' + (result.level === 'near' ? 'near' : (ok ? 'ok' : 'ko'));
+  fb.textContent = result.level === 'near' ? '🟡 Quasi corretto ✓' : (ok ? 'Corretto ✓' : 'Non corretto');
   setTimeout(()=> placementAdvance(ok), 500);
 };
 document.getElementById('placementInput').addEventListener('keydown', (e)=>{
@@ -8883,14 +9054,18 @@ async function finishRipassoQuiz(){
 document.getElementById('ripassoCheck').onclick = async ()=>{
   const m = ripassoQueue[ripassoIdx];
   const isNative = currentLang === 'ar';
-  const given = normalizeAnswer(document.getElementById('ripassoInput').value, isNative);
+  const rawInput = document.getElementById('ripassoInput').value;
+  const given = normalizeAnswer(rawInput, isNative);
   if(!given) return;
-  const ok = normalizeAnswer(m.correct, isNative) === given;
+  const result = classifyAnswer(given, [m.correct], isNative);
   const fb = document.getElementById('ripassoFeedback');
-  if(ok){
+  if(result.level === 'correct' || result.level === 'near'){
+    const isNear = result.level === 'near';
     srsReview(m, true);
-    fb.className = 'bp-feedback ok';
-    fb.textContent = `Corretto ✓ — torna tra ${m.interval} giorno${m.interval===1?'':'i'}.`;
+    fb.className = 'bp-feedback ' + (isNear ? 'near' : 'ok');
+    fb.innerHTML = isNear
+      ? `🟡 Quasi corretto — torna tra ${m.interval} giorno${m.interval===1?'':'i'}.<div class="sound-tip" style="margin-top:8px; font-style:normal;">Hai scritto: <b>${escapeHTML(rawInput.trim())}</b><br>Forma corretta: <b>${escapeHTML(m.correct)}</b></div>`
+      : `Corretto ✓ — torna tra ${m.interval} giorno${m.interval===1?'':'i'}.`;
     document.getElementById('ripassoCheckRow').classList.add('hidden');
     document.getElementById('ripassoInput').disabled = true;
     document.getElementById('ripassoNext').classList.remove('hidden');
@@ -8903,7 +9078,7 @@ document.getElementById('ripassoCheck').onclick = async ()=>{
     if(ripassoAttempts >= 2){
       srsReview(m, false);
       fb.className = 'bp-feedback ko';
-      fb.innerHTML = `Non ancora.<span class="hint">Risposta corretta: ${m.correct} — torna domani.</span>`;
+      fb.innerHTML = `Non ancora.<span class="hint">Risposta corretta: ${escapeHTML(m.correct)} — torna domani.</span>`;
       document.getElementById('ripassoCheckRow').classList.add('hidden');
       document.getElementById('ripassoInput').disabled = true;
       document.getElementById('ripassoNext').classList.remove('hidden');
