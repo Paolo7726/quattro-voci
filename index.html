@@ -184,6 +184,15 @@
   .grammar-list{
     list-style:none; margin:8px 0 0; padding:0; display:flex; flex-direction:column; gap:8px;
   }
+  .flashcard{
+    background: var(--panel-2); border:1px solid var(--hair); border-radius:16px;
+    padding: 32px 18px; text-align:center; min-height:160px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  }
+  .flashcard-emoji{ font-size:56px; line-height:1; margin-bottom:4px; }
+  .flashcard-word{ font-family:'Fraunces', serif; font-size:22px; font-weight:600; color: var(--ink); }
+  .flashcard-word.accent{ color: var(--accent); }
+  .flashcard-back{ margin-top:10px; padding-top:14px; border-top:1px solid var(--hair); width:100%; }
   .grammar-list li{
     font-size:13px; color: var(--ink-dim); line-height:1.5; padding:9px 12px;
     background: var(--panel-2); border-radius:8px; border-left:3px solid var(--accent);
@@ -642,6 +651,7 @@
       <button data-level="7">7 &middot; Numeri</button>
       <button data-level="8">8 &middot; Che ore sono</button>
       <button data-level="9">9 &middot; Dettato</button>
+      <button data-level="10">10 &middot; Oggetti</button>
     </div>
     <div class="scroll-fade left"></div>
     <div class="scroll-fade right"></div>
@@ -678,6 +688,26 @@
         <button class="ghost" id="imDictSkip">Salta</button>
       </div>
       <button class="primary hidden" id="imDictNext" style="width:100%; margin-top:8px;">Un'altra frase &rarr;</button>
+    </div>
+
+    <div id="imFlashcardMode" class="hidden">
+      <div class="bp-progress-wrap">
+        <div class="bp-progress-bar"><div class="bp-progress-fill" id="fcProgressFill"></div></div>
+        <div class="bp-progress-label" id="fcProgressLabel">Carta 1 di 24</div>
+      </div>
+      <div class="flashcard" id="flashcardBox">
+        <div class="flashcard-emoji" id="fcEmoji">🍎</div>
+        <div class="flashcard-word" id="fcFront">La mela</div>
+        <div class="flashcard-back hidden" id="fcBack">
+          <div class="flashcard-word accent" id="fcTarget">Apple</div>
+          <div class="sound-tip" id="fcPhon" style="font-style:normal;"></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <button class="primary" id="fcFlipBtn">Gira la carta</button>
+        <button class="ghost hidden" id="fcSpeakBtn">&#128266; Ascolta</button>
+      </div>
+      <button class="ghost" id="fcNextBtn" style="width:100%; margin-top:8px;">Prossima carta &rarr;</button>
     </div>
   </section>
 
@@ -774,6 +804,13 @@
     <p class="sub" style="margin-top:-2px;">5 frasi da tradurre correttamente, cronometrate: chi le finisce tutte e 5 nel minor tempo vince. Usa la direzione scelta sopra (Italiano&nbsp;&rarr;&nbsp;Lingua o il contrario). Serve un account (icona in alto a destra).</p>
     <div class="empty" id="duelLoggedOut">Accedi o registrati per sfidare un amico.</div>
     <div id="duelArea" class="hidden">
+      <p class="sub" style="margin-top:-2px;">Scegli quanto difficili vuoi le 5 frasi del duello, poi crea la partita.</p>
+      <div class="level-tabs" id="duelLevelTabs">
+        <button data-tier="A1" class="active">A1 &middot; Principiante</button>
+        <button data-tier="A2">A2 &middot; Base</button>
+        <button data-tier="B1">B1 &middot; Intermedio</button>
+        <button data-tier="B2">B2 &middot; Avanzato</button>
+      </div>
       <div class="row">
         <button class="primary" id="duelCreateBtn" style="width:100%;">&#9876;&#65039; Crea un duello</button>
       </div>
@@ -5356,6 +5393,32 @@ const LEARN = {
       {it:"Un quarto d'ora", ans:["a quarter of an hour"], phon:"a KUAR-ter ov an au-ar"},
       {it:"L'orologio", ans:["the clock"], phon:"de clok"},
     ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["the apple"], phon:"apple"},
+      {it:"L'aereo", emoji:"✈️", ans:["the airplane"], phon:"EIR-plein"},
+      {it:"La macchina", emoji:"🚗", ans:["the car"], phon:"car"},
+      {it:"La casa", emoji:"🏠", ans:["the house"], phon:"haus"},
+      {it:"La chiave", emoji:"🔑", ans:["the key"], phon:"ki"},
+      {it:"La sedia", emoji:"🪑", ans:["the chair"], phon:"cer"},
+      {it:"Il letto", emoji:"🛏️", ans:["the bed"], phon:"bed"},
+      {it:"La porta", emoji:"🚪", ans:["the door"], phon:"dor"},
+      {it:"Il telefono", emoji:"📱", ans:["the phone"], phon:"foun"},
+      {it:"Il computer", emoji:"💻", ans:["the computer"], phon:"com-PIU-ter"},
+      {it:"Il libro", emoji:"📖", ans:["the book"], phon:"buk"},
+      {it:"L'orologio", emoji:"⌚", ans:["the watch"], phon:"uatc"},
+      {it:"Gli occhiali", emoji:"👓", ans:["the glasses"], phon:"GLA-siz"},
+      {it:"L'ombrello", emoji:"☂️", ans:["the umbrella"], phon:"am-BRE-la"},
+      {it:"La borsa", emoji:"👜", ans:["the bag"], phon:"bag"},
+      {it:"La scarpa", emoji:"👞", ans:["the shoe"], phon:"sciu"},
+      {it:"Il cane", emoji:"🐶", ans:["the dog"], phon:"dog"},
+      {it:"Il gatto", emoji:"🐱", ans:["the cat"], phon:"cat"},
+      {it:"Il pane", emoji:"🍞", ans:["the bread"], phon:"bred"},
+      {it:"Il latte", emoji:"🥛", ans:["the milk"], phon:"milk"},
+      {it:"La bicicletta", emoji:"🚲", ans:["the bicycle"], phon:"BAI-si-col"},
+      {it:"Il treno", emoji:"🚂", ans:["the train"], phon:"trein"},
+      {it:"Il fiore", emoji:"🌸", ans:["the flower"], phon:"FLAU-er"},
+      {it:"Il sole", emoji:"☀️", ans:["the sun"], phon:"san"},
+    ],
   ],
   fr: [
     [ // Livello 1
@@ -5480,6 +5543,32 @@ const LEARN = {
       {it:"Tardi", ans:["tard"], phon:"tar"},
       {it:"Un quarto d'ora", ans:["un quart d'heure"], phon:"an kar deur"},
       {it:"L'orologio", ans:["l'horloge"], phon:"lor-LOZH"},
+    ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["la pomme"], phon:"la pom"},
+      {it:"L'aereo", emoji:"✈️", ans:["l'avion"], phon:"la-vi-ON"},
+      {it:"La macchina", emoji:"🚗", ans:["la voiture"], phon:"la vua-TIUR"},
+      {it:"La casa", emoji:"🏠", ans:["la maison"], phon:"la me-ZON"},
+      {it:"La chiave", emoji:"🔑", ans:["la clé","la cle"], phon:"la kle"},
+      {it:"La sedia", emoji:"🪑", ans:["la chaise"], phon:"la scez"},
+      {it:"Il letto", emoji:"🛏️", ans:["le lit"], phon:"le li"},
+      {it:"La porta", emoji:"🚪", ans:["la porte"], phon:"la port"},
+      {it:"Il telefono", emoji:"📱", ans:["le téléphone","le telephone"], phon:"le te-le-FON"},
+      {it:"Il computer", emoji:"💻", ans:["l'ordinateur"], phon:"lor-di-na-TER"},
+      {it:"Il libro", emoji:"📖", ans:["le livre"], phon:"le livr"},
+      {it:"L'orologio", emoji:"⌚", ans:["la montre"], phon:"la montr"},
+      {it:"Gli occhiali", emoji:"👓", ans:["les lunettes"], phon:"le liu-NET"},
+      {it:"L'ombrello", emoji:"☂️", ans:["le parapluie"], phon:"le pa-ra-PLUI"},
+      {it:"La borsa", emoji:"👜", ans:["le sac"], phon:"le sak"},
+      {it:"La scarpa", emoji:"👞", ans:["la chaussure"], phon:"la sciu-SIUR"},
+      {it:"Il cane", emoji:"🐶", ans:["le chien"], phon:"le sciã"},
+      {it:"Il gatto", emoji:"🐱", ans:["le chat"], phon:"le scia"},
+      {it:"Il pane", emoji:"🍞", ans:["le pain"], phon:"le pã"},
+      {it:"Il latte", emoji:"🥛", ans:["le lait"], phon:"le le"},
+      {it:"La bicicletta", emoji:"🚲", ans:["le vélo","le velo"], phon:"le ve-LO"},
+      {it:"Il treno", emoji:"🚂", ans:["le train"], phon:"le trã"},
+      {it:"Il fiore", emoji:"🌸", ans:["la fleur"], phon:"la fler"},
+      {it:"Il sole", emoji:"☀️", ans:["le soleil"], phon:"le so-LEI"},
     ],
   ],
   es: [
@@ -5606,6 +5695,32 @@ const LEARN = {
       {it:"Un quarto d'ora", ans:["un cuarto de hora"], phon:"un KUAR-to de O-ra"},
       {it:"L'orologio", ans:["el reloj"], phon:"el re-LOJ"},
     ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["la manzana"], phon:"la man-SA-na"},
+      {it:"L'aereo", emoji:"✈️", ans:["el avión","el avion"], phon:"el a-vi-ON"},
+      {it:"La macchina", emoji:"🚗", ans:["el coche"], phon:"el CO-cie"},
+      {it:"La casa", emoji:"🏠", ans:["la casa"], phon:"la CA-sa"},
+      {it:"La chiave", emoji:"🔑", ans:["la llave"], phon:"la YA-ve"},
+      {it:"La sedia", emoji:"🪑", ans:["la silla"], phon:"la SI-ya"},
+      {it:"Il letto", emoji:"🛏️", ans:["la cama"], phon:"la CA-ma"},
+      {it:"La porta", emoji:"🚪", ans:["la puerta"], phon:"la PUER-ta"},
+      {it:"Il telefono", emoji:"📱", ans:["el teléfono","el telefono"], phon:"el te-LE-fo-no"},
+      {it:"Il computer", emoji:"💻", ans:["el ordenador"], phon:"el or-de-na-DOR"},
+      {it:"Il libro", emoji:"📖", ans:["el libro"], phon:"el LI-bro"},
+      {it:"L'orologio", emoji:"⌚", ans:["el reloj"], phon:"el re-LOH"},
+      {it:"Gli occhiali", emoji:"👓", ans:["las gafas"], phon:"las GA-fas"},
+      {it:"L'ombrello", emoji:"☂️", ans:["el paraguas"], phon:"el pa-RA-guas"},
+      {it:"La borsa", emoji:"👜", ans:["el bolso"], phon:"el BOL-so"},
+      {it:"La scarpa", emoji:"👞", ans:["el zapato"], phon:"el sa-PA-to"},
+      {it:"Il cane", emoji:"🐶", ans:["el perro"], phon:"el PE-rro"},
+      {it:"Il gatto", emoji:"🐱", ans:["el gato"], phon:"el GA-to"},
+      {it:"Il pane", emoji:"🍞", ans:["el pan"], phon:"el PAN"},
+      {it:"Il latte", emoji:"🥛", ans:["la leche"], phon:"la LE-ce"},
+      {it:"La bicicletta", emoji:"🚲", ans:["la bicicleta"], phon:"la bi-si-CLE-ta"},
+      {it:"Il treno", emoji:"🚂", ans:["el tren"], phon:"el TREN"},
+      {it:"Il fiore", emoji:"🌸", ans:["la flor"], phon:"la FLOR"},
+      {it:"Il sole", emoji:"☀️", ans:["el sol"], phon:"el SOL"},
+    ],
   ],
   de: [
     [ // Livello 1
@@ -5730,6 +5845,32 @@ const LEARN = {
       {it:"Tardi", ans:["spät","spat"], phon:"shpet"},
       {it:"Un quarto d'ora", ans:["eine viertelstunde"], phon:"AI-ne FIR-tel-shtun-de"},
       {it:"L'orologio", ans:["die uhr"], phon:"di ur"},
+    ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["der apfel"], phon:"der AP-fel"},
+      {it:"L'aereo", emoji:"✈️", ans:["das flugzeug"], phon:"das FLUK-tsoik"},
+      {it:"La macchina", emoji:"🚗", ans:["das auto"], phon:"das AU-to"},
+      {it:"La casa", emoji:"🏠", ans:["das haus"], phon:"das haus"},
+      {it:"La chiave", emoji:"🔑", ans:["der schlüssel","der schlussel"], phon:"der SCHLIU-sel"},
+      {it:"La sedia", emoji:"🪑", ans:["der stuhl"], phon:"der SHTUL"},
+      {it:"Il letto", emoji:"🛏️", ans:["das bett"], phon:"das bet"},
+      {it:"La porta", emoji:"🚪", ans:["die tür","die tur"], phon:"di tiur"},
+      {it:"Il telefono", emoji:"📱", ans:["das telefon"], phon:"das te-le-FON"},
+      {it:"Il computer", emoji:"💻", ans:["der computer"], phon:"der kom-PIU-ter"},
+      {it:"Il libro", emoji:"📖", ans:["das buch"], phon:"das buh"},
+      {it:"L'orologio", emoji:"⌚", ans:["die uhr"], phon:"di ur"},
+      {it:"Gli occhiali", emoji:"👓", ans:["die brille"], phon:"di BRI-le"},
+      {it:"L'ombrello", emoji:"☂️", ans:["der regenschirm"], phon:"der RE-gen-shirm"},
+      {it:"La borsa", emoji:"👜", ans:["die tasche"], phon:"di TA-she"},
+      {it:"La scarpa", emoji:"👞", ans:["der schuh"], phon:"der shu"},
+      {it:"Il cane", emoji:"🐶", ans:["der hund"], phon:"der hunt"},
+      {it:"Il gatto", emoji:"🐱", ans:["die katze"], phon:"di KAT-se"},
+      {it:"Il pane", emoji:"🍞", ans:["das brot"], phon:"das brot"},
+      {it:"Il latte", emoji:"🥛", ans:["die milch"], phon:"di milh"},
+      {it:"La bicicletta", emoji:"🚲", ans:["das fahrrad"], phon:"das FAR-rat"},
+      {it:"Il treno", emoji:"🚂", ans:["der zug"], phon:"der tsuk"},
+      {it:"Il fiore", emoji:"🌸", ans:["die blume"], phon:"di BLU-me"},
+      {it:"Il sole", emoji:"☀️", ans:["die sonne"], phon:"di ZO-ne"},
     ],
   ],
   ar: [
@@ -5856,6 +5997,32 @@ const LEARN = {
       {it:"Un quarto d'ora", ans:["ربع ساعة","rub saa"], phon:"rub SA-a"},
       {it:"L'orologio", ans:["الساعة","as-saa"], phon:"as-SA-a"},
     ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["التفاحة","at-tuffaha"], phon:"at-tuffaha"},
+      {it:"L'aereo", emoji:"✈️", ans:["الطائرة","at-taira"], phon:"at-taira"},
+      {it:"La macchina", emoji:"🚗", ans:["السيارة","as-sayyara"], phon:"as-sayyara"},
+      {it:"La casa", emoji:"🏠", ans:["المنزل","al-manzil"], phon:"al-manzil"},
+      {it:"La chiave", emoji:"🔑", ans:["المفتاح","al-miftah"], phon:"al-miftah"},
+      {it:"La sedia", emoji:"🪑", ans:["الكرسي","al-kursi"], phon:"al-kursi"},
+      {it:"Il letto", emoji:"🛏️", ans:["السرير","as-sarir"], phon:"as-sarir"},
+      {it:"La porta", emoji:"🚪", ans:["الباب","al-bab"], phon:"al-bab"},
+      {it:"Il telefono", emoji:"📱", ans:["الهاتف","al-hatif"], phon:"al-hatif"},
+      {it:"Il computer", emoji:"💻", ans:["الحاسوب","al-hasub"], phon:"al-hasub"},
+      {it:"Il libro", emoji:"📖", ans:["الكتاب","al-kitab"], phon:"al-kitab"},
+      {it:"L'orologio", emoji:"⌚", ans:["الساعة","as-saa"], phon:"as-saa"},
+      {it:"Gli occhiali", emoji:"👓", ans:["النظارات","an-nazzarat"], phon:"an-nazzarat"},
+      {it:"L'ombrello", emoji:"☂️", ans:["المظلة","al-mizalla"], phon:"al-mizalla"},
+      {it:"La borsa", emoji:"👜", ans:["الحقيبة","al-haqiba"], phon:"al-haqiba"},
+      {it:"La scarpa", emoji:"👞", ans:["الحذاء","al-hitha"], phon:"al-hitha"},
+      {it:"Il cane", emoji:"🐶", ans:["الكلب","al-kalb"], phon:"al-kalb"},
+      {it:"Il gatto", emoji:"🐱", ans:["القطة","al-qitta"], phon:"al-qitta"},
+      {it:"Il pane", emoji:"🍞", ans:["الخبز","al-khubz"], phon:"al-khubz"},
+      {it:"Il latte", emoji:"🥛", ans:["الحليب","al-halib"], phon:"al-halib"},
+      {it:"La bicicletta", emoji:"🚲", ans:["الدراجة","ad-darraja"], phon:"ad-darraja"},
+      {it:"Il treno", emoji:"🚂", ans:["القطار","al-qitar"], phon:"al-qitar"},
+      {it:"Il fiore", emoji:"🌸", ans:["الزهرة","az-zahra"], phon:"az-zahra"},
+      {it:"Il sole", emoji:"☀️", ans:["الشمس","ash-shams"], phon:"ash-shams"},
+    ],
   ],
   zh: [
     [ // Livello 1
@@ -5980,6 +6147,32 @@ const LEARN = {
       {it:"Tardi", ans:["晚","wan"], phon:"UAN"},
       {it:"Un quarto d'ora", ans:["一刻钟","yi ke zhong"], phon:"i khe-GIONG"},
       {it:"L'orologio", ans:["钟表","zhong biao"], phon:"GIONG-biao"},
+    ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["苹果","ping guo"], phon:"ping guo"},
+      {it:"L'aereo", emoji:"✈️", ans:["飞机","fei ji"], phon:"fei ji"},
+      {it:"La macchina", emoji:"🚗", ans:["汽车","qi che"], phon:"qi che"},
+      {it:"La casa", emoji:"🏠", ans:["房子","fang zi"], phon:"fang zi"},
+      {it:"La chiave", emoji:"🔑", ans:["钥匙","yao shi"], phon:"yao shi"},
+      {it:"La sedia", emoji:"🪑", ans:["椅子","yi zi"], phon:"yi zi"},
+      {it:"Il letto", emoji:"🛏️", ans:["床","chuang"], phon:"chuang"},
+      {it:"La porta", emoji:"🚪", ans:["门","men"], phon:"men"},
+      {it:"Il telefono", emoji:"📱", ans:["电话","dian hua"], phon:"dian hua"},
+      {it:"Il computer", emoji:"💻", ans:["电脑","dian nao"], phon:"dian nao"},
+      {it:"Il libro", emoji:"📖", ans:["书","shu"], phon:"shu"},
+      {it:"L'orologio", emoji:"⌚", ans:["手表","shou biao"], phon:"shou biao"},
+      {it:"Gli occhiali", emoji:"👓", ans:["眼镜","yan jing"], phon:"yan jing"},
+      {it:"L'ombrello", emoji:"☂️", ans:["雨伞","yu san"], phon:"yu san"},
+      {it:"La borsa", emoji:"👜", ans:["包","bao"], phon:"bao"},
+      {it:"La scarpa", emoji:"👞", ans:["鞋子","xie zi"], phon:"xie zi"},
+      {it:"Il cane", emoji:"🐶", ans:["狗","gou"], phon:"gou"},
+      {it:"Il gatto", emoji:"🐱", ans:["猫","mao"], phon:"mao"},
+      {it:"Il pane", emoji:"🍞", ans:["面包","mian bao"], phon:"mian bao"},
+      {it:"Il latte", emoji:"🥛", ans:["牛奶","niu nai"], phon:"niu nai"},
+      {it:"La bicicletta", emoji:"🚲", ans:["自行车","zi xing che"], phon:"zi xing che"},
+      {it:"Il treno", emoji:"🚂", ans:["火车","huo che"], phon:"huo che"},
+      {it:"Il fiore", emoji:"🌸", ans:["花","hua"], phon:"hua"},
+      {it:"Il sole", emoji:"☀️", ans:["太阳","tai yang"], phon:"tai yang"},
     ],
   ],
   ja: [
@@ -6106,6 +6299,32 @@ const LEARN = {
       {it:"Un quarto d'ora", ans:["十五分","juugofun"], phon:"giù-go-FUN"},
       {it:"L'orologio", ans:["時計","tokei"], phon:"to-KEI"},
     ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["りんご","ringo"], phon:"ringo"},
+      {it:"L'aereo", emoji:"✈️", ans:["飛行機","hikouki"], phon:"hikouki"},
+      {it:"La macchina", emoji:"🚗", ans:["車","kuruma"], phon:"kuruma"},
+      {it:"La casa", emoji:"🏠", ans:["家","ie"], phon:"ie"},
+      {it:"La chiave", emoji:"🔑", ans:["鍵","kagi"], phon:"kagi"},
+      {it:"La sedia", emoji:"🪑", ans:["椅子","isu"], phon:"isu"},
+      {it:"Il letto", emoji:"🛏️", ans:["ベッド","beddo"], phon:"beddo"},
+      {it:"La porta", emoji:"🚪", ans:["ドア","doa"], phon:"doa"},
+      {it:"Il telefono", emoji:"📱", ans:["電話","denwa"], phon:"denwa"},
+      {it:"Il computer", emoji:"💻", ans:["コンピューター","konpyuutaa"], phon:"konpyuutaa"},
+      {it:"Il libro", emoji:"📖", ans:["本","hon"], phon:"hon"},
+      {it:"L'orologio", emoji:"⌚", ans:["時計","tokei"], phon:"tokei"},
+      {it:"Gli occhiali", emoji:"👓", ans:["眼鏡","megane"], phon:"megane"},
+      {it:"L'ombrello", emoji:"☂️", ans:["傘","kasa"], phon:"kasa"},
+      {it:"La borsa", emoji:"👜", ans:["かばん","kaban"], phon:"kaban"},
+      {it:"La scarpa", emoji:"👞", ans:["靴","kutsu"], phon:"kutsu"},
+      {it:"Il cane", emoji:"🐶", ans:["犬","inu"], phon:"inu"},
+      {it:"Il gatto", emoji:"🐱", ans:["猫","neko"], phon:"neko"},
+      {it:"Il pane", emoji:"🍞", ans:["パン","pan"], phon:"pan"},
+      {it:"Il latte", emoji:"🥛", ans:["牛乳","gyuunyuu"], phon:"gyuunyuu"},
+      {it:"La bicicletta", emoji:"🚲", ans:["自転車","jitensha"], phon:"jitensha"},
+      {it:"Il treno", emoji:"🚂", ans:["電車","densha"], phon:"densha"},
+      {it:"Il fiore", emoji:"🌸", ans:["花","hana"], phon:"hana"},
+      {it:"Il sole", emoji:"☀️", ans:["太陽","taiyou"], phon:"taiyou"},
+    ],
   ],
   ru: [
     [ // Livello 1
@@ -6230,6 +6449,32 @@ const LEARN = {
       {it:"Tardi", ans:["Поздно","pozdno"], phon:"POZ-dno"},
       {it:"Un quarto d'ora", ans:["Четверть часа","chetvert chasa"], phon:"CET-viert CIA-sa"},
       {it:"L'orologio", ans:["Часы","chasy"], phon:"cia-SY"},
+    ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["Яблоко","yabloko"], phon:"yabloko"},
+      {it:"L'aereo", emoji:"✈️", ans:["Самолёт","samolyot"], phon:"samolyot"},
+      {it:"La macchina", emoji:"🚗", ans:["Машина","mashina"], phon:"mashina"},
+      {it:"La casa", emoji:"🏠", ans:["Дом","dom"], phon:"dom"},
+      {it:"La chiave", emoji:"🔑", ans:["Ключ","klyuch"], phon:"klyuch"},
+      {it:"La sedia", emoji:"🪑", ans:["Стул","stul"], phon:"stul"},
+      {it:"Il letto", emoji:"🛏️", ans:["Кровать","krovat"], phon:"krovat"},
+      {it:"La porta", emoji:"🚪", ans:["Дверь","dver"], phon:"dver"},
+      {it:"Il telefono", emoji:"📱", ans:["Телефон","telefon"], phon:"telefon"},
+      {it:"Il computer", emoji:"💻", ans:["Компьютер","kompyuter"], phon:"kompyuter"},
+      {it:"Il libro", emoji:"📖", ans:["Книга","kniga"], phon:"kniga"},
+      {it:"L'orologio", emoji:"⌚", ans:["Часы","chasy"], phon:"chasy"},
+      {it:"Gli occhiali", emoji:"👓", ans:["Очки","ochki"], phon:"ochki"},
+      {it:"L'ombrello", emoji:"☂️", ans:["Зонт","zont"], phon:"zont"},
+      {it:"La borsa", emoji:"👜", ans:["Сумка","sumka"], phon:"sumka"},
+      {it:"La scarpa", emoji:"👞", ans:["Туфля","tuflya"], phon:"tuflya"},
+      {it:"Il cane", emoji:"🐶", ans:["Собака","sobaka"], phon:"sobaka"},
+      {it:"Il gatto", emoji:"🐱", ans:["Кошка","koshka"], phon:"koshka"},
+      {it:"Il pane", emoji:"🍞", ans:["Хлеб","khleb"], phon:"khleb"},
+      {it:"Il latte", emoji:"🥛", ans:["Молоко","moloko"], phon:"moloko"},
+      {it:"La bicicletta", emoji:"🚲", ans:["Велосипед","velosiped"], phon:"velosiped"},
+      {it:"Il treno", emoji:"🚂", ans:["Поезд","poyezd"], phon:"poyezd"},
+      {it:"Il fiore", emoji:"🌸", ans:["Цветок","tsvetok"], phon:"tsvetok"},
+      {it:"Il sole", emoji:"☀️", ans:["Солнце","solntse"], phon:"solntse"},
     ],
   ],
   tr: [
@@ -6356,6 +6601,32 @@ const LEARN = {
       {it:"Un quarto d'ora", ans:["çeyrek saat","ceyrek saat"], phon:"ceI-rek sa-AT"},
       {it:"L'orologio", ans:["saat"], phon:"sa-AT"},
     ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["elma"], phon:"EL-ma"},
+      {it:"L'aereo", emoji:"✈️", ans:["uçak","ucak"], phon:"u-CIAK"},
+      {it:"La macchina", emoji:"🚗", ans:["araba"], phon:"a-ra-BA"},
+      {it:"La casa", emoji:"🏠", ans:["ev"], phon:"EV"},
+      {it:"La chiave", emoji:"🔑", ans:["anahtar"], phon:"a-nah-TAR"},
+      {it:"La sedia", emoji:"🪑", ans:["sandalye"], phon:"san-dal-IE"},
+      {it:"Il letto", emoji:"🛏️", ans:["yatak"], phon:"ya-TAK"},
+      {it:"La porta", emoji:"🚪", ans:["kapı"], phon:"ka-PI"},
+      {it:"Il telefono", emoji:"📱", ans:["telefon"], phon:"te-le-FON"},
+      {it:"Il computer", emoji:"💻", ans:["bilgisayar"], phon:"bil-ghi-sa-YAR"},
+      {it:"Il libro", emoji:"📖", ans:["kitap"], phon:"ki-TAP"},
+      {it:"L'orologio", emoji:"⌚", ans:["saat"], phon:"sa-AT"},
+      {it:"Gli occhiali", emoji:"👓", ans:["gözlük","gozluk"], phon:"gheuz-LIUK"},
+      {it:"L'ombrello", emoji:"☂️", ans:["şemsiye","semsiye"], phon:"scem-si-IE"},
+      {it:"La borsa", emoji:"👜", ans:["çanta","canta"], phon:"cian-TA"},
+      {it:"La scarpa", emoji:"👞", ans:["ayakkabı"], phon:"a-yak-ka-BI"},
+      {it:"Il cane", emoji:"🐶", ans:["köpek","kopek"], phon:"keu-PEK"},
+      {it:"Il gatto", emoji:"🐱", ans:["kedi"], phon:"ke-DI"},
+      {it:"Il pane", emoji:"🍞", ans:["ekmek"], phon:"ek-MEK"},
+      {it:"Il latte", emoji:"🥛", ans:["süt","sut"], phon:"SIUT"},
+      {it:"La bicicletta", emoji:"🚲", ans:["bisiklet"], phon:"bi-sik-LET"},
+      {it:"Il treno", emoji:"🚂", ans:["tren"], phon:"TREN"},
+      {it:"Il fiore", emoji:"🌸", ans:["çiçek","cicek"], phon:"ci-CEK"},
+      {it:"Il sole", emoji:"☀️", ans:["güneş","gunes"], phon:"giu-NESC"},
+    ],
   ],
   pt: [
     [ // Livello 1
@@ -6480,6 +6751,32 @@ const LEARN = {
       {it:"Tardi", ans:["tarde"], phon:"TAR-dgi"},
       {it:"Un quarto d'ora", ans:["um quarto de hora"], phon:"un KUAR-tu dgi O-ra"},
       {it:"L'orologio", ans:["o relógio","o relogio"], phon:"u re-LO-djiu"},
+    ],
+    [ // Livello 10 (Oggetti)
+      {it:"La mela", emoji:"🍎", ans:["a maçã","a maca"], phon:"a ma-SSAN"},
+      {it:"L'aereo", emoji:"✈️", ans:["o avião","o aviao"], phon:"u a-vi-AUN"},
+      {it:"La macchina", emoji:"🚗", ans:["o carro"], phon:"u CA-hu"},
+      {it:"La casa", emoji:"🏠", ans:["a casa"], phon:"a CA-za"},
+      {it:"La chiave", emoji:"🔑", ans:["a chave"], phon:"a SHA-vi"},
+      {it:"La sedia", emoji:"🪑", ans:["a cadeira"], phon:"a ca-DEI-ra"},
+      {it:"Il letto", emoji:"🛏️", ans:["a cama"], phon:"a CA-ma"},
+      {it:"La porta", emoji:"🚪", ans:["a porta"], phon:"a POR-ta"},
+      {it:"Il telefono", emoji:"📱", ans:["o telefone"], phon:"u te-le-FO-ni"},
+      {it:"Il computer", emoji:"💻", ans:["o computador"], phon:"u com-pu-ta-DOR"},
+      {it:"Il libro", emoji:"📖", ans:["o livro"], phon:"u LI-vru"},
+      {it:"L'orologio", emoji:"⌚", ans:["o relógio","o relogio"], phon:"u re-LO-djiu"},
+      {it:"Gli occhiali", emoji:"👓", ans:["os óculos","os oculos"], phon:"us O-cu-lus"},
+      {it:"L'ombrello", emoji:"☂️", ans:["o guarda-chuva"], phon:"u guar-da-CHU-va"},
+      {it:"La borsa", emoji:"👜", ans:["a bolsa"], phon:"a BOL-sa"},
+      {it:"La scarpa", emoji:"👞", ans:["o sapato"], phon:"u sa-PA-tu"},
+      {it:"Il cane", emoji:"🐶", ans:["o cachorro"], phon:"u ca-SHO-hu"},
+      {it:"Il gatto", emoji:"🐱", ans:["o gato"], phon:"u GA-tu"},
+      {it:"Il pane", emoji:"🍞", ans:["o pão","o pao"], phon:"u PAUN"},
+      {it:"Il latte", emoji:"🥛", ans:["o leite"], phon:"u LEI-tchi"},
+      {it:"La bicicletta", emoji:"🚲", ans:["a bicicleta"], phon:"a bi-si-CLE-ta"},
+      {it:"Il treno", emoji:"🚂", ans:["o trem"], phon:"u TREIN"},
+      {it:"Il fiore", emoji:"🌸", ans:["a flor"], phon:"a FLOR"},
+      {it:"Il sole", emoji:"☀️", ans:["o sol"], phon:"u SOL"},
     ],
   ],
 };
@@ -6721,7 +7018,8 @@ async function loadState(lang){
         1:{to_target:{index:0}, to_it:{index:0}}, 2:{to_target:{index:0}, to_it:{index:0}},
         3:{to_target:{index:0}, to_it:{index:0}}, 4:{to_target:{index:0}, to_it:{index:0}},
         5:{to_target:{index:0}, to_it:{index:0}}, 6:{to_target:{index:0}, to_it:{index:0}},
-        7:{to_target:{index:0}, to_it:{index:0}}, 8:{to_target:{index:0}, to_it:{index:0}}
+        7:{to_target:{index:0}, to_it:{index:0}}, 8:{to_target:{index:0}, to_it:{index:0}},
+        10:{to_target:{index:0}, to_it:{index:0}}
       }
     };
   } else {
@@ -6741,7 +7039,7 @@ async function loadState(lang){
       if(state.impara.level >= 2) state.impara.level = Math.min(state.impara.level + 1, 6);
       state.impara._migratedLevels2026 = true;
     }
-    [1,2,3,4,5,6,7,8].forEach(lvl=>{
+    [1,2,3,4,5,6,7,8,10].forEach(lvl=>{
       if(!state.impara.progress[lvl]) state.impara.progress[lvl] = { to_target:{index:0}, to_it:{index:0} };
       else {
         if(!state.impara.progress[lvl].to_target) state.impara.progress[lvl].to_target = {index:0};
@@ -7604,11 +7902,20 @@ function renderImpara(){
   if(level === 9){
     document.getElementById('imNormalMode').classList.add('hidden');
     document.getElementById('imDictationMode').classList.remove('hidden');
+    document.getElementById('imFlashcardMode').classList.add('hidden');
     renderDictationMode();
+    return;
+  }
+  if(level === 10){
+    document.getElementById('imNormalMode').classList.add('hidden');
+    document.getElementById('imDictationMode').classList.add('hidden');
+    document.getElementById('imFlashcardMode').classList.remove('hidden');
+    renderFlashcardMode();
     return;
   }
   document.getElementById('imNormalMode').classList.remove('hidden');
   document.getElementById('imDictationMode').classList.add('hidden');
+  document.getElementById('imFlashcardMode').classList.add('hidden');
 
   const list = currentImparaList();
   const dir = state.impara.direction;
@@ -7831,6 +8138,50 @@ document.getElementById('imDictInput').addEventListener('keydown', (e)=>{
 document.getElementById('imDictSkip').onclick = newDictationCard;
 document.getElementById('imDictNext').onclick = newDictationCard;
 
+/* ---------- OGGETTI: carte illustrate con emoji (Livello 10 di Impara) ---------- */
+function currentFlashcardIndex(){
+  if(!state.impara.progress[10]) state.impara.progress[10] = { to_target:{index:0}, to_it:{index:0} };
+  return state.impara.progress[10].to_target;
+}
+function renderFlashcardMode(){
+  const list = LEARN[currentLang][8]; // Livello 10: essendo il Livello 9 (Dettato) senza un proprio array, i dati di Oggetti sono il 9° elemento (indice 8)
+  const ds = currentFlashcardIndex();
+  if(ds.index >= list.length) ds.index = 0;
+  const idx = ds.index;
+  document.getElementById('fcProgressFill').style.width = (idx/list.length*100)+'%';
+  document.getElementById('fcProgressLabel').textContent = `Carta ${idx+1} di ${list.length}`;
+  const item = list[idx];
+  document.getElementById('fcEmoji').textContent = item.emoji || '🔎';
+  document.getElementById('fcFront').textContent = item.it;
+  document.getElementById('fcTarget').textContent = item.ans[0];
+  const isNative = currentLang === 'ar';
+  document.getElementById('fcTarget').setAttribute('dir', isNative ? 'rtl' : 'ltr');
+  document.getElementById('fcPhon').textContent = item.phon ? `Si pronuncia circa: ${item.phon}` : '';
+  document.getElementById('fcBack').classList.add('hidden');
+  document.getElementById('fcFlipBtn').classList.remove('hidden');
+  document.getElementById('fcFlipBtn').textContent = 'Gira la carta';
+  document.getElementById('fcSpeakBtn').classList.add('hidden');
+}
+document.getElementById('fcFlipBtn').onclick = ()=>{
+  const back = document.getElementById('fcBack');
+  const showing = back.classList.contains('hidden');
+  back.classList.toggle('hidden', !showing);
+  document.getElementById('fcSpeakBtn').classList.toggle('hidden', !showing);
+  document.getElementById('fcFlipBtn').textContent = showing ? 'Nascondi' : 'Gira la carta';
+};
+document.getElementById('fcSpeakBtn').onclick = ()=>{
+  const list = LEARN[currentLang][8];
+  const item = list[currentFlashcardIndex().index];
+  if(item) speak(item.ans[0], currentLang);
+};
+document.getElementById('fcNextBtn').onclick = async ()=>{
+  const list = LEARN[currentLang][8];
+  const ds = currentFlashcardIndex();
+  ds.index = (ds.index + 1) % list.length;
+  await saveState(currentLang);
+  renderFlashcardMode();
+};
+
 document.querySelectorAll('#imLevelTabs button').forEach(btn=>{
   btn.onclick = async ()=>{
     state.impara.level = Number(btn.dataset.level);
@@ -7861,9 +8212,24 @@ function pickNDistinct(max, n){
 }
 // Ventaglio ampio: tutte le frasi di tutti i livelli del Percorso Base per la lingua corrente,
 // così ogni duello può pescare tra centinaia di frasi diverse invece di ripetersi sempre uguale.
-function duelPhrasePool(lang){
-  return BEGINNER[lang].flat();
+let duelTier = 'A1';
+function duelPhrasePool(lang, tier){
+  const levels = levelsForCEFR(tier || duelTier);
+  const pool = [];
+  levels.forEach(lvl => {
+    const list = BEGINNER[lang] && BEGINNER[lang][lvl-1];
+    if(list) pool.push(...list);
+  });
+  // Rete di sicurezza: se una lingua non avesse abbastanza frasi in quel livello (non dovrebbe
+  // succedere con 31 livelli coperti), ripiega sull'intero repertorio per non bloccare il duello.
+  return pool.length >= 5 ? pool : BEGINNER[lang].flat();
 }
+document.querySelectorAll('#duelLevelTabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    duelTier = btn.dataset.tier;
+    document.querySelectorAll('#duelLevelTabs button').forEach(b=>b.classList.toggle('active', b===btn));
+  };
+});
 let duelActive = null;
 let duelAttempts = 0;
 
