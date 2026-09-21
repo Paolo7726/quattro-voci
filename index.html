@@ -295,6 +295,17 @@
   .lb-score{ font-family:'IBM Plex Mono', monospace; font-weight:600; color: var(--accent); }
 
   /* mappa a tappe */
+  .chapter-index{ display:flex; flex-direction:column; gap:8px; margin: 4px 0 16px; }
+  .chapter-btn{
+    display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    background: var(--panel-2); border:1px solid var(--hair); border-radius:12px;
+    padding:11px 14px; color: var(--ink); font-family:'IBM Plex Sans'; cursor:pointer;
+  }
+  .chapter-btn:hover{ border-color: var(--accent); }
+  .chapter-btn .ci-icon{ font-size:21px; flex-shrink:0; }
+  .chapter-btn .ci-body{ flex:1; min-width:0; }
+  .chapter-btn .ci-name{ font-weight:600; font-size:13.5px; }
+  .chapter-btn .ci-range{ font-size:11.5px; color: var(--ink-dim); margin-top:1px; }
   .map-wrap{ position:relative; padding: 10px 0 8px; }
   .map-wrap::before{
     content:''; position:absolute; left:50%; top:10px; bottom:30px; width:2px;
@@ -895,6 +906,8 @@
     <span class="tag">Percorso a tappe</span>
     <h2>La tua mappa &mdash; <span id="mapLangLabel">English</span></h2>
     <p class="sub">Le tappe del Percorso Base si sbloccano completando la precedente. Le tappe Sfida (bordo tratteggiato) sono facoltative: se hai difficoltà, tocca pure quella successiva e vai avanti. Tocca una tappa per aprire subito l'esercizio qui sotto.</p>
+    <p class="sub" style="margin-top:-8px;">Vuoi andare dritto a un argomento specifico, senza fare prima tutto il resto? Scegli il capitolo: si sblocca subito, il resto del percorso lo trovi comunque dove l'hai lasciato.</p>
+    <div class="chapter-index" id="chapterIndex"></div>
     <div class="map-wrap" id="mapPath"></div>
 
     <div class="lb-divider"></div>
@@ -9065,6 +9078,10 @@ async function showPlacementResults(){
   document.getElementById('placementGoBtn').onclick = async ()=>{
     state.beginner.level = recommendedLevel;
     state.beginner.direction = 'to_target';
+    // Sblocca davvero la mappa fino al livello consigliato: senza questo, il test diceva
+    // "parti dal 27" ma la mappa lo mostrava comunque bloccato con il lucchetto. I livelli
+    // precedenti restano "da fare" (nessun segno di spunta finto), solo non più inaccessibili.
+    state.beginner.maxLevelUnlocked = Math.max(state.beginner.maxLevelUnlocked || 1, recommendedLevel);
     await saveState(currentLang);
     closePlacementModal();
     renderBeginner();
@@ -9251,7 +9268,47 @@ async function renderOggi(){
   renderMissions();
 }
 
+// Indice dei capitoli: permette di saltare direttamente all'inizio di un argomento specifico,
+// senza dover prima completare tutto quello che viene numericamente prima. Una volta dentro un
+// capitolo, le sue tappe restano comunque in ordine (non si salta all'interno del capitolo stesso).
+const CHAPTER_INDEX = [
+  { icon:'📘', name:'Percorso Base', range:'Livelli 1-11 · saluti, opinioni, vita quotidiana', startLevel:1 },
+  { icon:'📍', name:'Di dove sei', range:'Livelli 12-13', startLevel:12 },
+  { icon:'👋', name:'Presentazione', range:'Livelli 14-15', startLevel:14 },
+  { icon:'🍽️', name:'Dal Ristorante', range:'Livelli 16-17', startLevel:16 },
+  { icon:'✈️', name:'In Aeroporto', range:'Livelli 18-27', startLevel:18 },
+  { icon:'🕑', name:'Che Ore Sono', range:'Livelli 28-31', startLevel:28 },
+];
+
+function renderChapterIndex(){
+  const box = document.getElementById('chapterIndex');
+  if(!box) return;
+  box.innerHTML = CHAPTER_INDEX.map(ch => `
+    <button class="chapter-btn" data-start="${ch.startLevel}">
+      <span class="ci-icon">${ch.icon}</span>
+      <span class="ci-body">
+        <div class="ci-name">${escapeHTML(ch.name)}</div>
+        <div class="ci-range">${escapeHTML(ch.range)}</div>
+      </span>
+    </button>
+  `).join('');
+  box.querySelectorAll('.chapter-btn').forEach(btn=>{
+    btn.onclick = async ()=>{
+      const startLevel = Number(btn.dataset.start);
+      state.beginner.level = startLevel;
+      state.beginner.direction = 'to_target';
+      state.beginner.maxLevelUnlocked = Math.max(state.beginner.maxLevelUnlocked || 1, startLevel);
+      await saveState(currentLang);
+      renderBeginner();
+      renderMap();
+      const target = document.getElementById('percorsoInline');
+      if(target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+    };
+  });
+}
+
 function renderMap(){
+  renderChapterIndex();
   document.getElementById('mapLangLabel').textContent = LANGS[currentLang].label;
   const wrap = document.getElementById('mapPath');
   wrap.innerHTML = '';
