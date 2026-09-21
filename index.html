@@ -172,6 +172,20 @@
     background: var(--panel-2); border-radius:8px; line-height:1.45; font-style:italic;
   }
 
+  .im-section-label{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color: var(--ink-dim); margin: 2px 2px 6px;
+  }
+  .im-tools-row{ display:flex; gap:8px; margin-bottom: 14px; }
+  .im-tool-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:7px;
+    background: var(--panel-2); border:1px solid var(--accent); color: var(--ink);
+    font-family:'IBM Plex Sans'; font-weight:600; font-size:13.5px; padding:11px 8px;
+    border-radius:10px; cursor:pointer;
+  }
+  .im-tool-btn:hover{ background: var(--accent-soft); }
+  .im-tool-btn.active{ background: var(--accent); color:#17140F; }
+  .im-tool-icon{ font-size:16px; }
   .grammar-box{ margin: 4px 0 14px; }
   .grammar-toggle{
     width:100%; text-align:left; background: var(--panel-2); border:1px solid var(--hair);
@@ -651,6 +665,7 @@
       <button class="grammar-toggle" id="grammarToggle">📐 Note di grammatica &mdash; <span id="grammarLangName">English</span> <span id="grammarChevron">&#9662;</span></button>
       <ul class="grammar-list hidden" id="grammarList"></ul>
     </div>
+    <div class="im-section-label">Livelli</div>
     <div class="scroll-hint-wrap" id="imLevelTabsWrap">
     <div class="level-tabs" id="imLevelTabs">
       <button data-level="1" class="active">1 &middot; Parole</button>
@@ -661,11 +676,14 @@
       <button data-level="6">6 &middot; Lavoro e clienti</button>
       <button data-level="7">7 &middot; Numeri</button>
       <button data-level="8">8 &middot; Che ore sono</button>
-      <button data-level="9">9 &middot; Dettato</button>
-      <button data-level="10">10 &middot; Oggetti</button>
     </div>
     <div class="scroll-fade left"></div>
     <div class="scroll-fade right"></div>
+    </div>
+    <div class="im-section-label">Strumenti extra</div>
+    <div class="im-tools-row">
+      <button class="im-tool-btn" data-level="9"><span class="im-tool-icon">&#127911;</span>Dettato</button>
+      <button class="im-tool-btn" data-level="10"><span class="im-tool-icon">&#127183;</span>Flashcard</button>
     </div>
     <div id="imNormalMode">
     <div class="level-tabs" id="imDirTabs">
@@ -7911,6 +7929,9 @@ function renderImpara(){
   document.querySelectorAll('#imLevelTabs button').forEach(b=>{
     b.classList.toggle('active', Number(b.dataset.level) === level);
   });
+  document.querySelectorAll('.im-tool-btn').forEach(b=>{
+    b.classList.toggle('active', Number(b.dataset.level) === level);
+  });
 
   if(level === 9){
     document.getElementById('imNormalMode').classList.add('hidden');
@@ -8195,7 +8216,7 @@ document.getElementById('fcNextBtn').onclick = async ()=>{
   renderFlashcardMode();
 };
 
-document.querySelectorAll('#imLevelTabs button').forEach(btn=>{
+document.querySelectorAll('#imLevelTabs button, .im-tool-btn').forEach(btn=>{
   btn.onclick = async ()=>{
     state.impara.level = Number(btn.dataset.level);
     await saveState(currentLang);
