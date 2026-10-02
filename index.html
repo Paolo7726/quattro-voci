@@ -7128,6 +7128,7 @@ function applyTheme(){
 
 async function switchLang(key){
   currentLang = key;
+  try{ localStorage.setItem('qv_last_lang', key); }catch(e){}
   await loadState(key);
   renderRing();
   applyTheme();
@@ -7525,7 +7526,7 @@ document.getElementById('btnSuggestCorr').onclick = async ()=>{
   statusEl.textContent = 'Cerco un suggerimento...';
   try{
     const targetCode = TRANSLATE_LANG_CODE[currentLang] || 'en';
-    let result = await translateViaGoogle(meaning, 'it', targetCode);
+    let result = await translateViaAzure(meaning, 'it', targetCode);
     if(!result){ result = await translateViaMyMemory(meaning, 'it', targetCode); }
     if(!result){ throw new Error('no result'); }
     document.getElementById('inputCorr').value = result.text;
@@ -8519,7 +8520,7 @@ document.getElementById('trMicToggle').onclick = ()=>{
 
 async function getChinesePinyin(text){
   try{
-    const mod = await import('https://cdn.jsdelivr.net/npm/pinyin-pro/dist/index.mjs');
+    const mod = await import('https://cdn.jsdelivr.net/npm/pinyin-pro@3.28.2/dist/index.mjs');
     return mod.pinyin(text, { toneType:'symbol' });
   }catch(e){
     console.warn('pinyin load error', e);
@@ -8605,30 +8606,37 @@ function approxPhonLatin(text, lang){
   return s;
 }
 
-// Traduzione diretta (vera macchina di traduzione, non basata su "memoria" di frasi salvate da altri).
-// Usiamo l'endpoint pubblico di Google Translate: nessuna chiave richiesta, ed è machine translation
-// vera, non un database di corrispondenze che a volte restituisce frasi scorrelate.
-// Include anche un tentativo di traslitterazione (dt=rm): funziona a intermittenza a seconda della
-// lingua e non è documentato ufficialmente, quindi lo trattiamo come bonus, mai come garanzia.
-async function translateViaGoogle(text, sourceCode, targetCode){
+// Traduzione diretta tramite Microsoft Azure Translator (2 milioni di caratteri gratis al mese,
+// per sempre, servizio ufficiale — sostituisce il precedente endpoint non ufficiale di Google,
+// che poteva smettere di funzionare in qualsiasi momento e non era autorizzato per app pubblicate).
+// La chiave Azure non può stare qui (chiunque la leggerebbe e consumerebbe la soglia gratuita):
+// passa invece da un piccolo "intermediario" — un Cloudflare Worker gratuito che la tiene nascosta.
+// ISTRUZIONI DI CONFIGURAZIONE (vedi anche azure-worker.js allegato):
+//   1. Crea un account Azure e una risorsa "Translator" (piano F0, gratuito) — serve una carta solo
+//      per verifica identità, il piano F0 non addebita mai nulla, restituisce un errore oltre soglia.
+//   2. Crea un Cloudflare Worker gratuito, incolla il contenuto di azure-worker.js.
+//   3. Nelle impostazioni del Worker, aggiungi le variabili AZURE_KEY (come "secret") e AZURE_REGION
+//      (la regione scelta creando la risorsa Azure, es. "westeurope").
+//   4. Copia l'indirizzo del Worker pubblicato e incollalo qui sotto al posto del valore di esempio.
+// Finché l'indirizzo resta quello di esempio, l'app salta questo passaggio e usa subito la riserva
+// MyMemory più sotto, senza errori e senza bisogno di modificare altro codice.
+const AZURE_WORKER_URL = 'https://IL-TUO-WORKER.IL-TUO-ACCOUNT.workers.dev';
+const AZURE_TRANSLIT_SCRIPT = { ar:'Arab', 'zh-CN':'Hans', ja:'Jpan', ru:'Cyrl' }; // le altre lingue sono già in alfabeto latino
+function toAzureLangCode(code){ return code === 'zh-CN' ? 'zh-Hans' : code; }
+
+async function translateViaAzure(text, sourceCode, targetCode){
+  if(!AZURE_WORKER_URL || AZURE_WORKER_URL.includes('IL-TUO-WORKER')) return null; // non ancora configurato
   try{
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceCode}&tl=${targetCode}&dt=t&dt=rm&q=${encodeURIComponent(text)}`;
-    const res = await fetch(url);
+    const params = new URLSearchParams({ text, from: toAzureLangCode(sourceCode), to: toAzureLangCode(targetCode) });
+    const script = AZURE_TRANSLIT_SCRIPT[targetCode];
+    if(script) params.set('translit', script);
+    const res = await fetch(`${AZURE_WORKER_URL}/?${params.toString()}`);
     if(!res.ok) return null;
     const data = await res.json();
-    if(!data || !Array.isArray(data[0])) return null;
-    const translated = data[0].map(chunk => chunk[0]).join('');
-    if(!translated || !translated.trim()) return null;
-    let translit = null;
-    try{
-      const last = data[0][data[0].length - 1];
-      if(Array.isArray(last) && typeof last[2] === 'string' && last[2].trim()){
-        translit = last[2].trim();
-      }
-    }catch(e){ /* nessuna traslitterazione disponibile, va bene così */ }
-    return { text: translated.trim(), translit };
+    if(!data || typeof data.text !== 'string' || !data.text.trim()) return null;
+    return { text: data.text.trim(), translit: data.translit || null };
   }catch(e){
-    console.warn('google translate error', e);
+    console.warn('azure translate error', e);
     return null;
   }
 }
@@ -8660,7 +8668,7 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
   btn.disabled = true;
   btn.textContent = 'Traduco...';
   try{
-    let result = await translateViaGoogle(text, sourceCode, destCode);
+    let result = await translateViaAzure(text, sourceCode, destCode);
     if(!result){ result = await translateViaMyMemory(text, sourceCode, destCode); }
     if(!result){ throw new Error('empty translation'); }
     const translated = result.text;
@@ -9692,6 +9700,21 @@ function updateReminderBtn(){
   const on = reminderIsEnabled() && Notification.permission === 'granted';
   btn.textContent = on ? 'Disattiva' : 'Attiva';
 }
+// Su Chrome per Android (quindi anche nell'app pubblicata sul Play Store), "new Notification(...)"
+// dà errore silenzioso e la notifica non compare mai: va usata la registrazione del service worker.
+// Il fallback su "new Notification" resta per i pochi contesti senza service worker attivo.
+async function showAppNotification(title, options){
+  try{
+    if('serviceWorker' in navigator){
+      const reg = await navigator.serviceWorker.ready;
+      if(reg && reg.showNotification){
+        await reg.showNotification(title, options);
+        return;
+      }
+    }
+    if(typeof Notification !== 'undefined') new Notification(title, options);
+  }catch(e){ console.warn('notification error', e); }
+}
 document.getElementById('reminderToggle').onclick = async ()=>{
   if(typeof Notification === 'undefined') return;
   const currentlyOn = reminderIsEnabled() && Notification.permission === 'granted';
@@ -9704,7 +9727,7 @@ document.getElementById('reminderToggle').onclick = async ()=>{
     const perm = await Notification.requestPermission();
     if(perm === 'granted'){
       setReminderEnabled(true);
-      new Notification('Quattro Voci', { body: 'Promemoria attivato: ti avviserò se salti un giorno di pratica.' });
+      showAppNotification('Quattro Voci', { body: 'Promemoria attivato: ti avviserò se salti un giorno di pratica.' });
     } else {
       setReminderEnabled(false);
     }
@@ -9718,14 +9741,19 @@ function maybeShowPracticeReminder(){
     const today = todayStr();
     if(localStorage.getItem('qv_reminder_last_shown') === today) return;
     if(state.lastDate === today) return;
-    new Notification('Quattro Voci', { body: `Non ti sei ancora esercitato oggi con ${LANGS[currentLang].label}. Anche solo 5 minuti fanno la differenza!` });
+    showAppNotification('Quattro Voci', { body: `Non ti sei ancora esercitato oggi con ${LANGS[currentLang].label}. Anche solo 5 minuti fanno la differenza!` });
     localStorage.setItem('qv_reminder_last_shown', today);
   }catch(e){ console.warn('reminder notification error', e); }
 }
 
 (async function init(){
   renderRing();
-  await switchLang('en');
+  let startLang = 'en';
+  try{
+    const saved = localStorage.getItem('qv_last_lang');
+    if(saved && LANGS[saved]) startLang = saved;
+  }catch(e){}
+  await switchLang(startLang);
   resetTimer();
   updateReminderBtn();
   maybeShowPracticeReminder();
@@ -10222,11 +10250,12 @@ window.addEventListener('cloud-ready', ()=>{
         const cred = EmailAuthProvider.credential(user.email, password);
         await reauthenticateWithCredential(user, cred);
       }
-      const ALL_LANGS = ['en','fr','es','de','ar','zh','ja','ru','tr'];
+      const ALL_LANGS = ['en','fr','es','de','pt','ar','zh','ja','ru','tr'];
       for(const lang of ALL_LANGS){
         try{ await deleteDoc(doc(db, 'users', uid, 'progress', lang)); }catch(e){ console.warn('delete progress error', lang, e); }
       }
       try{ await deleteDoc(doc(db, 'leaderboard', uid)); }catch(e){ console.warn('delete leaderboard error', e); }
+      try{ await deleteDoc(doc(db, 'leaderboard_weekly', getWeekKey(), 'entries', uid)); }catch(e){ console.warn('delete weekly leaderboard error', e); }
       try{ await deleteDoc(doc(db, 'directory', uid)); }catch(e){ console.warn('delete directory error', e); }
       await deleteUser(user);
     },

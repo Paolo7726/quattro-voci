@@ -1,16 +1,23 @@
 {
+  "id": "/",
+  "lang": "it",
   "name": "Quattro Voci",
   "short_name": "4 Voci",
-  "description": "Ecosistema di immersione in 9 lingue — EN / FR / ES / DE / AR / 中文 / 日本語 / RU / TR — sfide, shadowing, pronuncia, dialoghi, duelli e percorso completo",
+  "description": "Ecosistema di immersione in 10 lingue — EN / FR / ES / DE / PT / AR / 中文 / 日本語 / RU / TR — sfide, shadowing, pronuncia, dialoghi, duelli e percorso completo, pensato per chi parla italiano",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#1B1916",
   "theme_color": "#1B1916",
+  "categories": ["education", "lifestyle"],
   "icons": [
     { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    { "src": "icons/screenshot-1.png", "sizes": "390x844", "type": "image/png", "form_factor": "narrow", "label": "Schermata Oggi con missioni e serie di pratica" },
+    { "src": "icons/screenshot-2.png", "sizes": "390x844", "type": "image/png", "form_factor": "narrow", "label": "Mappa a tappe del Percorso Base" }
   ]
 }
