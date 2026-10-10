@@ -8687,7 +8687,7 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
       const py = await getChinesePinyin(translated);
       if(py){
         phonEl.classList.remove('hidden');
-        phonEl.innerHTML = `Pinyin: <b>${py}</b>`;
+        phonEl.innerHTML = `Pinyin: <b>${escapeHTML(py)}</b>`;
       } else {
         phonEl.classList.add('hidden');
       }
@@ -8697,10 +8697,10 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
         ? "Pronuncia (molto approssimativa — l'inglese si scrive in modo irregolare)"
         : 'Pronuncia (approssimativa)';
       phonEl.classList.remove('hidden');
-      phonEl.innerHTML = `${label}: <b>${approx}</b>`;
+      phonEl.innerHTML = `${label}: <b>${escapeHTML(approx)}</b>`;
     } else if((outputLang === 'ar' || outputLang === 'ja') && result.translit){
       phonEl.classList.remove('hidden');
-      phonEl.innerHTML = `Traslitterazione: <b>${result.translit}</b>`;
+      phonEl.innerHTML = `Traslitterazione: <b>${escapeHTML(result.translit)}</b>`;
     } else {
       phonEl.classList.add('hidden');
       phonEl.innerHTML = '';
@@ -10194,7 +10194,7 @@ window.addEventListener('cloud-ready', ()=>{
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc, increment, deleteDoc,
-    collection, query, orderBy, limit, getDocs
+    collection, collectionGroup, query, where, orderBy, limit, getDocs
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -10255,7 +10255,14 @@ window.addEventListener('cloud-ready', ()=>{
         try{ await deleteDoc(doc(db, 'users', uid, 'progress', lang)); }catch(e){ console.warn('delete progress error', lang, e); }
       }
       try{ await deleteDoc(doc(db, 'leaderboard', uid)); }catch(e){ console.warn('delete leaderboard error', e); }
-      try{ await deleteDoc(doc(db, 'leaderboard_weekly', getWeekKey(), 'entries', uid)); }catch(e){ console.warn('delete weekly leaderboard error', e); }
+      try{
+        // Cancella la voce di classifica settimanale per TUTTE le settimane passate, non solo
+        // quella corrente: una collectionGroup query trova ogni sottocollezione "entries" (di
+        // qualunque settimana) in cui il campo uid corrisponde a questo utente.
+        const weeklyQ = query(collectionGroup(db, 'entries'), where('uid', '==', uid));
+        const weeklySnap = await getDocs(weeklyQ);
+        await Promise.all(weeklySnap.docs.map(d => deleteDoc(d.ref).catch(e => console.warn('delete weekly entry error', d.ref.path, e))));
+      }catch(e){ console.warn('delete weekly leaderboard error', e); }
       try{ await deleteDoc(doc(db, 'directory', uid)); }catch(e){ console.warn('delete directory error', e); }
       await deleteUser(user);
     },
@@ -10284,6 +10291,7 @@ window.addEventListener('cloud-ready', ()=>{
       try{
         const weekKey = getWeekKey();
         await setDoc(doc(db, 'leaderboard_weekly', weekKey, 'entries', uid), {
+          uid,
           nickname: cachedNicknameForWeekly || 'Anonimo',
           score: increment(amount),
           updatedAt: Date.now()
