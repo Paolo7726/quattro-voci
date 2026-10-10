@@ -1,4 +1,4 @@
-const CACHE_NAME = 'quattro-voci-v2';
+const CACHE_NAME = 'quattro-voci-v3';
 const ASSETS = [
   './',
   './index.html',
