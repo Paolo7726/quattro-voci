@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elimina account · Quattro Voci</title>
+<meta name="theme-color" content="#1B1916">
+<meta name="robots" content="noindex">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+  :root{ --bg:#1B1916; --panel:#242119; --ink:#EDE6D8; --ink-dim:#A79C89; --hair:#3A352B; --accent:#5EA8A0; --danger:#D96C6C; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height:1.55; }
+  main{ max-width:520px; margin:0 auto; padding:32px 18px 64px; }
+  h1{ font-family: Georgia, 'Fraunces', serif; font-size:28px; margin:0 0 8px; }
+  p, li{ font-size:15px; }
+  .card{ background:var(--panel); border:1px solid var(--hair); border-radius:14px; padding:18px 16px; margin:18px 0; }
+  label{ display:block; font-size:13px; color:var(--ink-dim); margin:12px 0 4px; }
+  input[type=email], input[type=password]{ width:100%; padding:12px; border-radius:10px; border:1px solid var(--hair); background:#1F1C17; color:var(--ink); font-size:16px; }
+  .check{ display:flex; gap:10px; align-items:flex-start; margin-top:14px; font-size:14px; }
+  .check input{ margin-top:4px; width:18px; height:18px; }
+  button{ width:100%; margin-top:16px; padding:13px; border-radius:999px; border:1px solid var(--danger); background:transparent; color:var(--danger); font-size:15px; font-weight:600; cursor:pointer; }
+  button:disabled{ opacity:.5; cursor:default; }
+  .fb{ margin-top:12px; font-size:14px; min-height:20px; }
+  .fb.err{ color:var(--danger); }
+  .fb.ok{ color:var(--accent); }
+  .dim{ color:var(--ink-dim); font-size:13.5px; }
+  a{ color:var(--accent); }
+  .back{ display:inline-block; margin-bottom:20px; font-size:14px; }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="./index.html">&larr; Torna a Quattro Voci</a>
+  <h1>Elimina il tuo account</h1>
+  <p>Da questa pagina puoi eliminare in modo <b>definitivo</b> il tuo account Quattro Voci, anche se non hai più l'app installata.</p>
+
+  <div class="card">
+    <p style="margin-top:0;"><b>Verranno cancellati per sempre:</b></p>
+    <ul style="margin-bottom:0;">
+      <li>l'account (email e password);</li>
+      <li>i progressi di studio in tutte le 10 lingue;</li>
+      <li>il punteggio e il nome pubblico nella classifica generale e in quelle settimanali;</li>
+      <li>l'iscrizione nell'elenco degli utenti.</li>
+    </ul>
+    <p class="dim" style="margin-bottom:0;">I duelli a cui hai partecipato: quelli già scaduti vengono cancellati subito, quelli ancora in corso scadono entro 7 giorni. I dati salvati solo sul tuo dispositivo (senza account) non ci arrivano mai: per toglierli basta cancellare i dati del browser o disinstallare l'app.</p>
+  </div>
+
+  <div class="card" id="formCard">
+    <label for="email">Email dell'account</label>
+    <input type="email" id="email" autocomplete="email" required>
+    <label for="pass">Password</label>
+    <input type="password" id="pass" autocomplete="current-password" required>
+    <div class="check"><input type="checkbox" id="confirm"><label for="confirm" style="margin:0; color:var(--ink); font-size:14px;">Ho capito che l'eliminazione è definitiva e non si può annullare.</label></div>
+    <button id="deleteBtn" disabled>Elimina definitivamente l'account</button>
+    <div class="fb" id="fb" role="status"></div>
+  </div>
+
+  <p class="dim">Non ricordi la password o non riesci ad accedere? Scrivi a <a href="mailto:quattrovoci.app@gmail.com?subject=Richiesta%20eliminazione%20account" class="contact-email">quattrovoci.app@gmail.com</a> dall'indirizzo email dell'account: elimineremo i tuoi dati entro 30 giorni.</p>
+  <p class="dim"><a href="./privacy.html">Privacy Policy</a></p>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, deleteUser, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import { getFirestore, doc, deleteDoc, collection, query, where, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  // Stessa configurazione (pubblica) di index.html.
+  const firebaseConfig = {
+    apiKey: "AIzaSyC8SbgtSVjD1GmLIleWnGpmceS6dbaz6hI",
+    authDomain: "quattro-voci.firebaseapp.com",
+    projectId: "quattro-voci",
+    storageBucket: "quattro-voci.firebasestorage.app",
+    messagingSenderId: "621886572166",
+    appId: "1:621886572166:web:eea48f5ef7b3e7cee97307"
+  };
+  const ALL_LANGS = ['en','fr','es','de','pt','ar','zh','ja','ru','tr'];
+  const WEEKLY_LEADERBOARD_START = '2026-07-01';
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Stessa chiave settimana ISO usata dall'app (es. "2026-W41").
+  function getWeekKey(d){
+    const now = d || new Date();
+    const date = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+    const dayNum = date.getUTCDay() || 7;
+    date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+    return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2,'0')}`;
+  }
+
+  const $ = (id) => document.getElementById(id);
+  const fb = $('fb');
+  const btn = $('deleteBtn');
+  function setFb(text, cls){ fb.textContent = text; fb.className = 'fb' + (cls ? ' ' + cls : ''); }
+  $('confirm').onchange = () => { btn.disabled = !$('confirm').checked; };
+
+  function authErrorText(e){
+    const c = (e && e.code) || '';
+    if(c.includes('invalid-credential') || c.includes('wrong-password') || c.includes('user-not-found') || c.includes('invalid-email'))
+      return 'Email o password non corrette.';
+    if(c.includes('too-many-requests')) return 'Troppi tentativi. Riprova tra qualche minuto.';
+    if(c.includes('network')) return 'Problema di connessione. Controlla internet e riprova.';
+    return 'Non è stato possibile completare l’operazione. Riprova o scrivici via email.';
+  }
+
+  btn.onclick = async () => {
+    const email = $('email').value.trim();
+    const pass = $('pass').value;
+    if(!email || !pass){ setFb('Inserisci email e password.', 'err'); return; }
+    if(!$('confirm').checked){ setFb('Conferma di aver capito che l’eliminazione è definitiva.', 'err'); return; }
+    btn.disabled = true;
+    setFb('Accesso in corso...');
+    let user;
+    try{
+      const cred = await signInWithEmailAndPassword(auth, email, pass);
+      user = cred.user;
+    }catch(e){ setFb(authErrorText(e), 'err'); btn.disabled = false; return; }
+
+    setFb('Cancellazione dei dati in corso...');
+    const uid = user.uid;
+    const tasks = [];
+    ALL_LANGS.forEach(lang => tasks.push(deleteDoc(doc(db, 'users', uid, 'progress', lang))));
+    tasks.push(deleteDoc(doc(db, 'leaderboard', uid)));
+    const weekKeys = new Set();
+    const cursor = new Date(WEEKLY_LEADERBOARD_START);
+    const now = new Date();
+    while(cursor <= now){ weekKeys.add(getWeekKey(cursor)); cursor.setDate(cursor.getDate() + 7); }
+    weekKeys.add(getWeekKey(now));
+    weekKeys.forEach(wk => tasks.push(deleteDoc(doc(db, 'leaderboard_weekly', wk, 'entries', uid))));
+    tasks.push(deleteDoc(doc(db, 'directory', uid)));
+    // Duelli già scaduti (oltre 7 giorni) creati o accettati: le regole permettono di cancellare solo questi.
+    for(const field of ['creatorUid', 'opponentUid']){
+      try{
+        const snap = await getDocs(query(collection(db, 'duels'), where(field, '==', uid), limit(100)));
+        snap.forEach(d => {
+          const data = d.data();
+          const expired = (data.expireAt && data.expireAt.toMillis) ? data.expireAt.toMillis() < Date.now()
+            : (typeof data.createdAt === 'number' && data.createdAt < Date.now() - 7 * 86400000);
+          if(expired) tasks.push(deleteDoc(d.ref));
+        });
+      }catch(e){ console.warn('duel lookup error', e); }
+    }
+    const results = await Promise.allSettled(tasks);
+    const failed = results.filter(r => r.status === 'rejected').length;
+    if(failed) console.warn('Alcune cancellazioni non sono riuscite:', failed);
+
+    try{
+      await deleteUser(user);
+      $('formCard').innerHTML = '<p style="margin:0;"><b>Account eliminato.</b></p><p class="dim" style="margin-bottom:0;">Il tuo account e i dati collegati sono stati cancellati. Puoi continuare a usare Quattro Voci senza account quando vuoi.</p>';
+    }catch(e){
+      try{ await signOut(auth); }catch(_){}
+      setFb('I dati sono stati cancellati, ma non è stato possibile eliminare l’accesso. Riprova tra poco o scrivici via email.', 'err');
+      btn.disabled = false;
+    }
+  };
+</script>
+</body>
+</html>
