@@ -26,6 +26,7 @@
   .fb.ok{ color:var(--accent); }
   .dim{ color:var(--ink-dim); font-size:13.5px; }
   a{ color:var(--accent); }
+  .grecaptcha-badge{ visibility:hidden !important; }
   .back{ display:inline-block; margin-bottom:20px; font-size:14px; }
 </style>
 </head>
@@ -58,10 +59,12 @@
 
   <p class="dim">Non ricordi la password o non riesci ad accedere? Scrivi a <a href="mailto:quattrovoci.app@gmail.com?subject=Richiesta%20eliminazione%20account" class="contact-email">quattrovoci.app@gmail.com</a> dall'indirizzo email dell'account: elimineremo i tuoi dati entro 30 giorni.</p>
   <p class="dim"><a href="./privacy.html">Privacy Policy</a></p>
+  <p class="dim" style="font-size:12px;">Questo sito è protetto da reCAPTCHA e si applicano le <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Norme sulla privacy</a> e i <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Termini di servizio</a> di Google.</p>
 </main>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check.js";
   import { getAuth, signInWithEmailAndPassword, deleteUser, signOut } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import { getFirestore, doc, deleteDoc, collection, query, where, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
@@ -77,7 +80,14 @@
   const ALL_LANGS = ['en','fr','es','de','pt','ar','zh','ja','ru','tr'];
   const WEEKLY_LEADERBOARD_START = '2026-07-01';
 
+  // ⚠️ Stessa "chiave del sito" reCAPTCHA v3 incollata in index.html.
+  const RECAPTCHA_SITE_KEY = 'INCOLLA-QUI-LA-SITE-KEY';
+
   const app = initializeApp(firebaseConfig);
+  if(RECAPTCHA_SITE_KEY && !RECAPTCHA_SITE_KEY.startsWith('INCOLLA')){
+    try{ initializeAppCheck(app, { provider: new ReCaptchaV3Provider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true }); }
+    catch(e){ console.warn('App Check init error', e); }
+  }
   const auth = getAuth(app);
   const db = getFirestore(app);
 

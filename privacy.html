@@ -67,6 +67,7 @@
   <h2>5. Servizi esterni utilizzati</h2>
   <ul>
     <li><b>Google Firebase</b> (Authentication e Cloud Firestore) — account e dati di studio, su server di Google Cloud.</li>
+    <li><b>Firebase App Check con Google reCAPTCHA</b> — verifica in modo invisibile che le richieste arrivino davvero dall'app e non da programmi automatici. reCAPTCHA raccoglie informazioni tecniche sul dispositivo e sull'uso della pagina, secondo le <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Norme sulla privacy</a> e i <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Termini di servizio</a> di Google.</li>
     <li><b>GitHub Pages</b> — ospita l'app; come ogni sito, riceve dati tecnici della connessione (es. indirizzo IP).</li>
     <li><b>Microsoft Azure Translator</b>, tramite un intermediario <b>Cloudflare Workers</b> — traduzione del testo che scrivi in «Traduci».</li>
     <li><b>MyMemory</b> (Translated srl) — traduzione di riserva, solo se il servizio principale non risponde.</li>
@@ -100,7 +101,7 @@
   <p>Per creare un account bisogna avere almeno 14 anni (età prevista in Italia per il consenso ai servizi digitali). Sotto questa età l'account può essere creato solo con il consenso di un genitore. L'app si può comunque usare senza account.</p>
 
   <h2>11. Sicurezza</h2>
-  <p>Le comunicazioni avvengono su connessione cifrata (HTTPS). L'accesso ai dati nel database è limitato da regole che permettono a ciascun utente di leggere e modificare solo i propri progressi.</p>
+  <p>Le comunicazioni avvengono su connessione cifrata (HTTPS) e le richieste al database sono verificate con Firebase App Check. L'accesso ai dati nel database è limitato da regole che permettono a ciascun utente di leggere e modificare solo i propri progressi.</p>
 
   <h2>12. Modifiche</h2>
   <p>Se questa informativa cambia, la nuova versione sarà pubblicata su questa pagina con la data di aggiornamento.</p>

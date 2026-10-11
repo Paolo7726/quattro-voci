@@ -449,6 +449,9 @@
   .rtl-text{ direction: rtl; font-family:'IBM Plex Sans Arabic', sans-serif; }
 
   .hidden{ display:none !important; }
+  /* Il badge flottante di reCAPTCHA coprirebbe la barra in basso: lo nascondiamo e mostriamo
+     al suo posto la dicitura richiesta da Google nel pannello Account. */
+  .grecaptcha-badge{ visibility:hidden !important; }
   .voice-notice{
     position:fixed; left:50%; transform:translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom));
     width: min(440px, calc(100% - 24px)); z-index: 60;
@@ -602,6 +605,7 @@
         <button type="button" id="forgotPasswordBtn" style="background:none; border:none; color:var(--ink-dim); font-size:12.5px; text-decoration:underline; cursor:pointer; padding:10px 2px 0; display:block;">Password dimenticata?</button>
         <p class="sub" style="margin-top:12px;">Facoltativo: puoi continuare a usare l'app senza account. In quel caso i progressi restano salvati solo su questo dispositivo.</p>
         <p class="sub" style="margin-top:8px;"><a href="./privacy.html" target="_blank" rel="noopener" style="color:var(--ink-dim); text-decoration:underline;">Privacy Policy</a> &middot; <a href="./elimina-account.html" target="_blank" rel="noopener" style="color:var(--ink-dim); text-decoration:underline;">Elimina account</a></p>
+        <p class="sub" style="margin-top:6px; font-size:11px;">Questo sito è protetto da reCAPTCHA e si applicano le <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--ink-dim);">Norme sulla privacy</a> e i <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:var(--ink-dim);">Termini di servizio</a> di Google.</p>
       </div>
 
       <div id="authLoggedIn" class="hidden">
@@ -12903,6 +12907,7 @@ window.addEventListener('cloud-ready', ()=>{
      ============================================================ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
     onAuthStateChanged, signOut, sendPasswordResetEmail,
@@ -12926,6 +12931,11 @@ window.addEventListener('cloud-ready', ()=>{
   // sostituisci questa stringa con il tuo UID, che trovi in:
   // Console Firebase → Authentication → tab "Utenti" → colonna "UID" della tua riga.
   const ADMIN_UID = "Xyx8cvHdpnUbyqgSCJZTg8780UM2";
+
+  // App Check (reCAPTCHA v3): dimostra a Firebase che le richieste arrivano davvero da questa app.
+  // ⚠️ Incolla qui la "chiave del sito" (site key) di reCAPTCHA v3. Finché resta il segnaposto,
+  // App Check non si attiva e l'app funziona come prima. Va incollata anche in elimina-account.html.
+  const RECAPTCHA_SITE_KEY = 'INCOLLA-QUI-LA-SITE-KEY';
 
   let app = null, auth = null, db = null;
   // Prima settimana in cui esiste la classifica settimanale: serve a cancellare tutte le voci
@@ -12959,6 +12969,11 @@ window.addEventListener('cloud-ready', ()=>{
   if(isConfigured){
     try{
       app = initializeApp(firebaseConfig);
+      if(RECAPTCHA_SITE_KEY && !RECAPTCHA_SITE_KEY.startsWith('INCOLLA')){
+        try{
+          initializeAppCheck(app, { provider: new ReCaptchaV3Provider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
+        }catch(e){ console.warn('App Check init error', e); }
+      }
       auth = getAuth(app);
       db = getFirestore(app);
     }catch(e){ console.warn('Firebase init error', e); }
