@@ -589,20 +589,22 @@
 
       <div id="authLoggedOut">
         <div class="level-tabs" id="authTabs">
-          <button data-mode="login" class="active">Accedi</button>
-          <button data-mode="signup">Registrati</button>
+          <button type="button" data-mode="login" class="active">Accedi</button>
+          <button type="button" data-mode="signup">Registrati</button>
         </div>
-        <input type="text" id="authNickname" placeholder="Nome pubblico (visibile in classifica)" autocomplete="nickname" maxlength="20" class="hidden">
-        <input type="email" id="authEmail" placeholder="Email" autocomplete="email">
+        <form id="authForm" action="#" method="post" novalidate>
+        <input type="text" id="authNickname" name="nickname" placeholder="Nome pubblico (visibile in classifica)" autocomplete="nickname" maxlength="20" class="hidden">
+        <input type="email" id="authEmail" name="email" placeholder="Email" autocomplete="username" readonly>
         <div class="pw-wrap">
-          <input type="password" id="authPass" placeholder="Password (min. 6 caratteri)" autocomplete="current-password">
+          <input type="password" id="authPass" name="password" placeholder="Password (min. 6 caratteri)" autocomplete="current-password" readonly>
           <button type="button" class="pw-toggle" id="pwToggle" aria-label="Mostra password">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
         <div class="auth-feedback" id="authFeedback"></div>
-        <button class="primary" id="authSubmit" style="width:100%">Accedi</button>
+        <button type="submit" class="primary" id="authSubmit" style="width:100%">Accedi</button>
         <button type="button" id="forgotPasswordBtn" style="background:none; border:none; color:var(--ink-dim); font-size:12.5px; text-decoration:underline; cursor:pointer; padding:10px 2px 0; display:block;">Password dimenticata?</button>
+        </form>
         <p class="sub" style="margin-top:12px;">Facoltativo: puoi continuare a usare l'app senza account. In quel caso i progressi restano salvati solo su questo dispositivo.</p>
         <p class="sub" style="margin-top:8px;"><a href="./privacy.html" target="_blank" rel="noopener" style="color:var(--ink-dim); text-decoration:underline;">Privacy Policy</a> &middot; <a href="./elimina-account.html" target="_blank" rel="noopener" style="color:var(--ink-dim); text-decoration:underline;">Elimina account</a></p>
         <p class="sub" style="margin-top:6px; font-size:11px;">Questo sito è protetto da reCAPTCHA e si applicano le <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--ink-dim);">Norme sulla privacy</a> e i <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:var(--ink-dim);">Termini di servizio</a> di Google.</p>
@@ -12523,7 +12525,9 @@ function openAuthModal(){
   const loggedIn = window.cloudAPI && window.cloudAPI.currentUser;
   document.getElementById('authLoggedOut').classList.toggle('hidden', !!loggedIn);
   document.getElementById('authLoggedIn').classList.toggle('hidden', !loggedIn);
+  if(!loggedIn && document.getElementById('authPass').hasAttribute('readonly')) lockAuthFields();
   if(loggedIn){
+    clearSensitiveFields();
     document.getElementById('authUserEmail').textContent = window.cloudAPI.currentUser.email;
     document.getElementById('authModalTitle').textContent = 'Account';
     const isAdmin = !!(window.cloudAPI.adminUid && window.cloudAPI.currentUser.uid === window.cloudAPI.adminUid);
@@ -12532,7 +12536,70 @@ function openAuthModal(){
     document.getElementById('authModalTitle').textContent = authMode === 'login' ? 'Accedi' : 'Registrati';
   }
 }
-function closeAuthModal(){ document.getElementById('authModal').classList.add('hidden'); }
+/* ---------- PROTEZIONE DATI DI ACCESSO ----------
+   - I campi email/password partono vuoti e in sola lettura: il browser non li compila da solo
+     (su un PC condiviso nessuno vede l'email di chi c'era prima). Appena l'utente tocca il campo
+     diventano scrivibili e il browser può proporre l'account salvato, solo su scelta esplicita.
+   - L'occhiolino mostra solo una password DIGITATA a mano: quella inserita in automatico dal
+     gestore password del browser non viene mai rivelata.
+   - Dopo l'accesso, o alla chiusura della finestra, la password viene cancellata dal campo:
+     così Chrome capisce che il login è finito e non ripropone "Salvare la password?" più tardi. */
+let passAutofilled = false;
+let passKeyTyped = false;
+function lockAuthFields(){
+  ['authEmail','authPass'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.value = '';
+    el.setAttribute('readonly','');
+  });
+  resetPassVisibility();
+  passAutofilled = false;
+  passKeyTyped = false;
+}
+function resetPassVisibility(){
+  const input = document.getElementById('authPass');
+  input.type = 'password';
+  document.getElementById('pwToggle').classList.remove('showing');
+}
+function clearSensitiveFields(){
+  document.getElementById('authPass').value = '';
+  const del = document.getElementById('deleteAccountPass');
+  if(del) del.value = '';
+  resetPassVisibility();
+  passAutofilled = false;
+  passKeyTyped = false;
+}
+['authEmail','authPass'].forEach(id=>{
+  const el = document.getElementById(id);
+  const unlock = ()=>{ el.removeAttribute('readonly'); };
+  el.addEventListener('pointerdown', unlock);
+  el.addEventListener('touchstart', unlock, { passive:true });
+  el.addEventListener('focus', unlock);
+});
+(function trackPasswordOrigin(){
+  const input = document.getElementById('authPass');
+  // Tasti premuti o testo incollato = digitazione dell'utente.
+  input.addEventListener('keydown', ()=>{ passKeyTyped = true; });
+  input.addEventListener('paste', ()=>{ passKeyTyped = true; });
+  input.addEventListener('input', (e)=>{
+    if(input.value === ''){ passAutofilled = false; passKeyTyped = false; return; }
+    let isAutofill = false;
+    try{ isAutofill = input.matches(':autofill') || input.matches(':-webkit-autofill'); }catch(err){}
+    // Il gestore password inserisce il testo senza tasti premuti (o con insertReplacementText).
+    if(!passKeyTyped || e.inputType === 'insertReplacementText' || !e.inputType) isAutofill = true;
+    if(isAutofill){
+      passAutofilled = true;
+      resetPassVisibility();
+    }
+    passKeyTyped = false;
+  });
+})();
+
+function closeAuthModal(){
+  document.getElementById('authModal').classList.add('hidden');
+  clearSensitiveFields();
+  if(!(window.cloudAPI && window.cloudAPI.currentUser)) lockAuthFields();
+}
 
 document.getElementById('accountBtn').onclick = openAuthModal;
 document.getElementById('authModalClose').onclick = closeAuthModal;
@@ -12549,6 +12616,7 @@ document.querySelectorAll('#authTabs button').forEach(btn=>{
     document.getElementById('authFeedback').textContent = '';
     document.getElementById('authNickname').classList.toggle('hidden', authMode !== 'signup');
     document.getElementById('forgotPasswordBtn').classList.toggle('hidden', authMode !== 'login');
+    document.getElementById('authPass').setAttribute('autocomplete', authMode === 'login' ? 'current-password' : 'new-password');
   };
 });
 
@@ -12556,10 +12624,24 @@ document.getElementById('pwToggle').onclick = ()=>{
   const input = document.getElementById('authPass');
   const btn = document.getElementById('pwToggle');
   const showing = input.type === 'text';
+  if(!showing){
+    let autofillNow = false;
+    try{ autofillNow = input.matches(':autofill') || input.matches(':-webkit-autofill'); }catch(err){}
+    if(input.value && (passAutofilled || autofillNow)){
+      const fb = document.getElementById('authFeedback');
+      fb.className = 'auth-feedback err';
+      fb.textContent = 'Per sicurezza la password inserita automaticamente dal browser non viene mostrata. Se vuoi vederla, cancellala e riscrivila.';
+      return;
+    }
+  }
   input.type = showing ? 'password' : 'text';
   btn.classList.toggle('showing', !showing);
 };
-document.getElementById('authSubmit').onclick = async ()=>{
+document.getElementById('authForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  doAuthSubmit();
+});
+async function doAuthSubmit(){
   const fb = document.getElementById('authFeedback');
   if(!window.cloudAPI || !window.cloudAPI.enabled){
     fb.className='auth-feedback err';
@@ -12597,11 +12679,12 @@ document.getElementById('authSubmit').onclick = async ()=>{
       window.cloudAPI.registerDirectory(nickname).catch(()=>{});
     }
     fb.textContent = '';
+    clearSensitiveFields();
   }catch(e){
     fb.className='auth-feedback err';
     fb.textContent = translateAuthError(e);
   }
-};
+}
 document.getElementById('forgotPasswordBtn').onclick = async ()=>{
   const fb = document.getElementById('authFeedback');
   if(!window.cloudAPI || !window.cloudAPI.enabled){
@@ -12628,6 +12711,7 @@ document.getElementById('forgotPasswordBtn').onclick = async ()=>{
 document.getElementById('authLogout').onclick = async ()=>{
   if(window.cloudAPI) await window.cloudAPI.logout();
   closeAuthModal();
+  lockAuthFields();
 };
 
 document.getElementById('deleteAccountBtn').onclick = ()=>{
