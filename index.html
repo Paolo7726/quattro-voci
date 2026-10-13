@@ -12907,7 +12907,7 @@ window.addEventListener('cloud-ready', ()=>{
      ============================================================ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check.js";
+  import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
     onAuthStateChanged, signOut, sendPasswordResetEmail,
@@ -12932,10 +12932,10 @@ window.addEventListener('cloud-ready', ()=>{
   // Console Firebase → Authentication → tab "Utenti" → colonna "UID" della tua riga.
   const ADMIN_UID = "Xyx8cvHdpnUbyqgSCJZTg8780UM2";
 
-  // App Check (reCAPTCHA v3): dimostra a Firebase che le richieste arrivano davvero da questa app.
-  // ⚠️ Incolla qui la "chiave del sito" (site key) di reCAPTCHA v3. Finché resta il segnaposto,
+  // App Check (Google Cloud Fraud Defense, ex reCAPTCHA Enterprise): dimostra a Firebase che le richieste arrivano davvero da questa app.
+  // Chiave del sito (site key) di Fraud Defense / reCAPTCHA. Finché resta il segnaposto,
   // App Check non si attiva e l'app funziona come prima. Va incollata anche in elimina-account.html.
-  const RECAPTCHA_SITE_KEY = 'INCOLLA-QUI-LA-SITE-KEY';
+  const RECAPTCHA_SITE_KEY = '6Lf6gOstAAAAAFmzRGtTe3yljJ9q_Skdg66LzkAF';
 
   let app = null, auth = null, db = null;
   // Prima settimana in cui esiste la classifica settimanale: serve a cancellare tutte le voci
@@ -12971,7 +12971,7 @@ window.addEventListener('cloud-ready', ()=>{
       app = initializeApp(firebaseConfig);
       if(RECAPTCHA_SITE_KEY && !RECAPTCHA_SITE_KEY.startsWith('INCOLLA')){
         try{
-          initializeAppCheck(app, { provider: new ReCaptchaV3Provider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
+          initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
         }catch(e){ console.warn('App Check init error', e); }
       }
       auth = getAuth(app);
