@@ -2,6 +2,8 @@ const CACHE_NAME = 'quattro-voci-v4';
 // Cache separata e PERMANENTE per i dati del promemoria (ultima pratica, lingua, attivo/no).
 // La pagina ci scrive, il service worker la legge quando il browser lo sveglia in background.
 // Non va mai cancellata dalla pulizia delle cache vecchie qui sotto.
+// Anche le cache "qv-tts-..." (audio delle frasi scaricato dalla voce online) restano: sono la
+// copia offline delle pronunce e scaricarle di nuovo consumerebbe la soglia gratuita di Azure.
 const META_CACHE = 'qv-meta';
 const META_URL = './__qv-meta.json';
 const ASSETS = [
@@ -23,7 +25,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME && k !== META_CACHE).map((k) => caches.delete(k)))
+      Promise.all(keys.filter((k) => k !== CACHE_NAME && k !== META_CACHE && !k.startsWith('qv-tts')).map((k) => caches.delete(k)))
     )
   );
   self.clients.claim();

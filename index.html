@@ -9826,20 +9826,166 @@ const LEARN = {
   }));
 })();
 
-/* Sintesi vocale del browser: legge ad alta voce la frase nella lingua target */
+/* Sintesi vocale: legge ad alta voce la frase nella lingua target.
+   1) Voce neurale Azure tramite il Worker (stessa qualità su ogni telefono). L'audio di ogni frase
+      viene salvato sul dispositivo (Cache Storage "qv-tts-v1"): la seconda volta parte subito e
+      funziona anche offline.
+   2) Se il Worker non risponde, la soglia gratuita è finita o si è offline senza audio salvato,
+      si usa la voce installata sul dispositivo, come prima. */
 const TTS_LANG = { it:'it-IT', en:'en-US', fr:'fr-FR', ar:'ar-SA', es:'es-ES', de:'de-DE', zh:'zh-CN', ja:'ja-JP', ru:'ru-RU', tr:'tr-TR', pt:'pt-BR' };
-function speak(text, langKey){
+const CLOUD_TTS_CACHE = 'qv-tts-v1';
+const CLOUD_TTS_TIMEOUT_MS = 6000;
+let cloudTtsOff = false;      // spento per questa sessione (Worker non ancora aggiornato / non configurato)
+let cloudTtsNetFails = 0;     // errori di rete consecutivi
+const cloudTtsMem = new Map(); // url -> objectURL già pronti (ultimi 80)
+let qvAudio = null;
+let qvAudioFin = null; // chiude la lettura in corso quando viene interrotta
+let speakToken = 0;
+
+function qvAudioEl(){
+  if(!qvAudio){ qvAudio = new Audio(); qvAudio.preload = 'auto'; }
+  return qvAudio;
+}
+// iPhone/iPad: l'audio può partire da codice solo se lo stesso elemento è già stato avviato una
+// volta con un tocco. Al primo tocco facciamo suonare un istante di silenzio, poi lo riusiamo.
+(function unlockAudioOnce(){
+  function silentWav(){
+    const n = 800, buf = new ArrayBuffer(44 + n), v = new DataView(buf);
+    const w = (o, s)=>{ for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
+    w(0,'RIFF'); v.setUint32(4, 36+n, true); w(8,'WAVE'); w(12,'fmt '); v.setUint32(16,16,true);
+    v.setUint16(20,1,true); v.setUint16(22,1,true); v.setUint32(24,8000,true); v.setUint32(28,8000,true);
+    v.setUint16(32,1,true); v.setUint16(34,8,true); w(36,'data'); v.setUint32(40,n,true);
+    for(let i=0;i<n;i++) v.setUint8(44+i,128);
+    return URL.createObjectURL(new Blob([buf], {type:'audio/wav'}));
+  }
+  const handler = ()=>{
+    document.removeEventListener('touchend', handler, true);
+    document.removeEventListener('click', handler, true);
+    try{
+      const a = qvAudioEl();
+      if(a.src) return;
+      a.src = silentWav();
+      const p = a.play(); if(p && p.catch) p.catch(()=>{});
+    }catch(e){}
+  };
+  document.addEventListener('touchend', handler, true);
+  document.addEventListener('click', handler, true);
+})();
+
+function cloudTtsUrl(text, langKey){
+  if(!AZURE_WORKER_URL || AZURE_WORKER_URL.includes('IL-TUO-WORKER')) return null;
+  if(!TTS_LANG[langKey] || !text || text.length > 300) return null;
+  return `${AZURE_WORKER_URL}/tts?lang=${encodeURIComponent(langKey)}&text=${encodeURIComponent(text.trim())}`;
+}
+function cloudTtsRemember(url, objUrl){
+  cloudTtsMem.set(url, objUrl);
+  if(cloudTtsMem.size > 80){
+    const first = cloudTtsMem.keys().next().value;
+    try{ URL.revokeObjectURL(cloudTtsMem.get(first)); }catch(e){}
+    cloudTtsMem.delete(first);
+  }
+}
+// Restituisce un indirizzo audio pronto da suonare, oppure null (→ voce del dispositivo).
+async function cloudTtsSource(text, langKey){
+  const url = cloudTtsUrl(text, langKey);
+  if(!url) return null;
+  if(cloudTtsMem.has(url)) return cloudTtsMem.get(url);
+  let cache = null;
   try{
-    if(!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = TTS_LANG[langKey] || 'en-US';
-    const v = pickVoiceFor(langKey);
-    if(v) u.voice = v;
-    u.rate = 0.9;
-    window.speechSynthesis.speak(u);
-    checkVoiceAvailability(langKey);
-  }catch(e){ console.warn('tts error', e); }
+    if('caches' in window){
+      cache = await caches.open(CLOUD_TTS_CACHE);
+      const hit = await cache.match(url);
+      if(hit){
+        const objUrl = URL.createObjectURL(await hit.blob());
+        cloudTtsRemember(url, objUrl);
+        return objUrl;
+      }
+    }
+  }catch(e){ cache = null; }
+  if(cloudTtsOff) return null;
+  if(typeof navigator !== 'undefined' && navigator.onLine === false) return null;
+  const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  const timer = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch(e){} }, CLOUD_TTS_TIMEOUT_MS);
+  try{
+    const res = await fetch(url, ctrl ? { signal: ctrl.signal } : undefined);
+    clearTimeout(timer);
+    const type = (res.headers.get('Content-Type') || '').toLowerCase();
+    if(!res.ok || !type.startsWith('audio/')){
+      // 429 = soglia gratuita / troppe richieste al minuto: solo questa volta voce del telefono.
+      // Altri errori (Worker non aggiornato o non configurato): niente audio online per la sessione.
+      if(res.status !== 429) cloudTtsOff = true;
+      return null;
+    }
+    const blob = await res.blob();
+    if(!blob.size) return null;
+    cloudTtsNetFails = 0;
+    if(cache){ try{ await cache.put(url, new Response(blob, { headers: { 'Content-Type': 'audio/mpeg' } })); }catch(e){} }
+    const objUrl = URL.createObjectURL(blob);
+    cloudTtsRemember(url, objUrl);
+    return objUrl;
+  }catch(e){
+    clearTimeout(timer);
+    if(++cloudTtsNetFails >= 3) cloudTtsOff = true;
+    return null;
+  }
+}
+function playAudioSrc(src){
+  return new Promise(resolve=>{
+    const a = qvAudioEl();
+    let done = false;
+    const fin = (ok)=>{ if(done) return; done = true; if(qvAudioFin === fin) qvAudioFin = null; a.onended = a.onerror = a.onpause = null; resolve(ok); };
+    if(qvAudioFin) qvAudioFin(true);
+    qvAudioFin = fin;
+    a.onended = ()=>fin(true);
+    a.onpause = ()=>fin(true);
+    a.onerror = ()=>fin(false);
+    try{
+      a.src = src;
+      const p = a.play();
+      if(p && p.catch) p.catch(()=>fin(false));
+    }catch(e){ fin(false); }
+  });
+}
+function deviceSpeakAsync(text, langKey){
+  return new Promise(resolve=>{
+    try{
+      if(!('speechSynthesis' in window)) return resolve();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = TTS_LANG[langKey] || 'en-US';
+      const v = pickVoiceFor(langKey);
+      if(v) u.voice = v;
+      u.rate = 0.9;
+      u.onend = ()=>resolve();
+      u.onerror = ()=>resolve();
+      window.speechSynthesis.speak(u);
+      checkVoiceAvailability(langKey);
+      setTimeout(resolve, 20000);
+    }catch(e){ console.warn('tts error', e); resolve(); }
+  });
+}
+// Ferma qualunque audio in corso (voce online o del dispositivo).
+function stopSpeech(){
+  speakToken++;
+  try{ if('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
+  try{ if(qvAudio && !qvAudio.paused) qvAudio.pause(); }catch(e){}
+  if(qvAudioFin) qvAudioFin(true);
+}
+// Legge la frase e si risolve quando ha finito (o quando viene interrotta da un'altra lettura).
+async function speakAsync(text, langKey){
+  stopSpeech();
+  const my = speakToken;
+  if(!text) return;
+  const src = await cloudTtsSource(text, langKey);
+  if(my !== speakToken) return;
+  if(src){
+    const ok = await playAudioSrc(src);
+    if(ok || my !== speakToken) return;
+  }
+  if(my !== speakToken) return;
+  await deviceSpeakAsync(text, langKey);
+}
+function speak(text, langKey){
+  speakAsync(text, langKey).catch(e=>console.warn('tts error', e));
 }
 
 /* ---------- VOCI DI SINTESI MANCANTI ----------
@@ -10582,6 +10728,7 @@ function renderAudioSource(){
 /* ---------- DIALOGHI ---------- */
 let dlgOpenId = null;
 let dlgHideMode = false;
+let dlgPlayRun = 0;
 function dlgFind(id){
   for(const L of DIALOGUES){ const s = L.list.find(x=>x.id===id); if(s) return s; }
   return null;
@@ -10600,25 +10747,19 @@ function dlgPhon(text, lang){
   }catch(e){}
   return null;
 }
-function dlgStopAudio(){ try{ if('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){} }
-function dlgPlayAll(s){
-  try{
-    if(!('speechSynthesis' in window)) return;
-    const synth = window.speechSynthesis; synth.cancel();
-    const v = pickVoiceFor(currentLang);
-    s.ph.forEach((p, i)=>{
-      const u = new SpeechSynthesisUtterance(p[currentLang]);
-      u.lang = TTS_LANG[currentLang] || 'en-US';
-      if(v) u.voice = v;
-      u.rate = 0.85;
-      u.onstart = ()=>{
-        document.querySelectorAll('#dlgView .dlg-line').forEach((el, k)=>{ el.style.background = (k===i) ? 'var(--accent-soft)' : ''; });
-      };
-      u.onend = ()=>{ if(i===s.ph.length-1) document.querySelectorAll('#dlgView .dlg-line').forEach(el=>el.style.background=''); };
-      synth.speak(u);
-    });
-    checkVoiceAvailability(currentLang);
-  }catch(e){ console.warn('dlg audio', e); }
+function dlgStopAudio(){ dlgPlayRun++; stopSpeech(); }
+async function dlgPlayAll(s){
+  stopSpeech();
+  const myRun = ++dlgPlayRun;
+  const lines = ()=>document.querySelectorAll('#dlgView .dlg-line');
+  for(let i=0; i<s.ph.length; i++){
+    if(myRun !== dlgPlayRun || dlgOpenId !== s.id) break;
+    lines().forEach((el, k)=>{ el.style.background = (k===i) ? 'var(--accent-soft)' : ''; });
+    await speakAsync(s.ph[i][currentLang], currentLang);
+    if(myRun !== dlgPlayRun) break;
+    await new Promise(r=>setTimeout(r, 450));
+  }
+  if(myRun === dlgPlayRun) lines().forEach(el=>el.style.background='');
 }
 function renderDialogGrid(){
   const view = document.getElementById('dlgView');
