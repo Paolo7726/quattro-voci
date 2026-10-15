@@ -264,6 +264,32 @@
   .dlg-it{ font-size:13.5px; color:var(--ink-dim); margin-top:3px; }
   .dlg-phon{ font-size:12.5px; color:var(--ink-dim); margin-top:2px; }
   .dlg-say{ flex:0 0 auto; width:40px; height:40px; border-radius:50%; border:1px solid var(--hair); background:var(--panel-2); font-size:17px; cursor:pointer; }
+  .dlg-btns{ display:flex; flex-direction:column; gap:6px; flex:0 0 auto; }
+  .dlg-mic.recording{ background:#c0392b; border-color:#c0392b; color:#fff; animation:dlgPulse 1s infinite; }
+  @keyframes dlgPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.08); } }
+  .dlg-mic.big{ flex:0 0 64px; width:64px; height:64px; border-radius:50%; font-size:26px; border:1px solid var(--accent); background:var(--accent-soft); cursor:pointer; }
+  .dlg-fb{ margin-top:8px; padding:8px 10px; border-radius:8px; font-size:13.5px; line-height:1.45; background:var(--panel-2); border-left:3px solid var(--hair); }
+  .dlg-fb.ok{ border-left-color:#3fae6a; }
+  .dlg-fb.near{ border-left-color:#e0a630; }
+  .dlg-fb.bad{ border-left-color:#d0574a; }
+  .dlg-fb.listen{ border-left-color:var(--accent); }
+  .dlg-fb .pct{ float:right; color:var(--ink-dim); }
+  .dlg-fb .heard{ color:var(--ink-dim); margin-top:3px; }
+  .dlg-words{ margin-top:5px; font-size:15px; }
+  .dlg-words .w-ok{ color:#3fae6a; }
+  .dlg-words .w-miss{ color:#d0574a; text-decoration:underline dotted; }
+  .dlg-recite-btn{ width:100%; display:flex; flex-direction:column; align-items:center; gap:2px; margin-bottom:10px; padding:12px; }
+  .dlg-recite-btn span{ font-size:12px; opacity:.8; font-weight:400; }
+  .dlg-recite{ border:1px solid var(--accent); border-radius:12px; padding:14px; margin-bottom:12px; background:var(--panel-2); }
+  .dlg-rc-dots{ display:flex; gap:5px; margin-bottom:10px; }
+  .dlg-rc-dots span{ width:22px; height:5px; border-radius:3px; background:var(--hair); }
+  .dlg-rc-dots .d-done{ background:var(--accent); opacity:.5; }
+  .dlg-rc-dots .d-now{ background:var(--accent); }
+  .dlg-rc-it{ font-size:17px; color:var(--ink); margin:2px 0 6px; }
+  .dlg-rc-end{ text-align:center; font-size:18px; padding:10px 0; }
+  .dlg-rc-end span{ font-size:13.5px; color:var(--ink-dim); }
+  .dlg-recite .dlg-actions{ align-items:center; }
+  .dlg-recite .dlg-actions button:not(.big){ flex:1 1 90px; }
   .dlg-tips{ background:var(--accent-soft); border-radius:10px; padding:12px 14px; font-size:13.5px; line-height:1.5; margin:12px 0; }
   .dlg-tips ol{ margin:6px 0 0; padding-left:20px; }
 
@@ -10603,7 +10629,7 @@ function renderDialogGrid(){
     <p class="dlg-progress">Completati: <b>${nDone}</b> su ${L.list.length}</p>
     <div class="dlg-grid">${L.list.map(s=>`<button class="dlg-card${done[s.id]?' done':''}" data-id="${s.id}">
       ${done[s.id]?'<span class="ok">✓</span>':''}<span class="em">${s.emoji}</span><span>${escapeHTML(s.title)}</span></button>`).join('')}</div>`;
-  view.querySelectorAll('.dlg-card').forEach(b=>{ b.onclick = ()=>{ dlgOpenId = b.dataset.id; dlgHideMode = false; renderDialogDetail(); window.scrollTo({top:0, behavior:'smooth'}); }; });
+  view.querySelectorAll('.dlg-card').forEach(b=>{ b.onclick = ()=>{ dlgOpenId = b.dataset.id; dlgHideMode = false; dlgRecite = null; renderDialogDetail(); window.scrollTo({top:0, behavior:'smooth'}); }; });
 }
 function renderDialogDetail(){
   const s = dlgFind(dlgOpenId);
@@ -10623,29 +10649,42 @@ function renderDialogDetail(){
         ${rom ? `<div class="dlg-rom${dlgHideMode?' hidden-txt':''}">${escapeHTML(rom)}</div>` : ''}
         ${phon ? `<div class="dlg-phon${dlgHideMode?' hidden-txt':''}">Si pronuncia circa: <b>${escapeHTML(phon)}</b></div>` : ''}
         <div class="dlg-it">🇮🇹 ${escapeHTML(p.it)}</div>
+        <div class="dlg-fbbox"></div>
       </div>
-      <button class="dlg-say" data-i="${i}" aria-label="Ascolta">🔊</button>
+      <div class="dlg-btns">
+        <button class="dlg-say" data-i="${i}" aria-label="Ascolta">🔊</button>
+        ${p.t ? '' : `<button class="dlg-say dlg-mic" data-i="${i}" aria-label="Pronuncia tu">🎤</button>`}
+      </div>
     </div>`;
   }).join('');
   view.innerHTML = `<button class="dlg-back" id="dlgBack">← Tutti gli scenari</button>
     <h3 class="dlg-title">${s.emoji} ${escapeHTML(s.title)}</h3>
     <div class="scenario-box">${escapeHTML(s.sit)}</div>
+    ${dlgRecite ? `<div id="dlgRecite" class="dlg-recite"></div>` : `
+    <button id="dlgReciteBtn" class="primary dlg-recite-btn">🎭 Recita la tua parte<span>L'app fa l'altra persona, tu rispondi a voce</span></button>
     <div class="dlg-actions">
       <button class="ghost" id="dlgPlay">▶ Ascolta tutto</button>
       <button class="ghost" id="dlgHide">${dlgHideMode ? '👀 Mostra le frasi' : '🙈 Mettiti alla prova'}</button>
     </div>
-    ${dlgHideMode ? '<p class="dlg-intro">Leggi l\'italiano e prova a dirlo ad alta voce. Poi tocca la frase sfocata (o 🔊) per controllare.</p>' : ''}
-    <div id="dlgLines">${lines}</div>
+    ${dlgHideMode ? '<p class="dlg-intro">Leggi l\'italiano e prova a dirlo ad alta voce (anche con 🎤). Poi tocca la frase sfocata per controllare.</p>' : ''}
+    <div id="dlgLines">${lines}</div>`}
     <div class="dlg-tips"><b>Come esercitarti</b><ol>
       <li>Ascolta ogni frase con 🔊 e ripetila ad alta voce, anche più volte.</li>
       <li>Ascolta tutto il dialogo di fila e prova a seguirlo.</li>
-      <li>Usa «Mettiti alla prova»: guarda l'italiano e dillo tu nella lingua che studi.</li>
+      <li>Tocca 🎤 e pronuncia la frase: vedrai in verde le parole capite e in rosso quelle da rivedere.</li>
+      <li>Quando ti senti pronto, usa «Recita la tua parte» e fai il dialogo senza guardare.</li>
     </ol></div>
-    <button id="dlgDoneBtn" style="width:100%">${done ? '✓ Completato — tocca per annullare' : 'Fatto ✓'}</button>`;
-  document.getElementById('dlgBack').onclick = ()=>{ dlgStopAudio(); dlgOpenId = null; renderDialogGrid(); };
-  document.getElementById('dlgPlay').onclick = ()=>dlgPlayAll(s);
-  document.getElementById('dlgHide').onclick = ()=>{ dlgHideMode = !dlgHideMode; renderDialogDetail(); };
-  view.querySelectorAll('.dlg-say').forEach(b=>{ b.onclick = ()=>{
+    <button class="primary" id="dlgDoneBtn" style="width:100%">${done ? '✓ Completato — tocca per annullare' : 'Fatto ✓'}</button>`;
+  document.getElementById('dlgBack').onclick = ()=>{ dlgStopAudio(); dlgStopRec(); dlgRecite = null; dlgOpenId = null; renderDialogGrid(); };
+  if(dlgRecite){
+    dlgReciteRender(s);
+  } else {
+    document.getElementById('dlgReciteBtn').onclick = ()=>{ dlgStopAudio(); dlgStopRec(); dlgRecite = { step: 0 }; renderDialogDetail(); document.getElementById('dlgRecite').scrollIntoView({behavior:'smooth', block:'center'}); };
+    document.getElementById('dlgPlay').onclick = ()=>dlgPlayAll(s);
+    document.getElementById('dlgHide').onclick = ()=>{ dlgHideMode = !dlgHideMode; renderDialogDetail(); };
+  }
+  view.querySelectorAll('.dlg-mic').forEach(b=>{ if(b.id) return; b.onclick = ()=>dlgListen(s, Number(b.dataset.i), b, b.closest('.dlg-line')); });
+  view.querySelectorAll('.dlg-say:not(.dlg-mic)').forEach(b=>{ b.onclick = ()=>{
     const i = Number(b.dataset.i);
     speak(s.ph[i][lang], lang);
     const line = b.closest('.dlg-line');
@@ -10664,6 +10703,159 @@ function renderDialogDetail(){
     else renderDialogDetail();
   };
 }
+/* ---------- DIALOGHI: pratica orale (microfono) ---------- */
+let dlgRec = null;
+let dlgRecBusy = false;
+let dlgRecite = null; // { step } quando è attiva la modalità "Recita la tua parte"
+function dlgSpeechSupported(){ return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
+function dlgIsCJK(lang){ return lang === 'zh' || lang === 'ja'; }
+function dlgStopRec(){ try{ if(dlgRec) dlgRec.abort(); }catch(e){} dlgRec = null; dlgRecBusy = false; }
+// Confronta frase attesa e frase riconosciuta. Restituisce punteggio 0..1 e, per le lingue
+// con parole separate da spazi, quali parole della frase attesa sono state riconosciute.
+function dlgScoreSpeech(expected, heard, lang){
+  if(dlgIsCJK(lang)){
+    let e = normalizeAnswer(expected), h = normalizeAnswer(heard);
+    // Il riconoscitore scrive spesso i numeri in cifre ("30欧元" invece di "三十欧元")
+    if(/\d/.test(h)){ h = h.replace(/\d/g,''); e = e.replace(/[零一二两三四五六七八九十百千]/g,''); }
+    if(!e.length) return { score: 1, words: null };
+    const d = levenshteinDistance(e, h);
+    return { score: Math.max(0, 1 - d / Math.max(e.length, 1)), words: null };
+  }
+  const tokens = expected.split(/\s+/).filter(Boolean);
+  const heardWords = normalizeAnswer(heard).split(' ').filter(Boolean);
+  const used = new Array(heardWords.length).fill(false);
+  const words = tokens.map(tok=>{
+    const n = normalizeAnswer(tok);
+    if(!n) return { tok, ok: true, skip: true };
+    let found = -1;
+    for(let k=0; k<heardWords.length; k++){
+      if(used[k]) continue;
+      const hw = heardWords[k];
+      if(hw === n || (n.length > 3 && levenshteinDistance(hw, n) <= 1)){ found = k; break; }
+    }
+    if(found >= 0){ used[found] = true; return { tok, ok: true }; }
+    return { tok, ok: false };
+  });
+  // Numeri detti a voce e trascritti in cifre ("30" per "thirty"): ognuno copre una parola mancante
+  let digits = heardWords.filter((w, k)=>!used[k] && /^\d+$/.test(w)).length;
+  for(const w of words){ if(digits <= 0) break; if(!w.ok){ w.ok = true; w.num = true; digits--; } }
+  const real = words.filter(w=>!w.skip);
+  const score = real.length ? real.filter(w=>w.ok).length / real.length : 1;
+  return { score, words };
+}
+function dlgVerdict(score){
+  if(score >= 0.85) return { cls:'ok', txt:'Ottimo! Ti hanno capito 👏' };
+  if(score >= 0.6) return { cls:'near', txt:'Ci sei quasi: riascolta e riprova le parole in rosso' };
+  return { cls:'bad', txt:'Non ancora: ascolta con 🔊 e riprova con calma' };
+}
+function dlgFeedbackHTML(p, lang, heard, res){
+  const v = dlgVerdict(res.score);
+  const pct = Math.round(res.score * 100);
+  let detail = '';
+  if(res.words){
+    const isAr = lang === 'ar';
+    detail = `<div class="dlg-words"${isAr?' dir="rtl" style="text-align:right"':''}>${res.words.map(w=>`<span class="${w.ok?'w-ok':'w-miss'}">${escapeHTML(w.tok)}</span>`).join(' ')}</div>`;
+  }
+  return `<div class="dlg-fb ${v.cls}"><b>${v.txt}</b> <span class="pct">${pct}%</span>
+    <div class="heard">Ho capito: «${escapeHTML(heard)}»</div>${detail}</div>`;
+}
+// Avvia il microfono per la frase i; onDone(score) viene chiamato al termine (anche senza risultato).
+function dlgListen(s, i, btn, scope, onDone){
+  const lang = currentLang;
+  const line = scope;
+  const fb = line.querySelector('.dlg-fbbox');
+  if(!dlgSpeechSupported()){
+    fb.innerHTML = '<div class="dlg-fb bad">Il microfono non è disponibile in questo browser. Usa Chrome su Android o sul computer.</div>';
+    return;
+  }
+  if(dlgRecBusy){ dlgStopRec(); btn.classList.remove('recording'); btn.textContent = '🎤'; return; }
+  dlgStopAudio();
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let gotResult = false;
+  try{
+    dlgRec = new SpeechRec();
+    dlgRec.lang = TTS_LANG[lang] || 'en-US';
+    dlgRec.interimResults = false;
+    dlgRec.maxAlternatives = 3;
+    dlgRec.onstart = ()=>{ dlgRecBusy = true; btn.classList.add('recording'); btn.textContent = '■'; fb.innerHTML = '<div class="dlg-fb listen">🎙️ Ti ascolto… parla adesso</div>'; };
+    dlgRec.onerror = (e)=>{
+      const msg = (e.error === 'not-allowed' || e.error === 'service-not-allowed')
+        ? 'Serve il permesso per il microfono: consentilo dalle impostazioni del browser.'
+        : (e.error === 'no-speech' ? 'Non ho sentito niente. Tocca 🎤 e parla vicino al telefono.' : 'Non sono riuscito a capire. Riprova.');
+      fb.innerHTML = `<div class="dlg-fb bad">${msg}</div>`;
+    };
+    dlgRec.onend = ()=>{
+      dlgRecBusy = false; dlgRec = null;
+      btn.classList.remove('recording'); btn.textContent = '🎤';
+      if(!gotResult && fb.querySelector('.listen')) fb.innerHTML = '<div class="dlg-fb bad">Non ho sentito niente. Tocca 🎤 e riprova.</div>';
+      if(onDone) onDone(gotResult);
+    };
+    dlgRec.onresult = (e)=>{
+      gotResult = true;
+      const alts = e.results[0];
+      let best = null, bestHeard = '';
+      for(let k=0; k<alts.length; k++){
+        const r = dlgScoreSpeech(s.ph[i][lang], alts[k].transcript, lang);
+        if(!best || r.score > best.score){ best = r; bestHeard = alts[k].transcript; }
+      }
+      fb.innerHTML = dlgFeedbackHTML(s.ph[i], lang, bestHeard, best);
+      line.querySelectorAll('.hidden-txt').forEach(x=>x.classList.remove('hidden-txt'));
+    };
+    dlgRec.start();
+  }catch(e){
+    console.warn('dlg speech error', e);
+    fb.innerHTML = '<div class="dlg-fb bad">Non riesco ad avviare il microfono. Controlla i permessi.</div>';
+  }
+}
+// Modalità "Recita la tua parte": l'app dice le battute dell'altra persona, tu dici le tue.
+function dlgReciteRender(s){
+  const lang = currentLang;
+  const box = document.getElementById('dlgRecite');
+  if(!box) return;
+  const step = dlgRecite.step;
+  if(step >= s.ph.length){
+    box.innerHTML = `<div class="dlg-rc-end">🎉 Dialogo completato!<br><span>Ripetilo finché le frasi ti escono senza guardare.</span></div>
+      <div class="dlg-actions"><button class="ghost" id="dlgRcAgain">↻ Ricomincia</button><button class="ghost" id="dlgRcClose">Chiudi</button></div>`;
+    document.getElementById('dlgRcAgain').onclick = ()=>{ dlgRecite.step = 0; dlgReciteRender(s); };
+    document.getElementById('dlgRcClose').onclick = ()=>{ dlgRecite = null; renderDialogDetail(); };
+    return;
+  }
+  const p = s.ph[step];
+  const isAr = lang === 'ar';
+  const dots = s.ph.map((_, k)=>`<span class="${k<step?'d-done':(k===step?'d-now':'')}"></span>`).join('');
+  if(p.t){
+    box.innerHTML = `<div class="dlg-rc-dots">${dots}</div>
+      <div class="dlg-who">💬 Ti rispondono</div>
+      <div class="dlg-target"${isAr?' dir="rtl" style="text-align:right"':''}>${escapeHTML(p[lang])}</div>
+      <div class="dlg-it">🇮🇹 ${escapeHTML(p.it)}</div>
+      <div class="dlg-actions" style="margin-top:12px"><button class="ghost" id="dlgRcHear">🔊 Riascolta</button><button class="primary" id="dlgRcNext">Avanti →</button></div>`;
+    document.getElementById('dlgRcHear').onclick = ()=>speak(p[lang], lang);
+    document.getElementById('dlgRcNext').onclick = ()=>{ dlgStopAudio(); dlgRecite.step++; dlgReciteRender(s); };
+    speak(p[lang], lang);
+  } else {
+    box.innerHTML = `<div class="dlg-rc-dots">${dots}</div>
+      <div class="dlg-line" style="border:none; padding:0">
+        <div class="body">
+          <div class="dlg-who">🗣️ Tocca a te ${LANGS[lang].flag || ''} — dillo ad alta voce</div>
+          <div class="dlg-rc-it">«${escapeHTML(p.it)}»</div>
+          <div class="dlg-target hidden-txt"${isAr?' dir="rtl" style="text-align:right"':''}>${escapeHTML(p[lang])}</div>
+          <div class="dlg-fbbox"></div>
+        </div>
+      </div>
+      <div class="dlg-actions" style="margin-top:12px">
+        <button class="dlg-mic big" id="dlgRcMic">🎤</button>
+        <button class="ghost" id="dlgRcHelp">💡 Aiuto</button>
+        <button class="primary" id="dlgRcNext">Avanti →</button>
+      </div>`;
+    const tgt = box.querySelector('.dlg-target');
+    tgt.onclick = ()=>tgt.classList.remove('hidden-txt');
+    document.getElementById('dlgRcHelp').onclick = ()=>{ tgt.classList.remove('hidden-txt'); speak(p[lang], lang); };
+    const mic = document.getElementById('dlgRcMic');
+    mic.onclick = ()=>dlgListen(s, step, mic, box);
+    document.getElementById('dlgRcNext').onclick = ()=>{ dlgStopRec(); dlgRecite.step++; dlgReciteRender(s); };
+  }
+}
+
 // Chiamata anche al cambio lingua: ridisegna la vista corrente nella nuova lingua.
 function renderScenario(){
   if(dlgOpenId) renderDialogDetail(); else renderDialogGrid();
@@ -10674,6 +10866,8 @@ document.querySelectorAll('#levelTabs button').forEach(btn=>{
     btn.classList.add('active');
     currentLevel = Number(btn.dataset.level);
     dlgStopAudio();
+    dlgStopRec();
+    dlgRecite = null;
     dlgOpenId = null;
     renderScenario();
   };
