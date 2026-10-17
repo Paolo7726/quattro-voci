@@ -9907,7 +9907,8 @@ async function cloudTtsSource(text, langKey){
   const ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
   const timer = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch(e){} }, CLOUD_TTS_TIMEOUT_MS);
   try{
-    const res = await fetch(url, ctrl ? { signal: ctrl.signal } : undefined);
+    const headers = await qvWorkerHeaders();
+    const res = await fetch(url, ctrl ? { signal: ctrl.signal, headers } : { headers });
     clearTimeout(timer);
     const type = (res.headers.get('Content-Type') || '').toLowerCase();
     if(!res.ok || !type.startsWith('audio/')){
@@ -12185,13 +12186,24 @@ const AZURE_WORKER_URL = 'https://quattro-voci-translate.palmitessa-paolo.worker
 const AZURE_TRANSLIT_SCRIPT = { ar:'Arab', ja:'Jpan', ru:'Cyrl' };
 function toAzureLangCode(code){ return code === 'zh-CN' ? 'zh-Hans' : code; }
 
+// Intestazione con il gettone App Check per il Worker. Il modulo Firebase si carica dopo questo
+// script: se la funzione non c'è ancora, si aspetta al massimo 3 secondi.
+async function qvWorkerHeaders(){
+  for(let i = 0; i < 30 && typeof window.qvAppCheckToken !== 'function'; i++){
+    await new Promise(r => setTimeout(r, 100));
+  }
+  if(typeof window.qvAppCheckToken !== 'function') return {};
+  const t = await window.qvAppCheckToken();
+  return t ? { 'X-Firebase-AppCheck': t } : {};
+}
+
 async function translateViaAzure(text, sourceCode, targetCode){
   if(!AZURE_WORKER_URL || AZURE_WORKER_URL.includes('IL-TUO-WORKER')) return null; // non ancora configurato
   try{
     const params = new URLSearchParams({ text, from: toAzureLangCode(sourceCode), to: toAzureLangCode(targetCode) });
     const script = AZURE_TRANSLIT_SCRIPT[targetCode];
     if(script) params.set('translit', script);
-    const res = await fetch(`${AZURE_WORKER_URL}/?${params.toString()}`);
+    const res = await fetch(`${AZURE_WORKER_URL}/?${params.toString()}`, { headers: await qvWorkerHeaders() });
     if(!res.ok) return null;
     const data = await res.json();
     if(!data || typeof data.text !== 'string' || !data.text.trim()) return null;
@@ -13973,7 +13985,7 @@ window.addEventListener('cloud-ready', ()=>{
      ============================================================ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check.js";
+  import { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken as getAppCheckToken } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
     onAuthStateChanged, signOut, sendPasswordResetEmail,
@@ -14003,7 +14015,7 @@ window.addEventListener('cloud-ready', ()=>{
   // App Check non si attiva e l'app funziona come prima. Va incollata anche in elimina-account.html.
   const RECAPTCHA_SITE_KEY = '6Lf6gOstAAAAAFmzRGtTe3yljJ9q_Skdg66LzkAF';
 
-  let app = null, auth = null, db = null;
+  let app = null, auth = null, db = null, appCheck = null;
   // Prima settimana in cui esiste la classifica settimanale: serve a cancellare tutte le voci
   // settimanali di un utente quando elimina l'account.
   const WEEKLY_LEADERBOARD_START = '2026-07-01';
@@ -14037,13 +14049,21 @@ window.addEventListener('cloud-ready', ()=>{
       app = initializeApp(firebaseConfig);
       if(RECAPTCHA_SITE_KEY && !RECAPTCHA_SITE_KEY.startsWith('INCOLLA')){
         try{
-          initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
+          appCheck = initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
         }catch(e){ console.warn('App Check init error', e); }
       }
       auth = getAuth(app);
       db = getFirestore(app);
     }catch(e){ console.warn('Firebase init error', e); }
   }
+
+  // Gettone App Check da mandare al Worker Cloudflare (traduzione e voce): il Worker rifiuta
+  // le richieste senza un gettone valido, così nessuno può usarlo fuori dall'app.
+  window.qvAppCheckToken = async function(){
+    if(!appCheck) return null;
+    try{ const r = await getAppCheckToken(appCheck, false); return (r && r.token) || null; }
+    catch(e){ console.warn('App Check token error', e); return null; }
+  };
 
   window.cloudAPI = {
     enabled: !!app,

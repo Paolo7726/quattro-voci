@@ -1,0 +1,56 @@
+rules_version = '2';
+
+// Regole di sicurezza del database Ausonia (sistema di accesso a richiesta).
+// Da incollare in: Firebase Console → Firestore Database → Regole → Pubblica.
+//
+// Le persone autorizzate NON si scrivono più qui: si approvano dall'app
+// (sezione "👥 Accessi", visibile solo all'amministratore).
+// Qui sotto c'è solo chi è amministratore (deve coincidere con ADMIN_EMAILS in index.html).
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function loggato() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function mia() {
+      return request.auth.token.email.lower();
+    }
+    function admin() {
+      return loggato() && mia() in ['ausoniaintimoemerceria@gmail.com'];
+    }
+    function autorizzato() {
+      return admin() || (loggato() && exists(/databases/$(database)/documents/access/$(mia())));
+    }
+
+    // Dati dell'app: preset, impostazioni, cronologia
+    match /shops/ausonia {
+      allow read, write: if autorizzato();
+      match /history/{annuncio} {
+        allow read, write: if autorizzato();
+      }
+    }
+
+    // Elenco persone autorizzate: lo gestisce solo l'amministratore,
+    // ognuno può solo vedere se c'è la propria email
+    match /access/{email} {
+      allow read: if admin() || (loggato() && email == mia());
+      allow write: if admin();
+    }
+
+    // Richieste di accesso: ognuno può inviare solo la propria
+    match /accessRequests/{email} {
+      allow read: if admin() || (loggato() && email == mia());
+      allow create, update: if loggato() && email == mia()
+        && request.resource.data.email == mia()
+        && request.resource.data.status == 'pending'
+        && request.resource.data.keys().hasOnly(['email', 'name', 'requestedAt', 'status']);
+      allow update, delete: if admin();
+    }
+
+    // Tutto il resto è chiuso
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
