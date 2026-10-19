@@ -13993,7 +13993,8 @@ window.addEventListener('cloud-ready', ()=>{
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
   import {
     getFirestore, doc, getDoc, setDoc, increment, deleteDoc,
-    collection, query, where, orderBy, limit, getDocs, Timestamp
+    collection, query, where, orderBy, limit, getDocs, Timestamp,
+    runTransaction, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -14119,22 +14120,49 @@ window.addEventListener('cloud-ready', ()=>{
       await setDoc(doc(db, 'leaderboard', auth.currentUser.uid), { nickname }, { merge:true });
       cachedNicknameForWeekly = nickname;
     },
+    // Aggiunge i punti di UNA risposta alla classifica totale e a quella settimanale, insieme.
+    // Le regole di Firestore accettano: 1-10 punti per volta, almeno 1 secondo tra due aumenti,
+    // massimo 3.000 punti al giorno (giorno UTC) — vedi firestore.rules. Se una scrittura viene
+    // rifiutata (es. risposte troppo ravvicinate) si perdono solo quei punti in classifica:
+    // i progressi sul telefono restano intatti.
     async addPoints(amount){
       if(!auth || !auth.currentUser || !amount) return;
+      const pts = Math.max(1, Math.min(10, Math.round(amount)));
       const uid = auth.currentUser.uid;
-      await setDoc(doc(db, 'leaderboard', uid), {
-        totalScore: increment(amount),
-        updatedAt: Date.now()
-      }, { merge:true });
-      try{
-        const weekKey = getWeekKey();
-        await setDoc(doc(db, 'leaderboard_weekly', weekKey, 'entries', uid), {
-          uid,
-          nickname: safeNick(cachedNicknameForWeekly),
-          score: increment(amount),
-          updatedAt: Date.now()
-        }, { merge:true });
-      }catch(e){ console.warn('weekly leaderboard write error', e); }
+      const lbRef = doc(db, 'leaderboard', uid);
+      const wkRef = doc(db, 'leaderboard_weekly', getWeekKey(), 'entries', uid);
+      // Il "giorno" deve coincidere con quello del server: se l'orologio del telefono è un po'
+      // avanti o indietro (es. vicino alla mezzanotte UTC) si riprova con il giorno accanto.
+      const now = Math.floor(Date.now() / 86400000);
+      let lastErr = null;
+      for(const today of [now, now - 1, now + 1]){
+        try{ await addPointsTx(today); return; }
+        catch(e){ lastErr = e; if(!e || e.code !== 'permission-denied') throw e; }
+      }
+      throw lastErr;
+      async function addPointsTx(today){ return runTransaction(db, async (tx) => {
+        const lb = await tx.get(lbRef);
+        const wk = await tx.get(wkRef);
+        if(!lb.exists()){
+          // Caso raro (account senza voce in classifica): si crea solo la totale.
+          tx.set(lbRef, { nickname: safeNick(cachedNicknameForWeekly), totalScore: pts, updatedAt: serverTimestamp(), dayNum: today, dayScore: pts });
+          return;
+        }
+        const d = lb.data();
+        const base = (d.dayNum === today && typeof d.dayScore === 'number') ? d.dayScore : 0;
+        tx.update(lbRef, {
+          totalScore: (typeof d.totalScore === 'number' ? d.totalScore : 0) + pts,
+          updatedAt: serverTimestamp(),
+          dayNum: today,
+          dayScore: base + pts
+        });
+        if(wk.exists()){
+          const w = wk.data();
+          tx.update(wkRef, { score: (typeof w.score === 'number' ? w.score : 0) + pts, updatedAt: serverTimestamp() });
+        }else{
+          tx.set(wkRef, { uid, nickname: safeNick(cachedNicknameForWeekly), score: pts, updatedAt: serverTimestamp() });
+        }
+      }); }
     },
     async initLeaderboardIfEmpty(startScore, nickname){
       if(!auth || !auth.currentUser) return;
