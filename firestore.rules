@@ -1,56 +1,162 @@
 rules_version = '2';
-
-// Regole di sicurezza del database Ausonia (sistema di accesso a richiesta).
-// Da incollare in: Firebase Console → Firestore Database → Regole → Pubblica.
-//
-// Le persone autorizzate NON si scrivono più qui: si approvano dall'app
-// (sezione "👥 Accessi", visibile solo all'amministratore).
-// Qui sotto c'è solo chi è amministratore (deve coincidere con ADMIN_EMAILS in index.html).
-
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function loggato() {
-      return request.auth != null && request.auth.token.email_verified == true;
+    // ---------- Funzioni di controllo condivise ----------
+
+    // Nickname pubblico: 3-20 caratteri, solo lettere (anche accentate), numeri, spazio, punto,
+    // trattino e trattino basso. Il filtro delle parolacce è nell'app; qui blocchiamo almeno
+    // lunghezze assurde e caratteri usati per inserire codice (< > " ecc.).
+    function validNickname(n) {
+      return n is string
+        && n.size() >= 3 && n.size() <= 20
+        && n.matches('^[A-Za-zÀ-ÖØ-öø-ÿ0-9 ._-]+$');
     }
-    function mia() {
-      return request.auth.token.email.lower();
-    }
-    function admin() {
-      return loggato() && mia() in ['ausoniaintimoemerceria@gmail.com'];
-    }
-    function autorizzato() {
-      return admin() || (loggato() && exists(/databases/$(database)/documents/access/$(mia())));
+    // Il nickname va controllato solo se viene scritto o cambiato: così i documenti vecchi con un
+    // nickname fuori standard non bloccano gli aggiornamenti del punteggio.
+    function nicknameOk(field) {
+      return !(field in request.resource.data)
+        || (resource != null && field in resource.data && request.resource.data[field] == resource.data[field])
+        || validNickname(request.resource.data[field]);
     }
 
-    // Dati dell'app: preset, impostazioni, cronologia
-    match /shops/ausonia {
-      allow read, write: if autorizzato();
-      match /history/{annuncio} {
-        allow read, write: if autorizzato();
-      }
+    match /users/{userId}/progress/{lang} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Elenco persone autorizzate: lo gestisce solo l'amministratore,
-    // ognuno può solo vedere se c'è la propria email
-    match /access/{email} {
-      allow read: if admin() || (loggato() && email == mia());
-      allow write: if admin();
+    // ---------- Classifica: protezione contro i punteggi gonfiati ----------
+    // Ogni risposta corretta vale al massimo 10 punti e l'app scrive la classifica una volta per
+    // risposta. Le regole quindi accettano un aumento solo se:
+    //   - è di 1-10 punti per volta;
+    //   - è passato almeno 1 secondo dall'aumento precedente (orario del server, non del telefono);
+    //   - nel giorno (UTC) l'utente non supera MAX_PUNTI_GIORNO punti in totale.
+    // La classifica settimanale può salire solo insieme a quella totale, nella stessa scrittura e
+    // della stessa quantità: così vale anche per lei lo stesso tetto giornaliero.
+    function maxPuntiGiorno() { return 3000; }
+    function serverDay() { return int(request.time.toMillis() / 86400000); }
+    function sameFields(fields) {
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(fields);
+    }
+    function totalPointsOk() {
+      let oldS = resource.data.get('totalScore', 0);
+      let newS = request.resource.data.get('totalScore', 0);
+      let d = newS - oldS;
+      let oldDay = resource.data.get('dayNum', -1);
+      let base = oldDay == serverDay() ? resource.data.get('dayScore', 0) : 0;
+      return newS is number && (
+        (d == 0 && sameFields(['updatedAt', 'dayNum', 'dayScore']))
+        || (d > 0 && d <= 10
+            && request.resource.data.updatedAt == request.time
+            && (!(resource.data.get('updatedAt', null) is timestamp)
+                || request.time > resource.data.updatedAt + duration.value(1, 's'))
+            && request.resource.data.dayNum == serverDay()
+            && request.resource.data.dayScore == base + d
+            && request.resource.data.dayScore <= maxPuntiGiorno())
+      );
+    }
+    // Aumento della settimanale di "d" punti: la totale dello stesso utente deve crescere di "d"
+    // nella stessa scrittura (getAfter = come sarà il documento dopo la scrittura).
+    function totalGrowsBy(uid, d) {
+      let path = /databases/$(database)/documents/leaderboard/$(uid);
+      return exists(path) && existsAfter(path)
+        && getAfter(path).data.get('totalScore', 0) == get(path).data.get('totalScore', 0) + d
+        && getAfter(path).data.get('updatedAt', null) == request.time;
     }
 
-    // Richieste di accesso: ognuno può inviare solo la propria
-    match /accessRequests/{email} {
-      allow read: if admin() || (loggato() && email == mia());
-      allow create, update: if loggato() && email == mia()
-        && request.resource.data.email == mia()
-        && request.resource.data.status == 'pending'
-        && request.resource.data.keys().hasOnly(['email', 'name', 'requestedAt', 'status']);
-      allow update, delete: if admin();
+    match /leaderboard/{userId} {
+      allow read: if request.auth != null;
+      // Creazione: punteggio iniziale (portato dai progressi fatti prima di creare l'account),
+      // massimo 10.000 — lo stesso limite applicato dall'app.
+      allow create: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['nickname', 'totalScore', 'updatedAt', 'dayNum', 'dayScore'])
+        && nicknameOk('nickname')
+        && (!('totalScore' in request.resource.data)
+            || (request.resource.data.totalScore is number
+                && request.resource.data.totalScore >= 0
+                && request.resource.data.totalScore <= 10000))
+        && (!('dayScore' in request.resource.data)
+            || (request.resource.data.dayNum == serverDay()
+                && request.resource.data.dayScore is number
+                && request.resource.data.dayScore >= 0
+                && request.resource.data.dayScore <= 10));
+      allow update: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['nickname', 'totalScore', 'updatedAt', 'dayNum', 'dayScore'])
+        && nicknameOk('nickname')
+        && totalPointsOk();
+      allow delete: if request.auth != null && request.auth.uid == userId;
     }
 
-    // Tutto il resto è chiuso
-    match /{document=**} {
-      allow read, write: if false;
+    match /leaderboard_weekly/{weekKey}/entries/{userId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['uid', 'nickname', 'score', 'updatedAt'])
+        && nicknameOk('nickname')
+        && (!('score' in request.resource.data)
+            || request.resource.data.score == 0
+            || (request.resource.data.score is number
+                && request.resource.data.score > 0
+                && request.resource.data.score <= 10
+                && totalGrowsBy(userId, request.resource.data.score)));
+      allow update: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['uid', 'nickname', 'score', 'updatedAt'])
+        && nicknameOk('nickname')
+        && request.resource.data.get('score', 0) is number
+        && (request.resource.data.get('score', 0) == resource.data.get('score', 0)
+            || (request.resource.data.get('score', 0) > resource.data.get('score', 0)
+                && request.resource.data.get('score', 0) <= resource.data.get('score', 0) + 10
+                && totalGrowsBy(userId, request.resource.data.get('score', 0) - resource.data.get('score', 0))));
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /directory/{userId} {
+      allow create: if request.auth != null && request.auth.uid == userId
+        && (!('nickname' in request.resource.data) || request.resource.data.nickname == '' || validNickname(request.resource.data.nickname));
+      allow read: if request.auth != null && (request.auth.uid == userId || request.auth.uid == "Xyx8cvHdpnUbyqgSCJZTg8780UM2");
+      allow update: if false;
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /duels/{duelCode} {
+      allow read: if request.auth != null;
+      // Un tempo dichiarato sotto i 3 secondi per 5 frasi è fisicamente impossibile per una persona:
+      // blocca il trucco più banale (dichiarare 0 o 1 millisecondo per vincere sempre). Non è una
+      // vera certificazione del tempo — quella richiederebbe un timestamp del server — ma alza
+      // parecchio l'asticella per chi provasse a manomettere dal browser per gioco.
+      // "expireAt" è la data di scadenza (7 giorni): dopo, l'app di chi ha creato o accettato il
+      // duello lo cancella al primo accesso (vedi regola delete più sotto).
+      allow create: if request.auth != null && request.resource.data.creatorUid == request.auth.uid
+        && nicknameOk('creatorNickname')
+        && (!('expireAt' in request.resource.data) || request.resource.data.expireAt is timestamp)
+        && (!('creatorTimeMs' in request.resource.data) || request.resource.data.creatorTimeMs == null || (request.resource.data.creatorTimeMs is number && request.resource.data.creatorTimeMs >= 3000))
+        && (!('opponentTimeMs' in request.resource.data) || request.resource.data.opponentTimeMs == null || (request.resource.data.opponentTimeMs is number && request.resource.data.opponentTimeMs >= 3000));
+      allow update: if request.auth != null && (
+        resource.data.creatorUid == request.auth.uid ||
+        resource.data.opponentUid == null ||
+        resource.data.opponentUid == request.auth.uid
+      )
+      // Chi crea il duello e la scadenza non si possono cambiare.
+      && request.resource.data.creatorUid == resource.data.creatorUid
+      && request.resource.data.get('expireAt', null) == resource.data.get('expireAt', null)
+      // L'avversario può essere solo chi sta scrivendo (o restare quello già registrato).
+      && (request.resource.data.get('opponentUid', null) == resource.data.get('opponentUid', null)
+          || request.resource.data.get('opponentUid', null) == request.auth.uid)
+      // Ognuno può scrivere solo il proprio tempo: l'avversario non tocca quello del creatore e viceversa.
+      && (request.auth.uid == resource.data.creatorUid
+          || request.resource.data.get('creatorTimeMs', null) == resource.data.get('creatorTimeMs', null))
+      && (request.auth.uid != resource.data.creatorUid
+          || request.resource.data.get('opponentTimeMs', null) == resource.data.get('opponentTimeMs', null))
+      && nicknameOk('opponentNickname')
+      && (!('creatorTimeMs' in request.resource.data) || request.resource.data.creatorTimeMs == null || (request.resource.data.creatorTimeMs is number && request.resource.data.creatorTimeMs >= 3000))
+      && (!('opponentTimeMs' in request.resource.data) || request.resource.data.opponentTimeMs == null || (request.resource.data.opponentTimeMs is number && request.resource.data.opponentTimeMs >= 3000));
+      // Pulizia senza TTL (piano gratuito): chi ha creato o accettato il duello può cancellarlo,
+      // ma solo dopo la scadenza (expireAt passato, oppure 7 giorni dalla creazione per i duelli
+      // vecchi che non hanno expireAt).
+      allow delete: if request.auth != null
+        && (resource.data.creatorUid == request.auth.uid || resource.data.get('opponentUid', null) == request.auth.uid)
+        && ((resource.data.get('expireAt', null) is timestamp && resource.data.expireAt < request.time)
+            || (resource.data.get('expireAt', null) == null
+                && resource.data.get('createdAt', null) is number
+                && resource.data.createdAt < request.time.toMillis() - 604800000));
     }
   }
 }
