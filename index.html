@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!-- FILE GENERATO da build.py (progetto quattrovoci-app): NON modificarlo qui.
+     Le modifiche vanno fatte in quattrovoci-app/src/index.html, poi si rigenera. -->
+
 <html lang="it">
 <head>
 <meta charset="UTF-8">
@@ -11,8 +14,10 @@
 <meta name="apple-mobile-web-app-title" content="Quattro Voci">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" href="icons/icon-192.png">
+<!--FONTS-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<!--/FONTS-->
 <style>
   :root{
     --bg: #1B1916;
@@ -524,6 +529,29 @@
     display:flex; align-items:center; justify-content:center; cursor:pointer;
   }
   .account-btn svg{ width:18px; height:18px; }
+  /* ---------- PRO (solo app Android) ---------- */
+  .pro-btn{
+    position:absolute; top:64px; right:46px; height:36px; padding:0 12px; border-radius:999px;
+    background: var(--panel); border:1px solid #E0B44C; color:#E0B44C; font-family:'IBM Plex Mono', monospace;
+    font-size:12px; font-weight:600; letter-spacing:.08em; cursor:pointer;
+  }
+  .pro-btn.on{ background:#E0B44C; color:#1B1916; }
+  .pro-tag{ display:inline-block; margin-left:6px; padding:1px 6px; border-radius:6px; background:#E0B44C; color:#1B1916;
+    font-family:'IBM Plex Mono', monospace; font-size:10px; font-weight:600; letter-spacing:.06em; vertical-align:middle; }
+  .pro-perks{ list-style:none; padding:0; margin:6px 0 14px; }
+  .pro-perks li{ padding:7px 0 7px 28px; position:relative; font-size:14px; border-bottom:1px solid var(--hair); }
+  .pro-perks li::before{ content:'✓'; position:absolute; left:6px; color:#E0B44C; font-weight:700; }
+  .pro-plan{ width:100%; display:flex; justify-content:space-between; align-items:center; gap:10px; text-align:left;
+    background:var(--panel-2); border:1px solid var(--hair); border-radius:var(--radius); padding:12px 14px; margin-bottom:8px;
+    color:var(--ink); cursor:pointer; font-family:inherit; }
+  .pro-plan[aria-pressed="true"]{ border-color:#E0B44C; box-shadow:0 0 0 1px #E0B44C inset; }
+  .pro-plan small{ display:block; color:var(--ink-dim); font-size:12px; margin-top:2px; }
+  .pro-plan .price{ text-align:right; font-weight:600; white-space:nowrap; }
+  .pro-plan .save{ margin-left:6px; font-size:11px; color:#1B1916; background:#7FBF7F; border-radius:6px; padding:1px 5px; }
+  .pro-fine{ font-size:11.5px; color:var(--ink-dim); line-height:1.45; margin:10px 0 0; }
+  .quota-note{ font-size:12px; color:var(--ink-dim); margin:6px 0 0; text-align:center; }
+  .quota-note.out{ color:#E0B44C; }
+  .user-code{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; word-break:break-all; color:var(--ink-dim); }
   .account-dot{
     position:absolute; top:-2px; right:-2px; width:9px; height:9px; border-radius:50%;
     background:#7FBF7F; border:2px solid var(--bg); display:none;
@@ -617,6 +645,7 @@
 <body>
 <div class="app">
   <header>
+    <button class="pro-btn hidden" id="proBtn" aria-label="QuattroVoci PRO">PRO</button>
     <button class="account-btn" id="accountBtn" aria-label="Account">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"/></svg>
       <span class="account-dot"></span>
@@ -661,7 +690,7 @@
         </form>
         <p class="sub" style="margin-top:12px;">Facoltativo: puoi continuare a usare l'app senza account. In quel caso i progressi restano salvati solo su questo dispositivo.</p>
         <p class="sub" style="margin-top:8px;"><a href="./privacy.html" target="_blank" rel="noopener" style="color:var(--ink-dim); text-decoration:underline;">Privacy Policy</a> &middot; <a href="./elimina-account.html" target="_blank" rel="noopener" style="color:var(--ink-dim); text-decoration:underline;">Elimina account</a></p>
-        <p class="sub" style="margin-top:6px; font-size:11px;">Questo sito è protetto da reCAPTCHA e si applicano le <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--ink-dim);">Norme sulla privacy</a> e i <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:var(--ink-dim);">Termini di servizio</a> di Google.</p>
+        <p class="sub" id="recaptchaNote" style="margin-top:6px; font-size:11px;">Questo sito è protetto da reCAPTCHA e si applicano le <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--ink-dim);">Norme sulla privacy</a> e i <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:var(--ink-dim);">Termini di servizio</a> di Google.</p>
       </div>
 
       <div id="authLoggedIn" class="hidden">
@@ -687,6 +716,25 @@
         </div>
       </div>
 
+      <div id="proAccountBox" class="hidden">
+        <div class="rec-divider"></div>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div>
+            <p style="font-weight:600; margin:0 0 4px; font-size:14px;">&#11088; QuattroVoci PRO</p>
+            <p class="sub" style="margin:0;" id="proAccountStatus">Senza pubblicità, voci di qualità, Traduci e Duelli illimitati.</p>
+          </div>
+          <button class="ghost" id="proAccountBtn" style="flex-shrink:0; padding:8px 14px; font-size:12.5px; white-space:nowrap;">Scopri</button>
+        </div>
+        <p class="sub" style="margin:8px 0 0; font-size:11.5px;">Codice utente (per l'assistenza): <span class="user-code" id="proUserCode">&mdash;</span></p>
+        <button class="ghost hidden" id="privacyOptionsBtn" style="width:100%; margin-top:10px;">&#128737; Opzioni privacy della pubblicità</button>
+      </div>
+      <div id="getAppBox" class="hidden">
+        <div class="rec-divider"></div>
+        <p style="font-weight:600; margin:0 0 4px; font-size:14px;">&#128241; QuattroVoci per Android</p>
+        <p class="sub" style="margin:0 0 8px;">Nell'app puoi passare a PRO: niente limiti giornalieri e voci di qualità.</p>
+        <a class="ghost" id="getAppLink" href="#" target="_blank" rel="noopener" style="display:block; text-align:center; text-decoration:none; padding:10px; border-radius:999px;">Scarica da Google Play</a>
+      </div>
+
       <div class="rec-divider"></div>
       <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
         <div>
@@ -697,6 +745,32 @@
         <button class="ghost" id="reminderToggle" style="flex-shrink:0; padding:8px 14px; font-size:12.5px; white-space:nowrap;">Attiva</button>
       </div>
       <button class="ghost" id="reviewTutorialBtn" style="width:100%; margin-top:16px;">&#128214; Rivedi il tutorial</button>
+    </div>
+  </div>
+
+  <div class="modal-overlay hidden" id="proModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="proTitle">QuattroVoci PRO</h3>
+        <button class="modal-close" id="proModalClose" aria-label="Chiudi">&times;</button>
+      </div>
+      <p class="sub" id="proSub" style="margin-top:0;">Impara senza interruzioni.</p>
+      <ul class="pro-perks">
+        <li><b>Niente pubblicità</b></li>
+        <li><b>Voci di qualità</b> per tutte le 10 lingue, uguali su ogni telefono</li>
+        <li><b>Traduci illimitato</b> (gratis: 10 traduzioni al giorno)</li>
+        <li><b>Duelli illimitati</b> (gratis: 3 al giorno)</li>
+        <li>Tutte le novità in arrivo</li>
+      </ul>
+      <div id="proPlans"></div>
+      <button class="primary" id="proBuyBtn" style="width:100%; margin-top:4px;">Prova gratis</button>
+      <p class="pro-fine" id="proFine"></p>
+      <div class="row" style="margin-top:10px; gap:8px;">
+        <button class="ghost" id="proRestoreBtn" style="flex:1; font-size:12.5px;">Ripristina acquisti</button>
+        <a class="ghost" id="proManageLink" href="https://play.google.com/store/account/subscriptions" target="_blank" rel="noopener" style="flex:1; text-align:center; text-decoration:none; font-size:12.5px; padding:10px; border-radius:999px;">Gestisci abbonamento</a>
+      </div>
+      <p class="pro-fine" style="text-align:center;"><a id="proPrivacyLink" href="#" target="_blank" rel="noopener" style="color:var(--ink-dim);">Privacy</a> &middot; <a id="proTermsLink" href="#" target="_blank" rel="noopener" style="color:var(--ink-dim);">Termini</a></p>
+      <button class="ghost hidden" id="proFakeBtn" style="width:100%; margin-top:10px;">&#129514; PRO di prova: spenta</button>
     </div>
   </div>
 
@@ -827,6 +901,7 @@
     <div class="rec-status" id="trMicStatus" style="margin-top:10px;">Pronto a registrare</div>
     <input type="text" id="trItInput" placeholder="...oppure scrivi qui la frase in italiano" style="margin-top:12px;">
     <button class="primary" id="trTranslateBtn" style="width:100%; margin-top:4px;">Traduci</button>
+    <p class="quota-note hidden" id="trQuotaNote"></p>
     <div id="trResultBox" class="hidden" style="margin-top:16px;">
       <div class="challenge-text" id="trResultText">&mdash;</div>
       <div id="trResultPhon" class="sound-tip hidden" style="margin-top:-6px;"></div>
@@ -919,6 +994,7 @@
         <input type="text" id="duelCodeInput" placeholder="Codice duello (es. AB3XZ9)" style="flex:1; text-transform:uppercase;">
         <button class="ghost" id="duelJoinBtn">Partecipa</button>
       </div>
+      <p class="quota-note hidden" id="duelQuotaNote"></p>
       <div id="duelStatusBox" style="margin-top:12px;"></div>
     </div>
   </section>
@@ -1265,6 +1341,103 @@
 </div><!-- fine .app -->
 
 <script>
+/* ============ CONFIGURAZIONE (build.py la adatta per il sito e per l'app Android) ============
+   Questo file è il SORGENTE UNICO: src/index.html del progetto quattrovoci-app.
+   build.py crea dist/web (sito GitHub Pages, senza pubblicità né PRO) e dist/www (app Android). */
+const QV_CONFIG = {
+  target: 'web',            // 'web' oppure 'app'
+  build: 'PC',
+  testBuild: false,       // true solo nelle versioni di prova: interruttore «PRO di prova»
+  ads: { banner: '' },
+  pro: { key: '', entitlement: 'pro' },
+  privacyUrl: 'https://paolo7726.github.io/quattro-voci/privacy.html',
+  termsUrl: 'https://paolo7726.github.io/quattro-voci/termini.html',
+  playUrl: '',         // link al Play Store (vuoto finché l'app non è pubblicata)
+  freeLimits: { translate: 10, duel: 3 }
+};
+window.QV_CONFIG = QV_CONFIG;
+const QV_NATIVE = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+function qvPlugin(name){ return (QV_NATIVE && window.Capacitor.Plugins && window.Capacitor.Plugins[name]) || null; }
+
+/* ---------- Riconoscimento vocale nell'app Android ----------
+   Nel WebView di Android non esiste SpeechRecognition del browser: questo adattatore usa il
+   plugin nativo con la stessa interfaccia (lang, maxAlternatives, onstart, onresult, onerror,
+   onend, start, stop, abort), così Sfida, Dialoghi e Traduci funzionano senza altre modifiche. */
+(function installNativeSpeechRecognition(){
+  const P = qvPlugin('SpeechRecognition');
+  if(!P) return;
+  class NativeSpeechRec {
+    constructor(){ this.lang = 'it-IT'; this.maxAlternatives = 1; this.interimResults = false; this.continuous = false; this._aborted = false; }
+    async start(){
+      const fire = (name, ev)=>{ try{ if(typeof this[name] === 'function') this[name](ev || {}); }catch(e){ console.warn('speech handler', e); } };
+      try{
+        let perm = await P.checkPermissions();
+        if(perm.speechRecognition !== 'granted') perm = await P.requestPermissions();
+        if(perm.speechRecognition !== 'granted'){ fire('onerror', { error:'not-allowed' }); fire('onend'); return; }
+        fire('onstart');
+        const r = await P.start({ language: this.lang, maxResults: Math.max(1, this.maxAlternatives || 1), partialResults: false, popup: false });
+        if(this._aborted){ fire('onend'); return; }
+        const m = (r && r.matches) || [];
+        if(m.length){
+          const alts = m.map(t => ({ transcript: t, confidence: 1 }));
+          alts.isFinal = true;
+          fire('onresult', { results: [alts], resultIndex: 0 });
+        } else {
+          fire('onerror', { error: 'no-speech' });
+        }
+      }catch(e){
+        const msg = String((e && e.message) || e || '');
+        fire('onerror', { error: /permission|denied/i.test(msg) ? 'not-allowed' : 'no-speech' });
+      }
+      fire('onend');
+    }
+    stop(){ try{ P.stop(); }catch(e){} }
+    abort(){ this._aborted = true; this.stop(); }
+  }
+  window.SpeechRecognition = NativeSpeechRec;
+  window.webkitSpeechRecognition = NativeSpeechRec;
+})();
+
+/* ---------- Limiti giornalieri della versione gratuita (sito e app senza PRO) ---------- */
+function qvIsPro(){ try{ return !!(window.QVPro && window.QVPro.on); }catch(e){ return false; } }
+function qvQuotaDay(){ const d = new Date(); return d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate(); }
+function qvQuotaUsed(kind){ try{ const v = JSON.parse(localStorage.getItem('qv_quota_' + kind) || 'null'); return (v && v.day === qvQuotaDay()) ? (v.n || 0) : 0; }catch(e){ return 0; } }
+function qvQuotaLeft(kind){ if(qvIsPro()) return Infinity; return Math.max(0, (QV_CONFIG.freeLimits[kind] || 0) - qvQuotaUsed(kind)); }
+function qvQuotaUse(kind){ if(qvIsPro()) return; try{ localStorage.setItem('qv_quota_' + kind, JSON.stringify({ day: qvQuotaDay(), n: qvQuotaUsed(kind) + 1 })); }catch(e){} qvRenderQuotaNotes(); }
+function qvRenderQuotaNotes(){
+  const items = [['translate', 'trQuotaNote', 'Traduzioni gratuite rimaste oggi', 'le {n} traduzioni gratuite'], ['duel', 'duelQuotaNote', 'Duelli gratuiti rimasti oggi', 'i {n} duelli gratuiti']];
+  items.forEach(([kind, id, label, used])=>{
+    const el = document.getElementById(id); if(!el) return;
+    if(qvIsPro()){ el.classList.add('hidden'); return; }
+    const left = qvQuotaLeft(kind), tot = QV_CONFIG.freeLimits[kind];
+    el.classList.remove('hidden');
+    el.classList.toggle('out', left === 0);
+    el.textContent = left > 0 ? `${label}: ${left} su ${tot}` : `Hai usato ${used.replace('{n}', tot)} di oggi: tornano disponibili domani.`;
+  });
+}
+// true = si può procedere; false = limite raggiunto (mostra il messaggio o la schermata PRO)
+function qvQuotaCheck(kind){
+  if(qvQuotaLeft(kind) > 0) return true;
+  const tot = QV_CONFIG.freeLimits[kind];
+  const what = kind === 'translate' ? `le ${tot} traduzioni gratuite` : `i ${tot} duelli gratuiti`;
+  if(window.QVPro && window.QVPro.available()){
+    window.QVPro.open(`Hai usato ${what} di oggi. Con PRO sono illimitati.`);
+  } else {
+    const msg = `Hai usato ${what} di oggi: tornano disponibili domani.` + (QV_CONFIG.playUrl ? ' Nell\'app Android, con QuattroVoci PRO, sono illimitati.' : '');
+    qvToast(msg);
+  }
+  qvRenderQuotaNotes();
+  return false;
+}
+function qvToast(msg){
+  let box = document.getElementById('qvToast');
+  if(!box){ box = document.createElement('div'); box.id = 'qvToast'; box.className = 'voice-notice'; box.setAttribute('role','status'); document.body.appendChild(box); }
+  box.innerHTML = '<div class="vn-body"></div><button type="button" class="vn-close" aria-label="Chiudi avviso">&times;</button>';
+  box.querySelector('.vn-body').textContent = msg;
+  box.querySelector('.vn-close').onclick = ()=> box.remove();
+  clearTimeout(box._t); box._t = setTimeout(()=>{ if(box.isConnected) box.remove(); }, 7000);
+}
+
 /* ---------- DATA ---------- */
 // Bandiere disegnate a mano come SVG, non emoji: su alcuni sistemi (in particolare Windows) le
 // emoji-bandiera non vengono disegnate come immagini ma solo come le due lettere del codice
@@ -9887,6 +10060,7 @@ function cloudTtsRemember(url, objUrl){
 }
 // Restituisce un indirizzo audio pronto da suonare, oppure null (→ voce del dispositivo).
 async function cloudTtsSource(text, langKey){
+  if(!qvIsPro()) return null; // voci di qualità Azure: solo QuattroVoci PRO (gratis: voce del telefono)
   const url = cloudTtsUrl(text, langKey);
   if(!url) return null;
   if(cloudTtsMem.has(url)) return cloudTtsMem.get(url);
@@ -9948,6 +10122,12 @@ function playAudioSrc(src){
   });
 }
 function deviceSpeakAsync(text, langKey){
+  const T = qvPlugin('TextToSpeech');
+  if(T){ // app Android: voce del telefono tramite il motore di sintesi di Android
+    checkVoiceAvailability(langKey);
+    return T.speak({ text, lang: TTS_LANG[langKey] || 'en-US', rate: 0.9, pitch: 1.0, volume: 1.0, category: 'playback' })
+      .catch(e => console.warn('tts nativo', e));
+  }
   return new Promise(resolve=>{
     try{
       if(!('speechSynthesis' in window)) return resolve();
@@ -9968,6 +10148,7 @@ function deviceSpeakAsync(text, langKey){
 function stopSpeech(){
   speakToken++;
   try{ if('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
+  try{ const T = qvPlugin('TextToSpeech'); if(T) T.stop().catch(()=>{}); }catch(e){}
   try{ if(qvAudio && !qvAudio.paused) qvAudio.pause(); }catch(e){}
   if(qvAudioFin) qvAudioFin(true);
 }
@@ -10017,6 +10198,18 @@ function hasVoiceFor(langKey){
   return voices.some(v => voiceMatches(v, langKey));
 }
 function checkVoiceAvailability(langKey){
+  const T = qvPlugin('TextToSpeech');
+  if(T && langKey !== 'it'){
+    const flag = 'qv_voice_warned_' + langKey;
+    try{ if(localStorage.getItem(flag) === '1') return; }catch(e){}
+    T.isLanguageSupported({ lang: TTS_LANG[langKey] || 'en-US' }).then(r=>{
+      if(r && r.supported === false){
+        try{ localStorage.setItem(flag, '1'); }catch(e){}
+        showVoiceNotice(langKey);
+      }
+    }).catch(()=>{});
+    return;
+  }
   if(!('speechSynthesis' in window) || langKey === 'it') return;
   const has = hasVoiceFor(langKey);
   if(has !== false) return;
@@ -10457,7 +10650,9 @@ document.querySelectorAll('#sfidaDirTabs button').forEach(btn=>{
 // Segna che oggi l'utente si è esercitato (Percorso, Ripasso, Shadowing, Sfida): serve al
 // promemoria per non avvisare chi ha già fatto pratica.
 function markPracticedToday(){
-  try{ localStorage.setItem('qv_last_practice', todayStr()); }catch(e){}
+  let was = null;
+  try{ was = localStorage.getItem('qv_last_practice'); localStorage.setItem('qv_last_practice', todayStr()); }catch(e){}
+  if(QV_NATIVE && was !== todayStr() && typeof nativeReminderReschedule === 'function') nativeReminderReschedule();
 }
 function updateStreakOnActivity(){
   const today = todayStr();
@@ -11812,6 +12007,7 @@ function showDuelStatus(code, duel){
 
 document.getElementById('duelCreateBtn').onclick = async ()=>{
   if(!(window.cloudAPI && window.cloudAPI.currentUser)) return;
+  if(!qvQuotaCheck('duel')) return;
   const btn = document.getElementById('duelCreateBtn');
   btn.disabled = true; btn.textContent = 'Creo...';
   try{
@@ -11827,6 +12023,7 @@ document.getElementById('duelCreateBtn').onclick = async ()=>{
       lang: currentLang, dir, phrases, createdAt: Date.now(),
       creatorTimeMs: null, opponentUid: null, opponentNickname: null, opponentTimeMs: null
     });
+    qvQuotaUse('duel');
     document.getElementById('duelStatusBox').innerHTML = `<div class="sound-tip" style="font-style:normal;">Duello creato! Codice: <b style="font-size:17px; letter-spacing:2px;">${code}</b><br>Condividilo con un amico (WhatsApp, messaggio, come preferisci). Ora gioca la tua parte.</div>`;
     startDuelPlay({ code, phrases, dir, lang: currentLang, role:'creator' });
   }catch(e){
@@ -11841,6 +12038,7 @@ document.getElementById('duelJoinBtn').onclick = async ()=>{
   if(!(window.cloudAPI && window.cloudAPI.currentUser)) return;
   const code = document.getElementById('duelCodeInput').value.trim().toUpperCase();
   if(!code) return;
+  if(!qvQuotaCheck('duel')) return;
   const statusBox = document.getElementById('duelStatusBox');
   statusBox.innerHTML = '<div class="empty">Cerco il duello...</div>';
   try{
@@ -12234,6 +12432,7 @@ async function translateViaMyMemory(text, sourceCode, targetCode){
 document.getElementById('trTranslateBtn').onclick = async ()=>{
   const text = document.getElementById('trItInput').value.trim();
   if(!text) return;
+  if(!qvQuotaCheck('translate')) return;
   const btn = document.getElementById('trTranslateBtn');
   const targetLangCode = TRANSLATE_LANG_CODE[currentLang] || 'en';
   const sourceCode = (trDirection === 'to_target') ? 'it' : targetLangCode;
@@ -12245,6 +12444,7 @@ document.getElementById('trTranslateBtn').onclick = async ()=>{
     let result = await translateViaAzure(text, sourceCode, destCode);
     if(!result){ result = await translateViaMyMemory(text, sourceCode, destCode); }
     if(!result){ throw new Error('empty translation'); }
+    qvQuotaUse('translate');
     const translated = result.text;
 
     const isResultArabic = (outputLang === 'ar');
@@ -13383,7 +13583,40 @@ function setReminderStatus(result){
   el.textContent = msg;
   el.classList.toggle('hidden', !msg);
 }
+/* App Android: il promemoria è una notifica locale programmata (alle 19, solo nei giorni in cui
+   non ti sei ancora esercitato). Si riprogramma a ogni apertura e a ogni esercizio fatto. */
+const QV_REMINDER_HOUR = 19;
+async function nativeReminderReschedule(){
+  const L = qvPlugin('LocalNotifications');
+  if(!L) return 'unsupported';
+  try{
+    const pending = await L.getPending();
+    if(pending && pending.notifications && pending.notifications.length){
+      await L.cancel({ notifications: pending.notifications.map(n => ({ id: n.id })) });
+    }
+    if(!reminderIsEnabled()) return 'off';
+    const label = (LANGS[currentLang] && LANGS[currentLang].label) || 'la tua lingua';
+    const practicedToday = (()=>{ try{ return localStorage.getItem('qv_last_practice') === todayStr(); }catch(e){ return false; } })();
+    const now = new Date(), list = [];
+    for(let d = 0; d < 3; d++){
+      const at = new Date(now.getFullYear(), now.getMonth(), now.getDate() + d, QV_REMINDER_HOUR, 0, 0);
+      if(d === 0 && (practicedToday || at <= now)) continue;
+      list.push({ id: 7100 + d, title: 'Quattro Voci', body: `Non ti sei ancora esercitato oggi con ${label}. Bastano 5 minuti!`, schedule: { at } });
+    }
+    if(list.length) await L.schedule({ notifications: list });
+    return 'ok';
+  }catch(e){ console.warn('promemoria nativo', e); return 'error'; }
+}
 async function refreshReminderBackground(){
+  if(qvPlugin('LocalNotifications')){
+    const r = await nativeReminderReschedule();
+    const el = document.getElementById('reminderStatus');
+    if(el){
+      el.textContent = (r === 'ok') ? `✓ Attivo: un avviso alle ${QV_REMINDER_HOUR}:00 nei giorni in cui non ti sei ancora esercitato.` : '';
+      el.classList.toggle('hidden', r !== 'ok');
+    }
+    return;
+  }
   const on = reminderIsEnabled() && typeof Notification !== 'undefined' && Notification.permission === 'granted';
   await syncReminderMeta();
   const r = await registerReminderSync(on);
@@ -13392,6 +13625,7 @@ async function refreshReminderBackground(){
 function updateReminderBtn(){
   const btn = document.getElementById('reminderToggle');
   if(!btn) return;
+  if(qvPlugin('LocalNotifications')){ btn.disabled = false; btn.textContent = reminderIsEnabled() ? 'Disattiva' : 'Attiva'; return; }
   const supported = (typeof Notification !== 'undefined');
   if(!supported){
     btn.textContent = 'Non disponibile';
@@ -13417,6 +13651,21 @@ async function showAppNotification(title, options){
   }catch(e){ console.warn('notification error', e); }
 }
 document.getElementById('reminderToggle').onclick = async ()=>{
+  const L = qvPlugin('LocalNotifications');
+  if(L){
+    if(reminderIsEnabled()){ setReminderEnabled(false); }
+    else{
+      try{
+        let p = await L.checkPermissions();
+        if(p.display !== 'granted') p = await L.requestPermissions();
+        setReminderEnabled(p.display === 'granted');
+        if(p.display !== 'granted') qvToast('Per ricevere il promemoria consenti le notifiche a Quattro Voci nelle impostazioni del telefono.');
+      }catch(e){ console.warn('permesso notifiche', e); }
+    }
+    updateReminderBtn();
+    refreshReminderBackground();
+    return;
+  }
   if(typeof Notification === 'undefined') return;
   const currentlyOn = reminderIsEnabled() && Notification.permission === 'granted';
   if(currentlyOn){
@@ -13438,6 +13687,7 @@ document.getElementById('reminderToggle').onclick = async ()=>{
   refreshReminderBackground();
 };
 function maybeShowPracticeReminder(){
+  if(QV_NATIVE) return; // nell'app ci pensano le notifiche programmate
   if(!reminderIsEnabled()) return;
   if(typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
   try{
@@ -13451,6 +13701,227 @@ function maybeShowPracticeReminder(){
   }catch(e){ console.warn('reminder notification error', e); }
 }
 
+
+/* ============ PUBBLICITÀ (AdMob, solo app Android senza PRO) ============
+   Un banner in fondo alla pagina, sopra la barra di navigazione. Prima del banner viene mostrato
+   (se serve) il modulo di consenso GDPR configurato in AdMob › Privacy e messaggi. */
+const QVAds = { started:false, banner:false,
+  async init(){
+    if(qvIsPro()) return;
+    const A = qvPlugin('AdMob');
+    if(!A || this.started || !QV_CONFIG.ads.banner) return;
+    this.started = true;
+    try{
+      await A.initialize({ initializeForTesting: false });
+      let ci = await A.requestConsentInfo();
+      if(ci.isConsentFormAvailable && ci.status === 'REQUIRED'){ await A.showConsentForm(); try{ ci = await A.requestConsentInfo(); }catch(e){} }
+      // obbligo GDPR: poter rivedere o revocare il consenso (Account › Opzioni privacy della pubblicità)
+      const po = document.getElementById('privacyOptionsBtn');
+      if(po) po.classList.toggle('hidden', ci.privacyOptionsRequirementStatus !== 'REQUIRED');
+      A.addListener('bannerAdSizeChanged', s => { if(!qvIsPro()) document.documentElement.style.setProperty('--ad-h', ((s && s.height) || 0) + 'px'); });
+      if(qvIsPro()){ this.started = false; return; }
+      await A.showBanner({ adId: QV_CONFIG.ads.banner, adSize: 'ADAPTIVE_BANNER', position: 'BOTTOM_CENTER', margin: 0 });
+      this.banner = true;
+      if(qvIsPro()) return this.remove();
+    }catch(e){ console.warn('AdMob', e); this.started = false; }
+  },
+  async remove(){
+    document.documentElement.style.setProperty('--ad-h', '0px');
+    const A = qvPlugin('AdMob');
+    if(A && this.banner){ try{ await A.removeBanner(); }catch(e){} this.banner = false; }
+    this.started = false;
+  }
+};
+document.getElementById('privacyOptionsBtn').onclick = async ()=>{
+  const A = qvPlugin('AdMob'); if(!A) return;
+  try{ await A.showPrivacyOptionsForm(); }catch(e){ qvToast('Opzioni privacy non disponibili in questo momento. Riprova più tardi.'); }
+};
+
+/* ============ QUATTROVOCI PRO (abbonamento Google Play tramite RevenueCat) ============
+   Senza chiave RevenueCat (file .env) la PRO resta nascosta. Nelle versioni di prova c'è
+   l'interruttore «PRO di prova» per vedere l'app come un cliente PRO senza pagare. */
+const QVPro = {
+  on: (()=>{ try{ return localStorage.getItem('qv_pro') === '1'; }catch(e){ return false; } })(),
+  fake: (()=>{ try{ return !!QV_CONFIG.testBuild && localStorage.getItem('qv_pro_fake') === '1'; }catch(e){ return false; } })(),
+  ent: null, pkgs: [], pick: null, mgmt: null, busy: false, uid: '',
+  plugin(){ return (QV_CONFIG.pro.key && qvPlugin('Purchases')) || null; },
+  available(){ return QV_NATIVE && (!!this.plugin() || !!QV_CONFIG.testBuild); },
+  save(){ try{ localStorage.setItem('qv_pro', this.on ? '1' : '0'); }catch(e){} },
+  async init(){
+    if(this.fake) this.on = true;
+    const P = this.plugin();
+    if(!P){ this.on = this.fake; this.save(); this.sync(); return; }
+    this.sync();
+    try{
+      await P.configure({ apiKey: QV_CONFIG.pro.key });
+      try{ const r = await P.getAppUserID(); this.uid = (r && r.appUserID) || ''; }catch(e){}
+      await P.addCustomerInfoUpdateListener(ci => this.apply(ci));
+      const { customerInfo } = await P.getCustomerInfo();
+      this.apply(customerInfo);
+    }catch(e){ console.warn('PRO', e); } // senza rete resta valido l'ultimo stato salvato
+    this.sync();
+  },
+  apply(ci){
+    const ent = ci && ci.entitlements && ci.entitlements.active && ci.entitlements.active[QV_CONFIG.pro.entitlement];
+    const was = this.on;
+    this.ent = ent || null; this.on = !!ent || this.fake; this.mgmt = (ci && ci.managementURL) || null; this.save();
+    if(this.on && !was) QVAds.remove();
+    if(!this.on && was) QVAds.init();
+    this.sync();
+  },
+  setFake(v){
+    if(!QV_CONFIG.testBuild) return;
+    this.fake = !!v; try{ localStorage.setItem('qv_pro_fake', this.fake ? '1' : '0'); }catch(e){}
+    const was = this.on; this.on = this.fake || !!this.ent; this.save();
+    if(this.on && !was) QVAds.remove();
+    if(!this.on && was) QVAds.init();
+    this.sync(); this.render();
+  },
+  async load(){
+    const P = this.plugin(); if(!P) return [];
+    const o = await P.getOfferings(); const cur = o && o.current;
+    this.pkgs = cur ? cur.availablePackages.filter(p => ['ANNUAL','MONTHLY'].includes(p.packageType)) : [];
+    this.pkgs.sort((a,b) => a.packageType === 'ANNUAL' ? -1 : 1);
+    return this.pkgs;
+  },
+  async buy(){
+    const P = this.plugin(), pkg = this.pick; if(!P || !pkg || this.busy) return;
+    this.busy = true;
+    try{
+      const r = await P.purchasePackage({ aPackage: pkg });
+      this.apply(r.customerInfo);
+      if(this.on){ document.getElementById('proModal').classList.add('hidden'); qvToast('Benvenuto in QuattroVoci PRO! La pubblicità è sparita e i limiti giornalieri non ci sono più.'); }
+    }catch(e){
+      if(!(e && (String(e.code) === '1' || e.userCancelled || /cancel/i.test(e.message || '')))) qvToast('Acquisto non completato. Riprova tra poco.');
+    }finally{ this.busy = false; }
+  },
+  async restore(){
+    const P = this.plugin(); if(!P) return;
+    try{
+      const { customerInfo } = await P.restorePurchases(); this.apply(customerInfo);
+      qvToast(this.on ? 'Abbonamento PRO ripristinato.' : 'Nessun abbonamento PRO trovato su questo account Google.');
+    }catch(e){ qvToast('Ripristino non riuscito. Controlla la connessione.'); }
+  },
+  sync(){
+    const av = this.available();
+    const btn = document.getElementById('proBtn');
+    btn.classList.toggle('hidden', !av);
+    btn.classList.toggle('on', this.on);
+    btn.textContent = this.on ? 'PRO ✓' : 'PRO';
+    btn.setAttribute('aria-label', this.on ? 'QuattroVoci PRO attivo' : 'Passa a QuattroVoci PRO');
+    document.getElementById('proAccountBox').classList.toggle('hidden', !av);
+    document.getElementById('proAccountStatus').textContent = this.on
+      ? 'Attivo: niente pubblicità, voci di qualità, Traduci e Duelli illimitati. Grazie!'
+      : 'Senza pubblicità, voci di qualità, Traduci e Duelli illimitati.';
+    document.getElementById('proAccountBtn').textContent = this.on ? 'Dettagli' : 'Scopri';
+    document.getElementById('proUserCode').textContent = this.uid || '—';
+    const fb = document.getElementById('proFakeBtn');
+    fb.classList.toggle('hidden', !QV_CONFIG.testBuild);
+    fb.textContent = '🧪 PRO di prova: ' + (this.fake ? 'attiva' : 'spenta');
+    const rn = document.getElementById('recaptchaNote'); if(rn) rn.classList.toggle('hidden', QV_NATIVE);
+    const ga = document.getElementById('getAppBox');
+    if(ga){ ga.classList.toggle('hidden', QV_NATIVE || !QV_CONFIG.playUrl); document.getElementById('getAppLink').href = QV_CONFIG.playUrl || '#'; }
+    qvRenderQuotaNotes();
+  },
+  render(){
+    const L = document.getElementById('proPlans'), buy = document.getElementById('proBuyBtn'), fine = document.getElementById('proFine');
+    const title = document.getElementById('proTitle'), sub = document.getElementById('proSub');
+    L.innerHTML = '';
+    if(this.on && this.fake && !this.ent){
+      title.textContent = 'PRO di prova attiva';
+      sub.textContent = 'Solo nella versione di prova: nessun abbonamento vero. Puoi spegnerla qui sotto.';
+      buy.classList.add('hidden'); fine.textContent = ''; return;
+    }
+    if(this.on){
+      title.textContent = 'Sei QuattroVoci PRO';
+      sub.textContent = 'Grazie! La PRO è attiva su questo account Google.';
+      const e = this.ent;
+      const p = document.createElement('p'); p.className = 'sub';
+      p.textContent = (e && e.expirationDate)
+        ? ((e.willRenew ? 'Si rinnova il ' : 'Attivo fino al ') + new Date(e.expirationDate).toLocaleDateString('it-IT') + (e.periodType === 'TRIAL' ? ' · periodo di prova gratuita' : ''))
+        : 'Abbonamento attivo';
+      L.appendChild(p);
+      buy.classList.add('hidden');
+      fine.textContent = 'Puoi disdire o cambiare piano da Google Play › Pagamenti e abbonamenti.';
+      return;
+    }
+    title.textContent = 'Passa a QuattroVoci PRO';
+    buy.classList.remove('hidden');
+    if(!this.plugin()){
+      L.innerHTML = '<p class="sub">Abbonamenti non ancora collegati (manca la chiave RevenueCat). Per provare usa «PRO di prova» qui sotto.</p>';
+      buy.disabled = true; fine.textContent = ''; return;
+    }
+    if(!this.pkgs.length){
+      L.innerHTML = '<p class="sub">Abbonamenti non disponibili in questo momento. Controlla la connessione e riprova.</p>';
+      buy.disabled = true; fine.textContent = ''; return;
+    }
+    const monthly = this.pkgs.find(p => p.packageType === 'MONTHLY');
+    if(!this.pick || !this.pkgs.includes(this.pick)) this.pick = this.pkgs[0];
+    const perMonth = p => p.product.price / (p.packageType === 'ANNUAL' ? 12 : 1);
+    const trialDays = p => { const o = p.product.defaultOption, f = o && o.freePhase; if(!f || !f.billingPeriod) return 0; const b = f.billingPeriod, n = b.value || 0; return b.unit === 'WEEK' ? n*7 : b.unit === 'MONTH' ? n*30 : b.unit === 'DAY' ? n : 0; };
+    this.pkgs.forEach(p => {
+      const yr = p.packageType === 'ANNUAL', t = trialDays(p);
+      const save = (yr && monthly) ? Math.round((1 - perMonth(p) / perMonth(monthly)) * 100) : 0;
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'pro-plan'; b.setAttribute('aria-pressed', p === this.pick);
+      b.innerHTML = '<span><b>' + (yr ? 'Annuale' : 'Mensile') + (save >= 5 ? '<span class="save">−' + save + '%</span>' : '') + '</b><small>'
+        + (t ? t + ' giorni gratis, poi ' : '') + (yr ? 'pagamento una volta all’anno' : 'pagamento ogni mese') + '</small></span>'
+        + '<span class="price"></span>';
+      b.querySelector('.price').textContent = p.product.priceString + (yr ? ' /anno' : ' /mese');
+      b.onclick = () => { this.pick = p; this.render(); };
+      L.appendChild(b);
+    });
+    const p = this.pick, t = trialDays(p), per = p.packageType === 'ANNUAL' ? 'all’anno' : 'al mese';
+    buy.disabled = false;
+    buy.textContent = t ? `Prova gratis per ${t} giorni` : `Abbonati a ${p.product.priceString} ${per}`;
+    fine.textContent = (t ? `Oggi non paghi nulla. Al termine dei ${t} giorni di prova l’abbonamento parte in automatico a ${p.product.priceString} ${per}. ` : `Pagamento di ${p.product.priceString} ${per}. `)
+      + 'Si rinnova automaticamente finché non lo disdici. Puoi disdire quando vuoi da Google Play › Pagamenti e abbonamenti'
+      + (t ? ': se disdici durante la prova non ti viene addebitato nulla.' : '.') + ' Il pagamento è gestito da Google Play.';
+  },
+  async open(reason){
+    if(!this.available()) return;
+    document.getElementById('authModal').classList.add('hidden');
+    document.getElementById('proModal').classList.remove('hidden');
+    document.getElementById('proSub').textContent = reason || 'Impara senza interruzioni.';
+    document.getElementById('proPrivacyLink').href = QV_CONFIG.privacyUrl;
+    document.getElementById('proTermsLink').href = QV_CONFIG.termsUrl;
+    document.getElementById('proManageLink').href = this.mgmt || 'https://play.google.com/store/account/subscriptions?package=it.paolo77app.quattrovoci';
+    this.render();
+    if(reason) document.getElementById('proSub').textContent = reason;
+    if(!this.on && !this.pkgs.length && this.plugin()){
+      try{ await this.load(); }catch(e){ console.warn('PRO offerte', e); }
+      this.render();
+      if(reason) document.getElementById('proSub').textContent = reason;
+    }
+  }
+};
+window.QVPro = QVPro;
+document.getElementById('proBtn').onclick = ()=> QVPro.open();
+document.getElementById('proAccountBtn').onclick = ()=> QVPro.open();
+document.getElementById('proModalClose').onclick = ()=> document.getElementById('proModal').classList.add('hidden');
+document.getElementById('proBuyBtn').onclick = ()=> QVPro.buy();
+document.getElementById('proRestoreBtn').onclick = ()=> QVPro.restore();
+document.getElementById('proFakeBtn').onclick = ()=>{
+  QVPro.setFake(!QVPro.fake);
+  qvToast(QVPro.fake ? 'PRO di prova attiva: niente pubblicità, voci di qualità e nessun limite.' : 'PRO di prova spenta: ora vedi la versione gratuita.');
+};
+
+/* ---------- Tasto «indietro» di Android: chiude la finestra aperta, poi torna a Oggi, poi esce ---------- */
+(function nativeBackButton(){
+  const A = qvPlugin('App'); if(!A) return;
+  A.addListener('backButton', ()=>{
+    const open = [...document.querySelectorAll('.modal-overlay')].filter(m => !m.classList.contains('hidden'));
+    if(open.length){ open[open.length - 1].classList.add('hidden'); return; }
+    const active = document.querySelector('nav.tabs button.active');
+    if(active && active.dataset.tab !== 'oggi'){
+      const oggi = document.querySelector('nav.tabs button[data-tab="oggi"]');
+      if(oggi){ oggi.click(); return; }
+    }
+    A.exitApp();
+  });
+  // Tornando nell'app, riprogramma il promemoria (es. dopo mezzanotte)
+  A.addListener('resume', ()=>{ try{ refreshReminderBackground(); }catch(e){} });
+})();
+
 (async function init(){
   renderRing();
   let startLang = 'en';
@@ -13463,6 +13934,9 @@ function maybeShowPracticeReminder(){
   updateReminderBtn();
   maybeShowPracticeReminder();
   refreshReminderBackground();
+  qvRenderQuotaNotes();
+  await QVPro.init();
+  QVAds.init();
 })();
 
 /* Indicatori "si può scorrere" per l'anello lingue e la barra di navigazione */
@@ -13501,7 +13975,7 @@ function refreshScrollHintsFor(tabName){
 }
 
 /* Registra il service worker solo se disponibile (non nell'ambiente artifact di Claude) */
-if('serviceWorker' in navigator){
+if('serviceWorker' in navigator && !QV_NATIVE && QV_CONFIG.target === 'web'){
   window.addEventListener('load', ()=>{
     navigator.serviceWorker.register('./sw.js').catch(()=>{ /* niente, va bene anche senza */ });
   });
@@ -13985,7 +14459,7 @@ window.addEventListener('cloud-ready', ()=>{
      ============================================================ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import { initializeAppCheck, ReCaptchaEnterpriseProvider, getToken as getAppCheckToken } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check.js";
+  import { initializeAppCheck, ReCaptchaEnterpriseProvider, CustomProvider, getToken as getAppCheckToken } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app-check.js";
   import {
     getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
     onAuthStateChanged, signOut, sendPasswordResetEmail,
@@ -14048,7 +14522,27 @@ window.addEventListener('cloud-ready', ()=>{
   if(isConfigured){
     try{
       app = initializeApp(firebaseConfig);
-      if(RECAPTCHA_SITE_KEY && !RECAPTCHA_SITE_KEY.startsWith('INCOLLA')){
+      const nativeAppCheck = (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()
+        && window.Capacitor.Plugins && window.Capacitor.Plugins.FirebaseAppCheck) || null;
+      if(nativeAppCheck){
+        // App Android: il gettone App Check arriva da Play Integrity (Google Play), tramite il plugin nativo.
+        // Nelle versioni di prova si usa il "debug provider": il codice da autorizzare in Firebase
+        // si legge con leggi-codice-appcheck.bat (vedi PUBBLICARE.md).
+        const testBuild = !!(window.QV_CONFIG && window.QV_CONFIG.testBuild);
+        const ready = nativeAppCheck.initialize({ debugToken: testBuild, isTokenAutoRefreshEnabled: true });
+        try{
+          appCheck = initializeAppCheck(app, {
+            provider: new CustomProvider({
+              getToken: async ()=>{
+                await ready;
+                const r = await nativeAppCheck.getToken({ forceRefresh: false });
+                return { token: r.token, expireTimeMillis: r.expireTimeMillis || (Date.now() + 30 * 60 * 1000) };
+              }
+            }),
+            isTokenAutoRefreshEnabled: true
+          });
+        }catch(e){ console.warn('App Check nativo', e); }
+      } else if(RECAPTCHA_SITE_KEY && !RECAPTCHA_SITE_KEY.startsWith('INCOLLA')){
         try{
           appCheck = initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(RECAPTCHA_SITE_KEY), isTokenAutoRefreshEnabled: true });
         }catch(e){ console.warn('App Check init error', e); }

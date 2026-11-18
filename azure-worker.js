@@ -18,14 +18,18 @@
 //   1. App Check: l'app manda in ogni richiesta un "gettone" firmato da Google che dimostra che
 //      la richiesta arriva davvero da Quattro Voci (reCAPTCHA Enterprise). Chi chiama il Worker
 //      da un terminale o da un altro sito non ce l'ha e riceve 401.
-//   2. Origin: dal browser sono accettate solo le richieste che arrivano da paolo7726.github.io.
+//   2. Origin: dal browser sono accettate solo le richieste che arrivano da paolo7726.github.io
+//      e dall'app Android (https://localhost, indirizzo interno di Capacitor).
 //   3. Limite di richieste per indirizzo IP (al minuto), tenuto in memoria dal Worker.
 //   4. Lunghezza massima dei testi (traduzione 500 caratteri, voce 300).
 // Il piano Azure F0 non addebita mai nulla: superata la soglia gratuita risponde con un errore e
 // l'app usa le riserve (MyMemory per le traduzioni, voce del telefono per l'audio).
 // ============================================================================
 
-const ALLOWED_ORIGIN = 'https://paolo7726.github.io';
+// Siti e app che possono usare il Worker dal browser: il sito e l'app Android (Capacitor usa
+// l'indirizzo interno https://localhost). La vera protezione resta App Check (vedi sotto).
+const ALLOWED_ORIGINS = ['https://paolo7726.github.io', 'https://localhost'];
+const ALLOWED_ORIGIN = ALLOWED_ORIGINS[0];
 const MAX_TEXT_LENGTH = 500;
 const TTS_MAX_LENGTH = 300;
 
@@ -244,7 +248,7 @@ export default {
   async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin');
     const cors = {
-      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+      'Access-Control-Allow-Origin': ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGIN,
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-Firebase-AppCheck',
       'Access-Control-Max-Age': '86400',
@@ -256,7 +260,7 @@ export default {
     const deny = (status, error) => new Response(JSON.stringify({ error }), { status, headers: jsonHeaders });
 
     if (request.method !== 'GET') return deny(405, 'method not allowed');
-    if (origin && origin !== ALLOWED_ORIGIN) return deny(403, 'origin not allowed');
+    if (origin && !ALLOWED_ORIGINS.includes(origin)) return deny(403, 'origin not allowed');
 
     const url = new URL(request.url);
     const isTts = url.pathname === '/tts';
